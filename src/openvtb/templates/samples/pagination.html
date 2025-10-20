@@ -1,0 +1,13 @@
+{% extends "samples/pager.html" %}
+{% load i18n %}
+
+{% block pagination_class %}pagination{% endblock %}
+
+{% block pages %}
+
+    {% for p in paginator.page_range %}
+        <li {% if p == page.number %}class="active"{% endif %}><a href="{% querystring page=p %}">{{ p }}</a></li>
+    {% endfor %}
+
+{% endblock %}
+

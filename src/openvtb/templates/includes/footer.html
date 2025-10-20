@@ -1,0 +1,28 @@
+{% extends "maykin_common/api/includes/footer.html" %}
+{% load static i18n %}
+
+{% block footer %}
+
+    {% with issues_link='<a class="link link--muted" href="https://github.com/maykinmedia/open-vtb/issues">issues</a>' %}
+        {{ block.super }}
+    {% endwith %}
+
+{% endblock %}
+
+{% block links %}
+    <li>
+        <a class="link link--muted" href="https://openvtb.readthedocs.io/">
+            {% trans "Documentation" %}
+        </a>
+    </li>
+    <li>
+        <a class="link link--muted" href="https://hub.docker.com/r/maykinmedia/open-vtb">
+            {% trans "Docker image" %}
+        </a>
+    </li>
+    <li>
+        <a class="link link--muted" href="https://github.com/maykinmedia/open-vtb">
+            {% trans "Code on Github" %}
+        </a>
+    </li>
+{% endblock links %}

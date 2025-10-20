@@ -1,0 +1,56 @@
+# Inspired by https://docs.docker.com/compose/django/
+services:
+  db:
+    # NOTE: No persistance storage configured.
+    # Using v14 to prevent schema permissions. See also docker-init-db.sql.
+    # See: https://hub.docker.com/_/postgres/
+    image: postgres:${PG_VERSION:-17}
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
+  web:
+    build: .
+    image: maykinmedia/open-vtb:latest
+    environment:
+      - DJANGO_SETTINGS_MODULE=openvtb.conf.docker
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-##q31k@oa@my@(twhvqsvv#+-9x0h0@94^f9=vmxe(zzkg^mot}
+      - DB_NAME=openvtb
+      - DB_USER=openvtb
+      - DB_HOST=db
+      # Only allow all hosts for development/testing purposes!
+      - ALLOWED_HOSTS=*
+      # Enabling Open Telemetry requires the services in docker/docker-compose.observability.yml
+      # to be up and running.
+      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-true}
+      - OTEL_RESOURCE_ATTRIBUTES=maykin.saas.client=maykin,maykin,maykin.saas.target=dev
+      - OTEL_METRIC_EXPORT_INTERVAL=${OTEL_METRIC_EXPORT_INTERVAL:-60000}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4317}  # gRPC
+      # otel:supersecret, escape spaces and = with percent encoding
+      # - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic b3RlbDpzdXBlcnNlY3JldA==
+      - OTEL_EXPORTER_OTLP_METRICS_INSECURE=${OTEL_EXPORTER_OTLP_METRICS_INSECURE:-true}
+      - _OTEL_ENABLE_CONTAINER_RESOURCE_DETECTOR=true
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+# See: src/openvtb/conf/docker.py
+# Optional containers below:
+#  elasticsearch:
+#    # NOTE: No persistance storage configured.
+#    # See: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+#    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#      - cluster.routing.allocation.disk.threshold_enabled=false
+#    ports:
+#      - 9200:9200
+#  redis:
+#    # NOTE: No persistance storage configured.
+#    # See: https://hub.docker.com/_/redis/
+#    image: redis
+#    ports:
+#        - 6379:6379

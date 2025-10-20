@@ -1,0 +1,2 @@
+CREATE USER openvtb;
+CREATE DATABASE openvtb WITH OWNER openvtb;

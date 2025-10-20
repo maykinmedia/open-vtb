@@ -1,0 +1,13 @@
+-c base.txt
+-r base.txt
+
+# CI and Code Quality
+ruff
+coverage
+
+django-webtest
+factory-boy
+freezegun
+pyquery  # integrates with webtest
+# maykin-common[vcr]  # 'mocking' http requests
+tblib

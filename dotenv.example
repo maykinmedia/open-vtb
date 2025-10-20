@@ -1,0 +1,14 @@
+SECRET_KEY="django-insecure-##q31k@oa@my@(twhvqsvv#+-9x0h0@94^f9=vmxe(zzkg^mot"
+DB_NAME="openvtb"
+DB_USER="openvtb"
+#
+# For peer authentication via unix domain socket
+# these should be kept empty.
+#
+DB_PASSWORD=""
+DB_HOST=""
+DB_PORT=""
+
+# Uncomment to record HTTP fixtures for the VCR tests
+# Should be fine to leave as "once" in dev, but *not* in CI.
+# VCR_RECORD_MODE="once"
