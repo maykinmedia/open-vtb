@@ -4,24 +4,13 @@ Tweaks the base settings so that caching mechanisms are used where possible,
 and HTTPS is leveraged where possible to further secure things.
 """
 
-# ruff: noqa: F403,F405
 import os
 
 os.environ.setdefault("ENVIRONMENT", "production")
 # NOTE: watch out for multiple projects using the same cache!
 os.environ.setdefault("CACHE_DEFAULT", "127.0.0.1:6379/2")
 
-# DISABLED by default - a lot of noise is created if there's no OTLP endpoint available
-os.environ.setdefault("OTEL_SDK_DISABLED", "true")
-
 from .base import *  # noqa isort:skip
-
-# Make use of persistent connections for better database performance
-# If not specified database connections are closed at the end of each request
-for db_config in DATABASES.values():
-    db_config["CONN_MAX_AGE"] = config(
-        "DB_CONN_MAX_AGE", default=0
-    )  # Lifetime of a database connection in seconds
 
 # Caching sessions.
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -37,15 +26,17 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 # Production logging facility.
-
-# Production logging facility.
 handlers = ["console"] if LOG_STDOUT else ["django"]
 
 LOGGING["loggers"].update(
     {
-        "django": {"handlers": handlers, "level": "INFO", "propagate": True},
+        "django": {
+            "handlers": logging_root_handlers,
+            "level": "INFO",
+            "propagate": False,
+        },
         "django.security.DisallowedHost": {
-            "handlers": handlers,
+            "handlers": logging_root_handlers,
             "level": "CRITICAL",
             "propagate": False,
         },
@@ -57,18 +48,12 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Sets X-Content-Type-Options: nosniff
 SECURE_BROWSER_XSS_FILTER = True  # Sets X-XSS-Protection: 1; mode=block
 
-##############################
-#                            #
-# 3RD PARTY LIBRARY SETTINGS #
-#                            #
-##############################
+# Deal with being hosted on a subpath
+if subpath and subpath != "/":
+    STATIC_URL = f"{subpath}{STATIC_URL}"
+    MEDIA_URL = f"{subpath}{MEDIA_URL}"
 
-# APM
-MIDDLEWARE = ["elasticapm.contrib.django.middleware.TracingMiddleware"] + MIDDLEWARE
-INSTALLED_APPS = INSTALLED_APPS + [
-    "elasticapm.contrib.django",
-]
-
-if SUBPATH and SUBPATH != "/":
-    STATIC_URL = f"{SUBPATH}{STATIC_URL}"
-    MEDIA_URL = f"{SUBPATH}{MEDIA_URL}"
+#
+# Custom settings overrides
+#
+ENVIRONMENT_SHOWN_IN_ADMIN = False

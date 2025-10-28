@@ -19,9 +19,9 @@ monkeypatch_admin()
 handler500 = "maykin_common.views.server_error"
 
 admin.site.enable_nav_sidebar = False
-admin.site.site_header = "openvtb admin"
-admin.site.site_title = "openvtb admin"
-admin.site.index_title = "openvtb dashboard"
+admin.site.site_header = "Openvtb admin"
+admin.site.site_title = "Openvtb admin"
+admin.site.index_title = "Welcome to the Open VTB admin"
 
 # URL routing
 
@@ -42,8 +42,8 @@ urlpatterns = [
     # Use custom login views for the admin + support hardware tokens
     path("admin/", include((urlpatterns, "maykin_2fa"))),
     path("admin/", include((webauthn_urlpatterns, "two_factor"))),
-    path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
+    path("ref/", include("vng_api_common.urls")),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),
@@ -57,6 +57,7 @@ urlpatterns = [
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
 ]
+
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run
 # collectstatic). Both the static folder and the media folder are only served via Django
