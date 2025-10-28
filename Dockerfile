@@ -66,6 +66,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
+COPY ./bin/uwsgi.ini /
 # Uncomment if you use celery
 # COPY ./bin/celery_worker.sh /celery_worker.sh
 # COPY ./bin/celery_beat.sh /celery_beat.sh
@@ -87,7 +88,8 @@ COPY --from=frontend-build /app/src/openvtb/static /app/src/openvtb/static
 # copy source code
 COPY ./src /app/src
 
-RUN useradd -M -u 1000 maykin \
+RUN groupadd -g 1000 maykin \
+    && useradd -M -u 1000 -g 1000 maykin \
     && chown -R maykin:maykin /app
 
 # drop privileges

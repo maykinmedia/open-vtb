@@ -25,7 +25,7 @@ import openvtb  # noqa isort:skip
 # -- Project information -----------------------------------------------------
 
 project = "openvtb"
-copyright = "Maykin B.V. 2025"
+copyright = "Maykin B.V. 2025"  # noqa
 author = openvtb.__author__
 
 # The full version, including alpha/beta/rc tags
