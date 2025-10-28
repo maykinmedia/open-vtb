@@ -193,7 +193,7 @@ djangorestframework-gis==1.2.0
     # via open-api-framework
 djangorestframework-inclusions==1.2.0
     # via open-api-framework
-docutils==0.22.2
+docutils==0.21.2
     # via django-setup-configuration
 drf-nested-routers==0.95.0
     # via commonground-api-common

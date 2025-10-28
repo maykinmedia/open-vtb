@@ -8,19 +8,21 @@
 import os
 import sys
 
+import django
+from django.utils.translation import activate
+
 sys.path.insert(0, os.path.abspath("../src"))
+os.environ["LOG_REQUESTS"] = "false"
 
 import openvtb  # noqa isort:skip
 
-# from objects.setup import setup_env  # noqa isort:skip
+# Import as private variable to avoid errors on build
+from importlib.metadata import version as _version
 
-# TODO: This needs to be enabled when we want to use autodoc to grab
-# documentation from classes and functions. However, enabling django.setup()
-# causes RTD to fail because GDAL is not present in the RTD environment.
-# See: https://github.com/readthedocs/readthedocs-docker-images/issues/114#issuecomment-570566599
-#
-# setup_env()
-# django.setup()
+from openvtb.setup import setup_env  # noqa isort:skip
+
+setup_env()
+django.setup()
 
 # -- Project information -----------------------------------------------------
 
@@ -38,9 +40,17 @@ release = openvtb.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # "sphinx.ext.todo",
-    # "sphinx_tabs.tabs",
-    # "recommonmark",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.todo",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.graphviz",
+    "django_setup_configuration.documentation.setup_config_example",
+    "django_setup_configuration.documentation.setup_config_usage",
+    "vng_api_common.diagrams.uml_images",
+    "sphinx_tabs.tabs",
+    "recommonmark",
     # "sphinx_markdown_tables",
 ]
 
@@ -54,19 +64,37 @@ templates_path = ["_templates"]
 # Usually you set "language" from the command line for these cases.
 language = "en"
 
+# Also set the language to English for Django, to make sure that any translatable text
+# is also shown in English (for instance the help texts for setup configuration examples)
+activate("en")
+
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".pytest_cache", "_archive"]
 
 source_suffix = [".rst", ".md"]
+
+intersphinx_mapping = {
+    "requests": (
+        "https://docs.python-requests.org/en/latest/",
+        None,
+    ),
+    "django": (
+        "http://docs.djangoproject.com/en/4.2/",
+        "http://docs.djangoproject.com/en/4.2/_objects/",
+    ),
+}
+
+# Datamodel image settings
+graphviz_output_format = "png"
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_logo = "logo.png"
+# html_logo = "logo.svg"
 html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -79,8 +107,25 @@ html_css_files = [
 
 todo_include_todos = True
 
+linkcheck_retries = 3
+
 linkcheck_ignore = [
-    r"https?://.*\.example.com*",
+    r"urn:*",
+    r"https?://.*\.gemeente.nl",
     r"http://localhost:\d+/",
     r"https://.*sentry.*",
+    r"https://example.com*",
+    r"https://portal.azure.com*",
+    r"https://.*kvk\.nl*",
+    r"https://gdpr.eu*",
 ]
+
+extlinks = {}
+
+django_structlog_version = _version("django-structlog")
+intersphinx_mapping = {
+    "django-structlog": (
+        f"https://django-structlog.readthedocs.io/en/{django_structlog_version}",
+        None,
+    ),
+}

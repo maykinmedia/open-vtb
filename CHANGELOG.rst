@@ -3,9 +3,5 @@ Change history
 ==============
 
 
-0.1.0
+1.X.X
 =====
-
-*<month, day year>*
-
-* Initial release.

@@ -1,27 +1,22 @@
-Documentation
-=============
+.. _index:
 
-TODO
+========================
+Open VTB Documentation
+========================
 
-This component is designed in line with the `Common Ground`_ model.
-
-This project is and only uses :ref:`introduction_open-source`.
+**Open VTB** is a modern, open-source data- and services-layer to store and
+expose client metadata and communications between clients and the municipality.
 
 .. _`Common Ground`: https://commonground.nl/
 
-Getting started
+Getting Started
 ---------------
 
-To get you started, you might find some of these links relevant:
-
-* New to this project? Have a look at the :ref:`introduction_index`
-* New to the API? Read up on the TODO
-* Want to get started now? Follow the TODO
-* Want to know how the admin interface works? Go to the TODO
-
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :hidden:
 
    introduction/index
+   installation/index
+   testing
+   changelog
