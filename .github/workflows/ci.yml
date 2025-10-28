@@ -132,15 +132,15 @@ jobs:
       docker-image-name: ${{ needs.store-reusable-workflow-vars.outputs.image-name }}
       django-settings-module: openvtb.conf.ci
 
-  open-api-publish:
-    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@v5
-    needs:
-      - store-reusable-workflow-vars
-      - open-api-ci
-      - tests
-    with:
-      docker-image-name: ${{ needs.store-reusable-workflow-vars.outputs.image-name }}
-      repository-owner: 'maykinmedia'
-    secrets:
-      docker-username: ${{ secrets.DOCKER_USERNAME }}
-      docker-token: ${{ secrets.DOCKER_TOKEN }}
+#  open-api-publish:
+#    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@v5
+#    needs:
+#      - store-reusable-workflow-vars
+#      - open-api-ci
+#      - tests
+#    with:
+#      docker-image-name: ${{ needs.store-reusable-workflow-vars.outputs.image-name }}
+#      repository-owner: 'maykinmedia'
+#    secrets:
+#      docker-username: ${{ secrets.DOCKER_USERNAME }}
+#      docker-token: ${{ secrets.DOCKER_TOKEN }}
