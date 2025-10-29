@@ -5,6 +5,8 @@ psycopg[pool]
 # Django packages
 django-capture-tag
 django-localflavor
+django-polymorphic
+
 mozilla-django-oidc-db[setup-configuration]
 
 maykin-common[axes,mfa,otel]

@@ -80,6 +80,7 @@ django==5.2.7
     #   django-markup
     #   django-otp
     #   django-phonenumber-field
+    #   django-polymorphic
     #   django-privates
     #   django-redis
     #   django-relativedelta
@@ -146,6 +147,8 @@ django-otp==1.6.1
     # via django-two-factor-auth
 django-phonenumber-field==7.3.0
     # via django-two-factor-auth
+django-polymorphic==4.1.0
+    # via -r requirements/base.in
 django-privates==3.1.1
     # via django-simple-certmanager
 django-redis==6.0.0
