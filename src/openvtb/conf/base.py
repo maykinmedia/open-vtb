@@ -14,8 +14,10 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "capture_tag",
     "maykin_common",
     # External applications.
+    "polymorphic",
     # Project applications.
     "openvtb.accounts",
+    "openvtb.components.taken",
     # Django libraries
     "localflavor",
 ]
