@@ -5,7 +5,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django_jsonform.models.fields import JSONField
+
 from .constants import SoortTaak, StatusTaak
+from .validators import validate_jsonschema
 
 
 class ExterneTaak(models.Model):
@@ -61,9 +64,11 @@ class ExterneTaak(models.Model):
         choices=SoortTaak.choices,
         help_text=_("Het soort taak"),
     )
-    data = models.JSONField(
+    data = JSONField(
         _("data"),
         default=dict,
+        blank=True,
+        null=True,
         help_text=_("Data van de taak met validaties op basis van het soort taak"),
         encoder=DjangoJSONEncoder,
     )
@@ -78,4 +83,8 @@ class ExterneTaak(models.Model):
         indexes = [GinIndex(fields=["data"], name="idx_externe_taak_data_gin")]
 
     def __str__(self):
-        return f"{self.title} ({self.status})"
+        return f"{self.titel} ({self.status})"
+
+    def clean(self):
+        super().clean()
+        validate_jsonschema(self.data, instance=self)
