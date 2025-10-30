@@ -13,9 +13,9 @@ from .api import *  # noqa
 INSTALLED_APPS = INSTALLED_APPS + [
     "capture_tag",
     "maykin_common",
-    # External applications.
     # Project applications.
     "openvtb.accounts",
+    "openvtb.components.taken",
     # Django libraries
     "localflavor",
 ]
