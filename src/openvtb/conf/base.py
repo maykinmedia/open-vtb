@@ -13,6 +13,7 @@ from .api import *  # noqa
 INSTALLED_APPS = INSTALLED_APPS + [
     "capture_tag",
     "maykin_common",
+    "rest_framework.authtoken",
     # External applications.
     # Project applications.
     "openvtb.accounts",
