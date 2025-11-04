@@ -87,4 +87,4 @@ class ExterneTaak(models.Model):
 
     def clean(self):
         super().clean()
-        validate_jsonschema(self.data, instance=self)
+        validate_jsonschema(self.data, self.taak_soort)

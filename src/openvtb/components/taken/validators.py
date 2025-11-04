@@ -1,25 +1,39 @@
-from django.core.exceptions import ValidationError
+from typing import Any
 
-import jsonschema
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+from jsonschema import FormatChecker, ValidationError as JSONValidationError, validate
 
 from .schemas import SCHEMA_MAPPING
 
 
-def validate_jsonschema(data, instance=None):
+def validate_jsonschema(data: Any, key: str) -> None:
     """
-    Validator for JSONField with appropriate JSON schema
+    Validator for JSONField with appropriate JSON schema.
+
+    Args:
+        data: The JSON data to validate.
+        key: The key to lookup the schema in SCHEMA_MAPPING.
+
+    Raises:
+        ValidationError: If the data does not conform to the schema.
     """
 
-    taak_soort = getattr(instance, "taak_soort", None)
-    if not taak_soort:
-        return
+    data = data or {}
+    if data and not key:
+        raise ValidationError(
+            {
+                "taak_soort": _(
+                    "Dit veld is verplicht voordat u het veld 'data' kunt instellen"
+                )
+            }
+        )
 
-    schema = SCHEMA_MAPPING.get(taak_soort, None)
+    schema = SCHEMA_MAPPING.get(key, None)
     if not schema:
         return
-
-    data_to_validate = data or {}
     try:
-        jsonschema.validate(instance=data_to_validate, schema=schema)
-    except jsonschema.ValidationError as json_error:
+        validate(instance=data, schema=schema, format_checker=FormatChecker())
+    except JSONValidationError as json_error:
         raise ValidationError({"data": json_error.message})

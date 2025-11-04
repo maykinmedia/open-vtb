@@ -10,7 +10,6 @@ import django_jsonform.models.fields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []

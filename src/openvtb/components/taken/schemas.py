@@ -1,9 +1,11 @@
 from django.utils.translation import gettext as _
 
+from jsonschema import Draft202012Validator
+
 from .constants import SoortTaak
 
 BETAAL_SCHEMA = {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$schema": Draft202012Validator.META_SCHEMA["$id"],
     "title": "BetaalTaak",
     "description": _(
         "Schema voor de BetaalTaak, bevat informatie over betaling en rekening van de ontvanger.",
@@ -50,7 +52,7 @@ BETAAL_SCHEMA = {
 }
 
 GEGEVENS_SCHEMA = {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$schema": Draft202012Validator.META_SCHEMA["$id"],
     "title": "GegevensUitvraagTaak",
     "description": _(
         "Schema voor de GegevensUitvraagTaak, inclusief links voor gegevensaanvragen en ontvangen gegevens."
@@ -77,7 +79,7 @@ GEGEVENS_SCHEMA = {
 
 
 FORMULIER_SCHEMA = {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$schema": Draft202012Validator.META_SCHEMA["$id"],
     "title": "FormulierTaak",
     "description": _(
         "Schema voor de FormulierTaak, inclusief definitie van het formulier en ontvangen gegevens."
@@ -102,7 +104,6 @@ FORMULIER_SCHEMA = {
     },
     "required": [
         "formulierDefinitie",
-        "ontvangenGegevens",
     ],
 }
 
