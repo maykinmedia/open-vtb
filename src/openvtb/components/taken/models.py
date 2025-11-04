@@ -77,7 +77,6 @@ class ExterneTaak(models.Model):
     # "wordtBehandeldDoor": {"urn": "urn(medewerker)", "omschrijving": "string(200)"}
     # "hoortBij": {"urn": "urn(zaak)", "omschrijving": "string(200)"}
     # "heeftBetrekkingOp": {"urn": "urn(product)", "omschrijving": "string(200)"}
-
     class Meta:
         verbose_name = _("Externe taak")
         verbose_name_plural = _("Externe taken")
