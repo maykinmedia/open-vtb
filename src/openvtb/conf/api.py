@@ -13,5 +13,8 @@ REST_FRAMEWORK["PAGE_SIZE"] = 100
 REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
     "vng_api_common.pagination.DynamicPageSizePagination"
 )
+REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
+    "rest_framework.authentication.TokenAuthentication",
+)
 
 VNG_COMPONENTS_BRANCH = "master"
