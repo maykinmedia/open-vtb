@@ -1,0 +1,346 @@
+openapi: 3.0.3
+info:
+  title: taken
+  version: 0.0.1
+  contact:
+    email: standaarden.ondersteuning@vng.nl
+    name: VNG
+    url: https://zaakgerichtwerken.vng.cloud
+  license:
+    name: EUPL 1.2
+    url: https://opensource.org/licenses/EUPL-1.2
+paths:
+  /externetaken:
+    get:
+      operationId: externetakenList
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - externetaken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExterneTaakList'
+          description: ''
+    post:
+      operationId: externetakenCreate
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExterneTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaak'
+          description: ''
+  /externetaken/{id}:
+    get:
+      operationId: externetakenRetrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this externe taak.
+        required: true
+      tags:
+      - externetaken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaak'
+          description: ''
+    put:
+      operationId: externetakenUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this externe taak.
+        required: true
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExterneTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaak'
+          description: ''
+    patch:
+      operationId: externetakenPartialUpdate
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this externe taak.
+        required: true
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedExterneTaak'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaak'
+          description: ''
+    delete:
+      operationId: externetakenDestroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this externe taak.
+        required: true
+      tags:
+      - externetaken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+components:
+  schemas:
+    BlankEnum:
+      enum:
+      - ''
+    ExterneTaak:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          nullable: true
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          description: Het soort taak
+          oneOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        data:
+          nullable: true
+          description: Data van de taak met validaties op basis van het soort taak
+      required:
+      - einddatumHandelingsTermijn
+      - handelingsPerspectief
+      - id
+      - titel
+    PaginatedExterneTaakList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExterneTaak'
+    PatchedExterneTaak:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          nullable: true
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          description: Het soort taak
+          oneOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        data:
+          nullable: true
+          description: Data van de taak met validaties op basis van het soort taak
+    StatusEnum:
+      enum:
+      - open
+      - uitgevoerd
+      - niet_uitgevoerd
+      - afgebroken
+      - verwerkt
+      type: string
+    TaakSoortEnum:
+      enum:
+      - betaaltaak
+      - gegevensuitvraagtaak
+      - formuliertaak
+      type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+servers:
+- url: /taken/api/v1
+tags:
+- name: externetaken
+- name: betaaltaken
+- name: gegevensuitvraagtaken
+- name: formuliertaken

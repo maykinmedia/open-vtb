@@ -16,5 +16,29 @@ REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
 REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
     "rest_framework.authentication.TokenAuthentication",
 )
+REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "openvtb.utils.schema.AutoSchema"
+
+SPECTACULAR_SETTINGS = {
+    "REDOC_DIST": "SIDECAR",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "CAMELIZE_NAMES": True,
+    "SCHEMA_PATH_PREFIX": r"/v[0-9]+",
+    "SCHEMA_PATH_PREFIX_TRIM": True,
+    "ENUM_GENERATE_CHOICE_DESCRIPTION": False,
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+        "maykin_common.drf_spectacular.hooks.remove_invalid_url_defaults",
+    ],
+    "CONTACT": {
+        "email": "standaarden.ondersteuning@vng.nl",
+        "name": "VNG",
+        "url": "https://zaakgerichtwerken.vng.cloud",
+    },
+    "LICENSE": {
+        "name": "EUPL 1.2",
+        "url": "https://opensource.org/licenses/EUPL-1.2",
+    },
+}
 
 VNG_COMPONENTS_BRANCH = "master"
