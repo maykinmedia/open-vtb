@@ -2,7 +2,9 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from openvtb.components.taken.validators import validate_jsonschema
 from openvtb.utils.converters import snake_to_camel_converter
+from openvtb.utils.serializers import get_field_value
 
 from ..constants import DEFAULT_VALUTA, VALUTE
 from ..models import ExterneTaak
@@ -49,6 +51,12 @@ class ExterneTaakSerializer(serializers.ModelSerializer):
             "toelichting",
             "taak_soort",
         )
+
+    def validate(self, attrs):
+        data = get_field_value(self, attrs, "data")
+        taak_soort = get_field_value(self, attrs, "taak_soort")
+        validate_jsonschema(data, taak_soort)
+        return super().validate(attrs)
 
 
 class DoelrekeningSerializer(serializers.Serializer):
