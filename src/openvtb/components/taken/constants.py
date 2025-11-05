@@ -14,3 +14,10 @@ class SoortTaak(models.TextChoices):
     BETAALTAAK = "betaaltaak", _("Betaallink")
     GEGEVENSUITVRAAGTAAK = "gegevensuitvraagtaak", _("Extern formulier")
     FORMULIERTAAK = "formuliertaak", _("Standaard formulier")
+
+
+VALUTE = {
+    "EUR": "EUR",
+}
+
+DEFAULT_VALUTA = VALUTE["EUR"]

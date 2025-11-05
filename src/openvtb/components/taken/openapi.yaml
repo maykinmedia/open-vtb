@@ -10,9 +10,201 @@ info:
     name: EUPL 1.2
     url: https://opensource.org/licenses/EUPL-1.2
 paths:
+  /betaaltaken:
+    get:
+      operationId: betaaltakenList
+      description: Vraag alle betaal taaken aan.
+      summary: Vraag alle betaal taaken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - betaaltaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBetaalTaakList'
+          description: ''
+    post:
+      operationId: betaaltakenCreate
+      description: Maak een betaal taak aan.
+      summary: Maak een betaal taak aan.
+      tags:
+      - betaaltaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BetaalTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetaalTaak'
+          description: ''
+  /betaaltaken/{uuid}:
+    get:
+      operationId: betaaltakenRetrieve
+      description: Een specifieke betaal taak aanvragen.
+      summary: Een specifieke betaal taak aanvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - betaaltaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetaalTaak'
+          description: ''
+    put:
+      operationId: betaaltakenUpdate
+      description: Volledig betaal taak wijzigen.
+      summary: Volledig betaal taak wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - betaaltaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BetaalTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetaalTaak'
+          description: ''
+    patch:
+      operationId: betaaltakenPartialUpdate
+      description: Een betaal taak gedeeltelijk wijzigen.
+      summary: Een betaal taak gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - betaaltaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBetaalTaak'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetaalTaak'
+          description: ''
+    delete:
+      operationId: betaaltakenDestroy
+      description: Een betaal taak verwijderen
+      summary: Een betaal taak verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - betaaltaken
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
   /externetaken:
     get:
       operationId: externetakenList
+      description: Vraag alle externe taken aan.
+      summary: Vraag alle externe taken aan.
       parameters:
       - name: page
         required: false
@@ -30,7 +222,6 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -46,6 +237,8 @@ paths:
           description: ''
     post:
       operationId: externetakenCreate
+      description: Maak een externe taak aan.
+      summary: Maak een externe taak aan.
       tags:
       - externetaken
       requestBody:
@@ -56,7 +249,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -70,21 +262,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExterneTaak'
           description: ''
-  /externetaken/{id}:
+  /externetaken/{uuid}:
     get:
       operationId: externetakenRetrieve
+      description: Een specifieke externe taak aanvragen.
+      summary: Een specifieke externe taak aanvragen.
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this externe taak.
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
         required: true
       tags:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -100,12 +295,16 @@ paths:
           description: ''
     put:
       operationId: externetakenUpdate
+      description: Volledig externe taak wijzigen.
+      summary: Volledig externe taak wijzigen.
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this externe taak.
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
         required: true
       tags:
       - externetaken
@@ -117,7 +316,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -133,12 +331,16 @@ paths:
           description: ''
     patch:
       operationId: externetakenPartialUpdate
+      description: Een externe taak gedeeltelijk wijzigen.
+      summary: Een externe taak gedeeltelijk wijzigen.
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this externe taak.
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
         required: true
       tags:
       - externetaken
@@ -149,7 +351,6 @@ paths:
               $ref: '#/components/schemas/PatchedExterneTaak'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -165,18 +366,401 @@ paths:
           description: ''
     delete:
       operationId: externetakenDestroy
+      description: Een externe taak verwijderen
+      summary: Een externe taak verwijderen
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this externe taak.
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
         required: true
       tags:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+  /formuliertaken:
+    get:
+      operationId: formuliertakenList
+      description: Vraag alle formulier taaken aan.
+      summary: Vraag alle formulier taaken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - formuliertaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFormulierTaakList'
+          description: ''
+    post:
+      operationId: formuliertakenCreate
+      description: Maak een formulier taak aan.
+      summary: Maak een formulier taak aan.
+      tags:
+      - formuliertaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormulierTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormulierTaak'
+          description: ''
+  /formuliertaken/{uuid}:
+    get:
+      operationId: formuliertakenRetrieve
+      description: Een specifieke formulier taak aanvragen.
+      summary: Een specifieke formulier taak aanvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - formuliertaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormulierTaak'
+          description: ''
+    put:
+      operationId: formuliertakenUpdate
+      description: Volledig formulier taak wijzigen.
+      summary: Volledig formulier taak wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - formuliertaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormulierTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormulierTaak'
+          description: ''
+    patch:
+      operationId: formuliertakenPartialUpdate
+      description: Een formulier taak gedeeltelijk wijzigen.
+      summary: Een formulier taak gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - formuliertaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFormulierTaak'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormulierTaak'
+          description: ''
+    delete:
+      operationId: formuliertakenDestroy
+      description: Een formulier taak verwijderen
+      summary: Een formulier taak verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - formuliertaken
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+  /gegevensuitvraagtaken:
+    get:
+      operationId: gegevensuitvraagtakenList
+      description: Vraag alle gegevensuitvraag taaken aan.
+      summary: Vraag alle gegevensuitvraag taaken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - gegevensuitvraagtaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGegevensUitvraagTaakList'
+          description: ''
+    post:
+      operationId: gegevensuitvraagtakenCreate
+      description: Maak een gegevensuitvraag taak aan.
+      summary: Maak een gegevensuitvraag taak aan.
+      tags:
+      - gegevensuitvraagtaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GegevensUitvraagTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GegevensUitvraagTaak'
+          description: ''
+  /gegevensuitvraagtaken/{uuid}:
+    get:
+      operationId: gegevensuitvraagtakenRetrieve
+      description: Een specifieke gegevensuitvraag taak aanvragen.
+      summary: Een specifieke gegevensuitvraag taak aanvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - gegevensuitvraagtaken
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GegevensUitvraagTaak'
+          description: ''
+    put:
+      operationId: gegevensuitvraagtakenUpdate
+      description: Volledig gegevensuitvraag taak wijzigen.
+      summary: Volledig gegevensuitvraag taak wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - gegevensuitvraagtaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GegevensUitvraagTaak'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GegevensUitvraagTaak'
+          description: ''
+    patch:
+      operationId: gegevensuitvraagtakenPartialUpdate
+      description: Een gegevensuitvraag taak gedeeltelijk wijzigen.
+      summary: Een gegevensuitvraag taak gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - gegevensuitvraagtaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGegevensUitvraagTaak'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GegevensUitvraagTaak'
+          description: ''
+    delete:
+      operationId: gegevensuitvraagtakenDestroy
+      description: Een gegevensuitvraag taak verwijderen
+      summary: Een gegevensuitvraag taak verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - gegevensuitvraagtaken
+      security:
+      - tokenAuth: []
       responses:
         '204':
           headers:
@@ -188,15 +772,55 @@ paths:
           description: No response body
 components:
   schemas:
+    BetaalTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        bedrag:
+          type: number
+          format: double
+          description: Bedrag dat betaald moet worden
+        valuta:
+          allOf:
+          - $ref: '#/components/schemas/ValutaEnum'
+          default: EUR
+          description: Valuta van de betaling
+        transactieomschrijving:
+          type: string
+          description: Omschrijving van de transactie
+          maxLength: 80
+        doelrekening:
+          allOf:
+          - $ref: '#/components/schemas/Doelrekening'
+          description: Gegevens van de ontvangende bankrekening
+      required:
+      - bedrag
+      - doelrekening
+      - externeTaak
+      - transactieomschrijving
     BlankEnum:
       enum:
       - ''
+    Doelrekening:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: Naam van de ontvanger van de betaling
+          maxLength: 200
+        iban:
+          type: string
+          description: IBAN code van de ontvanger
+      required:
+      - iban
+      - naam
     ExterneTaak:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
         uuid:
           type: string
           format: uuid
@@ -237,14 +861,67 @@ components:
           oneOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
           - $ref: '#/components/schemas/BlankEnum'
-        data:
-          nullable: true
-          description: Data van de taak met validaties op basis van het soort taak
       required:
       - einddatumHandelingsTermijn
       - handelingsPerspectief
-      - id
       - titel
+    FormulierTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        formulierDefinitie:
+          nullable: true
+          description: Definitie van het formulier in JSON
+        ontvangenGegevens:
+          nullable: true
+          description: Ontvangen gegevens als key-value object
+      required:
+      - externeTaak
+    GegevensUitvraagTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        uitvraagLink:
+          type: string
+          format: uri
+          description: Link naar de externe gegevensaanvraag
+        ontvangenGegevens:
+          nullable: true
+          description: Ontvangen gegevens als key-value object
+      required:
+      - externeTaak
+      - uitvraagLink
+    PaginatedBetaalTaakList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BetaalTaak'
     PaginatedExterneTaakList:
       type: object
       required:
@@ -268,12 +945,80 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExterneTaak'
+    PaginatedFormulierTaakList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormulierTaak'
+    PaginatedGegevensUitvraagTaakList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GegevensUitvraagTaak'
+    PatchedBetaalTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        bedrag:
+          type: number
+          format: double
+          description: Bedrag dat betaald moet worden
+        valuta:
+          allOf:
+          - $ref: '#/components/schemas/ValutaEnum'
+          default: EUR
+          description: Valuta van de betaling
+        transactieomschrijving:
+          type: string
+          description: Omschrijving van de transactie
+          maxLength: 80
+        doelrekening:
+          allOf:
+          - $ref: '#/components/schemas/Doelrekening'
+          description: Gegevens van de ontvangende bankrekening
     PatchedExterneTaak:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
         uuid:
           type: string
           format: uuid
@@ -314,9 +1059,35 @@ components:
           oneOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
           - $ref: '#/components/schemas/BlankEnum'
-        data:
+    PatchedFormulierTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        formulierDefinitie:
           nullable: true
-          description: Data van de taak met validaties op basis van het soort taak
+          description: Definitie van het formulier in JSON
+        ontvangenGegevens:
+          nullable: true
+          description: Ontvangen gegevens als key-value object
+    PatchedGegevensUitvraagTaak:
+      type: object
+      description: |-
+        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+      properties:
+        externeTaak:
+          $ref: '#/components/schemas/ExterneTaak'
+        uitvraagLink:
+          type: string
+          format: uri
+          description: Link naar de externe gegevensaanvraag
+        ontvangenGegevens:
+          nullable: true
+          description: Ontvangen gegevens als key-value object
     StatusEnum:
       enum:
       - open
@@ -330,6 +1101,10 @@ components:
       - betaaltaak
       - gegevensuitvraagtaak
       - formuliertaak
+      type: string
+    ValutaEnum:
+      enum:
+      - EUR
       type: string
   securitySchemes:
     tokenAuth:
