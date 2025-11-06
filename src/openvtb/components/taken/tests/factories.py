@@ -20,12 +20,12 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         betaaltaak = factory.Trait(
             taak_soort=SoortTaak.BETAALTAAK,
             data={
-                "bedrag": "number",
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             },
         )

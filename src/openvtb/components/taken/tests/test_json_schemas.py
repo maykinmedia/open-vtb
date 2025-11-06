@@ -3,273 +3,259 @@ from django.test import TestCase
 
 from ..constants import SoortTaak
 from ..validators import validate_jsonschema
-from .factories import ExterneTaakFactory
 
 
 class ValidateJSONSchemaTestCase(TestCase):
     def test_invalid_key_schema(self):
-        validate_jsonschema({}, "")
-        validate_jsonschema({}, "test")
-        validate_jsonschema({}, None)
+        for key in ["", "test", None]:
+            with self.assertRaises(ValidationError):
+                validate_jsonschema({}, key)
 
     def test_invalid_data_schema(self):
         # data values
-        data_values = ["", "test", [], 0, False, None]
-        for data in data_values:
+        for data in ["", "test", [], 0, False, None]:
             with self.assertRaises(ValidationError) as error:
                 validate_jsonschema(data, SoortTaak.BETAALTAAK.value)
             self.assertTrue("data" in error.exception.message_dict)
-
-        # data exists but the key doesn't exist
-        with self.assertRaises(ValidationError) as error:
-            validate_jsonschema({"data": "test"}, None)
-
-        self.assertEqual(
-            error.exception.message_dict,
-            {
-                "taak_soort": [
-                    "Dit veld is verplicht voordat u het veld 'data' kunt instellen"
-                ]
-            },
-        )
 
 
 class ValidateBetaalTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.externe_taak = ExterneTaakFactory.create(
-            taak_soort=SoortTaak.BETAALTAAK.value
-        )
+        self.taak_soort = SoortTaak.BETAALTAAK.value
 
     def test_valid_schema(self):
         # all data
-        self.externe_taak.data = {
-            "bedrag": 10.12,
+        data = {
+            "bedrag": "10.12",
             "valuta": "EUR",
             "transactieomschrijving": "test",
             "doelrekening": {
                 "naam": "test",
-                "iban": "iban-code-test",
+                "iban": "NL18BANK23481326",
             },
         }
-        self.externe_taak.full_clean()
-        self.externe_taak.save()
+        validate_jsonschema(data, self.taak_soort)
 
     def test_invalid_schema_required_fields(self):
         with self.subTest("'bedrag' field required"):
-            self.externe_taak.data = {
-                # "bedrag": 10.12,
+            data = {
+                # "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
                 {"data": ["'bedrag' is a required property"]},
             )
 
         with self.subTest("'valuta' field required"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 # "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
                 {"data": ["'valuta' is a required property"]},
             )
 
         with self.subTest("'transactieomschrijving' field required"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 # "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
                 {"data": ["'transactieomschrijving' is a required property"]},
             )
 
         with self.subTest("'doelrekening' field required"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 # "doelrekening": {
                 # "naam": "test",
-                # "iban": "iban-code-test",
+                # "iban": "NL18BANK23481326",
                 # },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
                 {"data": ["'doelrekening' is a required property"]},
             )
 
         with self.subTest("'doelrekening.naam' field required"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     # "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["'naam' is a required property"]},
+                {"doelrekening": ["'naam' is a required property"]},
             )
 
         with self.subTest("'doelrekening.iban' field required"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    # "iban": "iban-code-test",
+                    # "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["'iban' is a required property"]},
+                {"doelrekening": ["'iban' is a required property"]},
             )
 
     def test_invalid_schema_check_type(self):
-        with self.subTest("'bedrag' is not number"):
-            self.externe_taak.data = {
-                "bedrag": "10",
+        with self.subTest("'bedrag' is not decimal"):
+            data = {
+                "bedrag": "test",  # not decimal
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["'10' is not of type 'number'"]},
+                {"bedrag": ["'test' is not a valid decimal number"]},
+            )
+        with self.subTest("'bedrag'  has more than 2 decimal places"):
+            data = {
+                "bedrag": "10.111",  # 3 decimals
+                "valuta": "EUR",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            }
+            with self.assertRaises(ValidationError) as error:
+                validate_jsonschema(data, self.taak_soort)
+            self.assertEqual(
+                error.exception.message_dict,
+                {"bedrag": ["'10.111' has more than 2 decimal places"]},
             )
 
         with self.subTest("'valuta' choices"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "TEST",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["'TEST' is not one of ['EUR']"]},
+                {"valuta": ["'TEST' is not one of ['EUR']"]},
             )
 
         with self.subTest("'transactieomschrijving' is not string"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": 123,
                 "doelrekening": {
                     "naam": "test",
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["123 is not of type 'string'"]},
+                {"transactieomschrijving": ["123 is not of type 'string'"]},
             )
 
-        with self.subTest("'transactieomschrijving' is not dict"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+        with self.subTest("'doelrekening' is not dict"):
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": "TEST",
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["'TEST' is not of type 'object'"]},
+                {"doelrekening": ["'TEST' is not of type 'object'"]},
             )
 
         with self.subTest("'transactieomschrijving' is too long"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test" * 100,
                 "doelrekening": "TEST",
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
-
+                validate_jsonschema(data, self.taak_soort)
             self.assertTrue(
-                "is too long" in error.exception.message_dict["data"][0],
+                "is too long"
+                in error.exception.message_dict["transactieomschrijving"][0],
             )
 
         with self.subTest("'naam' is not string"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": True,
-                    "iban": "iban-code-test",
+                    "iban": "NL18BANK23481326",
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["True is not of type 'string'"]},
+                {"doelrekening.naam": ["True is not of type 'string'"]},
             )
 
         with self.subTest("'iban' is not string"):
-            self.externe_taak.data = {
-                "bedrag": 10.12,
+            data = {
+                "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
@@ -278,36 +264,47 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                self.externe_taak.full_clean()
-                self.externe_taak.save()
+                validate_jsonschema(data, self.taak_soort)
             self.assertEqual(
                 error.exception.message_dict,
-                {"data": ["123 is not of type 'string'"]},
+                {"doelrekening.iban": ["123 is not of type 'string'"]},
+            )
+        with self.subTest("'doelrekening.iban' field format"):
+            data = {
+                "bedrag": "10.12",
+                "valuta": "EUR",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "wrong-format",
+                },
+            }
+            with self.assertRaises(ValidationError) as error:
+                validate_jsonschema(data, self.taak_soort)
+            self.assertEqual(
+                error.exception.message_dict,
+                {"doelrekening.iban": ["'wrong-format' is not a valid IBAN"]},
             )
 
 
 class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.externe_taak = ExterneTaakFactory.create(
-            taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK.value
-        )
+        self.taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK.value
 
     def test_valid_schema(self):
-        self.externe_taak.data = {
+        data = {
             "uitvraagLink": "http://example.com/",
         }
-        self.externe_taak.full_clean()
-        self.externe_taak.save()
+        validate_jsonschema(data, self.taak_soort)
 
-        self.externe_taak.data = {
+        data = {
             "uitvraagLink": "http://example.com/",
             "ontvangenGegevens": {},
         }
-        self.externe_taak.full_clean()
-        self.externe_taak.save()
+        validate_jsonschema(data, self.taak_soort)
 
-        self.externe_taak.data = {
+        data = {
             "uitvraagLink": "http://example.com/",
             "ontvangenGegevens": {
                 "string": "hello world",  # string
@@ -334,50 +331,44 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
                 "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
             },
         }
-        self.externe_taak.full_clean()
-        self.externe_taak.save()
+        validate_jsonschema(data, self.taak_soort)
 
     def test_invalid_schema(self):
         with self.assertRaises(ValidationError) as error:
-            self.externe_taak.data = {}
-            self.externe_taak.full_clean()
-            self.externe_taak.save()
+            data = {}
+            validate_jsonschema(data, self.taak_soort)
         self.assertEqual(
             error.exception.message_dict,
             {"data": ["'uitvraagLink' is a required property"]},
         )
 
         with self.assertRaises(ValidationError) as error:
-            self.externe_taak.data = {
+            data = {
                 "uitvraagLink": "test",
                 "ontvangenGegevens": {},
             }
-            self.externe_taak.full_clean()
-            self.externe_taak.save()
+            validate_jsonschema(data, self.taak_soort)
         self.assertEqual(
             error.exception.message_dict,
-            {"data": ["'test' is not a 'uri'"]},
+            {"uitvraagLink": ["'test' is not a 'uri'"]},
         )
 
         with self.assertRaises(ValidationError) as error:
-            self.externe_taak.data = {
+            data = {
                 "uitvraagLink": "http://example.com",
                 "ontvangenGegevens": "http://example.com",
             }
-            self.externe_taak.full_clean()
-            self.externe_taak.save()
+            validate_jsonschema(data, self.taak_soort)
         self.assertEqual(
             error.exception.message_dict,
-            {"data": ["'http://example.com' is not of type 'object'"]},
+            {"ontvangenGegevens": ["'http://example.com' is not of type 'object'"]},
         )
 
 
 class ValidateFormulierTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.externe_taak = ExterneTaakFactory.create(
-            taak_soort=SoortTaak.FORMULIERTAAK.value
-        )
+        self.taak_soort = SoortTaak.FORMULIERTAAK.value
 
     def test_valid_schema(self):
         example = {
@@ -404,31 +395,28 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
             "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
             "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
         }
-        self.externe_taak.data = {
+        data = {
             "formulierDefinitie": example,
             "ontvangenGegevens": example,
         }
-        self.externe_taak.full_clean()
-        self.externe_taak.save()
+        validate_jsonschema(data, self.taak_soort)
 
     def test_invalid_schema(self):
         with self.assertRaises(ValidationError) as error:
-            self.externe_taak.data = {}
-            self.externe_taak.full_clean()
-            self.externe_taak.save()
+            data = {}
+            validate_jsonschema(data, self.taak_soort)
         self.assertEqual(
             error.exception.message_dict,
             {"data": ["'formulierDefinitie' is a required property"]},
         )
 
         with self.assertRaises(ValidationError) as error:
-            self.externe_taak.data = {
+            data = {
                 "formulierDefinitie": "example",
                 "ontvangenGegevens": {},
             }
-            self.externe_taak.full_clean()
-            self.externe_taak.save()
+            validate_jsonschema(data, self.taak_soort)
         self.assertEqual(
             error.exception.message_dict,
-            {"data": ["'example' is not of type 'object'"]},
+            {"formulierDefinitie": ["'example' is not of type 'object'"]},
         )

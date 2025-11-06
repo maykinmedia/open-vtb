@@ -1,8 +1,9 @@
 import uuid as _uuid
 
-from django.contrib.postgres.indexes import GinIndex
+from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
@@ -21,7 +22,7 @@ class ExterneTaak(models.Model):
     )
     titel = models.CharField(
         _("titel"),
-        max_length=255,
+        max_length=100,
         help_text=_("Titel van de taak (max. 1 zin)"),
     )
     status = models.CharField(
@@ -33,8 +34,7 @@ class ExterneTaak(models.Model):
     )
     startdatum = models.DateTimeField(
         _("start datum"),
-        blank=True,
-        null=True,
+        default=timezone.now,
         help_text=_("Startdatum van de taak."),
     )
     handelings_perspectief = models.CharField(
@@ -44,6 +44,8 @@ class ExterneTaak(models.Model):
     )
     einddatum_handelings_termijn = models.DateTimeField(
         _("einddatum handelings termijn"),
+        blank=True,
+        null=True,
         help_text=_("Einddatum handelings termijn"),
     )
     datum_herinnering = models.DateTimeField(
@@ -60,15 +62,12 @@ class ExterneTaak(models.Model):
     taak_soort = models.CharField(
         _("taak soort"),
         max_length=20,
-        blank=True,  # TODO check if is possible to create without
         choices=SoortTaak.choices,
         help_text=_("Het soort taak"),
     )
     data = JSONField(
         _("data"),
         default=dict,
-        blank=True,
-        null=True,
         help_text=_("Data van de taak met validaties op basis van het soort taak"),
         encoder=DjangoJSONEncoder,
     )
@@ -80,11 +79,15 @@ class ExterneTaak(models.Model):
     # "heeftBetrekkingOp": {"urn": "urn(product)", "omschrijving": "string(200)"}
 
     class Meta:
-        indexes = [GinIndex(fields=["data"], name="idx_externe_taak_data_gin")]
+        verbose_name = _("Externe taak")
+        verbose_name_plural = _("Externe taken")
 
     def __str__(self):
         return f"{self.titel} ({self.status})"
 
     def clean(self):
         super().clean()
-        validate_jsonschema(self.data, self.taak_soort)
+        try:
+            validate_jsonschema(self.data, self.taak_soort)
+        except ValidationError as error:
+            raise ValidationError({"data": str(error)})

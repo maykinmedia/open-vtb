@@ -14,12 +14,17 @@ BETAAL_SCHEMA = {
     "additionalProperties": False,
     "properties": {
         "bedrag": {
-            "type": "number",
+            "type": "string",
+            "format": "decimal",
         },
         "valuta": {
+            #  ISO 4217
             "type": "string",
             "enum": ["EUR"],
             "default": "EUR",
+            "minLength": 3,
+            "maxLength": 3,
+            "pattern": "^[A-Z]{3}$",
         },
         "transactieomschrijving": {
             "type": "string",
@@ -35,6 +40,7 @@ BETAAL_SCHEMA = {
                 },
                 "iban": {
                     "type": "string",
+                    "format": "iban",
                 },
             },
             "required": [

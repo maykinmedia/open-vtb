@@ -46,6 +46,23 @@
         "fields": {
             "order": 2,
             "translations": {
+                "en": "API Authorisations"
+            },
+            "name": "API Autorisaties",
+            "slug": "api-autorisaties",
+            "models": [
+                [
+                    "authtoken",
+                    "tokenproxy"
+                ]
+            ]
+        }
+    },
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
+            "order": 3,
+            "translations": {
                 "en": "Taken"
             },
             "name": "Taken",

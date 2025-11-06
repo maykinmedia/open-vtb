@@ -64,6 +64,8 @@ ignore = [
     "SIM102",
     # Use a single `with` statement with multiple contexts instead of nested `with` statements
     "SIM117",
+    # Checks for str.format calls that can be replaced with f-strings.
+    "UP032",
 ]
 
 [tool.ruff.lint.isort]
