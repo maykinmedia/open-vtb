@@ -7,10 +7,6 @@ import django.utils.timezone
 from django.db import migrations, models
 
 import django_jsonform.models.fields
-import uuid
-from django.db import migrations, models
-
-import django_jsonform.models.fields
 
 
 class Migration(migrations.Migration):

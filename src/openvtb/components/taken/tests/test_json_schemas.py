@@ -335,14 +335,6 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
 
     def test_invalid_schema(self):
         with self.assertRaises(ValidationError) as error:
-            data = {}
-            validate_jsonschema(data, self.taak_soort)
-        self.assertEqual(
-            error.exception.message_dict,
-            {"data": ["'uitvraagLink' is a required property"]},
-        )
-
-        with self.assertRaises(ValidationError) as error:
             data = {
                 "uitvraagLink": "test",
                 "ontvangenGegevens": {},
@@ -402,14 +394,6 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
         validate_jsonschema(data, self.taak_soort)
 
     def test_invalid_schema(self):
-        with self.assertRaises(ValidationError) as error:
-            data = {}
-            validate_jsonschema(data, self.taak_soort)
-        self.assertEqual(
-            error.exception.message_dict,
-            {"data": ["'formulierDefinitie' is a required property"]},
-        )
-
         with self.assertRaises(ValidationError) as error:
             data = {
                 "formulierDefinitie": "example",

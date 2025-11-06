@@ -98,7 +98,7 @@ class BetaalTaakTests(APITestCase):
                 "handelingsPerspectief": "handelingsPerspectief1",
                 "einddatumHandelingsTermijn": "2025-01-01T12:00:00",
             },
-            "bedrag": 11,
+            "bedrag": "11",
             "valuta": "EUR",
             "transactieomschrijving": "test",
             "doelrekening": {
@@ -244,7 +244,7 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": "2025-01-01T12:00:00",
                 "taakSoort": SoortTaak.FORMULIERTAAK.value,
             },
-            "bedrag": 11,
+            "bedrag": "11",
             "valuta": "EUR",
             "transactieomschrijving": "test",
             "doelrekening": {
@@ -276,7 +276,7 @@ class BetaalTaakTests(APITestCase):
                     "handelingsPerspectief": "handelingsPerspectief1",
                     "einddatumHandelingsTermijn": "2025-01-01T12:00:00",
                 },
-                "bedrag": "test",  # should be float
+                "bedrag": "test",  # should be decimal
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": {
@@ -291,7 +291,7 @@ class BetaalTaakTests(APITestCase):
                 {
                     "name": "bedrag",
                     "code": "invalid",
-                    "reason": "Een geldig nummer is vereist.",
+                    "reason": "'test' is not a valid decimal number",
                 },
             )
             self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -303,7 +303,7 @@ class BetaalTaakTests(APITestCase):
                     "handelingsPerspectief": "handelingsPerspectief1",
                     "einddatumHandelingsTermijn": "2025-01-01T12:00:00",
                 },
-                "bedrag": 11,
+                "bedrag": "11",
                 "valuta": "TEST",
                 "transactieomschrijving": "test",
                 "doelrekening": {
@@ -367,11 +367,11 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(betaaltaak.titel, "new_title")
 
         # patch one field from json_data
-        self.assertEqual(betaaltaak.data["bedrag"], 10.12)  # default factory value
-        response = self.client.patch(detail_url, {"bedrag": 100})
+        self.assertEqual(betaaltaak.data["bedrag"], "10.12")  # default factory value
+        response = self.client.patch(detail_url, {"bedrag": "100"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         betaaltaak = ExterneTaak.objects.get()
-        self.assertEqual(betaaltaak.data["bedrag"], 100)
+        self.assertEqual(betaaltaak.data["bedrag"], "100")
 
         # patch one field from json_data
         self.assertEqual(
@@ -416,7 +416,7 @@ class BetaalTaakTests(APITestCase):
                     "handelingsPerspectief": "handelingsPerspectief1",
                     "einddatumHandelingsTermijn": "2025-01-01T12:00:00",
                 },
-                "bedrag": 100,
+                "bedrag": "100",
                 "valuta": "EUR",
                 "transactieomschrijving": "new_test",
                 "doelrekening": {
@@ -450,144 +450,6 @@ class BetaalTaakTests(APITestCase):
                     "naam": betaaltaak.data["doelrekening"]["naam"],
                     "iban": betaaltaak.data["doelrekening"]["iban"],
                 },
-            },
-        )
-
-    def test_valid_update_from_generic_to_betaaltaak(self):
-        externetaak = ExterneTaakFactory.create()
-        self.assertEqual(ExterneTaak.objects.all().count(), 1)
-        self.assertEqual(externetaak.taak_soort, "")
-
-        # call generic endpoint
-        response = self.client.get(reverse("taken:externetaak-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 1)
-
-        # call betaaltaak endpoint
-        response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 0)
-
-        # update taak_soort to betaaltaak
-        detail_url = reverse(
-            "taken:externetaak-detail", kwargs={"uuid": str(externetaak.uuid)}
-        )
-        response = self.client.patch(
-            detail_url,
-            {"taakSoort": SoortTaak.BETAALTAAK.value},
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        externetaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            response.json(),
-            {
-                "uuid": str(externetaak.uuid),
-                "titel": externetaak.titel,
-                "status": externetaak.status,
-                "startdatum": externetaak.startdatum,
-                "handelingsPerspectief": externetaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": externetaak.datum_herinnering,
-                "toelichting": externetaak.toelichting,
-                "taakSoort": externetaak.taak_soort,
-            },
-        )
-        self.assertEqual(ExterneTaak.objects.all().count(), 1)
-        self.assertEqual(externetaak.taak_soort, SoortTaak.BETAALTAAK.value)
-        self.assertEqual(externetaak.data, {})
-
-        # call generic endpoint
-        response = self.client.get(reverse("taken:externetaak-list"))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 1)
-
-        # call betaaltaak endpoint
-        response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 1)
-
-        detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(externetaak.uuid)}
-        )
-
-        response = self.client.get(detail_url)
-        self.assertEqual(
-            response.json(),
-            {
-                "externeTaak": {
-                    "uuid": str(externetaak.uuid),
-                    "titel": externetaak.titel,
-                    "status": externetaak.status,
-                    "startdatum": externetaak.startdatum,
-                    "handelingsPerspectief": externetaak.handelings_perspectief,
-                    "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
-                        "+00:00", "Z"
-                    ),
-                    "datumHerinnering": externetaak.datum_herinnering,
-                    "toelichting": externetaak.toelichting,
-                    "taakSoort": SoortTaak.BETAALTAAK.value,
-                },
-                # all fields are None because they have not yet been set
-                "bedrag": None,
-                "valuta": None,
-                "transactieomschrijving": None,
-                "doelrekening": None,
-            },
-        )
-
-        # update fields
-        response = self.client.patch(
-            detail_url,
-            {
-                "bedrag": 100,
-                "valuta": "EUR",
-                "transactieomschrijving": "new_test",
-                "doelrekening": {
-                    "naam": "new_test",
-                    "iban": "new-iban-code-test",
-                },
-            },
-        )
-        betaaltaak = ExterneTaak.objects.get()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # check api response
-        self.assertEqual(
-            response.json(),
-            {
-                "externeTaak": {
-                    "uuid": str(betaaltaak.uuid),
-                    "titel": betaaltaak.titel,
-                    "status": betaaltaak.status,
-                    "startdatum": betaaltaak.startdatum,
-                    "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                    "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                        "+00:00", "Z"
-                    ),
-                    "datumHerinnering": betaaltaak.datum_herinnering,
-                    "toelichting": betaaltaak.toelichting,
-                    "taakSoort": SoortTaak.BETAALTAAK.value,
-                },
-                "bedrag": betaaltaak.data["bedrag"],
-                "valuta": betaaltaak.data["valuta"],
-                "transactieomschrijving": betaaltaak.data["transactieomschrijving"],
-                "doelrekening": {
-                    "naam": betaaltaak.data["doelrekening"]["naam"],
-                    "iban": betaaltaak.data["doelrekening"]["iban"],
-                },
-            },
-        )
-
-        # check db values
-        self.assertEqual(
-            betaaltaak.data,
-            {
-                "bedrag": 100.0,
-                "valuta": "EUR",
-                "doelrekening": {"iban": "new-iban-code-test", "naam": "new_test"},
-                "transactieomschrijving": "new_test",
             },
         )
 

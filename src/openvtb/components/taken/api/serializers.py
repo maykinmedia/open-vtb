@@ -59,6 +59,7 @@ class SoortTaakSerializerMixin(serializers.Serializer):
         data = {k: attrs.pop(k) for k in fields if k in attrs}
         attrs["taak_soort"] = self.taak_soort
         if self.instance and getattr(self.instance, "data", None):
+            # update data with instance values
             data = {**self.instance.data, **data}
 
         attrs["data"] = data
@@ -104,7 +105,7 @@ class DoelrekeningSerializer(serializers.Serializer):
 
 class BetaalTaakSerializer(SoortTaakSerializerMixin):
     externe_taak = ExterneTaakSerializer(source="*")
-    bedrag = serializers.FloatField(
+    bedrag = serializers.CharField(
         help_text=_("Bedrag dat betaald moet worden"),
     )
     valuta = serializers.ChoiceField(

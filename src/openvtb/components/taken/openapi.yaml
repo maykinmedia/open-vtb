@@ -775,14 +775,13 @@ components:
     BetaalTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
         bedrag:
-          type: number
-          format: double
+          type: string
           description: Bedrag dat betaald moet worden
         valuta:
           allOf:
@@ -829,7 +828,7 @@ components:
         titel:
           type: string
           description: Titel van de taak (max. 1 zin)
-          maxLength: 255
+          maxLength: 100
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -868,8 +867,8 @@ components:
     FormulierTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
@@ -884,8 +883,8 @@ components:
     GegevensUitvraagTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
@@ -994,14 +993,13 @@ components:
     PatchedBetaalTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
         bedrag:
-          type: number
-          format: double
+          type: string
           description: Bedrag dat betaald moet worden
         valuta:
           allOf:
@@ -1027,7 +1025,7 @@ components:
         titel:
           type: string
           description: Titel van de taak (max. 1 zin)
-          maxLength: 255
+          maxLength: 100
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1062,8 +1060,8 @@ components:
     PatchedFormulierTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
@@ -1076,8 +1074,8 @@ components:
     PatchedGegevensUitvraagTaak:
       type: object
       description: |-
-        A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-        avoiding the need for `source="data.<field>"` definitions.
+        Mixin for taak_soort serializers that automatically maps declared serializer fields
+        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
         externeTaak:
           $ref: '#/components/schemas/ExterneTaak'
