@@ -1,27 +1,34 @@
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.validators import validate_jsonschema
 from openvtb.utils.converters import snake_to_camel_converter
-from openvtb.utils.serializers import get_field_value
 
 from ..constants import DEFAULT_VALUTA, VALUTE
 from ..models import ExterneTaak
 
 
-class JsonDataSerializer(serializers.Serializer):
+class SoortTaakSerializerMixin(serializers.Serializer):
     """
-    A serializer mixin that maps declared fields directly to keys inside `instance.data`,
-    avoiding the need for `source="data.<field>"` definitions.
+    Mixin for taak_soort serializers that automatically maps declared serializer fields
+    to keys inside the `data` JSONField of an ExterneTaak instance.
     """
 
     data_field = "data"
+    taak_soort = None
 
     def get_data_dict(self, instance):
         return getattr(instance, self.data_field, {}) or {}
 
     def to_representation(self, instance):
+        """
+        Maps declared fields directly to keys inside `instance.data`,
+        avoiding the need for `source="data.<field>"` definitions.
+        """
+
         data_dict = self.get_data_dict(instance)
         base = {}
 
@@ -33,8 +40,40 @@ class JsonDataSerializer(serializers.Serializer):
                 value = getattr(instance, field_name)
             else:
                 value = data_dict.get(snake_to_camel_converter(field_name))
-            base[field_name] = field.to_representation(value)
+            base[field_name] = (
+                field.to_representation(value) if value is not None else None
+            )
         return base
+
+    def validate(self, attrs):
+        if attrs.pop("taak_soort", None):
+            raise serializers.ValidationError(
+                {
+                    "externeTaak.taakSoort": _(
+                        "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd."
+                    )
+                },
+                code="invalid",
+            )
+        fields = getattr(self.Meta, "task_fields", [])
+        data = {k: attrs.pop(k) for k in fields if k in attrs}
+        attrs["taak_soort"] = self.taak_soort
+        if self.instance and getattr(self.instance, "data", None):
+            data = {**self.instance.data, **data}
+
+        attrs["data"] = data
+        validate_jsonschema(data, self.taak_soort)
+        return super().validate(attrs)
+
+    @transaction.atomic
+    def create(self, validated_data):
+        return ExterneTaak.objects.create(**validated_data)
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        ExterneTaak.objects.filter(pk=instance.pk).update(**validated_data)
+        instance.refresh_from_db()
+        return instance
 
 
 class ExterneTaakSerializer(serializers.ModelSerializer):
@@ -52,12 +91,6 @@ class ExterneTaakSerializer(serializers.ModelSerializer):
             "taak_soort",
         )
 
-    def validate(self, attrs):
-        data = get_field_value(self, attrs, "data")
-        taak_soort = get_field_value(self, attrs, "taak_soort")
-        validate_jsonschema(data, taak_soort)
-        return super().validate(attrs)
-
 
 class DoelrekeningSerializer(serializers.Serializer):
     naam = serializers.CharField(
@@ -69,7 +102,7 @@ class DoelrekeningSerializer(serializers.Serializer):
     )
 
 
-class BetaalTaakSerializer(JsonDataSerializer):
+class BetaalTaakSerializer(SoortTaakSerializerMixin):
     externe_taak = ExterneTaakSerializer(source="*")
     bedrag = serializers.FloatField(
         help_text=_("Bedrag dat betaald moet worden"),
@@ -87,8 +120,13 @@ class BetaalTaakSerializer(JsonDataSerializer):
         help_text=_("Gegevens van de ontvangende bankrekening"),
     )
 
+    taak_soort = SoortTaak.BETAALTAAK
 
-class GegevensUitvraagTaakSerializer(JsonDataSerializer):
+    class Meta:
+        task_fields = ["bedrag", "valuta", "transactieomschrijving", "doelrekening"]
+
+
+class GegevensUitvraagTaakSerializer(SoortTaakSerializerMixin):
     externe_taak = ExterneTaakSerializer(source="*")
     uitvraag_link = serializers.URLField(
         help_text=_("Link naar de externe gegevensaanvraag"),
@@ -100,8 +138,13 @@ class GegevensUitvraagTaakSerializer(JsonDataSerializer):
         help_text=_("Ontvangen gegevens als key-value object"),
     )
 
+    taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK
 
-class FormulierTaakSerializer(JsonDataSerializer):
+    class Meta:
+        task_fields = ["uitvraag_link", "ontvangen_gegevens"]
+
+
+class FormulierTaakSerializer(SoortTaakSerializerMixin):
     externe_taak = ExterneTaakSerializer(source="*")
     formulier_definitie = serializers.JSONField(
         required=False,
@@ -115,3 +158,8 @@ class FormulierTaakSerializer(JsonDataSerializer):
         allow_null=True,
         help_text=_("Ontvangen gegevens als key-value object"),
     )
+
+    taak_soort = SoortTaak.FORMULIERTAAK
+
+    class Meta:
+        task_fields = ["formulier_definitie", "ontvangen_gegevens"]
