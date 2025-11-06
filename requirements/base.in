@@ -8,3 +8,7 @@ django-localflavor
 mozilla-django-oidc-db[setup-configuration]
 
 maykin-common[axes,mfa,otel]
+
+# Extra
+pytz
+jsonschema[format]
