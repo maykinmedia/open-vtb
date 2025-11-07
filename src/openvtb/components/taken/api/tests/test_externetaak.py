@@ -37,7 +37,9 @@ class ExterneTaakTests(APITestCase):
                         "uuid": str(externetaak.uuid),
                         "titel": externetaak.titel,
                         "status": externetaak.status,
-                        "startdatum": externetaak.startdatum,
+                        "startdatum": externetaak.startdatum.isoformat().replace(
+                            "+00:00", "Z"
+                        ),
                         "handelingsPerspectief": externetaak.handelings_perspectief,
                         "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
                             "+00:00", "Z"
@@ -86,7 +88,7 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(externetaak.uuid),
                 "titel": externetaak.titel,
                 "status": externetaak.status,
-                "startdatum": None,
+                "startdatum": externetaak.startdatum.isoformat().replace("+00:00", "Z"),
                 "handelingsPerspectief": externetaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"

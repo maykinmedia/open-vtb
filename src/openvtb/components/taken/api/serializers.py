@@ -91,6 +91,11 @@ class ExterneTaakSerializer(serializers.ModelSerializer):
             "toelichting",
             "taak_soort",
         )
+        extra_kwargs = {
+            "taak_soort": {
+                "required": False,
+            },
+        }
 
 
 class DoelrekeningSerializer(serializers.Serializer):
