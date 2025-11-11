@@ -10,6 +10,13 @@ BERICHTEN_API_VERSION = "0.0.1"
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 REST_FRAMEWORK["PAGE_SIZE"] = 100
+
+# necessary because it must not be converted to camelCase
+REST_FRAMEWORK["JSON_UNDERSCOREIZE"] = {
+    "no_underscore_before_number": False,
+    "ignore_fields": ["ontvangenGegevens", "formulierDefinitie"],
+    "ignore_keys": None,
+}
 REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
     "vng_api_common.pagination.DynamicPageSizePagination"
 )

@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
+from openvtb.utils.validators import validate_date
+
 from .constants import SoortTaak, StatusTaak
 from .validators import validate_jsonschema
 
@@ -25,6 +27,7 @@ class ExterneTaak(models.Model):
         max_length=100,
         help_text=_("Titel van de taak (max. 1 zin)"),
     )
+    # TODO add here validation to pass to status to another one
     status = models.CharField(
         _("status"),
         max_length=20,
@@ -90,3 +93,8 @@ class ExterneTaak(models.Model):
             validate_jsonschema(self.data, self.taak_soort)
         except ValidationError as error:
             raise ValidationError({"data": str(error)})
+
+        try:
+            validate_date(self.startdatum, self.einddatum_handelings_termijn)
+        except ValidationError as error:
+            raise ValidationError({"einddatum_handelings_termijn": error})

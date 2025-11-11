@@ -20,7 +20,6 @@ BETAAL_SCHEMA = {
         "valuta": {
             #  ISO 4217
             "type": "string",
-            "enum": ["EUR"],
             "default": "EUR",
             "minLength": 3,
             "maxLength": 3,
@@ -51,7 +50,6 @@ BETAAL_SCHEMA = {
     },
     "required": [
         "bedrag",
-        "valuta",
         "transactieomschrijving",
         "doelrekening",
     ],

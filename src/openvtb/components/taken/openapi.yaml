@@ -32,6 +32,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -43,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedBetaalTaakList'
+                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
           description: ''
     post:
       operationId: betaaltakenCreate
@@ -55,10 +56,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BetaalTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -70,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BetaalTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
   /betaaltaken/{uuid}:
     get:
@@ -90,6 +91,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -101,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BetaalTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     put:
       operationId: betaaltakenUpdate
@@ -122,10 +124,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BetaalTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -137,7 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BetaalTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     patch:
       operationId: betaaltakenPartialUpdate
@@ -158,9 +160,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedBetaalTaak'
+              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -172,7 +175,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BetaalTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     delete:
       operationId: betaaltakenDestroy
@@ -191,6 +194,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -235,33 +239,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedExterneTaakList'
           description: ''
-    post:
-      operationId: externetakenCreate
-      description: Maak een externe taak aan.
-      summary: Maak een externe taak aan.
-      tags:
-      - externetaken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExterneTaak'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExterneTaak'
-          description: ''
   /externetaken/{uuid}:
     get:
       operationId: externetakenRetrieve
@@ -293,103 +270,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExterneTaak'
           description: ''
-    put:
-      operationId: externetakenUpdate
-      description: Volledig externe taak wijzigen.
-      summary: Volledig externe taak wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        required: true
-      tags:
-      - externetaken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExterneTaak'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExterneTaak'
-          description: ''
-    patch:
-      operationId: externetakenPartialUpdate
-      description: Een externe taak gedeeltelijk wijzigen.
-      summary: Een externe taak gedeeltelijk wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        required: true
-      tags:
-      - externetaken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedExterneTaak'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExterneTaak'
-          description: ''
-    delete:
-      operationId: externetakenDestroy
-      description: Een externe taak verwijderen
-      summary: Een externe taak verwijderen
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        required: true
-      tags:
-      - externetaken
-      security:
-      - tokenAuth: []
-      responses:
-        '204':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          description: No response body
   /formuliertaken:
     get:
       operationId: formuliertakenList
@@ -423,7 +303,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedFormulierTaakList'
+                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
           description: ''
     post:
       operationId: formuliertakenCreate
@@ -435,8 +315,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormulierTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -450,7 +329,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormulierTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
   /formuliertaken/{uuid}:
     get:
@@ -481,7 +360,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormulierTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     put:
       operationId: formuliertakenUpdate
@@ -502,8 +381,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormulierTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -517,7 +395,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormulierTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     patch:
       operationId: formuliertakenPartialUpdate
@@ -538,7 +416,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedFormulierTaak'
+              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -552,7 +430,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FormulierTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     delete:
       operationId: formuliertakenDestroy
@@ -613,7 +491,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedGegevensUitvraagTaakList'
+                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
           description: ''
     post:
       operationId: gegevensuitvraagtakenCreate
@@ -625,8 +503,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GegevensUitvraagTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -640,7 +517,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
   /gegevensuitvraagtaken/{uuid}:
     get:
@@ -671,7 +548,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     put:
       operationId: gegevensuitvraagtakenUpdate
@@ -692,8 +569,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GegevensUitvraagTaak'
-        required: true
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -707,7 +583,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     patch:
       operationId: gegevensuitvraagtakenPartialUpdate
@@ -728,7 +604,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedGegevensUitvraagTaak'
+              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
       - tokenAuth: []
       responses:
@@ -742,7 +618,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
     delete:
       operationId: gegevensuitvraagtakenDestroy
@@ -772,20 +648,57 @@ paths:
           description: No response body
 components:
   schemas:
+    Base_ExterneTaakPolymorphicSerializer:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        data: {}
+      required:
+      - data
+      - handelingsPerspectief
+      - titel
     BetaalTaak:
       type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
         bedrag:
           type: string
           description: Bedrag dat betaald moet worden
         valuta:
-          allOf:
-          - $ref: '#/components/schemas/ValutaEnum'
+          type: string
           default: EUR
           description: Valuta van de betaling
         transactieomschrijving:
@@ -799,11 +712,7 @@ components:
       required:
       - bedrag
       - doelrekening
-      - externeTaak
       - transactieomschrijving
-    BlankEnum:
-      enum:
-      - ''
     Doelrekening:
       type: object
       properties:
@@ -836,7 +745,6 @@ components:
         startdatum:
           type: string
           format: date-time
-          nullable: true
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -846,6 +754,7 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
+          nullable: true
           description: Einddatum handelings termijn
         datumHerinnering:
           type: string
@@ -856,71 +765,44 @@ components:
           type: string
           description: Uitleg van de taak
         taakSoort:
-          description: Het soort taak
-          oneOf:
+          allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
-          - $ref: '#/components/schemas/BlankEnum'
+          description: Het soort taak
       required:
-      - einddatumHandelingsTermijn
       - handelingsPerspectief
+      - taakSoort
       - titel
+    ExterneTaakPolymorphic:
+      oneOf:
+      - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
+      discriminator:
+        propertyName: taakSoort
+        mapping:
+          betaaltaak: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
+          gegevensuitvraagtaak: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+          formuliertaak: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
     FormulierTaak:
       type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
         formulierDefinitie:
-          nullable: true
           description: Definitie van het formulier in JSON
         ontvangenGegevens:
-          nullable: true
           description: Ontvangen gegevens als key-value object
       required:
-      - externeTaak
+      - formulierDefinitie
     GegevensUitvraagTaak:
       type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
       properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
         uitvraagLink:
           type: string
           format: uri
           description: Link naar de externe gegevensaanvraag
         ontvangenGegevens:
-          nullable: true
           description: Ontvangen gegevens als key-value object
       required:
-      - externeTaak
       - uitvraagLink
-    PaginatedBetaalTaakList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BetaalTaak'
     PaginatedExterneTaakList:
       type: object
       required:
@@ -944,7 +826,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExterneTaak'
-    PaginatedFormulierTaakList:
+    PaginatedExterneTaakPolymorphicList:
       type: object
       required:
       - count
@@ -966,126 +848,18 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/FormulierTaak'
-    PaginatedGegevensUitvraagTaakList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/GegevensUitvraagTaak'
-    PatchedBetaalTaak:
-      type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
-      properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
-        bedrag:
-          type: string
-          description: Bedrag dat betaald moet worden
-        valuta:
-          allOf:
-          - $ref: '#/components/schemas/ValutaEnum'
-          default: EUR
-          description: Valuta van de betaling
-        transactieomschrijving:
-          type: string
-          description: Omschrijving van de transactie
-          maxLength: 80
-        doelrekening:
-          allOf:
-          - $ref: '#/components/schemas/Doelrekening'
-          description: Gegevens van de ontvangende bankrekening
-    PatchedExterneTaak:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de taak (max. 1 zin)
-          maxLength: 100
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak
-        startdatum:
-          type: string
-          format: date-time
-          nullable: true
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: Handelings perspectief
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date-time
-          description: Einddatum handelings termijn
-        datumHerinnering:
-          type: string
-          format: date-time
-          nullable: true
-          description: Datum Herinnering
-        toelichting:
-          type: string
-          description: Uitleg van de taak
-        taakSoort:
-          description: Het soort taak
-          oneOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          - $ref: '#/components/schemas/BlankEnum'
-    PatchedFormulierTaak:
-      type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
-      properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
-        formulierDefinitie:
-          nullable: true
-          description: Definitie van het formulier in JSON
-        ontvangenGegevens:
-          nullable: true
-          description: Ontvangen gegevens als key-value object
-    PatchedGegevensUitvraagTaak:
-      type: object
-      description: |-
-        Mixin for taak_soort serializers that automatically maps declared serializer fields
-        to keys inside the `data` JSONField of an ExterneTaak instance.
-      properties:
-        externeTaak:
-          $ref: '#/components/schemas/ExterneTaak'
-        uitvraagLink:
-          type: string
-          format: uri
-          description: Link naar de externe gegevensaanvraag
-        ontvangenGegevens:
-          nullable: true
-          description: Ontvangen gegevens als key-value object
+            $ref: '#/components/schemas/ExterneTaakPolymorphic'
+    PatchedExterneTaakPolymorphic:
+      oneOf:
+      - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
+      discriminator:
+        propertyName: taakSoort
+        mapping:
+          betaaltaak: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
+          gegevensuitvraagtaak: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+          formuliertaak: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
     StatusEnum:
       enum:
       - open
@@ -1100,10 +874,33 @@ components:
       - gegevensuitvraagtaak
       - formuliertaak
       type: string
-    ValutaEnum:
-      enum:
-      - EUR
-      type: string
+    betaaltaak_ExterneTaakPolymorphicSerializer:
+      allOf:
+      - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/data_BetaalTaak'
+    data_BetaalTaak:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BetaalTaak'
+    data_FormulierTaak:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/FormulierTaak'
+    data_GegevensUitvraagTaak:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+    formuliertaak_ExterneTaakPolymorphicSerializer:
+      allOf:
+      - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/data_FormulierTaak'
+    gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer:
+      allOf:
+      - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/data_GegevensUitvraagTaak'
   securitySchemes:
     tokenAuth:
       type: apiKey

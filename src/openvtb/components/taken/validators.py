@@ -82,4 +82,6 @@ def validate_jsonschema(data: Any, key: str) -> None:
             error=str(json_error),
         )
         path = ".".join(getattr(json_error, "absolute_path", [])) or "data"
+        if not path.startswith("data"):
+            path = "data." + path
         raise ValidationError({path: json_error.message})

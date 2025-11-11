@@ -7,10 +7,8 @@ from vng_api_common.pagination import DynamicPageSizePagination
 from ..constants import SoortTaak
 from ..models import ExterneTaak
 from .serializers import (
-    BetaalTaakSerializer,
+    ExterneTaakPolymorphicSerializer,
     ExterneTaakSerializer,
-    FormulierTaakSerializer,
-    GegevensUitvraagTaakSerializer,
 )
 
 
@@ -40,7 +38,7 @@ from .serializers import (
         description="Een externe taak verwijderen",
     ),
 )
-class ExterneTaakViewSet(viewsets.ModelViewSet):
+class ExterneTaakViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakSerializer
     pagination_class = DynamicPageSizePagination
@@ -77,14 +75,15 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
 )
 class BetaalTaakViewSet(viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
-    serializer_class = BetaalTaakSerializer
+    serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    taak_soort = SoortTaak.BETAALTAAK
 
     def get_queryset(self):
-        return super().get_queryset().filter(taak_soort=SoortTaak.BETAALTAAK)
+        return super().get_queryset().filter(taak_soort=self.taak_soort)
 
 
 @extend_schema_view(
@@ -115,14 +114,15 @@ class BetaalTaakViewSet(viewsets.ModelViewSet):
 )
 class GegevensUitvraagTaakViewSet(viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
-    serializer_class = GegevensUitvraagTaakSerializer
+    serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK
 
     def get_queryset(self):
-        return super().get_queryset().filter(taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK)
+        return super().get_queryset().filter(taak_soort=self.taak_soort)
 
 
 @extend_schema_view(
@@ -153,11 +153,12 @@ class GegevensUitvraagTaakViewSet(viewsets.ModelViewSet):
 )
 class FormulierTaakViewSet(viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
-    serializer_class = FormulierTaakSerializer
+    serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    taak_soort = SoortTaak.FORMULIERTAAK
 
     def get_queryset(self):
-        return super().get_queryset().filter(taak_soort=SoortTaak.FORMULIERTAAK)
+        return super().get_queryset().filter(taak_soort=self.taak_soort)

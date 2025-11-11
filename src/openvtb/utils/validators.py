@@ -1,7 +1,13 @@
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+
+from rest_framework import serializers
+
+from .serializers import get_from_serializer_data_or_instance
 
 
 def validate_charfield_entry(value, allow_apostrophe=False):
@@ -32,6 +38,57 @@ def validate_phone_number(value):
         raise ValidationError(_("Invalid mobile phonenumber.")) from exc
 
     return value
+
+
+def validate_date(start_date: datetime | None, end_date: datetime | None) -> None:
+    """
+    Validates that the end date is greater than the start date.
+
+    Raises:
+        ValidationError: If `end_date` is not greater than `start_date`.
+    """
+
+    if start_date and end_date and end_date < start_date:
+        raise ValidationError(
+            _(
+                "{end_date} date must be greater than {start_date}.".format(
+                    end_date=str(end_date), start_date=str(start_date)
+                )
+            )
+        )
+
+
+class StartBeforeEndValidator:
+    """
+    Validate that start date is before the end date
+    """
+
+    code = "date-mismatch"
+    message = _("{} should be before {}.")
+    requires_context = True
+
+    def __init__(self, start_date_field, end_date_field):
+        self.start_date_field = start_date_field
+        self.end_date_field = end_date_field
+
+    def __call__(self, attrs, serializer):
+        start_date = get_from_serializer_data_or_instance(
+            self.start_date_field, attrs, serializer
+        )
+        end_date = get_from_serializer_data_or_instance(
+            self.end_date_field, attrs, serializer
+        )
+        try:
+            validate_date(start_date, end_date)
+        except Exception:
+            raise serializers.ValidationError(
+                {
+                    self.end_date_field: self.message.format(
+                        self.start_date_field, self.end_date_field
+                    ),
+                },
+                code=self.code,
+            )
 
 
 class CustomRegexValidator(RegexValidator):
