@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -92,14 +91,15 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
             SoortTaak.GEGEVENSUITVRAAGTAAK: GegevensUitvraagTaakSerializer(),
             SoortTaak.FORMULIERTAAK: FormulierTaakSerializer(),
         },
-        group_field="data",
+        group_field="details",
         same_model=False,
     )
-    data = serializers.JSONField(required=True)
+    discriminator_field = "taak_soort"
 
     class Meta:
         model = ExterneTaak
         fields = (
+            "url",
             "uuid",
             "titel",
             "status",
@@ -108,53 +108,80 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
             "einddatum_handelings_termijn",
             "datum_herinnering",
             "toelichting",
-            "data",
+            "taak_soort",
+            "details",
         )
         validators = [
             StartBeforeEndValidator("startdatum", "einddatum_handelings_termijn"),
         ]
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+            "details": {"required": True},
+            "taak_soort": {"required": True},
+            "url": {
+                "view_name": "taken:betaaltaken-detail",  # fix TODO
+                "lookup_field": "uuid",
+                "help_text": _("De unieke URL van deze actor binnen deze API."),
+            },
+        }
 
-    def _init_taak_soort(self):
+    def _init_taak_soort(self, partial=False):
+        """
+        Set `taak_soort` with priority:
+        1. Use self.taak_soort if already set viewset, raise error if present in initial_data
+        2. Use value from initial_data if provided
+        3. Use instance value for partial_update, if not provided
+        """
+
         initial_data = getattr(self, "initial_data", None)
-        if initial_data is not None:
-            if "taak_soort" in initial_data:
+        instance = getattr(self, "instance", None)
+
+        if initial_data is None:
+            return
+        # 1.
+        if self.taak_soort:
+            if self.discriminator_field in initial_data:
                 raise serializers.ValidationError(
                     {
-                        "taakSoort": _(
+                        self.discriminator_field: _(
                             "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd."
                         )
                     },
                     code="invalid",
                 )
-            self.initial_data["taak_soort"] = self.taak_soort
+            initial_data[self.discriminator_field] = self.taak_soort
+            return
+
+        # 2.
+        if self.discriminator_field in initial_data:
+            self.taak_soort = initial_data[self.discriminator_field]
+            return
+
+        # 3.
+        if partial and instance is not None:
+            initial_data[self.discriminator_field] = instance.taak_soort
+            self.taak_soort = instance.taak_soort
 
     def __init__(self, *args, **kwargs):
         # necessary to pass the partial value in case of PATCH
         for discriminator in self.discriminator.mapping.values():
             discriminator.partial = kwargs.get("partial", False)
 
-        self.view = kwargs.get("context", {}).get("view", None)
-        if not self.view:
-            raise ValidationError(
-                _("View required for discriminator value"), code="required"
-            )
-
-        self.taak_soort = self.view.taak_soort
         super().__init__(*args, **kwargs)
-        self._init_taak_soort()
+        if context := kwargs.get("context", {}):
+            self.taak_soort = context.get(self.discriminator_field, None)
+            self._init_taak_soort(kwargs.get("partial", False))
 
     def validate(self, attrs):
-        attrs["taak_soort"] = self.taak_soort
-
-        data = {
-            snake_to_camel_converter(k): v for k, v in attrs.pop("data", {}).items()
+        details = {
+            snake_to_camel_converter(k): v for k, v in attrs.pop("details", {}).items()
         }
-        if self.instance and getattr(self.instance, "data", None):
-            # update data with instance values
-            data = {**self.instance.data, **data}
-
-        validate_jsonschema(data, self.taak_soort)
-        attrs["data"] = data
+        if self.instance and self.instance.details:
+            if self.instance.taak_soort == self.taak_soort:
+                # update details with instance values
+                details = {**self.instance.details, **details}
+        validate_jsonschema(details, self.taak_soort)
+        attrs["details"] = details
         return super().validate(attrs)
 
 

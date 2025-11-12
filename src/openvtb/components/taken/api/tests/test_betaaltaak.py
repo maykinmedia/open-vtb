@@ -12,6 +12,7 @@ from openvtb.utils.api_testcase import APITestCase
 
 class BetaalTaakTests(APITestCase):
     list_url = reverse("taken:betaaltaken-list")
+    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -39,6 +40,8 @@ class BetaalTaakTests(APITestCase):
                 "previous": None,
                 "results": [
                     {
+                        # TODO fix il url
+                        "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                         "uuid": str(betaaltaak.uuid),
                         "titel": betaaltaak.titel,
                         "status": betaaltaak.status,
@@ -51,15 +54,16 @@ class BetaalTaakTests(APITestCase):
                         ),
                         "datumHerinnering": betaaltaak.datum_herinnering,
                         "toelichting": betaaltaak.toelichting,
-                        "data": {
-                            "bedrag": betaaltaak.data["bedrag"],
-                            "valuta": betaaltaak.data["valuta"],
-                            "transactieomschrijving": betaaltaak.data[
+                        "taakSoort": betaaltaak.taak_soort,
+                        "details": {
+                            "bedrag": betaaltaak.details["bedrag"],
+                            "valuta": betaaltaak.details["valuta"],
+                            "transactieomschrijving": betaaltaak.details[
                                 "transactieomschrijving"
                             ],
                             "doelrekening": {
-                                "naam": betaaltaak.data["doelrekening"]["naam"],
-                                "iban": betaaltaak.data["doelrekening"]["iban"],
+                                "naam": betaaltaak.details["doelrekening"]["naam"],
+                                "iban": betaaltaak.details["doelrekening"]["iban"],
                             },
                         },
                     },
@@ -89,6 +93,8 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -99,13 +105,16 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "data": {
-                    "bedrag": betaaltaak.data["bedrag"],
-                    "valuta": betaaltaak.data["valuta"],
-                    "transactieomschrijving": betaaltaak.data["transactieomschrijving"],
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
                     "doelrekening": {
-                        "naam": betaaltaak.data["doelrekening"]["naam"],
-                        "iban": betaaltaak.data["doelrekening"]["iban"],
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
@@ -131,7 +140,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief1",
-            "data": {
+            "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
@@ -148,6 +157,8 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -156,13 +167,16 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "data": {
-                    "bedrag": betaaltaak.data["bedrag"],
-                    "valuta": betaaltaak.data["valuta"],
-                    "transactieomschrijving": betaaltaak.data["transactieomschrijving"],
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
                     "doelrekening": {
-                        "naam": betaaltaak.data["doelrekening"]["naam"],
-                        "iban": betaaltaak.data["doelrekening"]["iban"],
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
@@ -193,20 +207,20 @@ class BetaalTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data"),
+            get_validation_errors(response, "details"),
             {
-                "name": "data",
+                "name": "details",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
 
-        # empty data values
+        # empty details values
         data = {
             "titel": "test",
             "handelingsPerspectief": "test",
-            "data": {},
+            "details": {},
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -214,34 +228,34 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.data["title"], "Invalid input.")
         self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
-            get_validation_errors(response, "data.bedrag"),
+            get_validation_errors(response, "details.bedrag"),
             {
-                "name": "data.bedrag",
+                "name": "details.bedrag",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data.transactieomschrijving"),
+            get_validation_errors(response, "details.transactieomschrijving"),
             {
-                "name": "data.transactieomschrijving",
+                "name": "details.transactieomschrijving",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data.doelrekening"),
+            get_validation_errors(response, "details.doelrekening"),
             {
-                "name": "data.doelrekening",
+                "name": "details.doelrekening",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
-        # data.doelrekening empty values
+        # details.doelrekening empty values
         data = {
             "titel": "test",
             "handelingsPerspectief": "test",
-            "data": {
+            "details": {
                 "bedrag": "12",
                 "transactieomschrijving": "12",
                 "doelrekening": {},
@@ -253,17 +267,17 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.data["title"], "Invalid input.")
         self.assertEqual(len(response.data["invalid_params"]), 2)
         self.assertEqual(
-            get_validation_errors(response, "data.doelrekening.naam"),
+            get_validation_errors(response, "details.doelrekening.naam"),
             {
-                "name": "data.doelrekening.naam",
+                "name": "details.doelrekening.naam",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data.doelrekening.iban"),
+            get_validation_errors(response, "details.doelrekening.iban"),
             {
-                "name": "data.doelrekening.iban",
+                "name": "details.doelrekening.iban",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -276,7 +290,7 @@ class BetaalTaakTests(APITestCase):
             "titel": "test",
             "handelingsPerspectief": "test",
             "taak_soort": SoortTaak.FORMULIERTAAK.value,
-            "data": {
+            "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
@@ -340,7 +354,7 @@ class BetaalTaakTests(APITestCase):
                 "handelingsPerspectief": "test",
                 "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
                 "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
-                "data": {
+                "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
                     "doelrekening": {
@@ -365,7 +379,7 @@ class BetaalTaakTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": "test",
-                "data": {
+                "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
                     "doelrekening": {
@@ -377,9 +391,9 @@ class BetaalTaakTests(APITestCase):
             response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
-                get_validation_errors(response, "data.doelrekening.iban"),
+                get_validation_errors(response, "details.doelrekening.iban"),
                 {
-                    "name": "data.doelrekening.iban",
+                    "name": "details.doelrekening.iban",
                     "code": "invalid",
                     "reason": "'test' is not a valid IBAN",
                 },
@@ -390,7 +404,7 @@ class BetaalTaakTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": "test",
-                "data": {
+                "details": {
                     "bedrag": "11",
                     "valuta": "ABC",  # different valuta
                     "transactieomschrijving": "test",
@@ -403,9 +417,9 @@ class BetaalTaakTests(APITestCase):
             response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
-                get_validation_errors(response, "data.valuta"),
+                get_validation_errors(response, "details.valuta"),
                 {
-                    "name": "data.valuta",
+                    "name": "details.valuta",
                     "code": "invalid",
                     "reason": "Het is niet toegestaan een andere waarde dan EUR door te geven.",
                 },
@@ -424,6 +438,8 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -434,13 +450,16 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "data": {
-                    "bedrag": betaaltaak.data["bedrag"],
-                    "valuta": betaaltaak.data["valuta"],
-                    "transactieomschrijving": betaaltaak.data["transactieomschrijving"],
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
                     "doelrekening": {
-                        "naam": betaaltaak.data["doelrekening"]["naam"],
-                        "iban": betaaltaak.data["doelrekening"]["iban"],
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
@@ -453,22 +472,22 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(betaaltaak.titel, "new_title")
 
         # patch one field from json_data
-        self.assertEqual(betaaltaak.data["bedrag"], "10.12")  # default factory value
+        self.assertEqual(betaaltaak.details["bedrag"], "10.12")  # default factory value
         response = self.client.patch(
             detail_url,
             {
-                "data": {
+                "details": {
                     "bedrag": "100",
                 }
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         betaaltaak = ExterneTaak.objects.get()
-        self.assertEqual(betaaltaak.data["bedrag"], "100")
+        self.assertEqual(betaaltaak.details["bedrag"], "100")
 
         # patch one field from json_data
         self.assertEqual(
-            betaaltaak.data["doelrekening"],
+            betaaltaak.details["doelrekening"],
             {
                 "naam": "test",
                 "iban": "NL18BANK23481326",
@@ -477,7 +496,7 @@ class BetaalTaakTests(APITestCase):
         response = self.client.patch(
             detail_url,
             {
-                "data": {
+                "details": {
                     "doelrekening": {
                         "naam": "new_naam",
                         "iban": "NL18BANK23481111",  # new iban
@@ -488,7 +507,7 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         betaaltaak = ExterneTaak.objects.get()
         self.assertEqual(
-            betaaltaak.data["doelrekening"],
+            betaaltaak.details["doelrekening"],
             {
                 "naam": "new_naam",
                 "iban": "NL18BANK23481111",
@@ -530,7 +549,7 @@ class BetaalTaakTests(APITestCase):
             {
                 "titel": "new_titel",
                 "handelingsPerspectief": "new_handelingsPerspectief",
-                "data": {
+                "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
                     "transactieomschrijving": "new_test",
@@ -546,6 +565,8 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -556,13 +577,16 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "data": {
-                    "bedrag": betaaltaak.data["bedrag"],
-                    "valuta": betaaltaak.data["valuta"],
-                    "transactieomschrijving": betaaltaak.data["transactieomschrijving"],
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
                     "doelrekening": {
-                        "naam": betaaltaak.data["doelrekening"]["naam"],
-                        "iban": betaaltaak.data["doelrekening"]["iban"],
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
@@ -598,9 +622,9 @@ class BetaalTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data"),
+            get_validation_errors(response, "details"),
             {
-                "name": "data",
+                "name": "details",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },

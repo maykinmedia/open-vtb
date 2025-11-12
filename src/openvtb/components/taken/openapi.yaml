@@ -13,8 +13,8 @@ paths:
   /betaaltaken:
     get:
       operationId: betaaltakenList
-      description: Vraag alle betaal taaken aan.
-      summary: Vraag alle betaal taaken aan.
+      description: Vraag alle betaal taken aan.
+      summary: Vraag alle betaal taken aan.
       parameters:
       - name: page
         required: false
@@ -44,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
+                $ref: '#/components/schemas/PaginatedBetaalTaakListResponseList'
           description: ''
     post:
       operationId: betaaltakenCreate
@@ -56,7 +56,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/BetaalTaakCreateRequest'
+        required: true
       security:
       - tokenAuth: []
       - {}
@@ -71,7 +72,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/BetaalTaakCreateResponse'
           description: ''
   /betaaltaken/{uuid}:
     get:
@@ -103,7 +104,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/BetaalTaakRetrieveResponse'
           description: ''
     put:
       operationId: betaaltakenUpdate
@@ -124,7 +125,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/BetaalTaakUpdateRequest'
+        required: true
       security:
       - tokenAuth: []
       - {}
@@ -139,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/BetaalTaakUpdateResponse'
           description: ''
     patch:
       operationId: betaaltakenPartialUpdate
@@ -160,7 +162,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
+              $ref: '#/components/schemas/PatchedBetaalTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
       - {}
@@ -175,7 +177,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/BetaalTaakPartialUpdateResponse'
           description: ''
     delete:
       operationId: betaaltakenDestroy
@@ -226,6 +228,7 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -237,7 +240,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedExterneTaakList'
+                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
+          description: ''
+    post:
+      operationId: externetakenCreate
+      description: Maak een externe taak aan.
+      summary: Maak een externe taak aan.
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
   /externetaken/{uuid}:
     get:
@@ -257,6 +287,7 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -268,8 +299,107 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaak'
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
           description: ''
+    put:
+      operationId: externetakenUpdate
+      description: Volledig externe taak wijzigen.
+      summary: Volledig externe taak wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+          description: ''
+    patch:
+      operationId: externetakenPartialUpdate
+      description: Een externe taak gedeeltelijk wijzigen.
+      summary: Een externe taak gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - externetaken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+          description: ''
+    delete:
+      operationId: externetakenDestroy
+      description: Een externe taak verwijderen
+      summary: Een externe taak verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - externetaken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
   /formuliertaken:
     get:
       operationId: formuliertakenList
@@ -292,6 +422,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -303,7 +434,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
+                $ref: '#/components/schemas/PaginatedFormulierTaakListResponseList'
           description: ''
     post:
       operationId: formuliertakenCreate
@@ -315,9 +446,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/FormulierTaakCreateRequest'
+        required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -329,7 +462,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/FormulierTaakCreateResponse'
           description: ''
   /formuliertaken/{uuid}:
     get:
@@ -349,6 +482,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -360,7 +494,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/FormulierTaakRetrieveResponse'
           description: ''
     put:
       operationId: formuliertakenUpdate
@@ -381,9 +515,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/FormulierTaakUpdateRequest'
+        required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -395,7 +531,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/FormulierTaakUpdateResponse'
           description: ''
     patch:
       operationId: formuliertakenPartialUpdate
@@ -416,9 +552,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
+              $ref: '#/components/schemas/PatchedFormulierTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -430,7 +567,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/FormulierTaakPartialUpdateResponse'
           description: ''
     delete:
       operationId: formuliertakenDestroy
@@ -449,6 +586,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -480,6 +618,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -491,7 +630,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedExterneTaakPolymorphicList'
+                $ref: '#/components/schemas/PaginatedGegevensUitvraagTaakListResponseList'
           description: ''
     post:
       operationId: gegevensuitvraagtakenCreate
@@ -503,9 +642,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/GegevensUitvraagTaakCreateRequest'
+        required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -517,7 +658,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/GegevensUitvraagTaakCreateResponse'
           description: ''
   /gegevensuitvraagtaken/{uuid}:
     get:
@@ -537,6 +678,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -548,7 +690,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/GegevensUitvraagTaakRetrieveResponse'
           description: ''
     put:
       operationId: gegevensuitvraagtakenUpdate
@@ -569,9 +711,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExterneTaakPolymorphic'
+              $ref: '#/components/schemas/GegevensUitvraagTaakUpdateRequest'
+        required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -583,7 +727,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/GegevensUitvraagTaakUpdateResponse'
           description: ''
     patch:
       operationId: gegevensuitvraagtakenPartialUpdate
@@ -604,9 +748,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
+              $ref: '#/components/schemas/PatchedGegevensUitvraagTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -618,7 +763,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExterneTaakPolymorphic'
+                $ref: '#/components/schemas/GegevensUitvraagTaakPartialUpdateResponse'
           description: ''
     delete:
       operationId: gegevensuitvraagtakenDestroy
@@ -637,6 +782,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -651,87 +797,17 @@ components:
     Base_ExterneTaakPolymorphicSerializer:
       type: object
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
         uuid:
           type: string
           format: uuid
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de taak (max. 1 zin)
-          maxLength: 100
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak
-        startdatum:
-          type: string
-          format: date-time
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: Handelings perspectief
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date-time
-          nullable: true
-          description: Einddatum handelings termijn
-        datumHerinnering:
-          type: string
-          format: date-time
-          nullable: true
-          description: Datum Herinnering
-        toelichting:
-          type: string
-          description: Uitleg van de taak
-        data: {}
-      required:
-      - data
-      - handelingsPerspectief
-      - titel
-    BetaalTaak:
-      type: object
-      properties:
-        bedrag:
-          type: string
-          description: Bedrag dat betaald moet worden
-        valuta:
-          type: string
-          default: EUR
-          description: Valuta van de betaling
-        transactieomschrijving:
-          type: string
-          description: Omschrijving van de transactie
-          maxLength: 80
-        doelrekening:
-          allOf:
-          - $ref: '#/components/schemas/Doelrekening'
-          description: Gegevens van de ontvangende bankrekening
-      required:
-      - bedrag
-      - doelrekening
-      - transactieomschrijving
-    Doelrekening:
-      type: object
-      properties:
-        naam:
-          type: string
-          description: Naam van de ontvanger van de betaling
-          maxLength: 200
-        iban:
-          type: string
-          description: IBAN code van de ontvanger
-      required:
-      - iban
-      - naam
-    ExterneTaak:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
+          readOnly: true
           description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
             en zijn eigen administratie.
         titel:
@@ -768,10 +844,463 @@ components:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
           description: Het soort taak
+        details:
+          description: Details van de taak met validaties op basis van het soort taak
       required:
+      - details
       - handelingsPerspectief
       - taakSoort
       - titel
+      - url
+      - uuid
+    BetaalTaak:
+      type: object
+      properties:
+        bedrag:
+          type: string
+          description: Bedrag dat betaald moet worden
+        valuta:
+          type: string
+          default: EUR
+          description: Valuta van de betaling
+        transactieomschrijving:
+          type: string
+          description: Omschrijving van de transactie
+          maxLength: 80
+        doelrekening:
+          allOf:
+          - $ref: '#/components/schemas/Doelrekening'
+          description: Gegevens van de ontvangende bankrekening
+      required:
+      - bedrag
+      - doelrekening
+      - transactieomschrijving
+    BetaalTaakCreateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakCreateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakListResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakPartialUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakRetrieveResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    BetaalTaakUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    Doelrekening:
+      type: object
+      properties:
+        naam:
+          type: string
+          description: Naam van de ontvanger van de betaling
+          maxLength: 200
+        iban:
+          type: string
+          description: IBAN code van de ontvanger
+      required:
+      - iban
+      - naam
     ExterneTaakPolymorphic:
       oneOf:
       - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
@@ -792,6 +1321,419 @@ components:
           description: Ontvangen gegevens als key-value object
       required:
       - formulierDefinitie
+    FormulierTaakCreateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakCreateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakListResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakPartialUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakRetrieveResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    FormulierTaakUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
     GegevensUitvraagTaak:
       type: object
       properties:
@@ -803,7 +1745,420 @@ components:
           description: Ontvangen gegevens als key-value object
       required:
       - uitvraagLink
-    PaginatedExterneTaakList:
+    GegevensUitvraagTaakCreateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakCreateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakListResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakPartialUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakRetrieveResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    GegevensUitvraagTaakUpdateResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
+      required:
+      - details
+      - handelingsPerspectief
+      - taakSoort
+      - titel
+      - url
+      - uuid
+    PaginatedBetaalTaakListResponseList:
       type: object
       required:
       - count
@@ -825,7 +2180,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ExterneTaak'
+            $ref: '#/components/schemas/BetaalTaakListResponse'
     PaginatedExterneTaakPolymorphicList:
       type: object
       required:
@@ -849,6 +2204,104 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExterneTaakPolymorphic'
+    PaginatedFormulierTaakListResponseList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormulierTaakListResponse'
+    PaginatedGegevensUitvraagTaakListResponseList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GegevensUitvraagTaakListResponse'
+    PatchedBetaalTaakPartialUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/BetaalTaak'
     PatchedExterneTaakPolymorphic:
       oneOf:
       - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
@@ -860,6 +2313,110 @@ components:
           betaaltaak: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
           gegevensuitvraagtaak: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
           formuliertaak: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
+    PatchedFormulierTaakPartialUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/FormulierTaak'
+    PatchedGegevensUitvraagTaakPartialUpdateRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze actor binnen deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de taak (max. 1 zin)
+          maxLength: 100
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak
+        startdatum:
+          type: string
+          format: date-time
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: Handelings perspectief
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date-time
+          nullable: true
+          description: Einddatum handelings termijn
+        datumHerinnering:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum Herinnering
+        toelichting:
+          type: string
+          description: Uitleg van de taak
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak
+        details:
+          $ref: '#/components/schemas/GegevensUitvraagTaak'
     StatusEnum:
       enum:
       - open
@@ -877,30 +2434,30 @@ components:
     betaaltaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/data_BetaalTaak'
-    data_BetaalTaak:
+      - $ref: '#/components/schemas/details_BetaalTaak'
+    details_BetaalTaak:
       type: object
       properties:
-        data:
+        details:
           $ref: '#/components/schemas/BetaalTaak'
-    data_FormulierTaak:
+    details_FormulierTaak:
       type: object
       properties:
-        data:
+        details:
           $ref: '#/components/schemas/FormulierTaak'
-    data_GegevensUitvraagTaak:
+    details_GegevensUitvraagTaak:
       type: object
       properties:
-        data:
+        details:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
     formuliertaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/data_FormulierTaak'
+      - $ref: '#/components/schemas/details_FormulierTaak'
     gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/data_GegevensUitvraagTaak'
+      - $ref: '#/components/schemas/details_GegevensUitvraagTaak'
   securitySchemes:
     tokenAuth:
       type: apiKey

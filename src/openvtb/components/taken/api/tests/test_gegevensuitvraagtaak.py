@@ -12,6 +12,7 @@ from openvtb.utils.api_testcase import APITestCase
 
 class GegevensuitvraagTaakTests(APITestCase):
     list_url = reverse("taken:gegevensuitvraagtaken-list")
+    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -38,6 +39,8 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "previous": None,
                 "results": [
                     {
+                        # TODO fix il url
+                        "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                         "uuid": str(gegevensuitvraagtaak.uuid),
                         "titel": gegevensuitvraagtaak.titel,
                         "status": gegevensuitvraagtaak.status,
@@ -50,9 +53,12 @@ class GegevensuitvraagTaakTests(APITestCase):
                         ),
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                         "toelichting": gegevensuitvraagtaak.toelichting,
-                        "data": {
-                            "uitvraagLink": gegevensuitvraagtaak.data["uitvraagLink"],
-                            "ontvangenGegevens": gegevensuitvraagtaak.data[
+                        "taakSoort": gegevensuitvraagtaak.taak_soort,
+                        "details": {
+                            "uitvraagLink": gegevensuitvraagtaak.details[
+                                "uitvraagLink"
+                            ],
+                            "ontvangenGegevens": gegevensuitvraagtaak.details[
                                 "ontvangenGegevens"
                             ],
                         },
@@ -87,6 +93,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -99,9 +107,12 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "data": {
-                    "uitvraagLink": gegevensuitvraagtaak.data["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.data["ontvangenGegevens"],
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
                 },
             },
         )
@@ -127,7 +138,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
-            "data": {
+            "details": {
                 "uitvraagLink": "http://example.com/",
                 "ontvangenGegevens": {
                     "key1": "value1",
@@ -145,6 +156,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -155,9 +168,12 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "data": {
-                    "uitvraagLink": gegevensuitvraagtaak.data["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.data["ontvangenGegevens"],
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
                 },
             },
         )
@@ -166,7 +182,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
-            "data": {
+            "details": {
                 "uitvraagLink": "http://example.com/",
             },
         }
@@ -174,13 +190,13 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 2)
         gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
-        self.assertEqual(gegevensuitvraagtaak.data["ontvangenGegevens"], {})
+        self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
 
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
-            "data": {
+            "details": {
                 "uitvraagLink": "http://example.com/",
                 "ontvangenGegevens": {},
             },
@@ -189,7 +205,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 3)
         gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
-        self.assertEqual(gegevensuitvraagtaak.data["ontvangenGegevens"], {})
+        self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
 
     def test_invalid_create_required_fields(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -216,20 +232,20 @@ class GegevensuitvraagTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "data"),
+            get_validation_errors(response, "details"),
             {
-                "name": "data",
+                "name": "details",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
 
-        # empty data values
+        # empty details values
         data = {
             "titel": "test",
             "handelingsPerspectief": "test",
-            "data": {},
+            "details": {},
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -237,9 +253,9 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(response.data["title"], "Invalid input.")
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
-            get_validation_errors(response, "data.uitvraagLink"),
+            get_validation_errors(response, "details.uitvraagLink"),
             {
-                "name": "data.uitvraagLink",
+                "name": "details.uitvraagLink",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -253,7 +269,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief1",
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
-            "data": {
+            "details": {
                 "uitvraagLink": "http://example.com/",
             },
         }
@@ -294,7 +310,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "handelingsPerspectief": "test",
                 "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
                 "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
-                "data": {
+                "details": {
                     "uitvraagLink": "http://example.com/",
                 },
             }
@@ -314,16 +330,16 @@ class GegevensuitvraagTaakTests(APITestCase):
             data = {
                 "titel": "titel",
                 "handelingsPerspectief": "handelingsPerspectief1",
-                "data": {
+                "details": {
                     "uitvraagLink": "test",
                 },
             }
             response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
-                get_validation_errors(response, "data.uitvraagLink"),
+                get_validation_errors(response, "details.uitvraagLink"),
                 {
-                    "name": "data.uitvraagLink",
+                    "name": "details.uitvraagLink",
                     "code": "invalid",
                     "reason": "Voer een geldige URL in.",
                 },
@@ -334,16 +350,16 @@ class GegevensuitvraagTaakTests(APITestCase):
             data = {
                 "titel": "titel",
                 "handelingsPerspectief": "handelingsPerspectief1",
-                "data": {
+                "details": {
                     "uitvraagLink": None,
                 },
             }
             response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
-                get_validation_errors(response, "data.uitvraagLink"),
+                get_validation_errors(response, "details.uitvraagLink"),
                 {
-                    "name": "data.uitvraagLink",
+                    "name": "details.uitvraagLink",
                     "code": "null",
                     "reason": "Dit veld mag niet leeg zijn.",
                 },
@@ -354,7 +370,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             data = {
                 "titel": "titel",
                 "handelingsPerspectief": "handelingsPerspectief1",
-                "data": {
+                "details": {
                     "uitvraagLink": "http://example.com/",
                     "ontvangenGegevens": None,
                 },
@@ -363,9 +379,9 @@ class GegevensuitvraagTaakTests(APITestCase):
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
-                get_validation_errors(response, "data.ontvangenGegevens"),
+                get_validation_errors(response, "details.ontvangenGegevens"),
                 {
-                    "name": "data.ontvangenGegevens",
+                    "name": "details.ontvangenGegevens",
                     "code": "null",
                     "reason": "Dit veld mag niet leeg zijn.",
                 },
@@ -385,6 +401,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -397,9 +415,12 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "data": {
-                    "uitvraagLink": gegevensuitvraagtaak.data["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.data["ontvangenGegevens"],
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
                 },
             },
         )
@@ -412,32 +433,32 @@ class GegevensuitvraagTaakTests(APITestCase):
 
         # patch one field from json_data
         self.assertEqual(
-            gegevensuitvraagtaak.data["uitvraagLink"], "http://example.com/"
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example.com/"
         )  # default factory value
         response = self.client.patch(
-            detail_url, {"data": {"uitvraagLink": "http://example-new-url.com/"}}
+            detail_url, {"details": {"uitvraagLink": "http://example-new-url.com/"}}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         gegevensuitvraagtaak = ExterneTaak.objects.get()
         self.assertEqual(
-            gegevensuitvraagtaak.data["uitvraagLink"], "http://example-new-url.com/"
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
         )
 
         # update ontvangenGegevens
         self.assertEqual(
-            gegevensuitvraagtaak.data["ontvangenGegevens"], {"key": "value"}
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
         )  # default
         response = self.client.patch(
-            detail_url, {"data": {"ontvangenGegevens": {"new_key": "new_value"}}}
+            detail_url, {"details": {"ontvangenGegevens": {"new_key": "new_value"}}}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         gegevensuitvraagtaak = ExterneTaak.objects.get()
         # new value
         self.assertEqual(
-            gegevensuitvraagtaak.data["ontvangenGegevens"], {"new_key": "new_value"}
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"new_key": "new_value"}
         )
         self.assertNotEqual(
-            gegevensuitvraagtaak.data["ontvangenGegevens"], {"key": "value"}
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
         )
 
     def test_invalid_update_partial(self):
@@ -477,7 +498,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             {
                 "titel": "titel",
                 "handelingsPerspectief": "handelingsPerspectief1",
-                "data": {
+                "details": {
                     "uitvraagLink": "http://example-new-url.com/",
                 },
             },
@@ -487,6 +508,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
+                # TODO fix il url
+                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -499,14 +522,17 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "data": {
-                    "uitvraagLink": gegevensuitvraagtaak.data["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.data["ontvangenGegevens"],
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
                 },
             },
         )
         self.assertEqual(
-            gegevensuitvraagtaak.data["uitvraagLink"], "http://example-new-url.com/"
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
         )
 
     def test_destroy(self):
