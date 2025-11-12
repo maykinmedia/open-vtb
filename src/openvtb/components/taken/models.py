@@ -68,10 +68,10 @@ class ExterneTaak(models.Model):
         choices=SoortTaak.choices,
         help_text=_("Het soort taak"),
     )
-    data = JSONField(
-        _("data"),
+    details = JSONField(
+        _("details"),
         default=dict,
-        help_text=_("Data van de taak met validaties op basis van het soort taak"),
+        help_text=_("Details van de taak met validaties op basis van het soort taak"),
         encoder=DjangoJSONEncoder,
     )
 
@@ -90,9 +90,9 @@ class ExterneTaak(models.Model):
     def clean(self):
         super().clean()
         try:
-            validate_jsonschema(self.data, self.taak_soort)
+            validate_jsonschema(self.details, self.taak_soort)
         except ValidationError as error:
-            raise ValidationError({"data": str(error)})
+            raise ValidationError({"details": str(error)})
 
         try:
             validate_date(self.startdatum, self.einddatum_handelings_termijn)
