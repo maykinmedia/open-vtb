@@ -80,6 +80,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
             name_suffix="BetaalTaakCreateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=BetaalTaakSerializer,
+            write=True,
         ),
         responses={
             201: make_inline_response(
@@ -96,6 +97,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
             name_suffix="BetaalTaakUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=BetaalTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(
@@ -112,6 +114,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
             name_suffix="BetaalTaakPartialUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=BetaalTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(
@@ -169,6 +172,7 @@ class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="GegevensUitvraagTaakCreateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=GegevensUitvraagTaakSerializer,
+            write=True,
         ),
         responses={
             201: make_inline_response(
@@ -185,6 +189,7 @@ class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="GegevensUitvraagTaakUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=GegevensUitvraagTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(
@@ -201,6 +206,7 @@ class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="GegevensUitvraagTaakPartialUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=GegevensUitvraagTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(
@@ -258,6 +264,7 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="FormulierTaakCreateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=FormulierTaakSerializer,
+            write=True,
         ),
         responses={
             201: make_inline_response(
@@ -274,6 +281,7 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="FormulierTaakUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=FormulierTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(
@@ -290,6 +298,7 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
             name_suffix="FormulierTaakPartialUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
             inner_serializer_class=FormulierTaakSerializer,
+            write=True,
         ),
         responses={
             200: make_inline_response(

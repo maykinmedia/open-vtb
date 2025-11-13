@@ -6,6 +6,7 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.validators import validate_jsonschema
 from openvtb.utils.converters import camel_to_snake_converter, snake_to_camel_converter
+from openvtb.utils.serializers import get_from_serializer_data_or_instance
 from openvtb.utils.validators import StartBeforeEndValidator
 
 from ..constants import DEFAULT_VALUTA
@@ -119,18 +120,22 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
             "details": {"required": True},
             "taak_soort": {"required": True},
             "url": {
-                "view_name": "taken:betaaltaken-detail",  # fix TODO
+                "view_name": "taken:externetaak-detail",
                 "lookup_field": "uuid",
                 "help_text": _("De unieke URL van deze actor binnen deze API."),
             },
         }
 
-    def _init_taak_soort(self, partial=False):
+    def _init_taak_soort(self, taak_soort, partial=False):
         """
-        Set `taak_soort` with priority:
-        1. Use self.taak_soort if already set viewset, raise error if present in initial_data
-        2. Use value from initial_data if provided
-        3. Use instance value for partial_update, if not provided
+        Initialize `taak_soort`:
+
+        - If `taak_soort` is already set:
+            - if it also appears in `initial_data`, raise a ValidationError
+            - Otherwise, insert it into `initial_data` as default
+
+        - If `partial=True` and is not passed to the initial data:
+            - Add `taak_soort` value into `initial_data`
         """
 
         initial_data = getattr(self, "initial_data", None)
@@ -138,8 +143,8 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
 
         if initial_data is None:
             return
-        # 1.
-        if self.taak_soort:
+
+        if taak_soort:
             if self.discriminator_field in initial_data:
                 raise serializers.ValidationError(
                     {
@@ -149,53 +154,35 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
                     },
                     code="invalid",
                 )
-            initial_data[self.discriminator_field] = self.taak_soort
+            initial_data[self.discriminator_field] = taak_soort
             return
 
-        # 2.
-        if self.discriminator_field in initial_data:
-            self.taak_soort = initial_data[self.discriminator_field]
-            return
-
-        # 3.
-        if partial and instance is not None:
+        if partial and instance and self.discriminator_field not in initial_data:
             initial_data[self.discriminator_field] = instance.taak_soort
-            self.taak_soort = instance.taak_soort
+            return
 
     def __init__(self, *args, **kwargs):
-        # necessary to pass the partial value in case of PATCH
+        partial = kwargs.get("partial", False)
+        # partial pass for PATCH the content of the details
         for discriminator in self.discriminator.mapping.values():
-            discriminator.partial = kwargs.get("partial", False)
+            discriminator.partial = partial
 
         super().__init__(*args, **kwargs)
         if context := kwargs.get("context", {}):
-            self.taak_soort = context.get(self.discriminator_field, None)
-            self._init_taak_soort(kwargs.get("partial", False))
+            taak_soort = context.get(self.discriminator_field, None)
+            self._init_taak_soort(taak_soort, partial)
 
     def validate(self, attrs):
         details = {
             snake_to_camel_converter(k): v for k, v in attrs.pop("details", {}).items()
         }
-        if self.instance and self.instance.details:
-            if self.instance.taak_soort == self.taak_soort:
-                # update details with instance values
-                details = {**self.instance.details, **details}
-        validate_jsonschema(details, self.taak_soort)
+
+        taak_soort = get_from_serializer_data_or_instance(
+            self.discriminator_field, attrs, self
+        )
+        if self.instance and self.instance.taak_soort == taak_soort:
+            # update details only for the same taak_soort
+            details = {**self.instance.details, **details}
+        validate_jsonschema(details, taak_soort)
         attrs["details"] = details
         return super().validate(attrs)
-
-
-class ExterneTaakSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ExterneTaak
-        fields = (
-            "uuid",
-            "titel",
-            "status",
-            "startdatum",
-            "handelings_perspectief",
-            "einddatum_handelings_termijn",
-            "datum_herinnering",
-            "toelichting",
-            "taak_soort",
-        )

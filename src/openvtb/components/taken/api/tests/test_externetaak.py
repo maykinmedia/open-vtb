@@ -34,8 +34,7 @@ class ExterneTaakTests(APITestCase):
                 "previous": None,
                 "results": [
                     {
-                        # TODO fix il url
-                        "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(externetaak.uuid)})}",
+                        "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(externetaak.uuid)})}",
                         "uuid": str(externetaak.uuid),
                         "titel": externetaak.titel,
                         "status": externetaak.status,
@@ -88,8 +87,7 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                # TODO fix il url
-                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(externetaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(externetaak.uuid)})}",
                 "uuid": str(externetaak.uuid),
                 "titel": externetaak.titel,
                 "status": externetaak.status,
@@ -128,8 +126,7 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                # TODO fix il url
-                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -296,8 +293,7 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                # TODO fix il url
-                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
@@ -391,8 +387,7 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                # TODO fix il url
-                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
@@ -461,8 +456,7 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                # TODO fix il url
-                "url": f"http://testserver{reverse('taken:betaaltaken-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": str(gegevensuitvraagtaak.status),
