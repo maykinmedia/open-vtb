@@ -121,7 +121,7 @@ jobs:
         id: image-name
 
   open-api-ci:
-    uses: maykinmedia/open-api-workflows/.github/workflows/ci.yml@v5
+    uses: maykinmedia/open-api-workflows/.github/workflows/ci.yml@v6
     needs:
       - store-reusable-workflow-vars
     with:
@@ -133,7 +133,7 @@ jobs:
       django-settings-module: openvtb.conf.ci
 
 #  open-api-publish:
-#    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@v5
+#    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@v6
 #    needs:
 #      - store-reusable-workflow-vars
 #      - open-api-ci
