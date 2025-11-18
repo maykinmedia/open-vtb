@@ -1,41 +1,19 @@
 import json
-from datetime import date
 
 from django.urls import reverse, reverse_lazy
 
 from django_webtest import WebTest
-from freezegun import freeze_time
 from maykin_2fa.test import disable_admin_mfa
 
 from openvtb.accounts.tests.factories import UserFactory
 
 from ..constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
-from ..models import VerzoekType, VerzoekTypeVersion
-from .factories import VerzoekTypeFactory, VerzoekTypeVersionFactory
-
-JSON_SCHEMA = {
-    "type": "object",
-    "title": "Tree",
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "required": ["diameter"],
-    "properties": {
-        "diameter": {
-            "type": "integer",
-            "description": "size in cm.",
-        },
-        "extra": {
-            "type": "object",
-            "title": "extra",
-            "keys": {},
-            "additionalProperties": True,
-        },
-    },
-    "additionalProperties": False,
-}
+from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
+from .factories import JSON_SCHEMA, VerzoekTypeFactory, VerzoekTypeVersionFactory
 
 
 @disable_admin_mfa()
-class VerzoekTypeAddTests(WebTest):
+class VerzoekTypeAdminTests(WebTest):
     url = reverse_lazy("admin:verzoeken_verzoektype_add")
 
     @classmethod
@@ -253,3 +231,110 @@ class VerzoekTypeAddTests(WebTest):
         form = response.forms.get("verzoektype_form")
         # aanvraag_gegevens_schema readonly field
         self.assertNotIn("versions-0-aanvraag_gegevens_schema", form.fields)
+
+
+@disable_admin_mfa()
+class VerzoekAdminTests(WebTest):
+    url = reverse_lazy("admin:verzoeken_verzoek_add")
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+        cls.user = UserFactory.create(superuser=True)
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.app.set_user(self.user)
+
+    def test_create_verzoek_success(self):
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 0)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
+        verzoek_type = VerzoekTypeFactory.create()
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoek_type)
+
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+        form["aanvraag_gegevens"] = json.dumps(
+            {"diameter": 10, "extra": {"key": "value"}}
+        )
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Verzoek.objects.count(), 1)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+
+        verzoek = Verzoek.objects.get()
+
+        self.assertEqual(verzoek.verzoek_type, verzoek_type)
+        self.assertEqual(
+            verzoek.aanvraag_gegevens, {"extra": {"key": "value"}, "diameter": 10}
+        )
+
+    def test_create_verzoek_required_fields(self):
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 0)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
+        verzoek_type = VerzoekTypeFactory.create()
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoek_type)
+
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            str(error_list[0]),
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>Dit veld is vereist.</li><li>{'data': ["'diameter' is a required property"]}</li></ul>""",
+        )
+
+    def test_create_verzoek_invalid_json_schema(self):
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 0)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
+        verzoek_type = VerzoekTypeFactory.create()
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoek_type)
+
+        # required key
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+        form["aanvraag_gegevens"] = json.dumps({"random_key": 10})
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            str(error_list[0]),
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'data': ["'diameter' is a required property"]}</li></ul>""",
+        )
+
+        # invalid type
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+        form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            str(error_list[0]),
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'diameter': ["'test' is not of type 'integer'"]}</li></ul>""",
+        )
