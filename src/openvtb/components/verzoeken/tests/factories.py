@@ -4,7 +4,27 @@ import uuid
 import factory
 from factory.django import DjangoModelFactory
 
-from ..models import VerzoekType, VerzoekTypeVersion
+from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
+
+JSON_SCHEMA = {
+    "type": "object",
+    "title": "Tree",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": ["diameter"],
+    "properties": {
+        "diameter": {
+            "type": "integer",
+            "description": "size in cm.",
+        },
+        "extra": {
+            "type": "object",
+            "title": "extra",
+            "keys": {},
+            "additionalProperties": True,
+        },
+    },
+    "additionalProperties": False,
+}
 
 
 class VerzoekTypeFactory(DjangoModelFactory):
@@ -18,25 +38,7 @@ class VerzoekTypeFactory(DjangoModelFactory):
 
 class VerzoekTypeVersionFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
-    aanvraag_gegevens_schema = {
-        "type": "object",
-        "title": "Tree",
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "required": ["diameter"],
-        "properties": {
-            "diameter": {
-                "type": "integer",
-                "description": "size in cm.",
-            },
-            "extra": {
-                "type": "object",
-                "title": "extra",
-                "keys": {},
-                "additionalProperties": True,
-            },
-        },
-        "additionalProperties": False,
-    }
+    aanvraag_gegevens_schema = JSON_SCHEMA
 
     class Meta:
         model = VerzoekTypeVersion
@@ -53,6 +55,9 @@ class DataFactory(factory.DictFactory):
     diameter = factory.LazyAttribute(lambda x: random.randrange(1, 10_000))
 
 
-class Verzoek(DjangoModelFactory):
+class VerzoekFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
     aanvraag_gegevens = factory.SubFactory(DataFactory)
+
+    class Meta:
+        model = Verzoek

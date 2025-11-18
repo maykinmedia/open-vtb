@@ -120,6 +120,7 @@ class VerzoekBronInline(admin.StackedInline):
 @admin.register(Verzoek)
 class VerzoekAdmin(admin.ModelAdmin):
     list_display = ("uuid", "verzoek_type")
+    readonly_fields = ("uuid",)
     search_fields = ("uuid", "verzoek_type__naam", "bron__naam")
     inlines = [VerzoekBronInline, VerzoekBetalingInline]
     list_filter = ("verzoek_type",)
