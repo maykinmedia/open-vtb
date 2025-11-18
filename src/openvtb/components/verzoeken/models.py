@@ -281,7 +281,11 @@ class Verzoek(models.Model):
         super().clean()
         if not self.verzoek_type.last_version:
             raise ValidationError(
-                _("Onbekend VerzoekenType schema: geen schema beschikbaar."),
+                {
+                    "verzoek_type": _(
+                        "Onbekend VerzoekenType schema: geen schema beschikbaar."
+                    )
+                },
                 code="unknown_choice",
             )
         try:
