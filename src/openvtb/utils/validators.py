@@ -10,7 +10,7 @@ from rest_framework import serializers
 from .serializers import get_from_serializer_data_or_instance
 
 
-def validate_charfield_entry(value, allow_apostrophe=False):
+def validate_charfield_entry(value: str, allow_apostrophe: bool = False) -> str:
     """
     Validates a charfield entry according with Belastingdienst requirements.
 
@@ -31,7 +31,22 @@ def validate_charfield_entry(value, allow_apostrophe=False):
     return value
 
 
-def validate_phone_number(value):
+def validate_phone_number(value: str) -> str:
+    """
+    Validate a mobile phone number.
+
+    Strips spaces, hyphens, and leading zeros or plus signs, then checks if
+    the remaining value is numeric.
+
+    Args:
+        value (str): The phone number to validate.
+
+    Returns:
+        str: The original phone number if valid.
+
+    Raises:
+        ValidationError: If the value is not a valid numeric phone number.
+    """
     try:
         int(value.strip().lstrip("0+").replace("-", "").replace(" ", ""))
     except (ValueError, TypeError) as exc:
@@ -42,10 +57,18 @@ def validate_phone_number(value):
 
 def validate_date(start_date: datetime | None, end_date: datetime | None) -> None:
     """
-    Validates that the end date is greater than the start date.
+    Validate that `end_date` is after `start_date`.
+
+    Args:
+        start_date (datetime | None): The starting date.
+        end_date (datetime | None): The ending date.
+
+    Returns:
+        None
 
     Raises:
-        ValidationError: If `end_date` is not greater than `start_date`.
+        ValidationError: If both dates are provided and `end_date` < `start_date`.
+
     """
 
     if start_date and end_date and end_date < start_date:
@@ -93,18 +116,19 @@ class StartBeforeEndValidator:
 
 class CustomRegexValidator(RegexValidator):
     """
-    CustomRegexValidator because the validated value is append to the message.
+    Regex validator that appends the invalid value to the error message.
     """
 
-    def __call__(self, value):
+    def __call__(self, value: Any) -> None:
         """
-        Validates that the input matches the regular expression.
+        Validate that the input matches the regular expression.
+
+        Args:
+            value (Any): The value to validate.
+
+        Raises:
+            ValidationError: If the value does not match the regex.
         """
         if not self.regex.search(force_str(value)):
             message = f"{self.message}: {force_str(value)}"
             raise ValidationError(message, code=self.code)
-
-
-validate_postal_code = CustomRegexValidator(
-    regex="^[1-9][0-9]{3} ?[a-zA-Z]{2}$", message=_("Invalid postal code.")
-)

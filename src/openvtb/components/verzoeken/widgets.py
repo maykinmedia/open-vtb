@@ -21,6 +21,8 @@ class JSONSuit(_JSONSuit):
         try:
             json.loads(value)
         except ValueError:
+            # The supplied value is not valid JSON, use the original value as
+            # a fallback
             value = json.dumps(self.initial)
         return super().render(name, value, attrs)
 
