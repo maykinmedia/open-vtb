@@ -11,7 +11,6 @@ from django_jsonform.models.fields import JSONField
 from openvtb.utils.validators import validate_date
 
 from .constants import SoortTaak, StatusTaak
-from .validators import validate_jsonschema
 
 
 class ExterneTaak(models.Model):
@@ -27,7 +26,6 @@ class ExterneTaak(models.Model):
         max_length=100,
         help_text=_("Titel van de taak (max. 1 zin)"),
     )
-    # TODO add here validation to pass to status to another one
     status = models.CharField(
         _("status"),
         max_length=20,
