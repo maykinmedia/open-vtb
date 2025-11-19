@@ -10,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
+from openvtb.utils.validators import validate_jsonschema
+
 from .constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
 from .utils import check_json_schema
 
@@ -274,3 +276,18 @@ class Verzoek(models.Model):
 
     def __str__(self):
         return f"{self.uuid}"
+
+    def clean(self):
+        super().clean()
+        if not self.verzoek_type.last_version:
+            raise ValidationError(
+                _("Onbekend VerzoekenType schema: geen schema beschikbaar."),
+                code="unknown_choice",
+            )
+        try:
+            validate_jsonschema(
+                self.aanvraag_gegevens,
+                self.verzoek_type.last_version.aanvraag_gegevens_schema,
+            )
+        except ValidationError as error:
+            raise ValidationError({"aanvraag_gegevens": str(error)})

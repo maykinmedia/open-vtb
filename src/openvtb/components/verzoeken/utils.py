@@ -1,10 +1,21 @@
+from typing import Any
+
 from django.core.exceptions import ValidationError
 
 from jsonschema.exceptions import SchemaError
 from jsonschema.validators import validator_for
 
 
-def check_json_schema(json_schema: dict):
+def check_json_schema(json_schema: Any) -> None:
+    """
+    Check if a JSON schema is valid.
+
+    Args:
+        json_schema (dict): The JSON schema to validate.
+
+    Raises:
+        ValidationError: If the schema is invalid.
+    """
     schema_validator = validator_for(json_schema)
     try:
         schema_validator.check_schema(json_schema)
