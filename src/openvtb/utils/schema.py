@@ -17,7 +17,7 @@ class AutoSchema(_AutoSchema):
         return super().get_response_serializers()
 
     def get_override_parameters(self):
-        """Add request GEO headers"""
+        """Add version headers to responses"""
         params = super().get_override_parameters()
         version_headers = self.get_version_headers()
 

@@ -1,7 +1,11 @@
 openapi: 3.0.3
 info:
-  title: taken
+  title: Taken API
   version: 0.0.1
+  description: "\n        De 'Taken-Service' is een gestandaardiseerde architectuur\
+    \ voor Nederlandse overheidssystemen,\n        ontworpen om acties (taken) te\
+    \ definiëren en te beheren die burgers moeten uitvoeren.\n        Het zorgt voor\
+    \ consistente communicatie tussen verschillende applicaties.\n        "
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -75,8 +79,8 @@ paths:
   /betaaltaken/{uuid}:
     get:
       operationId: betaaltakenRetrieve
-      description: Een specifieke betaal taak aanvragen.
-      summary: Een specifieke betaal taak aanvragen.
+      description: Een specifieke betaal taak opvragen.
+      summary: Een specifieke betaal taak opvragen.
       parameters:
       - in: path
         name: uuid
@@ -264,8 +268,8 @@ paths:
   /externetaken/{uuid}:
     get:
       operationId: externetakenRetrieve
-      description: Een specifieke externe taak aanvragen.
-      summary: Een specifieke externe taak aanvragen.
+      description: Een specifieke externe taak opvragen.
+      summary: Een specifieke externe taak opvragen.
       parameters:
       - in: path
         name: uuid
@@ -453,8 +457,8 @@ paths:
   /formuliertaken/{uuid}:
     get:
       operationId: formuliertakenRetrieve
-      description: Een specifieke formulier taak aanvragen.
-      summary: Een specifieke formulier taak aanvragen.
+      description: Een specifieke formulier taak opvragen.
+      summary: Een specifieke formulier taak opvragen.
       parameters:
       - in: path
         name: uuid
@@ -643,8 +647,8 @@ paths:
   /gegevensuitvraagtaken/{uuid}:
     get:
       operationId: gegevensuitvraagtakenRetrieve
-      description: Een specifieke gegevensuitvraag taak aanvragen.
-      summary: Een specifieke gegevensuitvraag taak aanvragen.
+      description: Een specifieke gegevensuitvraag taak opvragen.
+      summary: Een specifieke gegevensuitvraag taak opvragen.
       parameters:
       - in: path
         name: uuid
@@ -777,7 +781,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -858,7 +862,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -912,7 +916,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -971,7 +975,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1030,7 +1034,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1089,7 +1093,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1148,7 +1152,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1202,7 +1206,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1294,7 +1298,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1348,7 +1352,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1407,7 +1411,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1466,7 +1470,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1525,7 +1529,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1584,7 +1588,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1638,7 +1642,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1708,7 +1712,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1762,7 +1766,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1821,7 +1825,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1880,7 +1884,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1939,7 +1943,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1998,7 +2002,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -2052,7 +2056,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -2203,7 +2207,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -2262,7 +2266,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -2310,7 +2314,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze actor binnen deze API.
+          description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
         uuid:

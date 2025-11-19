@@ -12,7 +12,6 @@ from openvtb.utils.api_testcase import APITestCase
 
 class FormulierTaakTests(APITestCase):
     list_url = reverse("taken:formuliertaken-list")
-    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -147,6 +146,7 @@ class FormulierTaakTests(APITestCase):
                     "key2": {
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
+                        "datetime": datetime.datetime.now(),
                     },
                 },
             },
@@ -218,6 +218,55 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
 
+        # create form.io example TextField
+        FORM_IO = {
+            "display": "form",
+            "settings": {
+                "pdf": {
+                    "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+                    "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+                }
+            },
+            "components": [
+                {
+                    "type": "button",
+                    "label": "Submit",
+                    "key": "submit",
+                    "disableOnInvalid": True,
+                    "input": True,
+                    "tableView": False,
+                },
+                {
+                    "label": "Text Field",
+                    "placeholder": "Add Test",
+                    "description": "Description ",
+                    "tooltip": "Tooltip",
+                    "prefix": "Test",
+                    "applyMaskOn": "change",
+                    "tableView": True,
+                    "validateWhenHidden": False,
+                    "key": "textField",
+                    "type": "textfield",
+                    "input": True,
+                },
+            ],
+        }
+
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief",
+            "details": {
+                "formulierDefinitie": FORM_IO,
+                "ontvangenGegevens": {},
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 4)
+        formuliertaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
+        self.assertEqual(formuliertaak.details["formulierDefinitie"], FORM_IO)
+        self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
+
     def test_invalid_create_required_fields(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
         data = {}
@@ -272,103 +321,6 @@ class FormulierTaakTests(APITestCase):
             },
         )
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
-
-    def test_invalid_create_pass_soort_taak(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
-        # wrong soort_taak
-        data = {
-            "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
-            "taakSoort": SoortTaak.FORMULIERTAAK.value,
-            "details": {
-                "formulierDefinitie": {
-                    "key1": "value1",
-                    "key2": {
-                        "keyCamelCase": "value_2",
-                        "key_snake_case": ["value_3"],
-                    },
-                },
-            },
-        }
-        response = self.client.post(self.list_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-        # same soort_taak
-        data["taak_soort"] = SoortTaak.BETAALTAAK.value
-        response = self.client.post(self.list_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-
-    def test_invalid_create_type_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
-        with self.subTest("invalid start_date gt end_date"):
-            data = {
-                "titel": "test",
-                "handelingsPerspectief": "test",
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
-                "details": {
-                    "formulierDefinitie": {
-                        "key1": "value1",
-                        "key2": {
-                            "keyCamelCase": "value_2",
-                            "key_snake_case": ["value_3"],
-                        },
-                    }
-                },
-            }
-            response = self.client.post(self.list_url, data)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(
-                get_validation_errors(response, "einddatumHandelingsTermijn"),
-                {
-                    "name": "einddatumHandelingsTermijn",
-                    "code": "date-mismatch",
-                    "reason": "startdatum should be before einddatum_handelings_termijn.",
-                },
-            )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
-
-        with self.subTest("null value formulierDefinitie"):
-            data = {
-                "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
-                "details": {
-                    "formulierDefinitie": None,
-                },
-            }
-            response = self.client.post(self.list_url, data)
-
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(
-                get_validation_errors(response, "details.formulierDefinitie"),
-                {
-                    "name": "details.formulierDefinitie",
-                    "code": "null",
-                    "reason": "Dit veld mag niet leeg zijn.",
-                },
-            )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
 
     def test_valid_update_partial(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
@@ -458,29 +410,6 @@ class FormulierTaakTests(APITestCase):
             formuliertaak.details["ontvangenGegevens"], {"key": "value"}
         )
 
-    def test_invalid_update_partial(self):
-        formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
-
-        detail_url = reverse(
-            "taken:formuliertaken-detail",
-            kwargs={"uuid": str(formuliertaak.uuid)},
-        )
-        # pass taak_soort
-        response = self.client.patch(
-            detail_url, {"taakSoort": SoortTaak.FORMULIERTAAK.value}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-
     def test_valid_update(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
@@ -557,3 +486,127 @@ class FormulierTaakTests(APITestCase):
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+
+class FormulierTaakValidationTests(APITestCase):
+    list_url = reverse("taken:formuliertaken-list")
+
+    def test_invalid_create_pass_soort_taak(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        # wrong soort_taak
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief1",
+            "taakSoort": SoortTaak.FORMULIERTAAK.value,
+            "details": {
+                "formulierDefinitie": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+        # same soort_taak
+        data["taak_soort"] = SoortTaak.BETAALTAAK.value
+        response = self.client.post(self.list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+
+    def test_invalid_update_partial(self):
+        formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
+
+        detail_url = reverse(
+            "taken:formuliertaken-detail",
+            kwargs={"uuid": str(formuliertaak.uuid)},
+        )
+        # pass taak_soort
+        response = self.client.patch(
+            detail_url, {"taakSoort": SoortTaak.FORMULIERTAAK.value}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+
+    def test_invalid_create_type_fields(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        with self.subTest("invalid start_date gt end_date"):
+            data = {
+                "titel": "test",
+                "handelingsPerspectief": "test",
+                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
+                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "details": {
+                    "formulierDefinitie": {
+                        "key1": "value1",
+                        "key2": {
+                            "keyCamelCase": "value_2",
+                            "key_snake_case": ["value_3"],
+                        },
+                    }
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "einddatumHandelingsTermijn"),
+                {
+                    "name": "einddatumHandelingsTermijn",
+                    "code": "date-mismatch",
+                    "reason": "startdatum should be before einddatum_handelings_termijn.",
+                },
+            )
+            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+        with self.subTest("null value formulierDefinitie"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": None,
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.formulierDefinitie"),
+                {
+                    "name": "details.formulierDefinitie",
+                    "code": "null",
+                    "reason": "Dit veld mag niet leeg zijn.",
+                },
+            )
+            self.assertEqual(ExterneTaak.objects.all().count(), 0)

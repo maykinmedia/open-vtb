@@ -1,7 +1,7 @@
 from drf_spectacular.utils import inline_serializer
 
 
-class SoortTaakMixinView:
+class SoortTaakMixin:
     taak_soort: str = None
 
     def get_queryset(self):
@@ -13,7 +13,7 @@ class SoortTaakMixinView:
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.taak_soort:
-            context["taak_soort"] = str(self.taak_soort)
+            context["taak_soort"] = self.taak_soort
         return context
 
 

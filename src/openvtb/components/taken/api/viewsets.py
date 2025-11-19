@@ -12,7 +12,7 @@ from .serializers import (
     FormulierTaakSerializer,
     GegevensUitvraagTaakSerializer,
 )
-from .utils import SoortTaakMixinView, make_inline_response
+from .utils import SoortTaakMixin, make_inline_response
 
 
 @extend_schema_view(
@@ -21,8 +21,8 @@ from .utils import SoortTaakMixinView, make_inline_response
         description="Vraag alle externe taken aan.",
     ),
     retrieve=extend_schema(
-        summary="Een specifieke externe taak aanvragen.",
-        description="Een specifieke externe taak aanvragen.",
+        summary="Een specifieke externe taak opvragen.",
+        description="Een specifieke externe taak opvragen.",
     ),
     create=extend_schema(
         summary="Maak een externe taak aan.",
@@ -63,8 +63,8 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         },
     ),
     retrieve=extend_schema(
-        summary="Een specifieke betaal taak aanvragen.",
-        description="Een specifieke betaal taak aanvragen.",
+        summary="Een specifieke betaal taak opvragen.",
+        description="Een specifieke betaal taak opvragen.",
         responses={
             200: make_inline_response(
                 name_suffix="BetaalTaakRetrieveResponse",
@@ -132,7 +132,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         },
     ),
 )
-class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
+class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -155,8 +155,8 @@ class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
         },
     ),
     retrieve=extend_schema(
-        summary="Een specifieke gegevensuitvraag taak aanvragen.",
-        description="Een specifieke gegevensuitvraag taak aanvragen.",
+        summary="Een specifieke gegevensuitvraag taak opvragen.",
+        description="Een specifieke gegevensuitvraag taak opvragen.",
         responses={
             200: make_inline_response(
                 name_suffix="GegevensUitvraagTaakRetrieveResponse",
@@ -224,7 +224,7 @@ class BetaalTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
         },
     ),
 )
-class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
+class GegevensUitvraagTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -247,8 +247,8 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
         },
     ),
     retrieve=extend_schema(
-        summary="Een specifieke formulier taak aanvragen.",
-        description="Een specifieke formulier taak aanvragen.",
+        summary="Een specifieke formulier taak opvragen.",
+        description="Een specifieke formulier taak opvragen.",
         responses={
             200: make_inline_response(
                 name_suffix="FormulierTaakRetrieveResponse",
@@ -316,7 +316,7 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
         },
     ),
 )
-class FormulierTaakViewSet(SoortTaakMixinView, viewsets.ModelViewSet):
+class FormulierTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
