@@ -108,7 +108,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             error.exception.message_dict,
             {
                 "aanvraag_gegevens": [
-                    "{'data': [\"'diameter' is a required property\"]}"
+                    "{'aanvraag_gegevens': [\"'diameter' is a required property\"]}"
                 ]
             },
         )
@@ -122,7 +122,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             error.exception.message_dict,
             {
                 "aanvraag_gegevens": [
-                    "{'diameter': [\"'test' is not of type 'integer'\"]}"
+                    "{'aanvraag_gegevens.diameter': [\"'test' is not of type 'integer'\"]}"
                 ]
             },
         )

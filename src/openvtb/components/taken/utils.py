@@ -25,9 +25,6 @@ def get_json_schema(key: str) -> Any:
     """
     schema = SCHEMA_MAPPING.get(key)
     if not schema:
-        logger.exception(
-            "validate_jsonschema failed: schema not found", extra={"schema_key": key}
-        )
         raise ValidationError(
             _("Onbekend '{key}': geen schema beschikbaar.".format(key=key)),
             code="unknown_choice",

@@ -8,9 +8,9 @@ from rest_framework import serializers
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
-from openvtb.components.taken.validators import validate_jsonschema
+from openvtb.components.taken.utils import get_json_schema
 from openvtb.utils.serializers import get_from_serializer_data_or_instance
-from openvtb.utils.validators import StartBeforeEndValidator
+from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
 from ..constants import Valute
 from ..models import ExterneTaak
@@ -187,6 +187,10 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
         if self.instance and self.instance.taak_soort == taak_soort:
             # update details only for the same taak_soort
             details = {**self.instance.details, **details}
-        validate_jsonschema(details, taak_soort)
+        validate_jsonschema(
+            instance=details,
+            label="details",
+            schema=get_json_schema(taak_soort),
+        )
         attrs["details"] = details
         return super().validate(attrs)

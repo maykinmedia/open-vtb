@@ -295,7 +295,7 @@ class VerzoekAdminTests(WebTest):
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
             str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>Dit veld is vereist.</li><li>{'data': ["'diameter' is a required property"]}</li></ul>""",
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>Dit veld is vereist.</li><li>{'aanvraag_gegevens': ["'diameter' is a required property"]}</li></ul>""",
         )
 
     def test_create_verzoek_invalid_json_schema(self):
@@ -319,7 +319,7 @@ class VerzoekAdminTests(WebTest):
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
             str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'data': ["'diameter' is a required property"]}</li></ul>""",
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'aanvraag_gegevens': ["'diameter' is a required property"]}</li></ul>""",
         )
 
         # invalid type
@@ -336,5 +336,5 @@ class VerzoekAdminTests(WebTest):
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
             str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'diameter': ["'test' is not of type 'integer'"]}</li></ul>""",
+            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'aanvraag_gegevens.diameter': ["'test' is not of type 'integer'"]}</li></ul>""",
         )

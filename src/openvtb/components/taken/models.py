@@ -8,9 +8,10 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
-from openvtb.utils.validators import validate_date
+from openvtb.utils.validators import validate_date, validate_jsonschema
 
 from .constants import SoortTaak, StatusTaak
+from .utils import get_json_schema
 
 
 class ExterneTaak(models.Model):
@@ -88,7 +89,11 @@ class ExterneTaak(models.Model):
     def clean(self):
         super().clean()
         try:
-            validate_jsonschema(self.details, self.taak_soort)
+            validate_jsonschema(
+                instance=self.details,
+                label="details",
+                schema=get_json_schema(self.taak_soort),
+            )
         except ValidationError as error:
             raise ValidationError({"details": str(error)})
 

@@ -1,13 +1,81 @@
+import re
 from datetime import datetime
+from decimal import Decimal
+from typing import Any
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
+import structlog
+from jsonschema import (
+    FormatChecker,
+    FormatError,
+    ValidationError as JSONValidationError,
+    validate,
+)
 from rest_framework import serializers
 
 from .serializers import get_from_serializer_data_or_instance
+
+logger = structlog.stdlib.get_logger(__name__)
+format_checker = FormatChecker()
+
+
+@format_checker.checks("decimal")
+def is_decimal(value: str) -> bool:
+    """
+    Checks that 'value' is a valid decimal with at most 2 decimal places.
+    Raises ValidationError if invalid.
+    """
+    try:
+        d = Decimal(value)
+    except Exception:
+        raise FormatError(
+            _("'{value}' is not a valid decimal number".format(value=value))
+        )
+    if d.as_tuple().exponent < -2:
+        raise FormatError(
+            _("'{value}' has more than 2 decimal places".format(value=value))
+        )
+    return True
+
+
+@format_checker.checks("iban")
+def is_valid_iban(value: str) -> bool:
+    """
+    JSONSchema format checker for IBAN values.
+
+    Raises:
+        ValidationError: if the IBAN does not match the expected pattern.
+    """
+    iban_regex = r"^[A-Za-z]{2}[0-9]{2}[A-Za-z0-9]{1,30}$"
+    if not re.compile(iban_regex).fullmatch(force_str(value)):
+        raise FormatError(_("'{value}' is not a valid IBAN".format(value=value)))
+    return True
+
+
+def validate_jsonschema(instance: Any, schema: Any, label: str = "instance") -> None:
+    """
+    Validator for JSONField with appropriate JSON schema.
+
+    Args:
+        instance (Any): The JSON object to validate.
+        label (str): A label representing the root key of the instance (used in error paths).
+        schema (Any): The JSON Schema to validate against.
+
+    Raises:
+        ValueError: Raises a dictionary mapping the error path to the validation message.
+    """
+    try:
+        validate(instance=instance, schema=schema, format_checker=format_checker)
+    except JSONValidationError as json_error:
+        logger.exception("validate_jsonschema failed: JSON not valid")
+        path = ".".join(getattr(json_error, "absolute_path", [])) or label
+        if not path.startswith(label):
+            path = f"{label}.{path}"
+        raise ValidationError({path: json_error.message})
 
 
 def validate_charfield_entry(value: str, allow_apostrophe: bool = False) -> str:
@@ -132,3 +200,8 @@ class CustomRegexValidator(RegexValidator):
         if not self.regex.search(force_str(value)):
             message = f"{self.message}: {force_str(value)}"
             raise ValidationError(message, code=self.code)
+
+
+validate_postal_code = CustomRegexValidator(
+    regex="^[1-9][0-9]{3} ?[a-zA-Z]{2}$", message=_("Invalid postal code.")
+)
