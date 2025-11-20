@@ -5,7 +5,7 @@ from .models import ExterneTaak
 
 
 class ExterneTaakForm(forms.ModelForm):
-    data = forms.JSONField(
+    details = forms.JSONField(
         required=False,
         initial={},
         widget=forms.Textarea(attrs={"rows": 10, "cols": 80}),
@@ -23,7 +23,7 @@ class ExterneTaakForm(forms.ModelForm):
             "datum_herinnering",
             "toelichting",
             "taak_soort",
-            "data",
+            "details",
         )
 
 

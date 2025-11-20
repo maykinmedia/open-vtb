@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 
 import factory
+from factory import SubFactory
 from factory.django import DjangoModelFactory
+from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
@@ -20,3 +22,10 @@ class UserFactory(DjangoModelFactory):
             is_staff=True,
             is_superuser=True,
         )
+
+
+class TokenFactory(DjangoModelFactory):
+    class Meta:
+        model = Token
+
+    user = SubFactory(UserFactory)

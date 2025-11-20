@@ -19,7 +19,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
     class Params:
         betaaltaak = factory.Trait(
             taak_soort=SoortTaak.BETAALTAAK,
-            data={
+            details={
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -31,7 +31,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         )
         gegevensuitvraagtaak = factory.Trait(
             taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK,
-            data={
+            details={
                 "uitvraagLink": "http://example.com/",
                 "ontvangenGegevens": {
                     "key": "value",
@@ -40,7 +40,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         )
         formuliertaak = factory.Trait(
             taak_soort=SoortTaak.FORMULIERTAAK,
-            data={
+            details={
                 "formulierDefinitie": {
                     "key": "value",
                 },

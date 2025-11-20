@@ -11,3 +11,4 @@ freezegun
 pyquery  # integrates with webtest
 # maykin-common[vcr]  # 'mocking' http requests
 tblib
+requests-mock

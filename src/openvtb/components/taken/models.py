@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
+from openvtb.utils.validators import validate_date
+
 from .constants import SoortTaak, StatusTaak
 from .validators import validate_jsonschema
 
@@ -25,6 +27,7 @@ class ExterneTaak(models.Model):
         max_length=100,
         help_text=_("Titel van de taak (max. 1 zin)"),
     )
+    # TODO add here validation to pass to status to another one
     status = models.CharField(
         _("status"),
         max_length=20,
@@ -65,10 +68,10 @@ class ExterneTaak(models.Model):
         choices=SoortTaak.choices,
         help_text=_("Het soort taak"),
     )
-    data = JSONField(
-        _("data"),
+    details = JSONField(
+        _("details"),
         default=dict,
-        help_text=_("Data van de taak met validaties op basis van het soort taak"),
+        help_text=_("Details van de taak met validaties op basis van het soort taak"),
         encoder=DjangoJSONEncoder,
     )
 
@@ -77,7 +80,6 @@ class ExterneTaak(models.Model):
     # "wordtBehandeldDoor": {"urn": "urn(medewerker)", "omschrijving": "string(200)"}
     # "hoortBij": {"urn": "urn(zaak)", "omschrijving": "string(200)"}
     # "heeftBetrekkingOp": {"urn": "urn(product)", "omschrijving": "string(200)"}
-
     class Meta:
         verbose_name = _("Externe taak")
         verbose_name_plural = _("Externe taken")
@@ -88,6 +90,11 @@ class ExterneTaak(models.Model):
     def clean(self):
         super().clean()
         try:
-            validate_jsonschema(self.data, self.taak_soort)
+            validate_jsonschema(self.details, self.taak_soort)
         except ValidationError as error:
-            raise ValidationError({"data": str(error)})
+            raise ValidationError({"details": str(error)})
+
+        try:
+            validate_date(self.startdatum, self.einddatum_handelings_termijn)
+        except ValidationError as error:
+            raise ValidationError({"einddatum_handelings_termijn": error})
