@@ -288,10 +288,12 @@ class Verzoek(models.Model):
                 },
                 code="unknown_choice",
             )
+
         try:
             validate_jsonschema(
-                self.aanvraag_gegevens,
-                self.verzoek_type.last_version.aanvraag_gegevens_schema,
+                instance=self.aanvraag_gegevens,
+                label="aanvraag_gegevens",
+                schema=self.verzoek_type.last_version.aanvraag_gegevens_schema,
             )
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens": str(error)})

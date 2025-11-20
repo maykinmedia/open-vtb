@@ -11,15 +11,17 @@ class ValidateJSONSchemaTestCase(TestCase):
     def test_invalid_key_schema(self):
         for key in ["", "test", None]:
             with self.assertRaises(ValidationError):
-                json_schema = get_json_schema(key)
-                validate_jsonschema({}, json_schema)
+                validate_jsonschema(instance={}, schema=get_json_schema(key))
 
     def test_invalid_data_schema(self):
         # data values
-        for data in ["", "test", [], 0, False, None]:
+        for instance in ["", "test", [], 0, False, None]:
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, SoortTaak.BETAALTAAK.value)
-            self.assertTrue("details" in error.exception.message_dict)
+                validate_jsonschema(
+                    instance=instance,
+                    schema=get_json_schema(SoortTaak.BETAALTAAK.value),
+                )
+            self.assertTrue("instance" in error.exception.message_dict)
 
 
 class ValidateBetaalTaakSchemaTestCase(TestCase):
@@ -30,7 +32,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
 
     def test_valid_schema(self):
         # all data
-        data = {
+        instance = {
             "bedrag": "10.12",
             "valuta": "EUR",
             "transactieomschrijving": "test",
@@ -39,11 +41,11 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "iban": "NL18BANK23481326",
             },
         }
-        validate_jsonschema(data, self.json_schema)
+        validate_jsonschema(instance=instance, schema=self.json_schema)
 
     def test_invalid_schema_required_fields(self):
         with self.subTest("'bedrag' field required"):
-            data = {
+            instance = {
                 # "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -53,15 +55,15 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.taak_soort)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
 
             self.assertEqual(
                 error.exception.message_dict,
-                {"details": ["'bedrag' is a required property"]},
+                {"instance": ["'bedrag' is a required property"]},
             )
 
         with self.subTest("'transactieomschrijving' field required"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 # "transactieomschrijving": "test",
@@ -71,14 +73,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details": ["'transactieomschrijving' is a required property"]},
+                {"instance": ["'transactieomschrijving' is a required property"]},
             )
 
         with self.subTest("'doelrekening' field required"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -88,14 +90,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 # },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details": ["'doelrekening' is a required property"]},
+                {"instance": ["'doelrekening' is a required property"]},
             )
 
         with self.subTest("'doelrekening.naam' field required"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -105,14 +107,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening": ["'naam' is a required property"]},
+                {"instance.doelrekening": ["'naam' is a required property"]},
             )
 
         with self.subTest("'doelrekening.iban' field required"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -122,15 +124,15 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening": ["'iban' is a required property"]},
+                {"instance.doelrekening": ["'iban' is a required property"]},
             )
 
     def test_invalid_schema_check_type(self):
         with self.subTest("'bedrag' is not decimal"):
-            data = {
+            instance = {
                 "bedrag": "test",  # not decimal
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -140,13 +142,13 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.bedrag": ["'test' is not a valid decimal number"]},
+                {"instance.bedrag": ["'test' is not a valid decimal number"]},
             )
         with self.subTest("'bedrag'  has more than 2 decimal places"):
-            data = {
+            instance = {
                 "bedrag": "10.111",  # 3 decimals
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -156,14 +158,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.bedrag": ["'10.111' has more than 2 decimal places"]},
+                {"instance.bedrag": ["'10.111' has more than 2 decimal places"]},
             )
 
         with self.subTest("'valuta' choices"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "TEST",
                 "transactieomschrijving": "test",
@@ -173,14 +175,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.valuta": ["'TEST' is not one of ['EUR']"]},
+                {"instance.valuta": ["'TEST' is not one of ['EUR']"]},
             )
 
         with self.subTest("'transactieomschrijving' is not string"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": 123,
@@ -190,42 +192,42 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.transactieomschrijving": ["123 is not of type 'string'"]},
+                {"instance.transactieomschrijving": ["123 is not of type 'string'"]},
             )
 
         with self.subTest("'doelrekening' is not dict"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
                 "doelrekening": "TEST",
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening": ["'TEST' is not of type 'object'"]},
+                {"instance.doelrekening": ["'TEST' is not of type 'object'"]},
             )
 
         with self.subTest("'transactieomschrijving' is too long"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test" * 100,
                 "doelrekening": "TEST",
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertTrue(
                 "is too long"
-                in error.exception.message_dict["details.transactieomschrijving"][0],
+                in error.exception.message_dict["instance.transactieomschrijving"][0],
             )
 
         with self.subTest("'naam' is not string"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -235,14 +237,14 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening.naam": ["True is not of type 'string'"]},
+                {"instance.doelrekening.naam": ["True is not of type 'string'"]},
             )
 
         with self.subTest("'iban' is not string"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -252,13 +254,13 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening.iban": ["123 is not of type 'string'"]},
+                {"instance.doelrekening.iban": ["123 is not of type 'string'"]},
             )
         with self.subTest("'doelrekening.iban' field format"):
-            data = {
+            instance = {
                 "bedrag": "10.12",
                 "valuta": "EUR",
                 "transactieomschrijving": "test",
@@ -268,10 +270,10 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 },
             }
             with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(data, self.json_schema)
+                validate_jsonschema(instance=instance, schema=self.json_schema)
             self.assertEqual(
                 error.exception.message_dict,
-                {"details.doelrekening.iban": ["'wrong-format' is not a valid IBAN"]},
+                {"instance.doelrekening.iban": ["'wrong-format' is not a valid IBAN"]},
             )
 
 
@@ -282,18 +284,18 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
         self.json_schema = get_json_schema(self.taak_soort)
 
     def test_valid_schema(self):
-        data = {
+        instance = {
             "uitvraagLink": "http://example.com/",
         }
-        validate_jsonschema(data, self.json_schema)
+        validate_jsonschema(instance=instance, schema=self.json_schema)
 
-        data = {
+        instance = {
             "uitvraagLink": "http://example.com/",
             "ontvangenGegevens": {},
         }
-        validate_jsonschema(data, self.json_schema)
+        validate_jsonschema(instance=instance, schema=self.json_schema)
 
-        data = {
+        instance = {
             "uitvraagLink": "http://example.com/",
             "ontvangenGegevens": {
                 "string": "hello world",  # string
@@ -320,30 +322,30 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
                 "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
             },
         }
-        validate_jsonschema(data, self.json_schema)
+        validate_jsonschema(instance=instance, schema=self.json_schema)
 
     def test_invalid_schema(self):
         with self.assertRaises(ValidationError) as error:
-            data = {
+            instance = {
                 "uitvraagLink": "test",
                 "ontvangenGegevens": {},
             }
-            validate_jsonschema(data, self.json_schema)
+            validate_jsonschema(instance=instance, schema=self.json_schema)
         self.assertEqual(
             error.exception.message_dict,
-            {"details.uitvraagLink": ["'test' is not a 'uri'"]},
+            {"instance.uitvraagLink": ["'test' is not a 'uri'"]},
         )
 
         with self.assertRaises(ValidationError) as error:
-            data = {
+            instance = {
                 "uitvraagLink": "http://example.com",
                 "ontvangenGegevens": "http://example.com",
             }
-            validate_jsonschema(data, self.json_schema)
+            validate_jsonschema(instance=instance, schema=self.json_schema)
         self.assertEqual(
             error.exception.message_dict,
             {
-                "details.ontvangenGegevens": [
+                "instance.ontvangenGegevens": [
                     "'http://example.com' is not of type 'object'"
                 ]
             },
@@ -381,20 +383,20 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
             "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
             "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
         }
-        data = {
+        instance = {
             "formulierDefinitie": example,
             "ontvangenGegevens": example,
         }
-        validate_jsonschema(data, self.json_schema)
+        validate_jsonschema(instance=instance, schema=self.json_schema)
 
     def test_invalid_schema(self):
         with self.assertRaises(ValidationError) as error:
-            data = {
+            instance = {
                 "formulierDefinitie": "example",
                 "ontvangenGegevens": {},
             }
-            validate_jsonschema(data, self.json_schema)
+            validate_jsonschema(instance=instance, schema=self.json_schema)
         self.assertEqual(
             error.exception.message_dict,
-            {"details.formulierDefinitie": ["'example' is not of type 'object'"]},
+            {"instance.formulierDefinitie": ["'example' is not of type 'object'"]},
         )
