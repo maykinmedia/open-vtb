@@ -60,5 +60,22 @@ ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
     "maykin_common.django_two_factor_auth.should_display_dropdown_menu"
 )
 
-# django geo_db_type
+#
+# Define this variable here to ensure it shows up in the envvar documentation
 DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
+
+# Geospatial libraries
+GEOS_LIBRARY_PATH = config(
+    "GEOS_LIBRARY_PATH",
+    None,
+    help_text=(
+        "Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty."
+    ),
+)
+GDAL_LIBRARY_PATH = config(
+    "GDAL_LIBRARY_PATH",
+    None,
+    help_text=(
+        "Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty."
+    ),
+)

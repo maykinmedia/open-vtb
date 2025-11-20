@@ -1,23 +1,31 @@
+---
 # .readthedocs.yaml
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
+# Required
 version: 2
 
+# Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/conf.py
 
+# Set the version of Python and other tools you might need
 build:
-  os: 'ubuntu-20.04'
+  os: ubuntu-22.04
   apt_packages:
     - libxml2-dev
     - libxmlsec1-dev
     - libxmlsec1-openssl
+    - libgdal-dev
+    - gdal-bin
     - graphviz
     - graphviz-dev
     - wget
+    - build-essential
+    - python3-dev
   tools:
-    python: '3.12'
+    python: "3.12"
 
 python:
   install:
