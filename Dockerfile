@@ -60,6 +60,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         postgresql-client \
         gettext \
         shared-mime-info \
+        gdal-bin \
         # lxml deps
         # libxslt \
     && rm -rf /var/lib/apt/lists/*

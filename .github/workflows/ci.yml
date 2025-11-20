@@ -41,39 +41,55 @@ jobs:
       changed-requirements: ${{ steps.changed-requirements.outputs.any_changed }}
 
   tests:
-    name: Tests (PG ${{ matrix.postgres }})
     runs-on: ubuntu-latest
     needs:
       - changed-files
 
-    # only run tests xtract version iif source files have changed (e.g. skip for PRs that only update docs)
-    if: ${{ needs.changed-files.outputs.changed-py-files == 'true'|| needs.changed-files.outputs.changed-requirements == 'true'|| github.event_name == 'push' }}
+    # only run tests if source files have changed (e.g. skip for PRs that only update docs)
+    if: ${{ needs.changed-files.outputs.changed-py-files == 'true'|| needs.changed-files.outputs.changed-requirements == 'true'|| needs.changed-files.outputs.changed-templates|| github.event_name == 'push' }}
 
     strategy:
       matrix:
         postgres: ["14", "15", "16", "17"]
+        postgis: ["3.2", "3.5"]
         use_pooling: [false]
+        exclude:
+          # postgis 3.2 is not compatible with recent postgres versions
+          - postgres: "17"
+            postgis: "3.2"
+          - postgres: "16"
+            postgis: "3.2"
+          - postgres: "15"
+            postgis: "3.2"
         include:
           - postgres: "17"
+            postgis: "3.5"
             use_pooling: true
+
+    name: Tests (PG ${{ matrix.postgres }}, postgis ${{ matrix.postgis }}) ${{matrix.use_pooling && 'with connection pooling' || ''}}
 
     services:
       postgres:
-        image: postgres:${{ matrix.postgres }}
+        image: postgis/postgis:${{ matrix.postgres }}-${{ matrix.postgis }}
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options:
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          --name postgres
 
     steps:
       - uses: actions/checkout@v4
       - name: Set up backend environment
         uses: maykinmedia/setup-django-backend@v1.3
         with:
-          python-version: '3.12'
-          setup-node: true
+          apt-packages: "libxml2 libxmlsec1 libxmlsec1-openssl gettext postgresql-client libgdal-dev gdal-bin"
+          python-version: "3.12"
+          optimize-postgres: "yes"
+          pg-service: "postgres"
+          setup-node: "yes"
 
       - name: Run tests
         run: |
@@ -97,6 +113,7 @@ jobs:
         uses: maykinmedia/setup-django-backend@v1.3
         with:
           python-version: '3.12'
+          apt-packages: "libgdal-dev gdal-bin"
           setup-node: false
 
       - name: Generate environment variable documentation using OAf and check if it was updated

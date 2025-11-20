@@ -12,7 +12,9 @@ jobs:
     uses: maykinmedia/open-api-workflows/.github/workflows/code-quality.yml@v6
     with:
       python-version: "3.12"
-      node-version: "20"
+      apt-packages: "libgdal-dev gdal-bin"
+      node-version: "24"
+      postgres-image: "postgis/postgis:16-3.5"
 
       django-settings-module: "openvtb.conf.ci"
       django-secret-key: dummy
