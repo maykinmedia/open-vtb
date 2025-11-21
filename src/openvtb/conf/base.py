@@ -14,9 +14,13 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "capture_tag",
     "maykin_common",
     "rest_framework.authtoken",
+    "django.contrib.gis",
+    # External applications.
+    "jsonsuit.apps.JSONSuitConfig",
     # Project applications.
     "openvtb.accounts",
     "openvtb.components.taken",
+    "openvtb.components.verzoeken",
     # Django libraries
     "localflavor",
 ]
@@ -55,3 +59,6 @@ ADMIN_INDEX_SHOW_REMAINING_APPS_TO_SUPERUSERS = True
 ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
     "maykin_common.django_two_factor_auth.should_display_dropdown_menu"
 )
+
+# django geo_db_type
+DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"

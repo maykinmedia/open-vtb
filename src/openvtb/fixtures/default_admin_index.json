@@ -78,6 +78,27 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
+            "order": 4,
+            "translations": {
+                "en": "Verzoeken"
+            },
+            "name": "Verzoeken",
+            "slug": "Verzoeken",
+            "models": [
+                [
+                    "verzoeken",
+                    "verzoek"
+                ],
+                [
+                    "verzoeken",
+                    "verzoektype"
+                ]
+            ]
+        }
+    },
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
             "order": 5,
             "translations": {
                 "en": "Configuration",
