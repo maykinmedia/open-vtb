@@ -1,0 +1,1193 @@
+openapi: 3.0.3
+info:
+  title: Verzoeken API
+  version: 0.0.1
+  description: "\n        De 'Verzoeken-API' slaat ingediende formuliergegevens op\
+    \ als gestructureerde JSON.\n        Aangezien formulieren elk type veld kunnen\
+    \ bevatten, definieert elk formulier een JSON-schema dat de verwachte structuur\
+    \ specificeert.\n        Inkomende gegevens worden getoetst aan dit schema en\
+    \ opgeslagen in een consistent, gestructureerd formaat.\n        "
+  contact:
+    email: standaarden.ondersteuning@vng.nl
+    name: VNG
+    url: https://zaakgerichtwerken.vng.cloud
+  license:
+    name: EUPL 1.2
+    url: https://opensource.org/licenses/EUPL-1.2
+paths:
+  /verzoeken:
+    get:
+      operationId: verzoekenList
+      description: Vraag alle verzoeken aan.
+      summary: Vraag alle Vraag alle verzoeken aan taken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - verzoeken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVerzoekList'
+          description: ''
+    post:
+      operationId: verzoekenCreate
+      description: Maak een verzoek aan.
+      summary: Maak een verzoek aan.
+      tags:
+      - verzoeken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verzoek'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Verzoek'
+          description: ''
+  /verzoeken/{uuid}:
+    get:
+      operationId: verzoekenRetrieve
+      description: Een specifieke verzoek opvragen.
+      summary: Een specifieke verzoek opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        required: true
+      tags:
+      - verzoeken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Verzoek'
+          description: ''
+    put:
+      operationId: verzoekenUpdate
+      description: Volledig verzoek wijzigen.
+      summary: Volledig verzoek wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        required: true
+      tags:
+      - verzoeken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verzoek'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Verzoek'
+          description: ''
+    patch:
+      operationId: verzoekenPartialUpdate
+      description: Een verzoek gedeeltelijk wijzigen.
+      summary: Een verzoek gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        required: true
+      tags:
+      - verzoeken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVerzoek'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Verzoek'
+          description: ''
+    delete:
+      operationId: verzoekenDestroy
+      description: Een verzoek verwijderen
+      summary: Een verzoek verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        required: true
+      tags:
+      - verzoeken
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+  /verzoekentype:
+    get:
+      operationId: verzoekentypeList
+      description: Vraag alle verzoeken type aan.
+      summary: Vraag alle Vraag alle verzoeken type aan taken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVerzoekTypeList'
+          description: ''
+    post:
+      operationId: verzoekentypeCreate
+      description: Maak een verzoek type aan.
+      summary: Maak een verzoek type aan.
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerzoekType'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekType'
+          description: ''
+  /verzoekentype/{uuid}:
+    get:
+      operationId: verzoekentypeRetrieve
+      description: Een specifieke verzoek type opvragen.
+      summary: Een specifieke verzoek type opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekType'
+          description: ''
+    put:
+      operationId: verzoekentypeUpdate
+      description: Volledig verzoek type wijzigen.
+      summary: Volledig verzoek type wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerzoekType'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekType'
+          description: ''
+    patch:
+      operationId: verzoekentypePartialUpdate
+      description: Een verzoek type gedeeltelijk wijzigen.
+      summary: Een verzoek type gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVerzoekType'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekType'
+          description: ''
+    delete:
+      operationId: verzoekentypeDestroy
+      description: Een verzoek type verwijderen
+      summary: Een verzoek type verwijderen
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+  /verzoekentype/{verzoektypeUuid}/versions:
+    get:
+      operationId: verzoekentypeVersionsList
+      description: Vraag alle verzoeken type versie aan.
+      summary: Vraag alle verzoeken type versie aan taken aan.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVerzoekTypeVersionList'
+          description: ''
+    post:
+      operationId: verzoekentypeVersionsCreate
+      description: Maak een verzoek type versie aan.
+      summary: Maak een verzoek type versie aan.
+      parameters:
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerzoekTypeVersion'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekTypeVersion'
+          description: ''
+  /verzoekentype/{verzoektypeUuid}/versions/{verzoektypeVersion}:
+    get:
+      operationId: verzoekentypeVersionsRetrieve
+      description: Een specifieke verzoek type versie opvragen.
+      summary: Een specifieke verzoek type versie opvragen.
+      parameters:
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      - in: path
+        name: verzoektypeVersion
+        schema:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        required: true
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekTypeVersion'
+          description: ''
+    put:
+      operationId: verzoekentypeVersionsUpdate
+      description: Volledig verzoek type versie wijzigen.
+      summary: Volledig verzoek type versie wijzigen.
+      parameters:
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      - in: path
+        name: verzoektypeVersion
+        schema:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        required: true
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerzoekTypeVersion'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekTypeVersion'
+          description: ''
+    patch:
+      operationId: verzoekentypeVersionsPartialUpdate
+      description: Een verzoek type versie gedeeltelijk wijzigen.
+      summary: Een verzoek type versie gedeeltelijk wijzigen.
+      parameters:
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      - in: path
+        name: verzoektypeVersion
+        schema:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        required: true
+      tags:
+      - verzoekentype
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVerzoekTypeVersion'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerzoekTypeVersion'
+          description: ''
+    delete:
+      operationId: verzoekentypeVersionsDestroy
+      description: Een verzoek type versie verwijderen
+      summary: Een verzoek type versie verwijderen
+      parameters:
+      - in: path
+        name: verzoektypeUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het VerzoekType
+        required: true
+      - in: path
+        name: verzoektypeVersion
+        schema:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        required: true
+      tags:
+      - verzoekentype
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          description: No response body
+components:
+  schemas:
+    GeoJSONGeometry:
+      title: GeoJSONGeometry
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/Point'
+      - $ref: '#/components/schemas/MultiPoint'
+      - $ref: '#/components/schemas/LineString'
+      - $ref: '#/components/schemas/MultiLineString'
+      - $ref: '#/components/schemas/Polygon'
+      - $ref: '#/components/schemas/MultiPolygon'
+      - $ref: '#/components/schemas/GeometryCollection'
+      discriminator:
+        propertyName: type
+    Geometry:
+      type: object
+      title: Geometry
+      description: GeoJSON geometry
+      required:
+      - type
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: The geometry type
+    GeometryCollection:
+      type: object
+      description: GeoJSON geometry collection
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.8
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - geometries
+        properties:
+          geometries:
+            type: array
+            items:
+              $ref: '#/components/schemas/Geometry'
+    LineString:
+      type: object
+      description: GeoJSON line-string geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.4
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/components/schemas/Point2D'
+            minItems: 2
+    MultiLineString:
+      type: object
+      description: GeoJSON multi-line-string geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.5
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Point2D'
+    MultiPoint:
+      type: object
+      description: GeoJSON multi-point geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.3
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            type: array
+            items:
+              $ref: '#/components/schemas/Point2D'
+    MultiPolygon:
+      type: object
+      description: GeoJSON multi-polygon geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.7
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Point2D'
+    OpvolgingEnum:
+      enum:
+      - niet
+      - mogelijk
+      - altijd
+      - meerdere
+      type: string
+    PaginatedVerzoekList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Verzoek'
+    PaginatedVerzoekTypeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerzoekType'
+    PaginatedVerzoekTypeVersionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerzoekTypeVersion'
+    PatchedVerzoek:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        verzoekType:
+          type: string
+          format: uri
+          readOnly: true
+          description: Type van het Verzoek.
+        geometrie:
+          $ref: '#/components/schemas/GeoJSONGeometry'
+        aanvraagGegevens:
+          description: JSON data voor validatie van het VerzoekType.
+        bijlagen:
+          type: array
+          items:
+            type: string
+            title: Documents
+            maxLength: 100
+          description: Eventuele bijlagen van het Verzoek (URNs van documenten).
+        verzoekBron:
+          $ref: '#/components/schemas/VerzoekBron'
+        verzoekBetaling:
+          $ref: '#/components/schemas/VerzoekBetaling'
+    PatchedVerzoekType:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek type deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        version:
+          type: string
+          format: uri
+          readOnly: true
+          description: Integer-versie van het VerzoekType.
+        naam:
+          type: string
+          description: Naam voor het VerzoekType
+          maxLength: 100
+        toelichting:
+          type: string
+          description: Uitleg over het VerzoekType
+        opvolging:
+          allOf:
+          - $ref: '#/components/schemas/OpvolgingEnum'
+          description: Opvolging over het VerzoekType
+        aanvraagGegevensSchema:
+          readOnly: true
+          description: JSON schema voor validatie van VerzoekType
+    PatchedVerzoekTypeVersion:
+      type: object
+      description: |-
+        A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
+        of primary key relationships.  Specifically:
+
+        * A 'url' field is included instead of the 'id' field.
+        * Relationships to other instances are hyperlinks, instead of primary keys.
+
+        NOTE: this only works with DRF 3.1.0 and above.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek deze API.
+        version:
+          type: integer
+          readOnly: true
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        verzoekType:
+          type: string
+          format: uri
+          readOnly: true
+          description: Het VerzoekType waartoe deze versie behoort.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van het VerzoekTypeVersion
+        aanvraagGegevensSchema:
+          description: JSON schema voor validatie van VerzoekType
+        createdAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Datum waarop de versie is gemaakt
+        modifiedAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Laatste datum waarop de versie is gewijzigd
+        publishedAt:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+          description: Datum waarop de versie is gepubliceerd
+    Point:
+      type: object
+      description: GeoJSON point geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.2
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            $ref: '#/components/schemas/Point2D'
+    Point2D:
+      type: array
+      title: Point2D
+      description: A 2D point
+      items:
+        type: number
+      maxItems: 2
+      minItems: 2
+    Polygon:
+      type: object
+      description: GeoJSON polygon geometry
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7946#section-3.1.6
+      allOf:
+      - $ref: '#/components/schemas/Geometry'
+      - type: object
+        required:
+        - coordinates
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Point2D'
+    StatusEnum:
+      enum:
+      - published
+      - draft
+      - deprecated
+      type: string
+    TypeEnum:
+      type: string
+      enum:
+      - Point
+      - MultiPoint
+      - LineString
+      - MultiLineString
+      - Polygon
+      - MultiPolygon
+      - Feature
+      - FeatureCollection
+      - GeometryCollection
+    Verzoek:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het Verzoek.
+        verzoekType:
+          type: string
+          format: uri
+          readOnly: true
+          description: Type van het Verzoek.
+        geometrie:
+          $ref: '#/components/schemas/GeoJSONGeometry'
+        aanvraagGegevens:
+          description: JSON data voor validatie van het VerzoekType.
+        bijlagen:
+          type: array
+          items:
+            type: string
+            title: Documents
+            maxLength: 100
+          description: Eventuele bijlagen van het Verzoek (URNs van documenten).
+        verzoekBron:
+          $ref: '#/components/schemas/VerzoekBron'
+        verzoekBetaling:
+          $ref: '#/components/schemas/VerzoekBetaling'
+      required:
+      - geometrie
+      - url
+      - uuid
+      - verzoekBetaling
+      - verzoekBron
+      - verzoekType
+    VerzoekBetaling:
+      type: object
+      properties:
+        kenmerken:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          description: Eventuele kenmerken van de betaling.
+        bedrag:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          description: Het bedrag van de betaling.
+        voltooid:
+          type: boolean
+          description: Geeft aan of de betaling voltooid is.
+        transactieDatum:
+          type: string
+          format: date-time
+          nullable: true
+          description: Datum en tijd van de transactie.
+        transactieReferentie:
+          type: string
+          description: Referentie van de transactie.
+          maxLength: 100
+      required:
+      - bedrag
+      - transactieReferentie
+    VerzoekBron:
+      type: object
+      properties:
+        naam:
+          type: string
+          title: Bron naam
+          description: Naam van de bron.
+          maxLength: 100
+        kenmerk:
+          type: string
+          title: Bron kenmerk
+          description: Kenmerk van de bron.
+          maxLength: 255
+      required:
+      - kenmerk
+      - naam
+    VerzoekType:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek type deze API.
+          minLength: 1
+          maxLength: 1000
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        version:
+          type: string
+          format: uri
+          readOnly: true
+          description: Integer-versie van het VerzoekType.
+        naam:
+          type: string
+          description: Naam voor het VerzoekType
+          maxLength: 100
+        toelichting:
+          type: string
+          description: Uitleg over het VerzoekType
+        opvolging:
+          allOf:
+          - $ref: '#/components/schemas/OpvolgingEnum'
+          description: Opvolging over het VerzoekType
+        aanvraagGegevensSchema:
+          readOnly: true
+          description: JSON schema voor validatie van VerzoekType
+      required:
+      - aanvraagGegevensSchema
+      - naam
+      - url
+      - uuid
+      - version
+    VerzoekTypeVersion:
+      type: object
+      description: |-
+        A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
+        of primary key relationships.  Specifically:
+
+        * A 'url' field is included instead of the 'id' field.
+        * Relationships to other instances are hyperlinks, instead of primary keys.
+
+        NOTE: this only works with DRF 3.1.0 and above.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de verzoek deze API.
+        version:
+          type: integer
+          readOnly: true
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        verzoekType:
+          type: string
+          format: uri
+          readOnly: true
+          description: Het VerzoekType waartoe deze versie behoort.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van het VerzoekTypeVersion
+        aanvraagGegevensSchema:
+          description: JSON schema voor validatie van VerzoekType
+        createdAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Datum waarop de versie is gemaakt
+        modifiedAt:
+          type: string
+          format: date
+          readOnly: true
+          description: Laatste datum waarop de versie is gewijzigd
+        publishedAt:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+          description: Datum waarop de versie is gepubliceerd
+      required:
+      - createdAt
+      - modifiedAt
+      - publishedAt
+      - url
+      - version
+      - verzoekType
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+servers:
+- url: /verzoeken/api/v1
+tags:
+- name: verzoeken

@@ -35,6 +35,14 @@ class VerzoekTypeFactory(DjangoModelFactory):
     class Meta:
         model = VerzoekType
 
+    @factory.post_generation
+    def create_version(obj, create, version, **kwargs):
+        if not create:
+            return
+
+        if version:
+            VerzoekTypeVersionFactory(verzoek_type=obj)
+
 
 class VerzoekTypeVersionFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)

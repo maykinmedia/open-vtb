@@ -70,6 +70,12 @@ class VerzoekType(models.Model):
         return None
 
     @property
+    def aanvraag_gegevens_schema(self):
+        if self.last_version:
+            return self.last_version.aanvraag_gegevens_schema
+        return {}
+
+    @property
     def status(self):
         if self.last_version:
             return self.last_version.status
