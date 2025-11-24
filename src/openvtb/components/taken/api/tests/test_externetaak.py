@@ -17,7 +17,8 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
-        # create em
+
+        # create taak
         ExterneTaakFactory.create(betaaltaak=True)
         response = self.client.get(self.list_url)
 

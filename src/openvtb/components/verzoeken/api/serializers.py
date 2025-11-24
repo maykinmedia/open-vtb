@@ -14,6 +14,7 @@ from ..models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
+from .validators import JsonSchemaValidator, VersionUpdateValidator
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
@@ -26,7 +27,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "version",
             "verzoek_type",
             "status",
-            "aanvraag_gegevens_schema",  # TODO validator if is pubblished or not
+            "aanvraag_gegevens_schema",
             "created_at",
             "modified_at",
             "published_at",
@@ -44,11 +45,12 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "view_name": "verzoeken:verzoektype-detail",
                 "read_only": True,
             },
+            "aanvraag_gegevens_schema": {"validators": [JsonSchemaValidator()]},
             "created_at": {"read_only": True},
             "modified_at": {"read_only": True},
             "published_at": {"read_only": True},
         }
-        # validators = [VersionUpdateValidator()]
+        validators = [VersionUpdateValidator()]
 
 
 class VerzoekBronSerializer(serializers.ModelSerializer):
