@@ -4,9 +4,11 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
-from rest_framework import viewsets
-from rest_framework_nested.viewsets import NestedViewSetMixin
+from rest_framework import serializers, viewsets
+from rest_framework.settings import api_settings
 from vng_api_common.pagination import DynamicPageSizePagination
+
+from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
 
 from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
 from .serializers import (
@@ -14,7 +16,7 @@ from .serializers import (
     VerzoekTypeSerializer,
     VerzoekTypeVersionSerializer,
 )
-from .utils import verzoektype_uuid_param
+from .utils import NestedViewSetMixin, verzoektype_uuid_param
 
 
 @extend_schema_view(
@@ -127,3 +129,16 @@ class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     pagination_class = DynamicPageSizePagination
+
+    def perform_destroy(self, instance):
+        if instance.status != VerzoekTypeVersionStatus.DRAFT:
+            raise serializers.ValidationError(
+                {
+                    api_settings.NON_FIELD_ERRORS_KEY: [
+                        _("Only draft versions can be destroyed")
+                    ]
+                },
+                code="non-draft-version-destroy",
+            )
+
+        super().perform_destroy(instance)

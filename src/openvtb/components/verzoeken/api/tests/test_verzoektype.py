@@ -157,7 +157,7 @@ class VerzoekTypeTests(APITestCase):
         response = self.client.patch(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # patch
+        # PATCH
         data = {
             "naam": "new_naam",
             "toelichting": "new_toelichting",
@@ -178,7 +178,7 @@ class VerzoekTypeTests(APITestCase):
             },
         )
 
-        # put
+        # PUT
         data = {
             "naam": "new_naam_2",
         }
@@ -208,7 +208,7 @@ class VerzoekTypeTests(APITestCase):
         verzoektype = VerzoekType.objects.get()
         old_naam = verzoektype.naam
 
-        # patch
+        # PATCH
         data = {
             "naam": "new_naam",
             "opvolging": "test",  # invalid choice
@@ -229,7 +229,7 @@ class VerzoekTypeTests(APITestCase):
         new_naam = verzoektype.naam
         self.assertEqual(old_naam, new_naam)
 
-        # put
+        # PUT
         data = {}
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -245,12 +245,6 @@ class VerzoekTypeTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-
-    def test_get_versions_incorrect_format_uuid(self):
-        """
-        Regression test for https://github.com/maykinmedia/objects-api/issues/361
-        """
-        # TODO
 
     def test_destroy(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)

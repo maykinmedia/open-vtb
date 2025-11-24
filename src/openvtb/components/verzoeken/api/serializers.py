@@ -14,7 +14,10 @@ from ..models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
-from .validators import JsonSchemaValidator, VersionUpdateValidator
+from .validators import (
+    JsonSchemaValidator,
+    VersionStatusValidator,
+)
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
@@ -45,12 +48,30 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "view_name": "verzoeken:verzoektype-detail",
                 "read_only": True,
             },
-            "aanvraag_gegevens_schema": {"validators": [JsonSchemaValidator()]},
+            "aanvraag_gegevens_schema": {
+                "validators": [JsonSchemaValidator()],
+                "required": True,
+            },
             "created_at": {"read_only": True},
             "modified_at": {"read_only": True},
             "published_at": {"read_only": True},
         }
-        validators = [VersionUpdateValidator()]
+        validators = [VersionStatusValidator()]
+
+    def validate_parent(self, verzoektype_uuid):
+        if not VerzoekType.objects.filter(uuid=verzoektype_uuid).exists():
+            msg = _("VerzoekType is invalid")
+            raise serializers.ValidationError(msg, code="invalid-parent")
+
+    def validate(self, attrs):
+        valid_attrs = super().validate(attrs)
+        verzoektype_uuid = self.context["request"].resolver_match.kwargs.get(
+            "verzoektype_uuid", ""
+        )
+        self.validate_parent(verzoektype_uuid)
+
+        valid_attrs["verzoek_type"] = VerzoekType.objects.get(uuid=verzoektype_uuid)
+        return valid_attrs
 
 
 class VerzoekBronSerializer(serializers.ModelSerializer):

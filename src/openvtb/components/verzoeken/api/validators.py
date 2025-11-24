@@ -7,7 +7,7 @@ from ..constants import VerzoekTypeVersionStatus
 from ..utils import check_json_schema
 
 
-class VersionUpdateValidator:
+class VersionStatusValidator:
     message = _("Only draft versions can be changed")
     code = "non-draft-version-update"
     requires_context = True
@@ -18,7 +18,10 @@ class VersionUpdateValidator:
             return
 
         if instance.status != VerzoekTypeVersionStatus.DRAFT:
-            raise serializers.ValidationError(self.message, code=self.code)
+            raise serializers.ValidationError(
+                {"status": self.message},
+                code=self.code,
+            )
 
 
 class JsonSchemaValidator:
