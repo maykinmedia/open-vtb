@@ -54,6 +54,11 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    # Components API urls
+    path(
+        "taken/api/",
+        include("openvtb.components.taken.api.urls"),
+    ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
 ]

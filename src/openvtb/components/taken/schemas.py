@@ -20,8 +20,8 @@ BETAAL_SCHEMA = {
         "valuta": {
             #  ISO 4217
             "type": "string",
-            "enum": ["EUR"],
             "default": "EUR",
+            "enum": ["EUR"],
             "minLength": 3,
             "maxLength": 3,
             "pattern": "^[A-Z]{3}$",

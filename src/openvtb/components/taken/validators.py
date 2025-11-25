@@ -53,16 +53,16 @@ def is_valid_iban(value: str) -> bool:
     return True
 
 
-def validate_jsonschema(data: Any, key: str) -> None:
+def validate_jsonschema(details: Any, key: str) -> None:
     """
     Validator for JSONField with appropriate JSON schema.
 
     Args:
-        data: The JSON data to validate.
+        details: The JSON details to validate.
         key: The key to lookup the schema in SCHEMA_MAPPING.
 
     Raises:
-        ValidationError: If the data does not conform to the schema.
+        ValidationError: If the details does not conform to the schema.
     """
 
     schema = SCHEMA_MAPPING.get(key, None)
@@ -74,12 +74,14 @@ def validate_jsonschema(data: Any, key: str) -> None:
         )
 
     try:
-        validate(instance=data, schema=schema, format_checker=format_checker)
+        validate(instance=details, schema=schema, format_checker=format_checker)
     except JSONValidationError as json_error:
         logger.exception(
             "validate_jsonschema failed: JSON not valid",
             schema_key=key,
             error=str(json_error),
         )
-        path = ".".join(getattr(json_error, "absolute_path", [])) or "data"
+        path = ".".join(getattr(json_error, "absolute_path", [])) or "details"
+        if not path.startswith("details"):
+            path = "details." + path
         raise ValidationError({path: json_error.message})

@@ -735,8 +735,11 @@ requests==2.32.5
     #   mozilla-django-oidc
     #   open-api-framework
     #   opentelemetry-exporter-otlp-proto-http
+    #   requests-mock
     #   sphinx
     #   zgw-consumers
+requests-mock==1.12.1
+    # via -r requirements/test-tools.in
 rfc3339-validator==0.1.4
     # via
     #   -c requirements/base.txt
