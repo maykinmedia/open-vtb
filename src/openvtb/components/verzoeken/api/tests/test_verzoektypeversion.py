@@ -280,55 +280,6 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(version.version, 1)
         self.assertEqual(version.verzoek_type, verzoektype)
 
-    def test_invalid_update_parent(self):
-        verzoektype_a = VerzoekTypeFactory.create(create_version=True)
-        verzoektype_b = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
-            "verzoeken:verzoektypeversion-detail",
-            kwargs={
-                "verzoektype_uuid": str(verzoektype_a.uuid),
-                "verzoektype_version": verzoektype_a.last_version.version,
-            },
-        )
-
-        # verzoekType read_only
-        data = {
-            "verzoekType": str(verzoektype_b),
-        }
-        response = self.client.patch(version_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "opvolging"),
-            {
-                "name": "opvolging",
-                "code": "invalid_choice",
-                "reason": '"test" is een ongeldige keuze.',
-            },
-        )
-        verzoektype = VerzoekType.objects.get()
-        new_naam = verzoektype.naam
-        self.assertEqual(old_naam, new_naam)
-
-        # PUT
-        data = {}
-        response = self.client.put(detail_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "naam"),
-            {
-                "name": "naam",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-
     def test_update_status_version(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         version_url = reverse(

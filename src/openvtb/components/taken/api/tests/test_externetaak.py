@@ -287,7 +287,7 @@ class ExterneTaakTests(APITestCase):
         detail_url = reverse(
             "taken:externetaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
-        # empty patch
+        # empty PATCH
         response = self.client.patch(detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -365,7 +365,7 @@ class ExterneTaakTests(APITestCase):
             "taken:externetaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
-        # all required put fields
+        # all required PUT fields
         response = self.client.put(
             detail_url,
             {

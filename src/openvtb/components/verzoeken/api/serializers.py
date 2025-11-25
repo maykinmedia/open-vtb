@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -7,6 +8,9 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
+from openvtb.utils.serializers import get_from_serializer_data_or_instance
+from openvtb.utils.validators import validate_jsonschema
+
 from ..models import (
     Verzoek,
     VerzoekBetaling,
@@ -14,10 +18,7 @@ from ..models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
-from .validators import (
-    JsonSchemaValidator,
-    VersionStatusValidator,
-)
+from .validators import JsonSchemaValidator, VersionStatusValidator
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
@@ -136,12 +137,24 @@ class VerzoekSerializer(serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
-        read_only=True,
+        required=True,
+        queryset=VerzoekType.objects.all(),
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type"),
     )
-    geometrie = GeometryField()
-    verzoek_bron = VerzoekBronSerializer(source="bron")
-    verzoek_betaling = VerzoekBetalingSerializer(source="betaling")
+    geometrie = GeometryField(
+        help_text=get_help_text("verzoeken.Verzoek", "geometrie"),
+        required=False,
+    )
+    verzoek_bron = VerzoekBronSerializer(
+        source="bron",
+        required=False,
+        help_text="",  # TODO
+    )
+    verzoek_betaling = VerzoekBetalingSerializer(
+        source="betaling",
+        required=False,
+        help_text="",  # TODO
+    )
 
     class Meta:
         model = Verzoek
@@ -157,10 +170,53 @@ class VerzoekSerializer(serializers.ModelSerializer):
         )
 
         extra_kwargs = {
-            "uuid": {"read_only": True},
+            "uuid": {
+                "read_only": True,
+            },
             "url": {
                 "view_name": "verzoeken:verzoek-detail",
                 "lookup_field": "uuid",
                 "help_text": _("De unieke URL van de verzoek deze API."),
             },
+            "aanvraag_gegevens": {
+                "required": True,
+            },
         }
+
+    def validate(self, attrs):
+        valid_attrs = super().validate(attrs)
+        verzoektype = get_from_serializer_data_or_instance("verzoek_type", attrs, self)
+        aanvraag_gegevens = get_from_serializer_data_or_instance(
+            "aanvraag_gegevens", attrs, self
+        )
+        validate_jsonschema(
+            instance=aanvraag_gegevens,
+            schema=verzoektype.aanvraag_gegevens_schema,
+            label="aanvraagGegevens",
+        )
+
+        return valid_attrs
+
+    @transaction.atomic
+    def create(self, validated_data):
+        bron = validated_data.pop("bron", None)
+        betaling = validated_data.pop("betaling", None)
+        instance = super().create(validated_data)
+
+        if bron:
+            VerzoekBron.objects.create(verzoek=instance, **bron)
+        if betaling:
+            VerzoekBetaling.objects.create(verzoek=instance, **betaling)
+
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bron = validated_data.pop("bron", None)
+        betaling = validated_data.pop("betaling", None)
+        instance = super().update(instance, validated_data)
+        if bron:
+            VerzoekBron.objects.filter(verzoek=instance).update(**bron)
+        if betaling:
+            VerzoekBetaling.objects.filter(verzoek=instance).update(**betaling)
+        return instance

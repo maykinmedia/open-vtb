@@ -17,6 +17,7 @@ REST_FRAMEWORK["JSON_UNDERSCOREIZE"] = {
     "ignore_fields": (
         "ontvangen_gegevens",
         "formulier_definitie",
+        "aanvraag_gegevens",
         "aanvraag_gegevens_schema",
     ),
     "ignore_keys": None,

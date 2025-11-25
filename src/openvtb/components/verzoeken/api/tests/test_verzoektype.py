@@ -152,7 +152,8 @@ class VerzoekTypeTests(APITestCase):
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )
         response = self.client.get(detail_url)
-        # empty patch
+
+        # empty PATCH
         data = {}
         response = self.client.patch(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

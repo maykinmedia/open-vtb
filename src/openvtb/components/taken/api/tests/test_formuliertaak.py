@@ -329,7 +329,7 @@ class FormulierTaakTests(APITestCase):
             "taken:formuliertaken-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
-        # empty patch
+        # empty PATCH
         response = self.client.patch(detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -356,13 +356,13 @@ class FormulierTaakTests(APITestCase):
             },
         )
 
-        # patch externe_taak field
+        # PATCH externe_taak field
         response = self.client.patch(detail_url, {"titel": "new_title"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         formuliertaak = ExterneTaak.objects.get()
         self.assertEqual(formuliertaak.titel, "new_title")
 
-        # patch one field from json_data
+        # PATCH one field from json_data
         self.assertEqual(
             formuliertaak.details["formulierDefinitie"], {"key": "value"}
         )  # default factory value
@@ -418,7 +418,7 @@ class FormulierTaakTests(APITestCase):
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
 
-        # all required put fields
+        # all required PUT fields
         response = self.client.put(
             detail_url,
             {
