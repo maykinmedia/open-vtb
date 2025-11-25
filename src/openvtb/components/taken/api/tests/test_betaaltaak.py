@@ -12,7 +12,6 @@ from openvtb.utils.api_testcase import APITestCase
 
 class BetaalTaakTests(APITestCase):
     list_url = reverse("taken:betaaltaken-list")
-    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -280,149 +279,6 @@ class BetaalTaakTests(APITestCase):
             },
         )
 
-    def test_invalid_create_pass_soort_taak(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
-        # wrong soort_taak
-        data = {
-            "titel": "test",
-            "handelingsPerspectief": "test",
-            "taak_soort": SoortTaak.FORMULIERTAAK.value,
-            "details": {
-                "bedrag": "11",
-                "transactieomschrijving": "test",
-                "doelrekening": {
-                    "naam": "test",
-                    "iban": "NL18BANK23481326",
-                },
-            },
-        }
-        response = self.client.post(self.list_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-        # same soort_taak
-        data["taak_soort"] = SoortTaak.BETAALTAAK.value
-        response = self.client.post(self.list_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-
-        # test camel_case
-        data.pop("taak_soort")
-        data["taakSoort"] = SoortTaak.GEGEVENSUITVRAAGTAAK.value
-
-        response = self.client.post(self.list_url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
-            },
-        )
-
-    def test_invalid_create_type_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
-        with self.subTest("invalid start_date gt end_date"):
-            data = {
-                "titel": "test",
-                "handelingsPerspectief": "test",
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
-                "details": {
-                    "bedrag": "11",
-                    "transactieomschrijving": "test",
-                    "doelrekening": {
-                        "naam": "test",
-                        "iban": "NL18BANK23481326",
-                    },
-                },
-            }
-            response = self.client.post(self.list_url, data)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(
-                get_validation_errors(response, "einddatumHandelingsTermijn"),
-                {
-                    "name": "einddatumHandelingsTermijn",
-                    "code": "date-mismatch",
-                    "reason": "startdatum should be before einddatum_handelings_termijn.",
-                },
-            )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
-
-        with self.subTest("invalid iban format"):
-            data = {
-                "titel": "test",
-                "handelingsPerspectief": "test",
-                "details": {
-                    "bedrag": "11",
-                    "transactieomschrijving": "test",
-                    "doelrekening": {
-                        "naam": "test",
-                        "iban": "test",
-                    },
-                },
-            }
-            response = self.client.post(self.list_url, data)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(
-                get_validation_errors(response, "details.doelrekening.iban"),
-                {
-                    "name": "details.doelrekening.iban",
-                    "code": "invalid",
-                    "reason": "'test' is not a valid IBAN",
-                },
-            )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
-
-        with self.subTest("invalid pass valuta"):
-            data = {
-                "titel": "test",
-                "handelingsPerspectief": "test",
-                "details": {
-                    "bedrag": "11",
-                    "valuta": "ABC",  # different valuta
-                    "transactieomschrijving": "test",
-                    "doelrekening": {
-                        "naam": "test",
-                        "iban": "NL18BANK23481326",
-                    },
-                },
-            }
-            response = self.client.post(self.list_url, data)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(
-                get_validation_errors(response, "details.valuta"),
-                {
-                    "name": "details.valuta",
-                    "code": "invalid",
-                    "reason": "Het is niet toegestaan een andere waarde dan EUR door te geven.",
-                },
-            )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
-
     def test_valid_update_partial(self):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
@@ -507,28 +363,6 @@ class BetaalTaakTests(APITestCase):
             {
                 "naam": "new_naam",
                 "iban": "NL18BANK23481111",
-            },
-        )
-
-    def test_invalid_update_partial(self):
-        betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
-
-        detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
-        )
-        # pass taak_soort
-        response = self.client.patch(
-            detail_url, {"taakSoort": SoortTaak.FORMULIERTAAK.value}
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
-            {
-                "name": "taakSoort",
-                "code": "invalid",
-                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
             },
         )
 
@@ -639,3 +473,154 @@ class BetaalTaakTests(APITestCase):
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+
+class BetaalTaakValidationTests(APITestCase):
+    list_url = reverse("taken:betaaltaken-list")
+
+    def test_invalid_create_pass_soort_taak(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        # wrong soort_taak
+        data = {
+            "titel": "test",
+            "handelingsPerspectief": "test",
+            "taakSoort": SoortTaak.FORMULIERTAAK.value,
+            "details": {
+                "bedrag": "11",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+        # same soort_taak
+        data["taakSoort"] = SoortTaak.BETAALTAAK.value
+        response = self.client.post(self.list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+
+    def test_invalid_update_partial(self):
+        betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
+
+        detail_url = reverse(
+            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+        )
+        # pass taak_soort
+        response = self.client.patch(
+            detail_url, {"taakSoort": SoortTaak.FORMULIERTAAK.value}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(
+            get_validation_errors(response, "taakSoort"),
+            {
+                "name": "taakSoort",
+                "code": "invalid",
+                "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+
+    def test_invalid_create_type_fields(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        with self.subTest("invalid start_date gt end_date"):
+            data = {
+                "titel": "test",
+                "handelingsPerspectief": "test",
+                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
+                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "details": {
+                    "bedrag": "11",
+                    "transactieomschrijving": "test",
+                    "doelrekening": {
+                        "naam": "test",
+                        "iban": "NL18BANK23481326",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "einddatumHandelingsTermijn"),
+                {
+                    "name": "einddatumHandelingsTermijn",
+                    "code": "date-mismatch",
+                    "reason": "startdatum should be before einddatum_handelings_termijn.",
+                },
+            )
+            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+        with self.subTest("invalid iban format"):
+            data = {
+                "titel": "test",
+                "handelingsPerspectief": "test",
+                "details": {
+                    "bedrag": "11",
+                    "transactieomschrijving": "test",
+                    "doelrekening": {
+                        "naam": "test",
+                        "iban": "test",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.doelrekening.iban"),
+                {
+                    "name": "details.doelrekening.iban",
+                    "code": "invalid",
+                    "reason": "'test' is not a valid IBAN",
+                },
+            )
+            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+        with self.subTest("invalid pass valuta"):
+            data = {
+                "titel": "test",
+                "handelingsPerspectief": "test",
+                "details": {
+                    "bedrag": "11",
+                    "valuta": "ABC",  # different valuta
+                    "transactieomschrijving": "test",
+                    "doelrekening": {
+                        "naam": "test",
+                        "iban": "NL18BANK23481326",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.valuta"),
+                {
+                    "name": "details.valuta",
+                    "code": "invalid",
+                    "reason": "Het is niet toegestaan een andere waarde dan EUR door te geven.",
+                },
+            )
+            self.assertEqual(ExterneTaak.objects.all().count(), 0)

@@ -16,8 +16,5 @@ class SoortTaak(models.TextChoices):
     FORMULIERTAAK = "formuliertaak", _("Standaard formulier")
 
 
-VALUTE = {
-    "EUR": "EUR",
-}
-
-DEFAULT_VALUTA = VALUTE["EUR"]
+class Valuta(models.TextChoices):
+    EUR = "EUR", _("Euro")

@@ -40,7 +40,6 @@ urlpatterns = [
         include(
             [
                 re_path(r"^", include(router.urls)),
-                path("", router.APIRootView.as_view(), name="api-root-taken"),
                 path(
                     "openapi.json",
                     SpectacularJSONAPIView.as_view(

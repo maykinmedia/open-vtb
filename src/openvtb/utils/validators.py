@@ -80,7 +80,7 @@ class StartBeforeEndValidator:
         )
         try:
             validate_date(start_date, end_date)
-        except Exception:
+        except ValidationError:
             raise serializers.ValidationError(
                 {
                     self.end_date_field: self.message.format(

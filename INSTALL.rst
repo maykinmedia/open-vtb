@@ -245,7 +245,7 @@ Building and publishing the image
 
 Using ``bin/release-docker-image``, you can easily build and tag the image.
 
-The script is based on git branches and tags - if you're on the ``master``
+The script is based on git branches and tags - if you're on the ``main``
 branch and the current ``HEAD`` is tagged, the tag will be used as
 ``RELEASE_TAG`` and the image will be pushed. If you want to push the image
 without a git tag, you can use the ``RELEASE_TAG`` envvar.

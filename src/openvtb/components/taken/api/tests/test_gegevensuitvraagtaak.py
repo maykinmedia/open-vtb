@@ -12,7 +12,6 @@ from openvtb.utils.api_testcase import APITestCase
 
 class GegevensuitvraagTaakTests(APITestCase):
     list_url = reverse("taken:gegevensuitvraagtaken-list")
-    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -259,6 +258,148 @@ class GegevensuitvraagTaakTests(APITestCase):
         )
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
 
+    def test_valid_update_partial(self):
+        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+
+        detail_url = reverse(
+            "taken:gegevensuitvraagtaken-detail",
+            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+        )
+        # empty patch
+        response = self.client.patch(detail_url, {})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "uuid": str(gegevensuitvraagtaak.uuid),
+                "titel": gegevensuitvraagtaak.titel,
+                "status": gegevensuitvraagtaak.status,
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "toelichting": gegevensuitvraagtaak.toelichting,
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
+                },
+            },
+        )
+
+        # patch externe_taak field
+        response = self.client.patch(detail_url, {"titel": "new_title"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(gegevensuitvraagtaak.titel, "new_title")
+
+        # patch one field from json_data
+        self.assertEqual(
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example.com/"
+        )  # default factory value
+        response = self.client.patch(
+            detail_url, {"details": {"uitvraagLink": "http://example-new-url.com/"}}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
+        )
+
+        # update ontvangenGegevens
+        self.assertEqual(
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
+        )  # default
+        response = self.client.patch(
+            detail_url, {"details": {"ontvangenGegevens": {"new_key": "new_value"}}}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        # new value
+        self.assertEqual(
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"new_key": "new_value"}
+        )
+        self.assertNotEqual(
+            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
+        )
+
+    def test_valid_update(self):
+        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+
+        detail_url = reverse(
+            "taken:gegevensuitvraagtaken-detail",
+            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+        )
+
+        # all required put fields
+        response = self.client.put(
+            detail_url,
+            {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "uitvraagLink": "http://example-new-url.com/",
+                },
+            },
+        )
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "uuid": str(gegevensuitvraagtaak.uuid),
+                "titel": gegevensuitvraagtaak.titel,
+                "status": gegevensuitvraagtaak.status,
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "toelichting": gegevensuitvraagtaak.toelichting,
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
+                },
+            },
+        )
+        self.assertEqual(
+            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
+        )
+
+    def test_destroy(self):
+        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+
+        detail_url = reverse(
+            "taken:gegevensuitvraagtaken-detail",
+            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+        )
+
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.json()["count"], 0)
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+
+
+class GegevensuitvraagTaakValidationTests(APITestCase):
+    list_url = reverse("taken:gegevensuitvraagtaken-list")
+
     def test_invalid_create_pass_soort_taak(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
         # wrong soort_taak
@@ -385,78 +526,6 @@ class GegevensuitvraagTaakTests(APITestCase):
             )
             self.assertEqual(ExterneTaak.objects.all().count(), 0)
 
-    def test_valid_update_partial(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
-
-        detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
-        )
-        # empty patch
-        response = self.client.patch(detail_url, {})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.json(),
-            {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
-                "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
-                },
-            },
-        )
-
-        # patch externe_taak field
-        response = self.client.patch(detail_url, {"titel": "new_title"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(gegevensuitvraagtaak.titel, "new_title")
-
-        # patch one field from json_data
-        self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example.com/"
-        )  # default factory value
-        response = self.client.patch(
-            detail_url, {"details": {"uitvraagLink": "http://example-new-url.com/"}}
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
-        )
-
-        # update ontvangenGegevens
-        self.assertEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
-        )  # default
-        response = self.client.patch(
-            detail_url, {"details": {"ontvangenGegevens": {"new_key": "new_value"}}}
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        # new value
-        self.assertEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"new_key": "new_value"}
-        )
-        self.assertNotEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
-        )
-
     def test_invalid_update_partial(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
@@ -479,69 +548,3 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
             },
         )
-
-    def test_valid_update(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
-
-        detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
-        )
-
-        # all required put fields
-        response = self.client.put(
-            detail_url,
-            {
-                "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
-                "details": {
-                    "uitvraagLink": "http://example-new-url.com/",
-                },
-            },
-        )
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.json(),
-            {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
-                "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
-                },
-            },
-        )
-        self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
-        )
-
-    def test_destroy(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
-
-        detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
-        )
-
-        self.assertEqual(ExterneTaak.objects.all().count(), 1)
-        response = self.client.delete(detail_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-        response = self.client.get(self.list_url)
-        self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
