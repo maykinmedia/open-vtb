@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Verzoeken API
-  version: 0.0.1
+  version: 0.1.0
   description: "\n        De 'Verzoeken-API' slaat ingediende formuliergegevens op\
     \ als gestructureerde JSON.\n        Aangezien formulieren elk type veld kunnen\
     \ bevatten, definieert elk formulier een JSON-schema dat de verwachte structuur\
@@ -461,6 +461,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VerzoekTypeVersion'
+        required: true
       security:
       - tokenAuth: []
       - {}
@@ -545,6 +546,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VerzoekTypeVersion'
+        required: true
       security:
       - tokenAuth: []
       - {}
@@ -844,10 +846,12 @@ components:
         verzoekType:
           type: string
           format: uri
-          readOnly: true
           description: Type van het Verzoek.
         geometrie:
-          $ref: '#/components/schemas/GeoJSONGeometry'
+          allOf:
+          - $ref: '#/components/schemas/GeoJSONGeometry'
+          description: Point, LineString of Polygon object dat de locatie van het
+            verzoek representeert.
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
         bijlagen:
@@ -1017,10 +1021,12 @@ components:
         verzoekType:
           type: string
           format: uri
-          readOnly: true
           description: Type van het Verzoek.
         geometrie:
-          $ref: '#/components/schemas/GeoJSONGeometry'
+          allOf:
+          - $ref: '#/components/schemas/GeoJSONGeometry'
+          description: Point, LineString of Polygon object dat de locatie van het
+            verzoek representeert.
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
         bijlagen:
@@ -1035,11 +1041,9 @@ components:
         verzoekBetaling:
           $ref: '#/components/schemas/VerzoekBetaling'
       required:
-      - geometrie
+      - aanvraagGegevens
       - url
       - uuid
-      - verzoekBetaling
-      - verzoekBron
       - verzoekType
     VerzoekBetaling:
       type: object
@@ -1049,11 +1053,13 @@ components:
           items:
             type: string
             maxLength: 100
+          nullable: true
           description: Eventuele kenmerken van de betaling.
         bedrag:
           type: string
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
           description: Het bedrag van de betaling.
         voltooid:
           type: boolean
@@ -1067,9 +1073,6 @@ components:
           type: string
           description: Referentie van de transactie.
           maxLength: 100
-      required:
-      - bedrag
-      - transactieReferentie
     VerzoekBron:
       type: object
       properties:
@@ -1083,9 +1086,6 @@ components:
           title: Bron kenmerk
           description: Kenmerk van de bron.
           maxLength: 255
-      required:
-      - kenmerk
-      - naam
     VerzoekType:
       type: object
       properties:
@@ -1175,6 +1175,7 @@ components:
           nullable: true
           description: Datum waarop de versie is gepubliceerd
       required:
+      - aanvraagGegevensSchema
       - createdAt
       - modifiedAt
       - publishedAt

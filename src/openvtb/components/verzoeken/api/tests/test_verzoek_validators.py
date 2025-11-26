@@ -1,0 +1,266 @@
+import uuid
+
+from rest_framework import status
+from vng_api_common.tests import get_validation_errors, reverse
+
+from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
+from openvtb.components.verzoeken.models import Verzoek, VerzoekType
+from openvtb.components.verzoeken.tests.factories import (
+    JSON_SCHEMA,
+    VerzoekTypeFactory,
+)
+from openvtb.utils.api_testcase import APITestCase
+
+
+class VerzoekValidatorsTests(APITestCase):
+    maxDiff = None
+
+    def test_verzoektype_exists(self):
+        url = reverse("verzoeken:verzoek-list")
+        self.assertEqual(Verzoek.objects.all().count(), 0)
+
+        # verzoekType does not exists
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(uuid.uuid4())}
+            ),
+            "aanvraagGegevens": {"diameter": 10},
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "verzoekType"),
+            {
+                "name": "verzoekType",
+                "code": "does_not_exist",
+                "reason": "Ongeldige hyperlink - Object bestaat niet.",
+            },
+        )
+
+        # verzoekType exists
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {"diameter": 10},
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Verzoek.objects.all().count(), 1)
+
+    def test_verzoektype_version_exists(self):
+        url = reverse("verzoeken:verzoek-list")
+        verzoektype = VerzoekTypeFactory.create()
+
+        # verzoekType versions does not exists
+        self.assertIsNone(verzoektype.last_version)
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {"diameter": 10},
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "verzoekType"),
+            {
+                "name": "verzoekType",
+                "code": "unknown-schema",
+                "reason": "Onbekend VerzoekenType schema: geen schema beschikbaar.",
+            },
+        )
+
+        # POST new version
+        response = self.client.post(
+            reverse(
+                "verzoeken:verzoektypeversion-list",
+                kwargs={"verzoektype_uuid": str(verzoektype.uuid)},
+            ),
+            {"aanvraagGegevensSchema": JSON_SCHEMA},
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoektype = VerzoekType.objects.get()
+        self.assertEqual(verzoektype.versions.count(), 1)
+        self.assertIsNotNone(verzoektype.last_version)
+
+        # re-CREATE Verzoek
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoek = Verzoek.objects.get()
+        self.assertEqual(verzoek.verzoek_type, verzoektype)
+        self.assertEqual(verzoek.verzoek_type.last_version.version, 1)
+        self.assertEqual(
+            verzoek.verzoek_type.last_version.aanvraag_gegevens_schema, JSON_SCHEMA
+        )
+
+    def test_update_verzoek_with_new_version(self):
+        url = reverse("verzoeken:verzoek-list")
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {
+                "diameter": 10,
+            },
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoek = Verzoek.objects.get()
+
+        # PUBLISH version and POST NEW
+        response = self.client.patch(
+            reverse(
+                "verzoeken:verzoektypeversion-detail",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                    "verzoektype_version": verzoektype.last_version.version,
+                },
+            ),
+            {"status": VerzoekTypeVersionStatus.PUBLISHED},
+        )
+        new_json_schema = {
+            "type": "object",
+            "title": "Tree",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "required": ["new_field"],
+            "properties": {"new_field": {"type": "string"}},
+        }
+        response = self.client.post(
+            reverse(
+                "verzoeken:verzoektypeversion-list",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                },
+            ),
+            {"aanvraagGegevensSchema": new_json_schema},
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(verzoek.verzoek_type.last_version.version, 2)
+        self.assertEqual(
+            verzoek.verzoek_type.last_version.status, VerzoekTypeVersionStatus.DRAFT
+        )
+
+        # PUT same initial data for verzoek
+        detail_url = reverse(
+            "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
+        )
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "aanvraagGegevens"),
+            {
+                "name": "aanvraagGegevens",
+                "code": "invalid",
+                "reason": "'new_field' is a required property",
+            },
+        )
+        # new data
+        response = self.client.put(
+            detail_url,
+            {
+                "verzoekType": reverse(
+                    "verzoeken:verzoektype-detail",
+                    kwargs={"uuid": str(verzoektype.uuid)},
+                ),
+                "aanvraagGegevens": {"new_field": "test"},
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        verzoek.refresh_from_db()
+        self.assertEqual(verzoek.aanvraag_gegevens["new_field"], "test")
+
+    def test_update_verzoek_with_new_verzoektype(self):
+        url = reverse("verzoeken:verzoek-list")
+
+        verzoektype_old = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail",
+                kwargs={"uuid": str(verzoektype_old.uuid)},
+            ),
+            "aanvraagGegevens": {"diameter": 10},
+        }
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoek = Verzoek.objects.get()
+
+        detail_url = reverse(
+            "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
+        )
+
+        verzoektype_new = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail",
+                kwargs={"uuid": str(verzoektype_new.uuid)},
+            ),
+        }
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "verzoekType"),
+            {
+                "name": "verzoekType",
+                "code": "immutable-field",
+                "reason": "Dit veld kan niet worden gewijzigd.",
+            },
+        )
+
+    def test_invalid_json_schema(self):
+        url = reverse("verzoeken:verzoek-list")
+
+        verzoektype_old = VerzoekTypeFactory.create(create_version=True)
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype_old.uuid)}
+        )
+
+        with self.subTest("additional_properties not allowed"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10, "randomBool": False},
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "aanvraagGegevens"),
+                {
+                    "name": "aanvraagGegevens",
+                    "code": "invalid",
+                    "reason": "Additional properties are not allowed ('randomBool' was unexpected)",
+                },
+            )
+
+        with self.subTest("type not valid"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": False},
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "aanvraagGegevens.diameter"),
+                {
+                    "name": "aanvraagGegevens.diameter",
+                    "code": "invalid",
+                    "reason": "False is not of type 'integer'",
+                },
+            )

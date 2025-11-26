@@ -18,7 +18,12 @@ from ..models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
-from .validators import JsonSchemaValidator, VersionStatusValidator
+from .validators import (
+    CheckVerzoekTypeVersion,
+    IsImmutableValidator,
+    JsonSchemaValidator,
+    VersionStatusValidator,
+)
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
@@ -139,6 +144,7 @@ class VerzoekSerializer(serializers.ModelSerializer):
         lookup_field="uuid",
         required=True,
         queryset=VerzoekType.objects.all(),
+        validators=[CheckVerzoekTypeVersion(), IsImmutableValidator()],
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type"),
     )
     geometrie = GeometryField(
@@ -216,7 +222,9 @@ class VerzoekSerializer(serializers.ModelSerializer):
         betaling = validated_data.pop("betaling", None)
         instance = super().update(instance, validated_data)
         if bron:
-            VerzoekBron.objects.filter(verzoek=instance).update(**bron)
+            VerzoekBron.objects.update_or_create(verzoek=instance, defaults={**bron})
         if betaling:
-            VerzoekBetaling.objects.filter(verzoek=instance).update(**betaling)
+            VerzoekBetaling.objects.update_or_create(
+                verzoek=instance, defaults={**betaling}
+            )
         return instance

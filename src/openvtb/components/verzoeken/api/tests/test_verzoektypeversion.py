@@ -318,7 +318,7 @@ class VerzoekTypeVersionTests(APITestCase):
             {
                 "name": "status",
                 "code": "non-draft-version-update",
-                "reason": "Only draft versions can be changed",
+                "reason": "Alleen `draft` kunnen worden gewijzigd.",
             },
         )
         verzoektype.refresh_from_db()
