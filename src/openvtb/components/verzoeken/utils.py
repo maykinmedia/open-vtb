@@ -1,12 +1,14 @@
-from typing import Any
+from typing import Any, Mapping  # noqa
 
 from django.core.exceptions import ValidationError
 
 from jsonschema.exceptions import SchemaError
 from jsonschema.validators import validator_for
 
+JsonSchemaType = Mapping[str, Any] | bool
 
-def check_json_schema(json_schema: Any) -> None:
+
+def check_json_schema(json_schema: JsonSchemaType) -> None:
     """
     Check if a JSON schema is valid.
 

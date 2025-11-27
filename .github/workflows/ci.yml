@@ -125,6 +125,8 @@ jobs:
               echo "Please update the environment documentation by running \`bin/generate_envvar_docs.sh\`"
               exit 1
           fi
+        env:
+          DJANGO_SETTINGS_MODULE: openvtb.conf.ci
 
   store-reusable-workflow-vars:
     name: create values which can be passed through a reusable workflow
@@ -142,8 +144,8 @@ jobs:
     needs:
       - store-reusable-workflow-vars
     with:
-      apt-packages: 'graphviz graphviz-dev'
-      main-branch: 'main'
+      apt-packages: "libgdal-dev gdal-bin graphviz graphviz-dev"
+      main-branch: "main"
       run-docs: true
       python-version: '3.12'
       docker-image-name: ${{ needs.store-reusable-workflow-vars.outputs.image-name }}

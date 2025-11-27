@@ -1,8 +1,10 @@
 from django import forms
 
+from jsonsuit.widgets import ReadonlyJSONSuit
+
 from .constants import VerzoekTypeVersionStatus
 from .models import VerzoekTypeVersion
-from .widgets import JSONSuit, ReadonlyJSONSuit
+from .widgets import JSONSuit
 
 
 class VerzoekTypeVersionForm(forms.ModelForm):

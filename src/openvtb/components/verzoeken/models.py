@@ -8,8 +8,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_jsonform.models.fields import JSONField
-
 from openvtb.utils.validators import validate_jsonschema
 
 from .constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
@@ -70,6 +68,12 @@ class VerzoekType(models.Model):
         return None
 
     @property
+    def aanvraag_gegevens_schema(self):
+        if self.last_version:
+            return self.last_version.aanvraag_gegevens_schema
+        return {}
+
+    @property
     def status(self):
         if self.last_version:
             return self.last_version.status
@@ -107,7 +111,7 @@ class VerzoekTypeVersion(models.Model):
         blank=True,
         help_text=_("Datum waarop de versie is gepubliceerd"),
     )
-    aanvraag_gegevens_schema = JSONField(
+    aanvraag_gegevens_schema = models.JSONField(
         _("aanvraag gegevens schema"),
         default=dict,
         help_text=_("JSON schema voor validatie van VerzoekType"),
@@ -167,11 +171,13 @@ class VerzoekBron(models.Model):
     naam = models.CharField(
         _("bron naam"),
         max_length=100,
+        blank=True,
         help_text=_("Naam van de bron."),
     )
     kenmerk = models.CharField(
         _("bron kenmerk"),
         max_length=255,
+        blank=True,
         help_text=_("Kenmerk van de bron."),
     )
 
@@ -183,6 +189,7 @@ class VerzoekBron(models.Model):
         return self.naam
 
 
+# TODO check optional fields
 class VerzoekBetaling(models.Model):
     verzoek = models.OneToOneField(
         "Verzoek",
@@ -192,12 +199,14 @@ class VerzoekBetaling(models.Model):
     kenmerken = ArrayField(
         models.CharField(_("kenmerken"), max_length=100),
         blank=True,
+        null=True,
         default=list,
         help_text=_("Eventuele kenmerken van de betaling."),
     )
     bedrag = models.DecimalField(
         _("bedrag"),
         max_digits=10,
+        null=True,
         decimal_places=2,
         help_text=_("Het bedrag van de betaling."),
     )
@@ -214,6 +223,7 @@ class VerzoekBetaling(models.Model):
     )
     transactie_referentie = models.CharField(
         _("transactie referentie"),
+        blank=True,
         max_length=100,
         help_text=_("Referentie van de transactie."),
     )
@@ -249,7 +259,7 @@ class Verzoek(models.Model):
             "Point, LineString of Polygon object dat de locatie van het verzoek representeert."
         ),
     )
-    aanvraag_gegevens = JSONField(
+    aanvraag_gegevens = models.JSONField(
         _("aanvraag gegevens"),
         default=dict,
         help_text=_("JSON data voor validatie van het VerzoekType."),
@@ -286,7 +296,7 @@ class Verzoek(models.Model):
                         "Onbekend VerzoekenType schema: geen schema beschikbaar."
                     )
                 },
-                code="unknown_choice",
+                code="unknown-schema",
             )
 
         try:

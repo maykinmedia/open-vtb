@@ -69,7 +69,7 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
         self.message_user(
             request,
             format_html(
-                _("The object type {version} has been published successfully!"),
+                _("The verzoektype {version} has been published successfully!"),
                 version=obj.last_version,
             ),
             level=messages.SUCCESS,

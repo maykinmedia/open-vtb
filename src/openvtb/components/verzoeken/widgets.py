@@ -1,19 +1,10 @@
 import json
 
-from jsonsuit.widgets import (
-    JSONSuit as _JSONSuit,
-    ReadonlyJSONSuit as _ReadonlyJSONSuit,
-)
+from jsonsuit.widgets import JSONSuit as _JSONSuit
 
 
 class JSONSuit(_JSONSuit):
     initial = dict()
-
-    def get_schema(self):
-        return {"type": "object", "properties": {}}
-
-    def add_error(self, error_map):
-        raise NotImplementedError("This method is not implemented")
 
     def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
@@ -25,8 +16,3 @@ class JSONSuit(_JSONSuit):
             # a fallback
             value = json.dumps(self.initial)
         return super().render(name, value, attrs)
-
-
-class ReadonlyJSONSuit(_ReadonlyJSONSuit):
-    def get_schema(self):
-        return {"type": "object", "properties": {}}

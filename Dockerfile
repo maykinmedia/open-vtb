@@ -11,7 +11,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         pkg-config \
         build-essential \
         # only relevant when using editable/github dependencies, which is discouraged
-        # git \
         libpq-dev \
         shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
@@ -19,18 +18,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 WORKDIR /app
 RUN mkdir /app/src
 
-# Ensure we use the latest version of pip
-RUN pip install pip setuptools -U
+# Use uv to install dependencies
+RUN pip install uv -U
 COPY ./requirements /app/requirements
-RUN pip install -r requirements/production.txt
+RUN uv pip install --system -r requirements/production.txt
 
 
 # Stage 2 - Install frontend deps and build assets
-FROM node:20-bookworm-slim AS frontend-build
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-    && rm -rf /var/lib/apt/lists/*
+FROM node:24-alpine AS frontend-build
 
 WORKDIR /app
 
@@ -39,7 +34,7 @@ COPY ./build /app/build/
 COPY ./*.json ./*.js ./.babelrc /app/
 
 # install WITH dev tooling
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # copy source code
 COPY ./src /app/src
