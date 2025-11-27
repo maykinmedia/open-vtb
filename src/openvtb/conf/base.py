@@ -14,9 +14,13 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "capture_tag",
     "maykin_common",
     "rest_framework.authtoken",
+    "django.contrib.gis",
+    # External applications.
+    "jsonsuit.apps.JSONSuitConfig",
     # Project applications.
     "openvtb.accounts",
     "openvtb.components.taken",
+    "openvtb.components.verzoeken",
     # Django libraries
     "localflavor",
 ]
@@ -54,4 +58,24 @@ REQUESTS_DEFAULT_TIMEOUT = (10, 30)
 ADMIN_INDEX_SHOW_REMAINING_APPS_TO_SUPERUSERS = True
 ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
     "maykin_common.django_two_factor_auth.should_display_dropdown_menu"
+)
+
+#
+# Define this variable here to ensure it shows up in the envvar documentation
+DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
+
+# Geospatial libraries
+GEOS_LIBRARY_PATH = config(
+    "GEOS_LIBRARY_PATH",
+    None,
+    help_text=(
+        "Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty."
+    ),
+)
+GDAL_LIBRARY_PATH = config(
+    "GDAL_LIBRARY_PATH",
+    None,
+    help_text=(
+        "Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty."
+    ),
 )

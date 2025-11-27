@@ -21,7 +21,11 @@
     "homepage": "https://maykinmedia.nl",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.0.0",
-        "microscope-sass": "^2.0.0"
+        "microscope-sass": "^2.0.0",
+        "prop-types": "latest",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-use": "^17.4.0"
     },
     "devDependencies": {
         "@babel/core": "^7.28.4",
