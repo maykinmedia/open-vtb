@@ -5,6 +5,8 @@ from drf_spectacular.utils import (
     extend_schema_view,
 )
 from rest_framework import serializers, viewsets
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 from vng_api_common.pagination import DynamicPageSizePagination
 
@@ -21,12 +23,12 @@ from .utils import NestedViewSetMixin, verzoektype_uuid_param
 
 @extend_schema_view(
     list=extend_schema(
-        summary=_("Vraag alle Vraag alle verzoeken aan taken aan."),
+        summary=_("Vraag alle verzoeken aan."),
         description=_("Vraag alle verzoeken aan."),
     ),
     retrieve=extend_schema(
-        summary=_("Een specifieke verzoek opvragen."),
-        description=_("Een specifieke verzoek opvragen."),
+        summary=_("Een specifiek verzoek opvragen."),
+        description=_("Een specifiek verzoek opvragen."),
     ),
     create=extend_schema(
         summary=_("Maak een verzoek aan."),
@@ -49,75 +51,75 @@ class VerzoekViewSet(viewsets.ModelViewSet):
     queryset = Verzoek.objects.all()
     serializer_class = VerzoekSerializer
     pagination_class = DynamicPageSizePagination
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
 
 
 @extend_schema_view(
     list=extend_schema(
-        summary=_("Vraag alle Vraag alle verzoeken type aan taken aan."),
-        description=_("Vraag alle verzoeken type aan."),
+        summary=_("Vraag alle verzoektypen aan."),
+        description=_("Vraag alle verzoektypen aan."),
     ),
     retrieve=extend_schema(
-        summary=_("Een specifieke verzoek type opvragen."),
-        description=_("Een specifieke verzoek type opvragen."),
+        summary=_("Een specifiek verzoektype opvragen."),
+        description=_("Een specifiek verzoektype opvragen."),
     ),
     create=extend_schema(
-        summary=_("Maak een verzoek type aan."),
-        description=_("Maak een verzoek type aan."),
+        summary=_("Maak een verzoektype aan."),
+        description=_("Maak een verzoektype aan."),
     ),
     update=extend_schema(
-        summary=_("Volledig verzoek type wijzigen."),
-        description=_("Volledig verzoek type wijzigen."),
+        summary=_("Volledig verzoektype wijzigen."),
+        description=_("Volledig verzoektype wijzigen."),
     ),
     partial_update=extend_schema(
-        summary=_("Een verzoek type gedeeltelijk wijzigen."),
-        description=_("Een verzoek type gedeeltelijk wijzigen."),
+        summary=_("Een verzoektype gedeeltelijk wijzigen."),
+        description=_("Een verzoektype gedeeltelijk wijzigen."),
     ),
     destroy=extend_schema(
-        summary=_("Een verzoek type verwijderen"),
-        description=_("Een verzoek type verwijderen"),
+        summary=_("Een verzoektype verwijderen"),
+        description=_("Een verzoektype verwijderen"),
     ),
 )
 class VerzoekTypeViewSet(viewsets.ModelViewSet):
     queryset = VerzoekType.objects.prefetch_related("versions").order_by("-pk")
     serializer_class = VerzoekTypeSerializer
     pagination_class = DynamicPageSizePagination
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
 
 
 @extend_schema_view(
     list=extend_schema(
-        summary=_("Vraag alle verzoeken type versie aan taken aan."),
-        description=_("Vraag alle verzoeken type versie aan."),
+        summary=_("Vraag alle verzoektypen versies aan."),
+        description=_("Vraag alle verzoektypen versies aan."),
         parameters=[verzoektype_uuid_param],
     ),
     retrieve=extend_schema(
-        summary=_("Een specifieke verzoek type versie opvragen."),
-        description=_("Een specifieke verzoek type versie opvragen."),
+        summary=_("Een specifiek verzoektype versie opvragen."),
+        description=_("Een specifiek verzoektype versie opvragen."),
         parameters=[verzoektype_uuid_param],
     ),
     create=extend_schema(
-        summary=_("Maak een verzoek type versie aan."),
-        description=_("Maak een verzoek type versie aan."),
+        summary=_("Maak een verzoektype versie aan."),
+        description=_("Maak een verzoektype versie aan."),
         parameters=[verzoektype_uuid_param],
     ),
     update=extend_schema(
-        summary=_("Volledig verzoek type versie wijzigen."),
-        description=_("Volledig verzoek type versie wijzigen."),
+        summary=_("Volledig verzoektype versie wijzigen."),
+        description=_("Volledig verzoektype versie wijzigen."),
         parameters=[verzoektype_uuid_param],
     ),
     partial_update=extend_schema(
-        summary=_("Een verzoek type versie gedeeltelijk wijzigen."),
-        description=_("Een verzoek type versie gedeeltelijk wijzigen."),
+        summary=_("Een verzoektype versie gedeeltelijk wijzigen."),
+        description=_("Een verzoektype versie gedeeltelijk wijzigen."),
         parameters=[verzoektype_uuid_param],
     ),
     destroy=extend_schema(
-        summary=_("Een verzoek type versie verwijderen"),
-        description=_("Een verzoek type versie verwijderen"),
+        summary=_("Een verzoektype versie verwijderen"),
+        description=_("Een verzoektype versie verwijderen"),
         parameters=[verzoektype_uuid_param],
     ),
 )
@@ -126,8 +128,8 @@ class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = VerzoekTypeVersionSerializer
     lookup_field = "version"
     lookup_url_kwarg = "verzoektype_version"
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = DynamicPageSizePagination
 
     def perform_destroy(self, instance):

@@ -2,11 +2,10 @@ openapi: 3.0.3
 info:
   title: Verzoeken API
   version: 0.1.0
-  description: "\n        De 'Verzoeken-API' slaat ingediende formuliergegevens op\
-    \ als gestructureerde JSON.\n        Aangezien formulieren elk type veld kunnen\
-    \ bevatten, definieert elk formulier een JSON-schema dat de verwachte structuur\
-    \ specificeert.\n        Inkomende gegevens worden getoetst aan dit schema en\
-    \ opgeslagen in een consistent, gestructureerd formaat.\n        "
+  description: De 'Verzoeken-API' slaat ingediende formuliergegevens op als gestructureerde
+    JSON.Aangezien formulieren elk type veld kunnen bevatten, definieert elk formulier
+    een JSON-schema dat de verwachte structuur specificeert.Inkomende gegevens worden
+    getoetst aan dit schema en opgeslagen in een consistent, gestructureerd formaat.
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -19,7 +18,7 @@ paths:
     get:
       operationId: verzoekenList
       description: Vraag alle verzoeken aan.
-      summary: Vraag alle Vraag alle verzoeken aan taken aan.
+      summary: Vraag alle verzoeken aan.
       parameters:
       - name: page
         required: false
@@ -37,7 +36,6 @@ paths:
       - verzoeken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -65,7 +63,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -82,8 +79,8 @@ paths:
   /verzoeken/{uuid}:
     get:
       operationId: verzoekenRetrieve
-      description: Een specifieke verzoek opvragen.
-      summary: Een specifieke verzoek opvragen.
+      description: Een specifiek verzoek opvragen.
+      summary: Een specifiek verzoek opvragen.
       parameters:
       - in: path
         name: uuid
@@ -96,7 +93,6 @@ paths:
       - verzoeken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -132,7 +128,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -167,7 +162,6 @@ paths:
               $ref: '#/components/schemas/PatchedVerzoek'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -197,7 +191,6 @@ paths:
       - verzoeken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:
@@ -207,11 +200,11 @@ paths:
               description: 'Geeft een specifieke API-versie aan in de context van
                 een specifieke aanroep. Voorbeeld: 1.2.1.'
           description: No response body
-  /verzoekentype:
+  /verzoektypen:
     get:
-      operationId: verzoekentypeList
-      description: Vraag alle verzoeken type aan.
-      summary: Vraag alle Vraag alle verzoeken type aan taken aan.
+      operationId: verzoektypenList
+      description: Vraag alle verzoektypen aan.
+      summary: Vraag alle verzoektypen aan.
       parameters:
       - name: page
         required: false
@@ -226,10 +219,9 @@ paths:
         schema:
           type: integer
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -244,11 +236,11 @@ paths:
                 $ref: '#/components/schemas/PaginatedVerzoekTypeList'
           description: ''
     post:
-      operationId: verzoekentypeCreate
-      description: Maak een verzoek type aan.
-      summary: Maak een verzoek type aan.
+      operationId: verzoektypenCreate
+      description: Maak een verzoektype aan.
+      summary: Maak een verzoektype aan.
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -257,7 +249,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -271,11 +262,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/VerzoekType'
           description: ''
-  /verzoekentype/{uuid}:
+  /verzoektypen/{uuid}:
     get:
-      operationId: verzoekentypeRetrieve
-      description: Een specifieke verzoek type opvragen.
-      summary: Een specifieke verzoek type opvragen.
+      operationId: verzoektypenRetrieve
+      description: Een specifiek verzoektype opvragen.
+      summary: Een specifiek verzoektype opvragen.
       parameters:
       - in: path
         name: uuid
@@ -285,10 +276,9 @@ paths:
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -303,9 +293,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekType'
           description: ''
     put:
-      operationId: verzoekentypeUpdate
-      description: Volledig verzoek type wijzigen.
-      summary: Volledig verzoek type wijzigen.
+      operationId: verzoektypenUpdate
+      description: Volledig verzoektype wijzigen.
+      summary: Volledig verzoektype wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -315,7 +305,7 @@ paths:
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -324,7 +314,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -339,9 +328,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekType'
           description: ''
     patch:
-      operationId: verzoekentypePartialUpdate
-      description: Een verzoek type gedeeltelijk wijzigen.
-      summary: Een verzoek type gedeeltelijk wijzigen.
+      operationId: verzoektypenPartialUpdate
+      description: Een verzoektype gedeeltelijk wijzigen.
+      summary: Een verzoektype gedeeltelijk wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -351,7 +340,7 @@ paths:
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -359,7 +348,6 @@ paths:
               $ref: '#/components/schemas/PatchedVerzoekType'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -374,9 +362,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekType'
           description: ''
     delete:
-      operationId: verzoekentypeDestroy
-      description: Een verzoek type verwijderen
-      summary: Een verzoek type verwijderen
+      operationId: verzoektypenDestroy
+      description: Een verzoektype verwijderen
+      summary: Een verzoektype verwijderen
       parameters:
       - in: path
         name: uuid
@@ -386,10 +374,9 @@ paths:
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:
@@ -399,11 +386,11 @@ paths:
               description: 'Geeft een specifieke API-versie aan in de context van
                 een specifieke aanroep. Voorbeeld: 1.2.1.'
           description: No response body
-  /verzoekentype/{verzoektypeUuid}/versions:
+  /verzoektypen/{verzoektypeUuid}/versions:
     get:
-      operationId: verzoekentypeVersionsList
-      description: Vraag alle verzoeken type versie aan.
-      summary: Vraag alle verzoeken type versie aan taken aan.
+      operationId: verzoektypenVersionsList
+      description: Vraag alle verzoektypen versies aan.
+      summary: Vraag alle verzoektypen versies aan.
       parameters:
       - name: page
         required: false
@@ -425,10 +412,9 @@ paths:
         description: UUID van het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -443,9 +429,9 @@ paths:
                 $ref: '#/components/schemas/PaginatedVerzoekTypeVersionList'
           description: ''
     post:
-      operationId: verzoekentypeVersionsCreate
-      description: Maak een verzoek type versie aan.
-      summary: Maak een verzoek type versie aan.
+      operationId: verzoektypenVersionsCreate
+      description: Maak een verzoektype versie aan.
+      summary: Maak een verzoektype versie aan.
       parameters:
       - in: path
         name: verzoektypeUuid
@@ -455,7 +441,7 @@ paths:
         description: UUID van het VerzoekType
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -464,7 +450,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -478,11 +463,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
-  /verzoekentype/{verzoektypeUuid}/versions/{verzoektypeVersion}:
+  /verzoektypen/{verzoektypeUuid}/versions/{verzoektypeVersion}:
     get:
-      operationId: verzoekentypeVersionsRetrieve
-      description: Een specifieke verzoek type versie opvragen.
-      summary: Een specifieke verzoek type versie opvragen.
+      operationId: verzoektypenVersionsRetrieve
+      description: Een specifiek verzoektype versie opvragen.
+      summary: Een specifiek verzoektype versie opvragen.
       parameters:
       - in: path
         name: verzoektypeUuid
@@ -501,10 +486,9 @@ paths:
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -519,9 +503,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     put:
-      operationId: verzoekentypeVersionsUpdate
-      description: Volledig verzoek type versie wijzigen.
-      summary: Volledig verzoek type versie wijzigen.
+      operationId: verzoektypenVersionsUpdate
+      description: Volledig verzoektype versie wijzigen.
+      summary: Volledig verzoektype versie wijzigen.
       parameters:
       - in: path
         name: verzoektypeUuid
@@ -540,7 +524,7 @@ paths:
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -549,7 +533,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -564,9 +547,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     patch:
-      operationId: verzoekentypeVersionsPartialUpdate
-      description: Een verzoek type versie gedeeltelijk wijzigen.
-      summary: Een verzoek type versie gedeeltelijk wijzigen.
+      operationId: verzoektypenVersionsPartialUpdate
+      description: Een verzoektype versie gedeeltelijk wijzigen.
+      summary: Een verzoektype versie gedeeltelijk wijzigen.
       parameters:
       - in: path
         name: verzoektypeUuid
@@ -585,7 +568,7 @@ paths:
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       requestBody:
         content:
           application/json:
@@ -593,7 +576,6 @@ paths:
               $ref: '#/components/schemas/PatchedVerzoekTypeVersion'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -608,9 +590,9 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     delete:
-      operationId: verzoekentypeVersionsDestroy
-      description: Een verzoek type versie verwijderen
-      summary: Een verzoek type versie verwijderen
+      operationId: verzoektypenVersionsDestroy
+      description: Een verzoektype versie verwijderen
+      summary: Een verzoektype versie verwijderen
       parameters:
       - in: path
         name: verzoektypeUuid
@@ -629,10 +611,9 @@ paths:
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
-      - verzoekentype
+      - verzoektypen
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:

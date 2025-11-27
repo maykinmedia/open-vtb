@@ -2,10 +2,10 @@ openapi: 3.0.3
 info:
   title: Taken API
   version: 0.1.0
-  description: "\n        De 'Taken-Service' is een gestandaardiseerde architectuur\
-    \ voor Nederlandse overheidssystemen,\n        ontworpen om acties (taken) te\
-    \ definiëren en te beheren die burgers moeten uitvoeren.\n        Het zorgt voor\
-    \ consistente communicatie tussen verschillende applicaties.\n        "
+  description: De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse
+    overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren die
+    burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen verschillende
+    applicaties.
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG

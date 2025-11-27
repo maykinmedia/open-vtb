@@ -17,7 +17,7 @@ app_name = "verzoeken"
 router = routers.DefaultRouter()
 router.register("verzoeken", VerzoekViewSet)
 router.register(
-    "verzoekentype",
+    "verzoektypen",
     VerzoekTypeViewSet,
     [routers.Nested("versions", VerzoekTypeVersionViewSet)],
 )
