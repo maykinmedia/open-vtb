@@ -3,9 +3,9 @@ from vng_api_common.conf.api import *  # noqa - imports white-listed
 # Remove the reference - we don't have a single API version.
 del API_VERSION  # noqa
 
-VERZOEK_API_VERSION = "0.0.1"
-TAKEN_API_VERSION = "0.0.1"
-BERICHTEN_API_VERSION = "0.0.1"
+VERZOEK_API_VERSION = "0.1.0"
+TAKEN_API_VERSION = "0.1.0"
+BERICHTEN_API_VERSION = "0.1.0"
 
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
@@ -14,7 +14,12 @@ REST_FRAMEWORK["PAGE_SIZE"] = 100
 # content of these fields must not be converted to camelCase
 REST_FRAMEWORK["JSON_UNDERSCOREIZE"] = {
     "no_underscore_before_number": False,
-    "ignore_fields": ("ontvangen_gegevens", "formulier_definitie"),
+    "ignore_fields": (
+        "ontvangen_gegevens",
+        "formulier_definitie",
+        "aanvraag_gegevens",
+        "aanvraag_gegevens_schema",
+    ),
     "ignore_keys": None,
 }
 REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (

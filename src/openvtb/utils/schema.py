@@ -4,6 +4,7 @@ from drf_spectacular.openapi import (
     AutoSchema as _AutoSchema,
 )
 from drf_spectacular.utils import OpenApiParameter
+from rest_framework import serializers
 from vng_api_common.constants import VERSION_HEADER
 
 
@@ -36,3 +37,11 @@ class AutoSchema(_AutoSchema):
                 response=True,
             )
         ]
+
+    def _map_serializer_field(self, field, direction, *args, **kwargs):
+        schema = super()._map_serializer_field(field, direction, *args, **kwargs)
+
+        if isinstance(field, serializers.JSONField):
+            schema["type"] = "object"
+
+        return schema

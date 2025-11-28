@@ -293,7 +293,7 @@ class Verzoek(models.Model):
             raise ValidationError(
                 {
                     "verzoek_type": _(
-                        "Onbekend VerzoekenType schema: geen schema beschikbaar."
+                        "Onbekend VerzoekType schema: geen schema beschikbaar."
                     )
                 },
                 code="unknown-schema",

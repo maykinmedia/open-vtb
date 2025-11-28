@@ -1,10 +1,17 @@
-import random
 import uuid
+
+from django.utils import timezone
 
 import factory
 from factory.django import DjangoModelFactory
 
-from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
+from ..models import (
+    Verzoek,
+    VerzoekBetaling,
+    VerzoekBron,
+    VerzoekType,
+    VerzoekTypeVersion,
+)
 
 JSON_SCHEMA = {
     "type": "object",
@@ -35,6 +42,14 @@ class VerzoekTypeFactory(DjangoModelFactory):
     class Meta:
         model = VerzoekType
 
+    @factory.post_generation
+    def create_version(obj, create, version, **kwargs):
+        if not create:
+            return
+
+        if version:
+            VerzoekTypeVersionFactory(verzoek_type=obj)
+
 
 class VerzoekTypeVersionFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
@@ -47,12 +62,13 @@ class VerzoekTypeVersionFactory(DjangoModelFactory):
 class DataFactory(factory.DictFactory):
     extra = factory.Dict(
         {
-            "string": "True",
-            "bool": False,
-            "integer": random.randrange(1, 10_000),
+            "extra": {
+                "bool": False,
+                "integer": "100",
+            },
         }
     )
-    diameter = factory.LazyAttribute(lambda x: random.randrange(1, 10_000))
+    diameter = 10
 
 
 class VerzoekFactory(DjangoModelFactory):
@@ -61,3 +77,33 @@ class VerzoekFactory(DjangoModelFactory):
 
     class Meta:
         model = Verzoek
+
+    @factory.post_generation
+    def create_details(obj, create, details, **kwargs):
+        if not create:
+            return
+
+        if details:
+            VerzoekBronFactory(verzoek=obj)
+            VerzoekBetalingFactory(verzoek=obj)
+
+
+class VerzoekBronFactory(DjangoModelFactory):
+    verzoek = factory.SubFactory(VerzoekFactory)
+    naam = factory.Faker("word")
+    kenmerk = factory.Faker("word")
+
+    class Meta:
+        model = VerzoekBron
+
+
+class VerzoekBetalingFactory(DjangoModelFactory):
+    verzoek = factory.SubFactory(VerzoekFactory)
+    kenmerken = factory.ListFactory()
+    bedrag = factory.Faker("pydecimal", left_digits=8, right_digits=2, positive=True)
+    voltooid = factory.Faker("pybool")
+    transactie_datum = factory.LazyAttribute(lambda _: timezone.now())
+    transactie_referentie = factory.Faker("uuid4")
+
+    class Meta:
+        model = VerzoekBetaling

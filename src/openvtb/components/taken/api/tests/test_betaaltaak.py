@@ -285,7 +285,7 @@ class BetaalTaakTests(APITestCase):
         detail_url = reverse(
             "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
-        # empty patch
+        # empty PATCH
         response = self.client.patch(detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -373,7 +373,7 @@ class BetaalTaakTests(APITestCase):
             "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
-        # all required put fields
+        # all required PUT fields
         response = self.client.put(
             detail_url,
             {
@@ -428,7 +428,7 @@ class BetaalTaakTests(APITestCase):
             "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
-        # all required put fields
+        # all required PUT fields
         response = self.client.put(detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")

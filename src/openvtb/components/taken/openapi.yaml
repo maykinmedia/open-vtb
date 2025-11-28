@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
   title: Taken API
-  version: 0.0.1
-  description: "\n        De 'Taken-Service' is een gestandaardiseerde architectuur\
-    \ voor Nederlandse overheidssystemen,\n        ontworpen om acties (taken) te\
-    \ definiëren en te beheren die burgers moeten uitvoeren.\n        Het zorgt voor\
-    \ consistente communicatie tussen verschillende applicaties.\n        "
+  version: 0.1.0
+  description: De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse
+    overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren die
+    burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen verschillende
+    applicaties.
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -826,6 +826,7 @@ components:
           description: Het soort taak
         details:
           description: Details van de taak met validaties op basis van het soort taak
+          type: object
       required:
       - details
       - handelingsPerspectief
@@ -1287,8 +1288,10 @@ components:
       properties:
         formulierDefinitie:
           description: Definitie van het formulier in JSON
+          type: object
         ontvangenGegevens:
           description: Ontvangen gegevens als key-value object
+          type: object
       required:
       - formulierDefinitie
     FormulierTaakCreateRequest:
@@ -1703,6 +1706,7 @@ components:
           description: Link naar de externe gegevensaanvraag
         ontvangenGegevens:
           description: Ontvangen gegevens als key-value object
+          type: object
       required:
       - uitvraagLink
     GegevensUitvraagTaakCreateRequest:

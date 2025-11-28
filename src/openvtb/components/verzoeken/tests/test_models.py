@@ -1,23 +1,21 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from ..models import VerzoekType, VerzoekTypeVersion
+from ..models import VerzoekTypeVersion
 from .factories import (
     JSON_SCHEMA,
     VerzoekFactory,
     VerzoekTypeFactory,
-    VerzoekTypeVersionFactory,
 )
 
 
 class ValidateVerzoekTypeSchemaTestCase(TestCase):
     def test_valid_schema(self):
-        VerzoekTypeVersionFactory.create(aanvraag_gegevens_schema=JSON_SCHEMA)
-        verzoek_type = VerzoekType.objects.get()
-
+        verzoek_type = VerzoekTypeFactory.create(create_version=True)
         self.assertEqual(verzoek_type.last_version.version, 1)
         self.assertEqual(
-            verzoek_type.last_version.aanvraag_gegevens_schema, JSON_SCHEMA
+            verzoek_type.last_version.aanvraag_gegevens_schema,
+            JSON_SCHEMA,  # default from factories
         )
 
     def test_invalid_schema(self):
@@ -57,11 +55,7 @@ class ValidateVerzoekTypeSchemaTestCase(TestCase):
 class ValidateVerzoekSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.verzoek_type = VerzoekTypeFactory.create()
-        VerzoekTypeVersionFactory.create(
-            verzoek_type=self.verzoek_type,
-            aanvraag_gegevens_schema=JSON_SCHEMA,
-        )
+        self.verzoek_type = VerzoekTypeFactory.create(create_version=True)
 
     def test_valid_schema(self):
         # default schema from factory
@@ -85,11 +79,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             self.verzoek.full_clean()
         self.assertEqual(
             error.exception.message_dict,
-            {
-                "verzoek_type": [
-                    "Onbekend VerzoekenType schema: geen schema beschikbaar."
-                ]
-            },
+            {"verzoek_type": ["Onbekend VerzoekType schema: geen schema beschikbaar."]},
         )
 
     def test_invalid_schema(self):
