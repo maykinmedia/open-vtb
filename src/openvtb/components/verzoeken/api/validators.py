@@ -56,7 +56,7 @@ class CheckVerzoekTypeVersion:
     Raises a ValidationError if `instance.last_version` is None.
     """
 
-    message = _("Onbekend VerzoekenType schema: geen schema beschikbaar.")
+    message = _("Onbekend VerzoekType schema: geen schema beschikbaar.")
     code = "unknown-schema"
 
     def __call__(self, instance):

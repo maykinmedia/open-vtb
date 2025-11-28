@@ -74,7 +74,7 @@ class VerzoekValidatorsTests(APITestCase):
             {
                 "name": "verzoekType",
                 "code": "unknown-schema",
-                "reason": "Onbekend VerzoekenType schema: geen schema beschikbaar.",
+                "reason": "Onbekend VerzoekType schema: geen schema beschikbaar.",
             },
         )
 

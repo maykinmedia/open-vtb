@@ -79,11 +79,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             self.verzoek.full_clean()
         self.assertEqual(
             error.exception.message_dict,
-            {
-                "verzoek_type": [
-                    "Onbekend VerzoekenType schema: geen schema beschikbaar."
-                ]
-            },
+            {"verzoek_type": ["Onbekend VerzoekType schema: geen schema beschikbaar."]},
         )
 
     def test_invalid_schema(self):

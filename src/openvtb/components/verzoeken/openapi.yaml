@@ -816,7 +816,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek deze API.
+          description: De unieke URL van het verzoek binnen deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -835,6 +835,7 @@ components:
             verzoek representeert.
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
+          type: object
         bijlagen:
           type: array
           items:
@@ -853,7 +854,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek type deze API.
+          description: De unieke URL van het verzoektype binnen deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -880,6 +881,7 @@ components:
         aanvraagGegevensSchema:
           readOnly: true
           description: JSON schema voor validatie van VerzoekType
+          type: object
     PatchedVerzoekTypeVersion:
       type: object
       description: |-
@@ -895,7 +897,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek deze API.
+          description: De unieke URL van deze verzoektype versie binnen deze API.
         version:
           type: integer
           readOnly: true
@@ -912,6 +914,7 @@ components:
           description: Status van het VerzoekTypeVersion
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
+          type: object
         createdAt:
           type: string
           format: date
@@ -991,7 +994,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek deze API.
+          description: De unieke URL van het verzoek binnen deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1010,6 +1013,7 @@ components:
             verzoek representeert.
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
+          type: object
         bijlagen:
           type: array
           items:
@@ -1074,7 +1078,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek type deze API.
+          description: De unieke URL van het verzoektype binnen deze API.
           minLength: 1
           maxLength: 1000
         uuid:
@@ -1101,6 +1105,7 @@ components:
         aanvraagGegevensSchema:
           readOnly: true
           description: JSON schema voor validatie van VerzoekType
+          type: object
       required:
       - aanvraagGegevensSchema
       - naam
@@ -1122,7 +1127,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van de verzoek deze API.
+          description: De unieke URL van deze verzoektype versie binnen deze API.
         version:
           type: integer
           readOnly: true
@@ -1139,6 +1144,7 @@ components:
           description: Status van het VerzoekTypeVersion
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
+          type: object
         createdAt:
           type: string
           format: date

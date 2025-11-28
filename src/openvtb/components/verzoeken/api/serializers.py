@@ -46,7 +46,9 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "lookup_field": "version",
                 "lookup_url_kwarg": "verzoektype_version",
                 "view_name": "verzoeken:verzoektypeversion-detail",
-                "help_text": _("De unieke URL van de verzoek deze API."),
+                "help_text": _(
+                    "De unieke URL van deze verzoektype versie binnen deze API."
+                ),
             },
             "version": {"read_only": True},
             "verzoek_type": {
@@ -64,19 +66,20 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         }
         validators = [VersionStatusValidator()]
 
-    def validate_parent(self, verzoektype_uuid):
-        if not VerzoekType.objects.filter(uuid=verzoektype_uuid).exists():
-            msg = _("VerzoekType is invalid")
-            raise serializers.ValidationError(msg, code="invalid-parent")
-
     def validate(self, attrs):
         valid_attrs = super().validate(attrs)
         verzoektype_uuid = self.context["request"].resolver_match.kwargs.get(
             "verzoektype_uuid", ""
         )
-        self.validate_parent(verzoektype_uuid)
 
-        valid_attrs["verzoek_type"] = VerzoekType.objects.get(uuid=verzoektype_uuid)
+        verzoek_type = VerzoekType.objects.filter(uuid=verzoektype_uuid).first()
+        if not verzoek_type:
+            raise serializers.ValidationError(
+                _("VerzoekType with the specified UUID does not exist"),
+                code="verzoektype-does-not-exist",
+            )
+
+        valid_attrs["verzoek_type"] = verzoek_type
         return valid_attrs
 
 
@@ -133,7 +136,7 @@ class VerzoekTypeSerializer(serializers.ModelSerializer):
             "url": {
                 "view_name": "verzoeken:verzoektype-detail",
                 "lookup_field": "uuid",
-                "help_text": _("De unieke URL van de verzoek type deze API."),
+                "help_text": _("De unieke URL van het verzoektype binnen deze API."),
             },
         }
 
@@ -182,7 +185,7 @@ class VerzoekSerializer(serializers.ModelSerializer):
             "url": {
                 "view_name": "verzoeken:verzoek-detail",
                 "lookup_field": "uuid",
-                "help_text": _("De unieke URL van de verzoek deze API."),
+                "help_text": _("De unieke URL van het verzoek binnen deze API."),
             },
             "aanvraag_gegevens": {
                 "required": True,
