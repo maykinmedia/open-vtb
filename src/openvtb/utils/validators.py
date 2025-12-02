@@ -5,6 +5,7 @@ from typing import Any
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
@@ -205,3 +206,94 @@ class CustomRegexValidator(RegexValidator):
 validate_postal_code = CustomRegexValidator(
     regex="^[1-9][0-9]{3} ?[a-zA-Z]{2}$", message=_("Invalid postal code.")
 )
+
+
+@deconstructible
+class URNValidator(RegexValidator):
+    """
+
+    The basic syntax for a URN is defined using the
+    Augmented Backus-Naur Form (ABNF) as specified in [RFC5234].
+    Rules not defined here (specifically: alphanum, fragment, and pchar)
+    are defined as part of the URI syntax [RFC3986] and used here to point
+    out the syntactic relationship with the terms used there.
+
+    URN Syntax:
+
+        namestring    = assigned-name
+                        [ rq-components ]
+                        [ "#" f-component ]
+
+        NID           = (alphanum) 0*30(ldh) (alphanum)
+        ldh           = alphanum / "-"
+        NSS           = pchar *(pchar / "/")
+        rq-components = [ "?+" r-component ]
+                        [ "?=" q-component ]
+        r-component   = pchar *( pchar / "/" / "?" )
+        q-component   = pchar *( pchar / "/" / "?" )
+        f-component   = fragment
+
+        ; general URI syntax rules (RFC3986)
+        fragment      = *( pchar / "/" / "?" )
+        pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+        pct-encoded   = "%" HEXDIG HEXDIG
+        unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+        sub-delims    = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+
+        alphanum      = ALPHA / DIGIT  ; obsolete, usage is deprecated
+
+    The question mark character "?" can be used without percent-encoding
+    inside r-components, q-components, and f-components.  Other than
+    inside those components, a "?" that is not immediately followed by
+    "=" or "+" is not defined for URNs and SHOULD be treated as a syntax
+    error by URN-specific parsers and other processors.
+    """
+
+    HEXDIG = r"[0-9A-Fa-f]"
+    ALPHA = r"[A-Za-z]"
+    DIGIT = r"\d"
+    ALPHANUM = rf"(?:{ALPHA}|{DIGIT})"
+
+    # URI components (RFC3986)
+    unreserved = rf"(?:{ALPHA}|{DIGIT}|[-._~])"
+    pct_encoded = rf"(?:%{HEXDIG}{HEXDIG})"
+    sub_delims = r"(?:[!$&'()*+,;=])"
+    pchar = rf"(?:{unreserved}|{pct_encoded}|{sub_delims}|[:@])"
+
+    # assigned-name components
+    ldh = rf"(?:{ALPHANUM}|-)"
+    NID = rf"(?:{ALPHANUM}(?:{ldh}){{0,30}}{ALPHANUM}|{ALPHANUM})"
+
+    # NSS: pchar seguito da zero o più (pchar o "/")
+    NSS = rf"(?:{pchar}(?:{pchar}|/)*)"
+
+    assigned_name = rf"(?:{NID}:{NSS})"
+
+    # optionals r-component and q-component
+    r_component = rf"(?:{pchar}(?:{pchar}|/|\?)*)"
+    q_component = rf"(?:{pchar}(?:{pchar}|/|\?)*)"
+    rq_components = rf"(?:\?\+{r_component})?(?:\?={q_component})?"
+
+    # f-component (fragment)
+    fragment = rf"(?:(?:{pchar}|/|\?)*)"
+    f_component = rf"(?:#{fragment})?"
+
+    # Full URN regex (RFC 8141)
+    urn_pattern = (
+        rf"^urn:{assigned_name}"
+        rf"{rq_components}"
+        rf"{f_component}$"
+    )
+
+    message = (
+        "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' "
+        "(e.g., urn:isbn:9780143127796)."
+    )
+    code = "invalid_urn"
+
+    def __init__(self):
+        super().__init__(
+            regex=re.compile(self.urn_pattern),
+            message=self.message,
+            code=self.code,
+        )
