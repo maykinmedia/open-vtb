@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
 from .constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
@@ -20,9 +21,6 @@ class VerzoekType(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het VerzoekType"),
     )
-
-    # TODO urn = urnField()
-
     naam = models.CharField(
         _("naam"),
         max_length=100,
@@ -50,7 +48,11 @@ class VerzoekType(models.Model):
         auto_now=True,
         help_text=_("Laatste datum waarop het VerzoekType is gewijzigd"),
     )
-    # TODO bijlageTypen -> DOCUMENTTYPE URN?
+    bijlage_typen = URNField(
+        _("bijlage typen"),
+        help_text=_("bijlage typen urn"),  # TODO check hel_text
+        blank=True,
+    )
 
     class Meta:
         verbose_name = _("VerzoekType")
@@ -242,9 +244,6 @@ class Verzoek(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het Verzoek."),
     )
-
-    # TODO urn = urnField()
-
     verzoek_type = models.ForeignKey(
         VerzoekType,
         db_index=True,
@@ -265,20 +264,38 @@ class Verzoek(models.Model):
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
     )
+    # bijlagen relation
     bijlagen = ArrayField(
-        models.CharField(
-            _("documents"), max_length=100
-        ),  # TODO documents URNField ENKELVOUDIGINFORMATIEOBJECT
+        URNField(_("bijlagen URN")),
         blank=True,
         default=list,
         help_text=_("Eventuele bijlagen van het Verzoek (URNs van documenten)."),
     )
+    # partij relation
+    partij_is_ingediend_door = URNField(
+        _("is ingediend door partij"),
+        help_text=_("is ingediend door Partij urn"),  # TODO check hel_text
+        blank=True,
+    )
+    # betrokkene relation
+    betrokkene_is_ingediend_door = URNField(
+        _("is ingediend door betrokkene"),
+        help_text=_("is ingediend door Betrokkene urn"),  # TODO check hel_text
+        blank=True,
+    )
 
-    # TODO relations
-    # auth_context ->  URNField
-    # partij ->  URNField
-    # betrokkene ->  URNField
-    # zaak ->  URNField
+    # zaak relations
+    zaak_heeft_geleid_tot = URNField(
+        _("heeft geleid tot"),
+        help_text=_("heeft geleid tot Zaak urn"),  # TODO check hel_text
+        blank=True,
+    )
+    # auth_context relations
+    auth_context = URNField(
+        _("auth context"),
+        help_text=_("authentication context urn"),  # TODO check hel_text
+        blank=True,
+    )
 
     class Meta:
         verbose_name = _("Verzoek")
