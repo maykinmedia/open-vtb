@@ -40,6 +40,7 @@ class BetaalTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                         "uuid": str(betaaltaak.uuid),
                         "titel": betaaltaak.titel,
                         "status": betaaltaak.status,
@@ -96,6 +97,7 @@ class BetaalTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -163,6 +165,7 @@ class BetaalTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -217,6 +220,7 @@ class BetaalTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -358,6 +362,7 @@ class BetaalTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -466,6 +471,7 @@ class BetaalTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
