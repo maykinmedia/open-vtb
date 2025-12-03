@@ -52,6 +52,10 @@ class BetaalTaakTests(APITestCase):
                         ),
                         "datumHerinnering": betaaltaak.datum_herinnering,
                         "toelichting": betaaltaak.toelichting,
+                        "partijIsToegewezenAan": "",
+                        "medewerkerWordtBehandeldDoor": "",
+                        "zaakHoortBij": "",
+                        "productHeeftBetrekkingOp": "",
                         "taakSoort": betaaltaak.taak_soort,
                         "details": {
                             "bedrag": betaaltaak.details["bedrag"],
@@ -102,6 +106,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -163,6 +171,64 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
+                    "doelrekening": {
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
+                    },
+                },
+            },
+        )
+
+    def test_valid_create_with_external_relations(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief1",
+            "partijIsToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "medewerkerWordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
+            "zaakHoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "productHeeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
+            "details": {
+                "bedrag": "11",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+
+        betaaltaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "uuid": str(betaaltaak.uuid),
+                "titel": betaaltaak.titel,
+                "status": betaaltaak.status,
+                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "handelingsPerspectief": betaaltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": betaaltaak.datum_herinnering,
+                "toelichting": betaaltaak.toelichting,
+                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -302,6 +368,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -406,6 +476,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
