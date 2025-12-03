@@ -6,7 +6,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ExterneTaakFactory
+from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -51,6 +51,10 @@ class FormulierTaakTests(APITestCase):
                         ),
                         "datumHerinnering": formuliertaak.datum_herinnering,
                         "toelichting": formuliertaak.toelichting,
+                        "partijIsToegewezenAan": "",
+                        "medewerkerWordtBehandeldDoor": "",
+                        "zaakHoortBij": "",
+                        "productHeeftBetrekkingOp": "",
                         "taakSoort": formuliertaak.taak_soort,
                         "details": {
                             "formulierDefinitie": formuliertaak.details[
@@ -104,6 +108,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "partijIsToegewezenAan": formuliertaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": formuliertaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": formuliertaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": formuliertaak.product_heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -169,6 +177,10 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "partijIsToegewezenAan": formuliertaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": formuliertaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": formuliertaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": formuliertaak.product_heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -219,39 +231,6 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
 
         # create form.io example TextField
-        FORM_IO = {
-            "display": "form",
-            "settings": {
-                "pdf": {
-                    "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
-                    "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
-                }
-            },
-            "components": [
-                {
-                    "type": "button",
-                    "label": "Submit",
-                    "key": "submit",
-                    "disableOnInvalid": True,
-                    "input": True,
-                    "tableView": False,
-                },
-                {
-                    "label": "Text Field",
-                    "placeholder": "Add Test",
-                    "description": "Description ",
-                    "tooltip": "Tooltip",
-                    "prefix": "Test",
-                    "applyMaskOn": "change",
-                    "tableView": True,
-                    "validateWhenHidden": False,
-                    "key": "textField",
-                    "type": "textfield",
-                    "input": True,
-                },
-            ],
-        }
-
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
@@ -266,6 +245,63 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
         self.assertEqual(formuliertaak.details["formulierDefinitie"], FORM_IO)
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
+
+    def test_valid_create_with_external_relations(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief",
+            "partijIsToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "medewerkerWordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
+            "zaakHoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "productHeeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
+            "details": {
+                "formulierDefinitie": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
+                "ontvangenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                        "datetime": datetime.datetime.now(),
+                    },
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+        formuliertaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "uuid": str(formuliertaak.uuid),
+                "titel": formuliertaak.titel,
+                "status": formuliertaak.status,
+                "startdatum": formuliertaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": formuliertaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": formuliertaak.datum_herinnering,
+                "toelichting": formuliertaak.toelichting,
+                "partijIsToegewezenAan": formuliertaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": formuliertaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": formuliertaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": formuliertaak.product_heeft_betrekking_op,
+                "taakSoort": formuliertaak.taak_soort,
+                "details": {
+                    "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
+                },
+            },
+        )
 
     def test_invalid_create_required_fields(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -348,6 +384,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "partijIsToegewezenAan": formuliertaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": formuliertaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": formuliertaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": formuliertaak.product_heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -364,7 +404,7 @@ class FormulierTaakTests(APITestCase):
 
         # PATCH one field from json_data
         self.assertEqual(
-            formuliertaak.details["formulierDefinitie"], {"key": "value"}
+            formuliertaak.details["formulierDefinitie"], FORM_IO
         )  # default factory value
         response = self.client.patch(
             detail_url,
@@ -406,9 +446,7 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(
             formuliertaak.details["ontvangenGegevens"], {"new_key": "new_value"}
         )
-        self.assertNotEqual(
-            formuliertaak.details["ontvangenGegevens"], {"key": "value"}
-        )
+        self.assertNotEqual(formuliertaak.details["ontvangenGegevens"], FORM_IO)
 
     def test_valid_update(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
@@ -453,6 +491,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "partijIsToegewezenAan": formuliertaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": formuliertaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": formuliertaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": formuliertaak.product_heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
