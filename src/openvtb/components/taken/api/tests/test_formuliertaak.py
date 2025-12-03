@@ -39,6 +39,7 @@ class FormulierTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                         "uuid": str(formuliertaak.uuid),
                         "titel": formuliertaak.titel,
                         "status": formuliertaak.status,
@@ -96,6 +97,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -167,6 +169,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -281,6 +284,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -372,6 +376,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -479,6 +484,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,

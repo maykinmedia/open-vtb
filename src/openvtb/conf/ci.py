@@ -22,6 +22,7 @@ os.environ.setdefault("LOG_REQUESTS", "no")
 os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 os.environ.setdefault("OTEL_SERVICE_NAME", "openvtb-ci")
 
+os.environ.setdefault("URN_NAMESPACE", "maykin")
 from .base import *  # noqa isort:skip
 
 CACHES.update(

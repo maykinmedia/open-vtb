@@ -9,7 +9,10 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.utils import get_json_schema
-from openvtb.utils.serializers import get_from_serializer_data_or_instance
+from openvtb.utils.serializers import (
+    UrnModelSerializer,
+    get_from_serializer_data_or_instance,
+)
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
 from ..constants import Valuta
@@ -87,7 +90,7 @@ class FormulierTaakSerializer(serializers.Serializer):
         return super().to_representation(instance)
 
 
-class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
+class ExterneTaakPolymorphicSerializer(UrnModelSerializer, PolymorphicSerializer):
     discriminator = Discriminator(
         discriminator_field="taak_soort",
         mapping={
@@ -104,6 +107,7 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
         model = ExterneTaak
         fields = (
             "url",
+            "urn",
             "uuid",
             "titel",
             "status",
@@ -133,6 +137,11 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
                 "view_name": "taken:externetaak-detail",
                 "lookup_field": "uuid",
                 "help_text": _("De unieke URL van de externe taak deze API."),
+            },
+            "urn": {
+                "lookup_field": "uuid",
+                "view_name": "taken:externetaak-detail",
+                "help_text": _("De unieke URN van de externe taak deze API."),
             },
         }
 

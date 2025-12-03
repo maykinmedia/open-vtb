@@ -36,6 +36,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -63,6 +64,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -94,6 +96,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -130,6 +133,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -165,6 +169,7 @@ paths:
               $ref: '#/components/schemas/PatchedBetaalTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -195,6 +200,7 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -226,6 +232,7 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -252,6 +259,7 @@ paths:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -283,6 +291,7 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -318,6 +327,7 @@ paths:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -353,6 +363,7 @@ paths:
               $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -383,6 +394,7 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -414,6 +426,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -441,6 +454,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -472,6 +486,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -508,6 +523,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -543,6 +559,7 @@ paths:
               $ref: '#/components/schemas/PatchedFormulierTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -573,6 +590,7 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -604,6 +622,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -631,6 +650,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '201':
           headers:
@@ -662,6 +682,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -698,6 +719,7 @@ paths:
         required: true
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -733,6 +755,7 @@ paths:
               $ref: '#/components/schemas/PatchedGegevensUitvraagTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
+      - {}
       responses:
         '200':
           headers:
@@ -763,6 +786,7 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
+      - {}
       responses:
         '204':
           headers:
@@ -784,6 +808,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -820,6 +848,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -833,6 +889,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     BetaalTaak:
       type: object
@@ -866,6 +923,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -902,6 +963,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/BetaalTaak'
       required:
@@ -909,6 +998,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakCreateResponse:
       type: object
@@ -920,6 +1010,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -956,6 +1050,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -968,6 +1090,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakListResponse:
       type: object
@@ -979,6 +1102,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1015,6 +1142,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1027,6 +1182,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakPartialUpdateResponse:
       type: object
@@ -1038,6 +1194,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1074,6 +1234,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1086,6 +1274,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakRetrieveResponse:
       type: object
@@ -1097,6 +1286,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1133,6 +1326,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1145,6 +1366,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakUpdateRequest:
       type: object
@@ -1156,6 +1378,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1192,6 +1418,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/BetaalTaak'
       required:
@@ -1199,6 +1453,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     BetaalTaakUpdateResponse:
       type: object
@@ -1210,6 +1465,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1246,6 +1505,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1258,6 +1545,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     Doelrekening:
       type: object
@@ -1304,6 +1592,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1340,6 +1632,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/FormulierTaak'
       required:
@@ -1347,6 +1667,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakCreateResponse:
       type: object
@@ -1358,6 +1679,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1394,6 +1719,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1406,6 +1759,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakListResponse:
       type: object
@@ -1417,6 +1771,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1453,6 +1811,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1465,6 +1851,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakPartialUpdateResponse:
       type: object
@@ -1476,6 +1863,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1512,6 +1903,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1524,6 +1943,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakRetrieveResponse:
       type: object
@@ -1535,6 +1955,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1571,6 +1995,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1583,6 +2035,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakUpdateRequest:
       type: object
@@ -1594,6 +2047,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1630,6 +2087,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/FormulierTaak'
       required:
@@ -1637,6 +2122,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     FormulierTaakUpdateResponse:
       type: object
@@ -1648,6 +2134,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1684,6 +2174,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1696,6 +2214,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaak:
       type: object
@@ -1719,6 +2238,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1755,6 +2278,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
@@ -1762,6 +2313,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakCreateResponse:
       type: object
@@ -1773,6 +2325,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1809,6 +2365,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1821,6 +2405,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakListResponse:
       type: object
@@ -1832,6 +2417,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1868,6 +2457,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1880,6 +2497,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakPartialUpdateResponse:
       type: object
@@ -1891,6 +2509,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1927,6 +2549,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1939,6 +2589,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakRetrieveResponse:
       type: object
@@ -1950,6 +2601,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -1986,6 +2641,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -1998,6 +2681,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakUpdateRequest:
       type: object
@@ -2009,6 +2693,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -2045,6 +2733,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
@@ -2052,6 +2768,7 @@ components:
       - handelingsPerspectief
       - titel
       - url
+      - urn
       - uuid
     GegevensUitvraagTaakUpdateResponse:
       type: object
@@ -2063,6 +2780,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -2099,6 +2820,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -2111,6 +2860,7 @@ components:
       - taakSoort
       - titel
       - url
+      - urn
       - uuid
     PaginatedBetaalTaakListResponseList:
       type: object
@@ -2214,6 +2964,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -2250,6 +3004,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/BetaalTaak'
     PatchedExterneTaakPolymorphic:
@@ -2273,6 +3055,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -2309,6 +3095,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/FormulierTaak'
     PatchedGegevensUitvraagTaakPartialUpdateRequest:
@@ -2321,6 +3135,10 @@ components:
           description: De unieke URL van de externe taak deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de externe taak deze API.
         uuid:
           type: string
           format: uuid
@@ -2357,6 +3175,34 @@ components:
         toelichting:
           type: string
           description: Uitleg van de taak
+        partijIsToegewezenAan:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan
+          description: Persoon aan wie de taak is toegewezen
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        medewerkerWordtBehandeldDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Medewerker die de taak uitvoert
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHoortBij:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Hoort bij zaak
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        productHeeftBetrekkingOp:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Wordt behandeld door
+          description: Betreft het product
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         details:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
     StatusEnum:
