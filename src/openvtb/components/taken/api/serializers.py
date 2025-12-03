@@ -112,6 +112,10 @@ class ExterneTaakPolymorphicSerializer(PolymorphicSerializer):
             "einddatum_handelings_termijn",
             "datum_herinnering",
             "toelichting",
+            "partij_is_toegewezen_aan",
+            "medewerker_wordt_behandeld_door",
+            "zaak_hoort_bij",
+            "product_heeft_betrekking_op",
             "taak_soort",
             "details",
         )
