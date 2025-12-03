@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
 
+from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
 from .constants import SoortTaak, StatusTaak
@@ -73,12 +74,31 @@ class ExterneTaak(models.Model):
         help_text=_("Details van de taak met validaties op basis van het soort taak"),
         encoder=DjangoJSONEncoder,
     )
+    # partij relation
+    partij_is_toegewezen_aan = URNField(
+        _("is toegewezen aan"),
+        help_text=_("Persoon aan wie de taak is toegewezen"),
+        blank=True,
+    )
+    # medewerker relation
+    medewerker_wordt_behandeld_door = URNField(
+        _("wordt behandeld door"),
+        help_text=_("Medewerker die de taak uitvoert"),
+        blank=True,
+    )
+    # zaak relations
+    zaak_hoort_bij = URNField(
+        _("wordt behandeld door"),
+        help_text=_("Hoort bij zaak"),
+        blank=True,
+    )
+    # product relations
+    product_heeft_betrekking_op = URNField(
+        _("wordt behandeld door"),
+        help_text=_("Betreft het product"),
+        blank=True,
+    )
 
-    # TODO relations with URNField:
-    # "isToegewezenAan": { "urn": "urn(persoon)", "omschrijving": "string(200)"}
-    # "wordtBehandeldDoor": {"urn": "urn(medewerker)", "omschrijving": "string(200)"}
-    # "hoortBij": {"urn": "urn(zaak)", "omschrijving": "string(200)"}
-    # "heeftBetrekkingOp": {"urn": "urn(product)", "omschrijving": "string(200)"}
     class Meta:
         verbose_name = _("Externe taak")
         verbose_name_plural = _("Externe taken")

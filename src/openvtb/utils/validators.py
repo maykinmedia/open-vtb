@@ -211,12 +211,8 @@ validate_postal_code = CustomRegexValidator(
 @deconstructible
 class URNValidator(RegexValidator):
     """
-
     The basic syntax for a URN is defined using the
     Augmented Backus-Naur Form (ABNF) as specified in [RFC5234].
-    Rules not defined here (specifically: alphanum, fragment, and pchar)
-    are defined as part of the URI syntax [RFC3986] and used here to point
-    out the syntactic relationship with the terms used there.
 
     URN Syntax:
 
@@ -247,6 +243,8 @@ class URNValidator(RegexValidator):
     inside those components, a "?" that is not immediately followed by
     "=" or "+" is not defined for URNs and SHOULD be treated as a syntax
     error by URN-specific parsers and other processors.
+
+    https://datatracker.ietf.org/doc/html/rfc8141
     """
 
     HEXDIG = r"[0-9A-Fa-f]"
