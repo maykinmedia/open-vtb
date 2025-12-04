@@ -793,6 +793,7 @@ pyyaml==6.0.3
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via
     #   -c requirements/ci.txt
@@ -975,6 +976,10 @@ tblib==3.1.0
     #   -r requirements/ci.txt
 tomlkit==0.13.3
     # via bump-my-version
+types-requests==2.32.4.20250913
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
     #   -c requirements/ci.txt
@@ -1026,7 +1031,12 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   types-requests
 uwsgi==2.0.31
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+vcrpy==8.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1079,6 +1089,7 @@ wrapt==1.17.3
     #   -r requirements/ci.txt
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   vcrpy
 zgw-consumers==1.1.0
     # via
     #   -c requirements/ci.txt
