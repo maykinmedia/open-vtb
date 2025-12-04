@@ -41,11 +41,17 @@ class VerzoekTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('verzoeken:verzoek-detail', kwargs={'uuid': str(verzoek.uuid)})}",
+                        "urn": f"urn:maykin:verzoeken:verzoek:{str(verzoek.uuid)}",
                         "uuid": str(verzoek.uuid),
                         "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                        "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "geometrie": None,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
+                        "partijIsIngediendDoor": "",
+                        "betrokkeneIsIngediendDoor": "",
+                        "zaakHeeftGeleidTot": "",
+                        "authContext": "",
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
@@ -85,11 +91,17 @@ class VerzoekTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoek-detail', kwargs={'uuid': str(verzoek.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoek:{str(verzoek.uuid)}",
                 "uuid": str(verzoek.uuid),
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": None,
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "bijlagen": [],
+                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
+                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
+                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
+                "authContext": verzoek.auth_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -116,7 +128,10 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "bijlagen": ["string"],
+            "bijlagen": [
+                "urn:maykin:document:1111111111",
+                "urn:maykin:document:2222222222",
+            ],
             "verzoekBron": {
                 "naam": "string",
                 "kenmerk": "string",
@@ -136,11 +151,81 @@ class VerzoekTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoek-detail', kwargs={'uuid': str(verzoek.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoek:{str(verzoek.uuid)}",
                 "uuid": str(verzoek.uuid),
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoek.verzoek_type.uuid)})}",
+                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "bijlagen": verzoek.bijlagen,
+                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
+                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
+                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
+                "authContext": verzoek.auth_context,
+                "verzoekBron": {
+                    "naam": verzoek.bron.naam,
+                    "kenmerk": verzoek.bron.kenmerk,
+                },
+                "verzoekBetaling": {
+                    "kenmerken": verzoek.betaling.kenmerken,
+                    "bedrag": str(verzoek.betaling.bedrag),
+                    "voltooid": verzoek.betaling.voltooid,
+                    "transactieDatum": verzoek.betaling.transactie_datum.isoformat().replace(
+                        "+00:00", "Z"
+                    ),
+                    "transactieReferentie": verzoek.betaling.transactie_referentie,
+                },
+            },
+        )
+
+    def test_valid_create_with_external_relations(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "geometrie": {"type": "Point", "coordinates": [0, 0]},
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {
+                "diameter": 10,
+            },
+            "bijlagen": [
+                "urn:maykin:document:1111111111",
+                "urn:maykin:document:2222222222",
+            ],
+            "partijIsIngediendDoor": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "betrokkeneIsIngediendDoor": "urn:maykin:betrokkene:brp:nnp:bsn:11112222",
+            "zaakHeeftGeleidTot": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "authContext": "",
+            "verzoekBron": {
+                "naam": "string",
+                "kenmerk": "string",
+            },
+            "verzoekBetaling": {
+                "kenmerken": ["string"],
+                "bedrag": "10",
+                "voltooid": True,
+                "transactieDatum": "2025-01-01T14:15:22Z",
+                "transactieReferentie": "string",
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoek = Verzoek.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('verzoeken:verzoek-detail', kwargs={'uuid': str(verzoek.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoek:{str(verzoek.uuid)}",
+                "uuid": str(verzoek.uuid),
+                "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoek.verzoek_type.uuid)})}",
+                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
+                "geometrie": json.loads(verzoek.geometrie.geojson),
+                "aanvraagGegevens": verzoek.aanvraag_gegevens,
+                "bijlagen": verzoek.bijlagen,
+                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
+                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
+                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
+                "authContext": verzoek.auth_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,

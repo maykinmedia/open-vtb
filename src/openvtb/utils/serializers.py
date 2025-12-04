@@ -39,6 +39,9 @@ class NoUrnMatch(Exception):
     pass
 
 
+@extend_schema_field(
+    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
+)
 class URNRelatedField(RelatedField):
     """
     A DRF field for representing related objects as URNs.

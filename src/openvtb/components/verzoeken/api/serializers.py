@@ -8,7 +8,11 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
-from openvtb.utils.serializers import get_from_serializer_data_or_instance
+from openvtb.utils.serializers import (
+    UrnModelSerializer,
+    URNRelatedField,
+    get_from_serializer_data_or_instance,
+)
 from openvtb.utils.validators import validate_jsonschema
 
 from ..models import (
@@ -101,7 +105,7 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
         )
 
 
-class VerzoekTypeSerializer(serializers.ModelSerializer):
+class VerzoekTypeSerializer(UrnModelSerializer, serializers.ModelSerializer):
     version = NestedHyperlinkedRelatedField(
         read_only=True,
         source="last_version",
@@ -123,11 +127,13 @@ class VerzoekTypeSerializer(serializers.ModelSerializer):
         model = VerzoekType
         fields = (
             "url",
+            "urn",
             "uuid",
             "version",
             "naam",
             "toelichting",
             "opvolging",
+            "bijlage_typen",
             "aanvraag_gegevens_schema",
         )
 
@@ -138,10 +144,15 @@ class VerzoekTypeSerializer(serializers.ModelSerializer):
                 "lookup_field": "uuid",
                 "help_text": _("De unieke URL van het verzoektype binnen deze API."),
             },
+            "urn": {
+                "lookup_field": "uuid",
+                "view_name": "verzoeken:verzoektype-detail",
+                "help_text": _("De unieke URN van de verzoektype deze API."),
+            },
         }
 
 
-class VerzoekSerializer(serializers.ModelSerializer):
+class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
@@ -149,6 +160,14 @@ class VerzoekSerializer(serializers.ModelSerializer):
         queryset=VerzoekType.objects.all(),
         validators=[CheckVerzoekTypeVersion(), IsImmutableValidator()],
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type"),
+    )
+    verzoek_type_urn = URNRelatedField(
+        view_name="verzoeken:verzoektype-detail",
+        lookup_field="uuid",
+        source="verzoek_type",
+        urn_resource="verzoektype",
+        read_only=True,
+        help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
     )
     geometrie = GeometryField(
         help_text=get_help_text("verzoeken.Verzoek", "geometrie"),
@@ -169,11 +188,17 @@ class VerzoekSerializer(serializers.ModelSerializer):
         model = Verzoek
         fields = (
             "url",
+            "urn",
             "uuid",
             "verzoek_type",
+            "verzoek_type_urn",
             "geometrie",
             "aanvraag_gegevens",
             "bijlagen",
+            "partij_is_ingediend_door",
+            "betrokkene_is_ingediend_door",
+            "zaak_heeft_geleid_tot",
+            "auth_context",
             "verzoek_bron",
             "verzoek_betaling",
         )
@@ -186,6 +211,11 @@ class VerzoekSerializer(serializers.ModelSerializer):
                 "view_name": "verzoeken:verzoek-detail",
                 "lookup_field": "uuid",
                 "help_text": _("De unieke URL van het verzoek binnen deze API."),
+            },
+            "urn": {
+                "lookup_field": "uuid",
+                "view_name": "verzoeken:verzoek-detail",
+                "help_text": _("De unieke URN van de Verzoek deze API."),
             },
             "aanvraag_gegevens": {
                 "required": True,
