@@ -39,6 +39,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                         "uuid": str(gegevensuitvraagtaak.uuid),
                         "titel": gegevensuitvraagtaak.titel,
                         "status": gegevensuitvraagtaak.status,
@@ -51,6 +52,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                         ),
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                         "toelichting": gegevensuitvraagtaak.toelichting,
+                        "partijIsToegewezenAan": "",
+                        "medewerkerWordtBehandeldDoor": "",
+                        "zaakHoortBij": "",
+                        "productHeeftBetrekkingOp": "",
                         "taakSoort": gegevensuitvraagtaak.taak_soort,
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
@@ -92,6 +97,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -104,6 +110,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "partijIsToegewezenAan": gegevensuitvraagtaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": gegevensuitvraagtaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": gegevensuitvraagtaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": gegevensuitvraagtaak.product_heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -154,6 +164,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -164,6 +175,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "partijIsToegewezenAan": gegevensuitvraagtaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": gegevensuitvraagtaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": gegevensuitvraagtaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": gegevensuitvraagtaak.product_heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -202,6 +217,55 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(ExterneTaak.objects.all().count(), 3)
         gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
         self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
+
+    def test_valid_create_with_external_relations(self):
+        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief",
+            "details": {
+                "uitvraagLink": "http://example.com/",
+                "ontvangenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
+                "uuid": str(gegevensuitvraagtaak.uuid),
+                "titel": gegevensuitvraagtaak.titel,
+                "status": gegevensuitvraagtaak.status,
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "toelichting": gegevensuitvraagtaak.toelichting,
+                "partijIsToegewezenAan": gegevensuitvraagtaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": gegevensuitvraagtaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": gegevensuitvraagtaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": gegevensuitvraagtaak.product_heeft_betrekking_op,
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
+                },
+            },
+        )
 
     def test_invalid_create_required_fields(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -272,6 +336,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -284,6 +349,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "partijIsToegewezenAan": gegevensuitvraagtaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": gegevensuitvraagtaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": gegevensuitvraagtaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": gegevensuitvraagtaak.product_heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -355,6 +424,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -367,6 +437,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "partijIsToegewezenAan": gegevensuitvraagtaak.partij_is_toegewezen_aan,
+                "medewerkerWordtBehandeldDoor": gegevensuitvraagtaak.medewerker_wordt_behandeld_door,
+                "zaakHoortBij": gegevensuitvraagtaak.zaak_hoort_bij,
+                "productHeeftBetrekkingOp": gegevensuitvraagtaak.product_heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],

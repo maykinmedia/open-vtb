@@ -35,11 +35,13 @@ class VerzoekTypeTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                        "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "uuid": str(verzoektype.uuid),
                         "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
                         "naam": verzoektype.naam,
                         "toelichting": verzoektype.toelichting,
                         "opvolging": verzoektype.opvolging,
+                        "bijlageTypen": verzoektype.bijlage_typen,
                         "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
                     }
                 ],
@@ -65,11 +67,13 @@ class VerzoekTypeTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
                 "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
                 "naam": verzoektype.naam,
                 "toelichting": verzoektype.toelichting,
                 "opvolging": verzoektype.opvolging,
+                "bijlageTypen": verzoektype.bijlage_typen,
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
@@ -91,11 +95,13 @@ class VerzoekTypeTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
                 "version": None,
                 "naam": "string",
                 "toelichting": "string",
                 "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
+                "bijlageTypen": verzoektype.bijlage_typen,
                 "aanvraagGegevensSchema": {},
             },
         )
@@ -170,11 +176,13 @@ class VerzoekTypeTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
                 "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
                 "naam": "new_naam",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,
+                "bijlageTypen": verzoektype.bijlage_typen,
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
@@ -190,11 +198,13 @@ class VerzoekTypeTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
                 "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
                 "naam": "new_naam_2",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,
+                "bijlageTypen": verzoektype.bijlage_typen,
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
