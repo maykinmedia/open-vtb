@@ -382,6 +382,7 @@ pyyaml==6.0.3
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via django-two-factor-auth
 redis==6.4.0
@@ -395,6 +396,7 @@ requests==2.32.5
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests
+    #   maykin-common
     #   mozilla-django-oidc
     #   open-api-framework
     #   opentelemetry-exporter-otlp-proto-http
@@ -427,6 +429,8 @@ structlog==25.5.0
     # via
     #   django-structlog
     #   open-api-framework
+types-requests==2.32.4.20250913
+    # via maykin-common
 typing-extensions==4.15.0
     # via
     #   grpcio
@@ -462,8 +466,11 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   types-requests
 uwsgi==2.0.31
     # via open-api-framework
+vcrpy==8.0.0
+    # via maykin-common
 vine==5.1.0
     # via
     #   amqp
@@ -481,6 +488,7 @@ wrapt==1.17.3
     # via
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   vcrpy
 zgw-consumers==1.1.0
     # via
     #   commonground-api-common
