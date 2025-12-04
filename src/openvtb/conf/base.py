@@ -85,3 +85,8 @@ GDAL_LIBRARY_PATH = config(
 URN_NAMESPACE = config(
     "URN_NAMESPACE", None, help_text=("Namespace used in URNs schemas.")
 )
+
+
+# MOZILLA DJANGO OIDC
+
+OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_backend.OIDCAuthenticationBackend"
