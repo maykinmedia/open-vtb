@@ -712,6 +712,7 @@ pyyaml==6.0.3
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via
     #   -c requirements/base.txt
@@ -834,6 +835,10 @@ structlog==25.5.0
     #   django-structlog
 tblib==3.1.0
     # via -r requirements/test-tools.in
+types-requests==2.32.4.20250913
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 typing-extensions==4.15.0
     # via
     #   -c requirements/base.txt
@@ -884,7 +889,12 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   types-requests
 uwsgi==2.0.31
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+vcrpy==8.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -926,6 +936,7 @@ wrapt==1.17.3
     #   -r requirements/base.txt
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   vcrpy
 zgw-consumers==1.1.0
     # via
     #   -c requirements/base.txt
