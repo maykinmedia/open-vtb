@@ -36,7 +36,6 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -64,7 +63,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -96,7 +94,6 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -133,7 +130,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -169,7 +165,6 @@ paths:
               $ref: '#/components/schemas/PatchedBetaalTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -200,7 +195,6 @@ paths:
       - betaaltaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:
@@ -232,7 +226,6 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -259,7 +252,6 @@ paths:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -291,7 +283,6 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -327,7 +318,6 @@ paths:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -363,7 +353,6 @@ paths:
               $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -394,7 +383,6 @@ paths:
       - externetaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:
@@ -426,7 +414,6 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -454,7 +441,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -486,7 +472,6 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -523,7 +508,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -559,7 +543,6 @@ paths:
               $ref: '#/components/schemas/PatchedFormulierTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -590,7 +573,6 @@ paths:
       - formuliertaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:
@@ -622,7 +604,6 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -650,7 +631,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           headers:
@@ -682,7 +662,6 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -719,7 +698,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -755,7 +733,6 @@ paths:
               $ref: '#/components/schemas/PatchedGegevensUitvraagTaakPartialUpdateRequest'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           headers:
@@ -786,7 +763,6 @@ paths:
       - gegevensuitvraagtaken
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           headers:

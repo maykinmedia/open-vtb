@@ -819,6 +819,10 @@ components:
           description: De unieke URL van het verzoek binnen deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de Verzoek deze API.
         uuid:
           type: string
           format: uuid
@@ -828,6 +832,11 @@ components:
           type: string
           format: uri
           description: Type van het Verzoek.
+        verzoekTypeUrn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: Type van het Verzoek.URN field
         geometrie:
           allOf:
           - $ref: '#/components/schemas/GeoJSONGeometry'
@@ -840,9 +849,38 @@ components:
           type: array
           items:
             type: string
-            title: Documents
-            maxLength: 100
+            example: urn:namespace:component:resource:uuid
+            title: Bijlagen URN
+            pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+            maxLength: 255
           description: Eventuele bijlagen van het Verzoek (URNs van documenten).
+        partijIsIngediendDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is ingediend door partij
+          description: is ingediend door Partij urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        betrokkeneIsIngediendDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is ingediend door betrokkene
+          description: is ingediend door Betrokkene urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHeeftGeleidTot:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Heeft geleid tot
+          description: heeft geleid tot Zaak urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        authContext:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: authentication context urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         verzoekBron:
           $ref: '#/components/schemas/VerzoekBron'
         verzoekBetaling:
@@ -857,6 +895,10 @@ components:
           description: De unieke URL van het verzoektype binnen deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de verzoektype deze API.
         uuid:
           type: string
           format: uuid
@@ -878,6 +920,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/OpvolgingEnum'
           description: Opvolging over het VerzoekType
+        bijlageTypen:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: bijlage typen urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         aanvraagGegevensSchema:
           readOnly: true
           description: JSON schema voor validatie van VerzoekType
@@ -997,6 +1045,10 @@ components:
           description: De unieke URL van het verzoek binnen deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de Verzoek deze API.
         uuid:
           type: string
           format: uuid
@@ -1006,6 +1058,11 @@ components:
           type: string
           format: uri
           description: Type van het Verzoek.
+        verzoekTypeUrn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: Type van het Verzoek.URN field
         geometrie:
           allOf:
           - $ref: '#/components/schemas/GeoJSONGeometry'
@@ -1018,9 +1075,38 @@ components:
           type: array
           items:
             type: string
-            title: Documents
-            maxLength: 100
+            example: urn:namespace:component:resource:uuid
+            title: Bijlagen URN
+            pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+            maxLength: 255
           description: Eventuele bijlagen van het Verzoek (URNs van documenten).
+        partijIsIngediendDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is ingediend door partij
+          description: is ingediend door Partij urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        betrokkeneIsIngediendDoor:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Is ingediend door betrokkene
+          description: is ingediend door Betrokkene urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        zaakHeeftGeleidTot:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          title: Heeft geleid tot
+          description: heeft geleid tot Zaak urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
+        authContext:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: authentication context urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         verzoekBron:
           $ref: '#/components/schemas/VerzoekBron'
         verzoekBetaling:
@@ -1028,8 +1114,10 @@ components:
       required:
       - aanvraagGegevens
       - url
+      - urn
       - uuid
       - verzoekType
+      - verzoekTypeUrn
     VerzoekBetaling:
       type: object
       properties:
@@ -1081,6 +1169,10 @@ components:
           description: De unieke URL van het verzoektype binnen deze API.
           minLength: 1
           maxLength: 1000
+        urn:
+          type: string
+          readOnly: true
+          description: De unieke URN van de verzoektype deze API.
         uuid:
           type: string
           format: uuid
@@ -1102,6 +1194,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/OpvolgingEnum'
           description: Opvolging over het VerzoekType
+        bijlageTypen:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: bijlage typen urn
+          pattern: ^urn:(?:(?:(?:[A-Za-z]|\d)(?:(?:(?:[A-Za-z]|\d)|-)){0,30}(?:[A-Za-z]|\d)|(?:[A-Za-z]|\d)):(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/)*))(?:\?\+(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:\?=(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?(?:#(?:(?:(?:(?:[A-Za-z]|\d|[-._~])|(?:%[0-9A-Fa-f][0-9A-Fa-f])|(?:[!$&'()*+,;=])|[:@])|/|\?)*))?$
+          maxLength: 255
         aanvraagGegevensSchema:
           readOnly: true
           description: JSON schema voor validatie van VerzoekType
@@ -1110,6 +1208,7 @@ components:
       - aanvraagGegevensSchema
       - naam
       - url
+      - urn
       - uuid
       - version
     VerzoekTypeVersion:
