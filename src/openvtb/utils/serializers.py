@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.utils import OpenApiTypes, extend_schema_field
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import fields as drf_fields, serializers
 from rest_framework.relations import (
     ObjectTypeError,
@@ -62,7 +62,6 @@ class URNRelatedField(RelatedField):
 
     lookup_field = "pk"
     view_name = None
-
     urn_namespace = None
     urn_component = None
     urn_resource = None
@@ -77,15 +76,11 @@ class URNRelatedField(RelatedField):
         ),
     }
 
-    def __init__(self, view_name=None, urn_namespace=None, **kwargs):
+    def __init__(self, view_name=None, **kwargs):
         self.view_name = view_name
-        if urn_namespace is None:
-            self.urn_namespace = settings.URN_NAMESPACE
-        assert self.urn_namespace is not None, (
-            "The `urn_namespace` argument is required."
-        )
-
         self.lookup_field = kwargs.pop("lookup_field", self.lookup_field)
+
+        self.urn_namespace = kwargs.pop("urn_namespace", self.urn_namespace)
         self.urn_component = kwargs.pop("urn_component", self.urn_component)
         self.urn_resource = kwargs.pop("urn_resource", self.urn_resource)
 
@@ -106,18 +101,6 @@ class URNRelatedField(RelatedField):
             exc = ObjectTypeError(str(sys.exc_info()[1]))
             raise exc.with_traceback(sys.exc_info()[2])
 
-    def get_urn_resource(self):
-        """
-        Extract the `urn_resource` name from the model associated with the view.
-        """
-        try:
-            return self.context["view"].queryset.model._meta.model_name
-        except Exception:
-            raise ImproperlyConfigured(
-                "URNRelatedField could not determine the `urn_resource`: "
-                "model not found on the view or serializer."
-            )
-
     def get_urn_component(self):
         """
         Extract the `urn_component` name from the DRF request context.
@@ -130,6 +113,18 @@ class URNRelatedField(RelatedField):
                 "request, resolver_match, or namespace is missing in serializer context."
             )
 
+    def get_urn_resource(self):
+        """
+        Extract the `urn_resource` name from the model associated with the view.
+        """
+        try:
+            return self.context["view"].queryset.model._meta.model_name
+        except (KeyError, AttributeError, ValueError):
+            raise ImproperlyConfigured(
+                "URNRelatedField could not determine the `urn_resource`: "
+                "model not found on the view or serializer."
+            )
+
     def get_urn(self, obj):
         """
         Given an object, return the URN that links to the object.
@@ -138,19 +133,27 @@ class URNRelatedField(RelatedField):
         if hasattr(obj, "pk") and obj.pk in (None, ""):
             return None
 
+        if self.urn_namespace is None:
+            self.urn_namespace = settings.URN_NAMESPACE
+        if not self.urn_namespace:
+            raise ImproperlyConfigured(
+                "URNRelatedField requires a `urn_namespace` to be specified."
+            )
+
         if self.urn_component is None:
             self.urn_component = self.get_urn_component()
-
-        assert self.urn_component, (
-            "URNRelatedField requires a `urn_component` to be specified."
-        )
+        if not self.urn_component:
+            raise ImproperlyConfigured(
+                "URNRelatedField requires a `urn_component` to be specified."
+            )
 
         if self.urn_resource is None:
             self.urn_resource = self.get_urn_resource()
 
-        assert self.urn_resource, (
-            "URNRelatedField requires a `urn_resource` to be specified."
-        )
+        if not self.urn_resource:
+            raise ImproperlyConfigured(
+                "URNRelatedField requires a `urn_resource` to be specified."
+            )
 
         value = getattr(obj, self.lookup_field)
         return (
@@ -191,23 +194,24 @@ class URNRelatedField(RelatedField):
             )
 
 
-@extend_schema_field(OpenApiTypes.STR)
+@extend_schema_field(
+    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
+)
 class URNIdentityField(URNRelatedField):
     """
     A read-only field that exposes the object's URN identity.
     """
 
-    def __init__(self, view_name=None, **kwargs):
-        assert view_name is not None, "The `view_name` argument is required."
+    def __init__(self, *args, **kwargs):
         kwargs["read_only"] = True
         kwargs["source"] = "*"
-        super().__init__(view_name, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def use_pk_only_optimization(self):
         return False
 
 
-class UrnModelSerializer(serializers.ModelSerializer):
+class URNModelSerializer(serializers.ModelSerializer):
     serializer_related_field = URNIdentityField
     urn_field_name = "urn"
 
@@ -244,7 +248,7 @@ class UrnModelSerializer(serializers.ModelSerializer):
         Create nested fields for forward and reverse relationships.
         """
 
-        class NestedSerializer(UrnModelSerializer):
+        class NestedSerializer(URNModelSerializer):
             class Meta:
                 model = relation_info.related_model
                 depth = nested_depth - 1

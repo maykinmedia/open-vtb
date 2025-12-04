@@ -9,7 +9,7 @@ from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
 from openvtb.utils.serializers import (
-    UrnModelSerializer,
+    URNModelSerializer,
     URNRelatedField,
     get_from_serializer_data_or_instance,
 )
@@ -105,7 +105,7 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
         )
 
 
-class VerzoekTypeSerializer(UrnModelSerializer, serializers.ModelSerializer):
+class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
     version = NestedHyperlinkedRelatedField(
         read_only=True,
         source="last_version",
@@ -146,13 +146,12 @@ class VerzoekTypeSerializer(UrnModelSerializer, serializers.ModelSerializer):
             },
             "urn": {
                 "lookup_field": "uuid",
-                "view_name": "verzoeken:verzoektype-detail",
                 "help_text": _("De unieke URN van de verzoektype deze API."),
             },
         }
 
 
-class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
+class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
@@ -162,7 +161,6 @@ class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type"),
     )
     verzoek_type_urn = URNRelatedField(
-        view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
         source="verzoek_type",
         urn_resource="verzoektype",
@@ -214,7 +212,6 @@ class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
             },
             "urn": {
                 "lookup_field": "uuid",
-                "view_name": "verzoeken:verzoek-detail",
                 "help_text": _("De unieke URN van de Verzoek deze API."),
             },
             "aanvraag_gegevens": {

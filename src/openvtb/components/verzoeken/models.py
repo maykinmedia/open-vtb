@@ -283,13 +283,13 @@ class Verzoek(models.Model):
         help_text=_("is ingediend door Betrokkene urn"),  # TODO check hel_text
         blank=True,
     )
-    # zaak relations
+    # zaak relation
     zaak_heeft_geleid_tot = URNField(
         _("heeft geleid tot"),
         help_text=_("heeft geleid tot Zaak urn"),  # TODO check hel_text
         blank=True,
     )
-    # auth_context relations
+    # auth_context relation
     auth_context = URNField(
         _("auth context"),
         help_text=_("authentication context urn"),  # TODO check hel_text

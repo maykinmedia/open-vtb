@@ -86,13 +86,13 @@ class ExterneTaak(models.Model):
         help_text=_("Medewerker die de taak uitvoert"),
         blank=True,
     )
-    # zaak relations
+    # zaak relation
     zaak_hoort_bij = URNField(
         _("wordt behandeld door"),
         help_text=_("Hoort bij zaak"),
         blank=True,
     )
-    # product relations
+    # product relation
     product_heeft_betrekking_op = URNField(
         _("wordt behandeld door"),
         help_text=_("Betreft het product"),

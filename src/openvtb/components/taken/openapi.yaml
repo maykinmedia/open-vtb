@@ -786,6 +786,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -901,6 +902,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -988,6 +990,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1080,6 +1083,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1172,6 +1176,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1264,6 +1269,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1356,6 +1362,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1443,6 +1450,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1570,6 +1578,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1657,6 +1666,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1749,6 +1759,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1841,6 +1852,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -1933,6 +1945,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2025,6 +2038,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2112,6 +2126,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2216,6 +2231,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2303,6 +2319,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2395,6 +2412,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2487,6 +2505,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2579,6 +2598,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2671,6 +2691,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2758,6 +2779,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -2942,6 +2964,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -3033,6 +3056,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
@@ -3113,6 +3137,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De unieke URN van de externe taak deze API.
         uuid:
