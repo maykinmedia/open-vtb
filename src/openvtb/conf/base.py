@@ -86,3 +86,8 @@ URN_NAMESPACE = config(
     "URN_NAMESPACE",
     help_text=("Namespace used in URNs schemas."),
 )
+
+
+# MOZILLA DJANGO OIDC
+
+OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_backend.OIDCAuthenticationBackend"
