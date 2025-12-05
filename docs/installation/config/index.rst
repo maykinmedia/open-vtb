@@ -10,3 +10,4 @@ Configuration
    :caption: Further reading
 
    env_configuration
+   openvtb_configuration
