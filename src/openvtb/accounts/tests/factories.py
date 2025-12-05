@@ -3,7 +3,14 @@ from django.contrib.auth import get_user_model
 import factory
 from factory import SubFactory
 from factory.django import DjangoModelFactory
+from mozilla_django_oidc_db.constants import OIDC_ADMIN_CONFIG_IDENTIFIER
+from mozilla_django_oidc_db.tests.factories import (
+    OIDCClientFactory as BaseOIDCClientFactory,
+    OIDCProviderFactory,
+)
 from rest_framework.authtoken.models import Token
+
+KEYCLOAK_BASE_URL = "http://localhost:8080/realms/test/protocol/openid-connect"
 
 User = get_user_model()
 
@@ -18,10 +25,8 @@ class UserFactory(DjangoModelFactory):
         model = User
 
     class Params:
-        superuser = factory.Trait(
-            is_staff=True,
-            is_superuser=True,
-        )
+        superuser = factory.Trait(is_staff=True, is_superuser=True)
+        staff = factory.Trait(is_staff=True)
 
 
 class TokenFactory(DjangoModelFactory):
@@ -29,3 +34,27 @@ class TokenFactory(DjangoModelFactory):
         model = Token
 
     user = SubFactory(UserFactory)
+
+
+class OIDCClientFactory(BaseOIDCClientFactory):
+    enabled = True
+
+    class Params:  # pyright: ignore[reportIncompatibleVariableOverride]
+        with_keycloak_provider = factory.Trait(
+            oidc_provider=factory.SubFactory(
+                OIDCProviderFactory,
+                identifier="keycloak-provider",
+                oidc_op_jwks_endpoint=f"{KEYCLOAK_BASE_URL}/certs",
+                oidc_op_authorization_endpoint=f"{KEYCLOAK_BASE_URL}/auth",
+                oidc_op_token_endpoint=f"{KEYCLOAK_BASE_URL}/token",
+                oidc_op_user_endpoint=f"{KEYCLOAK_BASE_URL}/userinfo",
+                oidc_op_logout_endpoint=f"{KEYCLOAK_BASE_URL}/logout",
+            ),
+            oidc_rp_client_id="testid",
+            oidc_rp_client_secret="7DB3KUAAizYCcmZufpHRVOcD0TOkNO3I",
+            oidc_rp_sign_algo="RS256",
+        )
+        with_admin = factory.Trait(
+            identifier=OIDC_ADMIN_CONFIG_IDENTIFIER,
+            oidc_rp_scopes_list=["email", "profile", "openid"],
+        )

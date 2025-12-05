@@ -5,7 +5,6 @@ from drf_spectacular.utils import (
     extend_schema_view,
 )
 from rest_framework import serializers, viewsets
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 from vng_api_common.pagination import DynamicPageSizePagination
@@ -51,7 +50,6 @@ class VerzoekViewSet(viewsets.ModelViewSet):
     queryset = Verzoek.objects.all()
     serializer_class = VerzoekSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
 
@@ -86,7 +84,6 @@ class VerzoekTypeViewSet(viewsets.ModelViewSet):
     queryset = VerzoekType.objects.prefetch_related("versions").order_by("-pk")
     serializer_class = VerzoekTypeSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
 
@@ -128,7 +125,6 @@ class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = VerzoekTypeVersionSerializer
     lookup_field = "version"
     lookup_url_kwarg = "verzoektype_version"
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     pagination_class = DynamicPageSizePagination
 
