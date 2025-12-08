@@ -11,7 +11,7 @@ from openvtb.utils.api_testcase import APITestCase
 
 
 class GegevensuitvraagTaakTests(APITestCase):
-    list_url = reverse("taken:gegevensuitvraagtaken-list")
+    list_url = reverse("taken:gegevensuitvraagtaak-list")
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -83,7 +83,7 @@ class GegevensuitvraagTaakTests(APITestCase):
     def test_detail(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
         )
         response = self.client.get(detail_url)
@@ -125,7 +125,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # different taak_soort
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(betaaltaak.uuid)},
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -262,7 +262,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
         )
         # empty PATCH
@@ -334,7 +334,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
         )
 
@@ -384,7 +384,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
         )
 
@@ -398,7 +398,7 @@ class GegevensuitvraagTaakTests(APITestCase):
 
 
 class GegevensuitvraagTaakValidationTests(APITestCase):
-    list_url = reverse("taken:gegevensuitvraagtaken-list")
+    list_url = reverse("taken:gegevensuitvraagtaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -530,7 +530,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaken-detail",
+            "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
         )
         # pass taak_soort

@@ -20,17 +20,17 @@ router.register("externetaken", ExterneTaakViewSet)
 router.register(
     "betaaltaken",
     BetaalTaakViewSet,
-    basename="betaaltaken",
+    basename="betaaltaak",
 )
 router.register(
     "gegevensuitvraagtaken",
     GegevensUitvraagTaakViewSet,
-    basename="gegevensuitvraagtaken",
+    basename="gegevensuitvraagtaak",
 )
 router.register(
     "formuliertaken",
     FormulierTaakViewSet,
-    basename="formuliertaken",
+    basename="formuliertaak",
 )
 
 

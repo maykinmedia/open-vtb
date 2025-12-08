@@ -11,7 +11,7 @@ from openvtb.utils.api_testcase import APITestCase
 
 
 class BetaalTaakTests(APITestCase):
-    list_url = reverse("taken:betaaltaken-list")
+    list_url = reverse("taken:betaaltaak-list")
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -84,7 +84,7 @@ class BetaalTaakTests(APITestCase):
     def test_detail(self):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
         response = self.client.get(detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -128,7 +128,7 @@ class BetaalTaakTests(APITestCase):
         # different taak_soort
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(gegevensuitvraagtaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(gegevensuitvraagtaak.uuid)}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -283,7 +283,7 @@ class BetaalTaakTests(APITestCase):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
         # empty PATCH
         response = self.client.patch(detail_url, {})
@@ -370,7 +370,7 @@ class BetaalTaakTests(APITestCase):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
         # all required PUT fields
@@ -425,7 +425,7 @@ class BetaalTaakTests(APITestCase):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
         # all required PUT fields
@@ -463,7 +463,7 @@ class BetaalTaakTests(APITestCase):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
 
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
@@ -476,7 +476,7 @@ class BetaalTaakTests(APITestCase):
 
 
 class BetaalTaakValidationTests(APITestCase):
-    list_url = reverse("taken:betaaltaken-list")
+    list_url = reverse("taken:betaaltaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -527,7 +527,7 @@ class BetaalTaakValidationTests(APITestCase):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
         detail_url = reverse(
-            "taken:betaaltaken-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
         )
         # pass taak_soort
         response = self.client.patch(

@@ -11,7 +11,7 @@ from openvtb.utils.api_testcase import APITestCase
 
 
 class FormulierTaakTests(APITestCase):
-    list_url = reverse("taken:formuliertaken-list")
+    list_url = reverse("taken:formuliertaak-list")
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -83,7 +83,7 @@ class FormulierTaakTests(APITestCase):
     def test_detail(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
         response = self.client.get(detail_url)
@@ -123,7 +123,7 @@ class FormulierTaakTests(APITestCase):
         # different taak_soort
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(betaaltaak.uuid)},
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -326,7 +326,7 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
         # empty PATCH
@@ -414,7 +414,7 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
 
@@ -475,7 +475,7 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
 
@@ -489,7 +489,7 @@ class FormulierTaakTests(APITestCase):
 
 
 class FormulierTaakValidationTests(APITestCase):
-    list_url = reverse("taken:formuliertaken-list")
+    list_url = reverse("taken:formuliertaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
         self.assertEqual(ExterneTaak.objects.all().count(), 0)
@@ -541,7 +541,7 @@ class FormulierTaakValidationTests(APITestCase):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
         detail_url = reverse(
-            "taken:formuliertaken-detail",
+            "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
         )
         # pass taak_soort
