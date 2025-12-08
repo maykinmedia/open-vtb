@@ -1,4 +1,3 @@
-
 from django.contrib.auth import get_user_model
 
 from drf_spectacular.extensions import OpenApiAuthenticationExtension, _SchemaType
@@ -29,7 +28,7 @@ class OIDCAuthenticationBackend(_OIDCAuthenticationBackendDB):
 
 
 class JWTScheme(OpenApiAuthenticationExtension):
-    target_class = "openvtb.utils.oidc_drf_middleware.OIDCAuthentication"
+    target_class = "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication"
     name = "jwtAuth"
 
     def get_security_definition(

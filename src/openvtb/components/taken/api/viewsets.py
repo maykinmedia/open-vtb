@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
@@ -45,7 +44,6 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
 
@@ -136,7 +134,6 @@ class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.BETAALTAAK
@@ -228,7 +225,6 @@ class GegevensUitvraagTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK
@@ -320,7 +316,6 @@ class FormulierTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.FORMULIERTAAK
