@@ -90,7 +90,7 @@ URN_NAMESPACE = config(
 
 # MOZILLA DJANGO OIDC
 
-OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_backend.OIDCAuthenticationBackend"
+OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_auth.oidc_backend.OIDCAuthenticationBackend"
 
 
 # django-setup-configuration
