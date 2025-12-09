@@ -10,27 +10,27 @@ Open Verzoek, Taken en Berichten (VTB)
 
 Register en API's voor Verzoeken, Taken en Berichten. (`English version`_)
 
-Ontwikkeld door `Maykin B.V.`_ in opdracht van de 
+Ontwikkeld door `Maykin B.V.`_ in opdracht van de
 `Platform Dienstverlening werkgroep`_.
 
 
 Introductie
 ===========
 
-Platform Dienstverlening verlegt de grens voor Zaakgericht Werken en 
+Platform Dienstverlening verlegt de grens voor Zaakgericht Werken en
 introduceert een aantal concepten die aanvullende functionaliteit geven binnen
 Platform Dienstverlening. Deze concepten zijn:
 
-* **Verzoeken** Een ontkoppeling tussen een applicatie en een zaakregister, 
+* **Verzoeken** Een ontkoppeling tussen een applicatie en een zaakregister,
   waarin het verzoek de gegevens van de aanvraag (het verzoek) bevat. Op basis
   van dit verzoek kan een applicatie bepalen wat voor zaak dit moet worden.
 
 * **Taken** Aanvullende vragen van de overheid aan de inwoner of ondernemer
   kunnen uitgezet worden als taken. Bijvoorbeeld voor het aanleveren van een
-  document, of een uitstaande betaling. Een taak wordt typisch uitgezet door 
+  document, of een uitstaande betaling. Een taak wordt typisch uitgezet door
   een afhandelcomponent en wordt typisch weergegeven in een mijn-omgeving.
 
-* **Berichten** Communicatie tussen inwoners, ondernemers en gemeenten via 
+* **Berichten** Communicatie tussen inwoners, ondernemers en gemeenten via
   digitale kanalen. Het vormt een naslag van alle communicatie die is verstuurd
   en ook is in te zien via bijvoorbeeld een mijn-omgeving of KCC-applicatie.
 
@@ -38,19 +38,34 @@ Platform Dienstverlening. Deze concepten zijn:
 API specificatie
 ================
 
+Hieronder staat de laatste versie van Open VTB en welke versie van de
+API-specificaties wordt aangeboden.
+
+
 |oas|
 
-==============  ==============  =============================
-Versie          Release datum   API specificatie
-==============  ==============  =============================
-latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/api/openapi.yaml>`_,
-                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/api/openapi.yaml>`_,
-                                (`verschillen <https://github.com/maykinmedia/open-vtb/compare/0.1.0..main#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
-0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/api/openapi.yaml>`_,
-                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/api/openapi.yaml>`_
-==============  ==============  =============================
+===============  =========================  =============   ================
+Open VTB versie  API versie                 Release datum   API specificatie
+===============  =========================  =============   ================
+main/latest       n/a                        n/a            | Verzoeken:
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+                                                            | Taken:
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+0.1.0               | Verzoeken: 0.1.0      YYYY-MM-DD      | Verzoeken:
+                    | Taken: 0.1.0                               `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
+                                                            | Taken:
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
+===============  =========================  =============   ================
 
-Vorige versies worden nog 6 maanden ondersteund nadat de volgende versie is 
+Vorige versies worden nog 6 maanden ondersteund nadat de volgende versie is
 uitgebracht.
 
 Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/open-vtb/blob/main/CHANGELOG.rst>`_
