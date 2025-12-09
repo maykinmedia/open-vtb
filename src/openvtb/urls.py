@@ -12,6 +12,8 @@ from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
 from maykin_common.accounts.views import PasswordResetView
 from mozilla_django_oidc_db.views import AdminLoginFailure
 
+from openvtb.components.views import ComponentIndexView
+
 # Configure admin
 
 monkeypatch_admin()
@@ -64,7 +66,18 @@ urlpatterns = [
         include("openvtb.components.verzoeken.api.urls"),
     ),
     # Simply show the master template.
-    path("", TemplateView.as_view(template_name="master.html"), name="root"),
+    path("", TemplateView.as_view(template_name="main.html"), name="root"),
+    # separate apps
+    path(
+        "taken/",
+        ComponentIndexView.as_view(component="taken", api_version="1"),
+        name="index-taken",
+    ),
+    path(
+        "verzoeken/",
+        ComponentIndexView.as_view(component="verzoeken", api_version="1"),
+        name="index-verzoeken",
+    ),
 ]
 
 

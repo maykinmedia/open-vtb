@@ -80,6 +80,7 @@ COPY --from=backend-build /app/src/ /app/src/
 
 # copy frontend build statics
 COPY --from=frontend-build /app/src/openvtb/static /app/src/openvtb/static
+COPY --from=frontend-build /app/node_modules/@fortawesome/fontawesome-free/webfonts /app/node_modules/@fortawesome/fontawesome-free/webfonts
 
 # copy source code
 COPY ./src /app/src

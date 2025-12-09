@@ -1,14 +1,14 @@
 {% load static %}<!DOCTYPE html>
-<html lang="en" class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
+<html lang="en" class="view {% block view_class %}view--{% if request.resolver_match.namespaces %}{{ request.resolver_match.namespaces|join:'-' }}-{% endif %}{{ request.resolver_match.url_name }}{% endblock %}">
     <head>
         <meta charset="utf-8">
-        <title>{% block title %}Openvtb{% endblock %}</title>
+        <title>{% block title %}{% if title %}{{ title }}{% else %}{{ settings.SITE_TITLE }}{% endif %} | {{ settings.PROJECT_NAME }}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="{% static 'ico/favicon.svg' %}" sizes="any" rel="icon" type="image/svg+xml" />
-        <link href="{% static 'ico/favicon-96x96.png' %}" sizes="96x96" rel="icon" type="image/png" />
-        <link href="{% static 'ico/favicon-32x32.png' %}" sizes="32x32" rel="icon" type="image/png" />
-        <link href="{% static 'ico/favicon.png' %}" sizes="16x16" rel="icon" type="image/png" />
-        <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+        <link href="{% static 'maykin_common/ico/favicon.svg' %}" sizes="any" rel="icon" type="image/svg+xml" />
+        <link href="{% static 'maykin_common/ico/favicon-96x96.png' %}" sizes="96x96" rel="icon" type="image/png" />
+        <link href="{% static 'maykin_common/ico/favicon-32x32.png' %}" sizes="32x32" rel="icon" type="image/png" />
+        <link href="{% static 'maykin_common/ico/favicon.png' %}" sizes="16x16" rel="icon" type="image/png" />
+        <link href="{% static 'maykin_common/ico/favicon.png' %}" rel="shortcut icon">
         <link href="{% static 'bundles/openvtb-css.css' %}" media="all" rel="stylesheet" />
         {% block extra_css %}{% endblock %}
     </head>
