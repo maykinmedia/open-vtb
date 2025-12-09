@@ -27,9 +27,11 @@ class OIDCAuthentication(_OIDCAuthentication):
             msg = "OIDC authentication failed with status code: {}".format(
                 resp.status_code
             )
-
             if "www-authenticate" in resp.headers:
                 data = parse_www_authenticate_header(resp.headers["www-authenticate"])
-                msg = f"{msg} www_authenticate: {data}"
+                error_description = data.get(
+                    "error_description", "no error description in www-authenticate"
+                )
+                msg = "{} www_authenticate: {}".format(msg, error_description)
 
             raise AuthenticationFailed(msg)

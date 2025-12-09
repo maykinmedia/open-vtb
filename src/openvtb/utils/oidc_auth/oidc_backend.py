@@ -27,9 +27,9 @@ class OIDCAuthenticationBackend(_OIDCAuthenticationBackendDB):
         return super().get_or_create_user(access_token, id_token, payload)
 
 
-class JWTScheme(OpenApiAuthenticationExtension):
+class OIDCScheme(OpenApiAuthenticationExtension):
     target_class = "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication"
-    name = "jwtAuth"
+    name = "openIdConnect"
 
     def get_security_definition(
         self, auto_schema: "AutoSchema"
