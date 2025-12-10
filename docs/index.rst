@@ -19,5 +19,6 @@ Getting Started
    introduction/index
    installation/index
    development/index
+   manual/index
    testing
    changelog
