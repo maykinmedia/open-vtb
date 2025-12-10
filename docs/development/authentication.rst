@@ -22,7 +22,7 @@ in your request's HTTP headers:
 OpenID connect
 --------------
 
-To connect to Open VTB, you have received a jwt token which should be included
+To connect to Open VTB, you have received a JSON Web Token (JWT) which should be included
 in your request's HTTP headers:
 
 .. code-block:: none

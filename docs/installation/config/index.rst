@@ -11,3 +11,4 @@ Configuration
 
    env_configuration
    openvtb_configuration
+   openvtb_configuration_cli

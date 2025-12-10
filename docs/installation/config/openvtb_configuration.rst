@@ -11,80 +11,48 @@ configured first.
 
     This document describes the manual configuration via the admin.
 
-.. _installation_configuration_sites:
+.. _configure_api_token:
 
-Create an API token
-===================
+Configure an API Token
+======================
 
-Open VTB
---------
-By creating an API token, we can perform an API test call to verify the successful
-installation.
+You can access the application for which you want to configure authorizations through the **Open VTB admin** interface.
+In the admin, go to **API Autorisaties** > **Tokens**.
+This page shows a list of all existing tokens that provide access to the Open VTB APIs.
 
-Navigate to **API Autorisaties** > **Tokens** and click on **Token toevoegen**
-in the top right.
+To create a new token:
 
-1. Select the user you want to create a token for
-2. Click **Opslaan** in the bottom left
-
-After creating the **Token** the **key** is shown in the list page. This value
-can be used in the ``Authorization`` header.
+1. Click **Add Token** / **Token toevoegen** in the top right.
+2. Select the **User** for whom the token should be created.
+3. Click **Save** / **Opslaan** at the bottom.
 
 
-Making an API call
-------------------
+Once the token is created, the system redirects you to a page where the generated token is displayed.
+The token key also appears in the list view and can be used in the ``Authorization`` header when performing API calls.
+See :ref:`manual_use_token` for instructions on how to use the token in API requests.
 
-We can now make an HTTP request to one of the APIs of Open VTB. For this
-example, we have used `curl`_ to make the request.
-
-.. code-block:: bash
-
-   curl --request GET \
-   --header 'Authorization: Token {{ token }}' \
-   --header 'Content-Type: application/json' \
-   {{ API_URL }}
-
-.. _Curl: https://curl.se/docs/manpage.html
+.. _configure_openid_connect_token:
 
 Configure OpenID Connect
 ========================
 
-Open VTB
---------
+Navigate to **Accounts** > **OIDC Providers**.
 
-Navigate to **Config** > **OpenID**.
+1. Click **Add OIDC Provider** / **OIDC Provider toevoegen**.
+2. Fill in the fields required for the provider you want to use. See :ref:`manual_oidc`.
+3. Click **Save** / **Opslaan** in the bottom left.
 
-1. Fill in the fields required for the provider you want to use. See :ref:`manual_oidc`.
-2. Enable the configuration.
-3. Click **Opslaan** in the bottom left
+Next, navigate to **Accounts** > **OIDC Clients**.
 
-Making an API call
-------------------
+1. Select the **admin-oidc** client.
+2. Choose the **provider** you set up earlier.
+3. Fill in the fields required for the client.
+4. Enable the configuration.
+5. Click **Save** / **Opslaan** in the bottom left.
 
-We can now make an HTTP request to one of the APIs of Open VTB. For this
-example, we have used `curl`_ to make the request.
+After OpenID Connect is :ref:`configured <manual_oidc>`, JWT tokens from the OpenID provider
+can be used to access the API. JWT tokens from the OpenID Connect can be used to access the API:
+see :ref:`manual_use_oidc` for how to obtain and use the JWT token in API requests.
 
-To obtain an access token using the *client credentials* flow, run the following command:
-
-.. code-block:: bash
-
-    curl --request POST \
-      --url "{{ token_url }}" \
-      --header "Content-Type: application/x-www-form-urlencoded" \
-      --data "client_id={{ client_id }}" \
-      --data "client_secret={{ client_secret }}" \
-      --data "grant_type=client_credentials" \
-      --data "scope=openid"
-
-
-Once the access token has been generated, you can use it to call the API as follows:
-
-.. code-block:: bash
-
-    curl --request GET \
-      --header "Authorization: Bearer {{ access_token }}" \
-      --header "Content-Type: application/json" \
-      {{ API_URL }}
-
-
-.. _Curl: https://curl.se/docs/manpage.html
+This configuration can be performed either through the admin interface
+or via the setup configuration. See :ref:`Admin OIDC Configuration Step <ref_step_mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep>`.

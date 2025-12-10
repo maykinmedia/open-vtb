@@ -14,6 +14,5 @@ For the sake of simplicity, we have chosen to use Docker and Docker Compose for 
    :caption: Further reading
 
    config/index
-   manual/index
 
 
