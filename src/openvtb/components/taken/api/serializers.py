@@ -9,10 +9,8 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.utils import get_json_schema
-from openvtb.utils.serializers import (
-    UrnModelSerializer,
-    get_from_serializer_data_or_instance,
-)
+from openvtb.utils.api_utils import get_from_serializer_data_or_instance
+from openvtb.utils.serializers import URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
 from ..constants import Valuta
@@ -90,7 +88,7 @@ class FormulierTaakSerializer(serializers.Serializer):
         return super().to_representation(instance)
 
 
-class ExterneTaakPolymorphicSerializer(UrnModelSerializer, PolymorphicSerializer):
+class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer):
     discriminator = Discriminator(
         discriminator_field="taak_soort",
         mapping={
@@ -116,10 +114,10 @@ class ExterneTaakPolymorphicSerializer(UrnModelSerializer, PolymorphicSerializer
             "einddatum_handelings_termijn",
             "datum_herinnering",
             "toelichting",
-            "partij_is_toegewezen_aan",
-            "medewerker_wordt_behandeld_door",
-            "zaak_hoort_bij",
-            "product_heeft_betrekking_op",
+            "is_toegewezen_aan_partij",
+            "wordt_behandeld_door_medewerker",
+            "hoort_bij_zaak",
+            "heeft_betrekking_op_product",
             "taak_soort",
             "details",
         )
@@ -140,8 +138,7 @@ class ExterneTaakPolymorphicSerializer(UrnModelSerializer, PolymorphicSerializer
             },
             "urn": {
                 "lookup_field": "uuid",
-                "view_name": "taken:externetaak-detail",
-                "help_text": _("De unieke URN van de externe taak deze API."),
+                "help_text": _("De Uniform Resource Name van de externe taak."),
             },
         }
 

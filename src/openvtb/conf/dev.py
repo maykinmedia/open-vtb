@@ -24,6 +24,7 @@ os.environ.setdefault("LOG_REQUESTS", "no")
 os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 os.environ.setdefault("OTEL_EXPORTER_OTLP_METRICS_INSECURE", "true")
 
+# URNs
 os.environ.setdefault("URN_NAMESPACE", "maykin")
 
 from .base import *  # noqa isort:skip

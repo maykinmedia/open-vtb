@@ -21,7 +21,7 @@ class VerzoekTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
 
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
@@ -48,10 +48,10 @@ class VerzoekTests(APITestCase):
                         "geometrie": None,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
-                        "partijIsIngediendDoor": "",
-                        "betrokkeneIsIngediendDoor": "",
-                        "zaakHeeftGeleidTot": "",
-                        "authContext": "",
+                        "isIngediendDoorPartij": "",
+                        "isIngediendDoorBetrokkene": "",
+                        "heeftGeleidTotZaak": "",
+                        "authenticatieContext": "",
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
@@ -98,10 +98,10 @@ class VerzoekTests(APITestCase):
                 "geometrie": None,
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "bijlagen": [],
-                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
-                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
-                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
-                "authContext": verzoek.auth_context,
+                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
+                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
+                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -158,10 +158,10 @@ class VerzoekTests(APITestCase):
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "bijlagen": verzoek.bijlagen,
-                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
-                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
-                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
-                "authContext": verzoek.auth_context,
+                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
+                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
+                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -192,10 +192,10 @@ class VerzoekTests(APITestCase):
                 "urn:maykin:document:1111111111",
                 "urn:maykin:document:2222222222",
             ],
-            "partijIsIngediendDoor": "urn:maykin:partij:brp:nnp:bsn:1234567892",
-            "betrokkeneIsIngediendDoor": "urn:maykin:betrokkene:brp:nnp:bsn:11112222",
-            "zaakHeeftGeleidTot": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "authContext": "",
+            "isIngediendDoorPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "isIngediendDoorBetrokkene": "urn:maykin:betrokkene:brp:nnp:bsn:11112222",
+            "heeftGeleidTotZaak": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "authenticatieContext": "",
             "verzoekBron": {
                 "naam": "string",
                 "kenmerk": "string",
@@ -222,10 +222,10 @@ class VerzoekTests(APITestCase):
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "bijlagen": verzoek.bijlagen,
-                "partijIsIngediendDoor": verzoek.partij_is_ingediend_door,
-                "betrokkeneIsIngediendDoor": verzoek.betrokkene_is_ingediend_door,
-                "zaakHeeftGeleidTot": verzoek.zaak_heeft_geleid_tot,
-                "authContext": verzoek.auth_context,
+                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
+                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
+                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -265,7 +265,7 @@ class VerzoekTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
 
     def test_valid_update_partial(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
@@ -405,4 +405,4 @@ class VerzoekTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(Verzoek.objects.all().count(), 0)
+        self.assertFalse(Verzoek.objects.exists())

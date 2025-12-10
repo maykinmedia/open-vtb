@@ -16,7 +16,7 @@ class VerzoekTypeTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
 
         VerzoekTypeFactory.create(create_version=True)
         response = self.client.get(self.list_url)
@@ -113,7 +113,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(verzoektype.aanvraag_gegevens_schema, {})
 
     def test_invalid_create(self):
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
         data = {}
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -129,7 +129,7 @@ class VerzoekTypeTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
 
         # invalid values
         data = {
@@ -150,7 +150,7 @@ class VerzoekTypeTests(APITestCase):
                 "reason": '"test" is een ongeldige keuze.',
             },
         )
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())
 
     def test_valid_update(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
@@ -270,4 +270,4 @@ class VerzoekTypeTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(VerzoekType.objects.all().count(), 0)
+        self.assertFalse(VerzoekType.objects.exists())

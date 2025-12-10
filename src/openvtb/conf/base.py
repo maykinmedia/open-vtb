@@ -83,5 +83,6 @@ GDAL_LIBRARY_PATH = config(
 
 # URN settings
 URN_NAMESPACE = config(
-    "URN_NAMESPACE", None, help_text=("Namespace used in URNs schemas.")
+    "URN_NAMESPACE",
+    help_text=("Namespace used in URNs schemas."),
 )

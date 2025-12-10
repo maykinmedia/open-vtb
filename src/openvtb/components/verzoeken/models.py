@@ -48,10 +48,11 @@ class VerzoekType(models.Model):
         auto_now=True,
         help_text=_("Laatste datum waarop het VerzoekType is gewijzigd"),
     )
-    bijlage_typen = URNField(
-        _("bijlage typen"),
-        help_text=_("bijlage typen urn"),  # TODO check hel_text
+    bijlage_typen = ArrayField(
+        URNField(_("bijlage_typen URN")),
         blank=True,
+        default=list,
+        help_text=_("bijlage typen urn"),  # TODO check help_text
     )
 
     class Meta:
@@ -272,27 +273,27 @@ class Verzoek(models.Model):
         help_text=_("Eventuele bijlagen van het Verzoek (URNs van documenten)."),
     )
     # partij relation
-    partij_is_ingediend_door = URNField(
+    is_ingediend_door_partij = URNField(
         _("is ingediend door partij"),
-        help_text=_("is ingediend door Partij urn"),  # TODO check hel_text
+        help_text=_("is ingediend door Partij urn"),  # TODO check help_text
         blank=True,
     )
     # betrokkene relation
-    betrokkene_is_ingediend_door = URNField(
+    is_ingediend_door_betrokkene = URNField(
         _("is ingediend door betrokkene"),
-        help_text=_("is ingediend door Betrokkene urn"),  # TODO check hel_text
+        help_text=_("is ingediend door Betrokkene urn"),  # TODO check help_text
         blank=True,
     )
-    # zaak relations
-    zaak_heeft_geleid_tot = URNField(
+    # zaak relation
+    heeft_geleid_tot_zaak = URNField(
         _("heeft geleid tot"),
-        help_text=_("heeft geleid tot Zaak urn"),  # TODO check hel_text
+        help_text=_("heeft geleid tot Zaak urn"),  # TODO check help_text
         blank=True,
     )
-    # auth_context relations
-    auth_context = URNField(
-        _("auth context"),
-        help_text=_("authentication context urn"),  # TODO check hel_text
+    # authenticatie_context relation
+    authenticatie_context = URNField(
+        _("authenticatie context"),
+        help_text=_("authentication context urn"),  # TODO check help_text
         blank=True,
     )
 

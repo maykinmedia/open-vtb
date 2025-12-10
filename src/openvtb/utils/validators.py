@@ -18,7 +18,7 @@ from jsonschema import (
 )
 from rest_framework import serializers
 
-from .serializers import get_from_serializer_data_or_instance
+from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 
 logger = structlog.stdlib.get_logger(__name__)
 format_checker = FormatChecker()
@@ -220,13 +220,17 @@ class URNValidator(RegexValidator):
                         [ rq-components ]
                         [ "#" f-component ]
 
+        assigned-name = "urn" ":" NID ":" NSS
+
         NID           = (alphanum) 0*30(ldh) (alphanum)
         ldh           = alphanum / "-"
         NSS           = pchar *(pchar / "/")
+
         rq-components = [ "?+" r-component ]
                         [ "?=" q-component ]
         r-component   = pchar *( pchar / "/" / "?" )
         q-component   = pchar *( pchar / "/" / "?" )
+
         f-component   = fragment
 
         ; general URI syntax rules (RFC3986)
@@ -248,40 +252,24 @@ class URNValidator(RegexValidator):
     """
 
     HEXDIG = r"[0-9A-Fa-f]"
-    ALPHA = r"[A-Za-z]"
-    DIGIT = r"\d"
-    ALPHANUM = rf"(?:{ALPHA}|{DIGIT})"
+    ALPHANUM = r"[A-Za-z0-9]"
+    pchar = rf"(?:{ALPHANUM}|[-._~]|%{HEXDIG}{HEXDIG}|[!$&'()*+,;=]|[:@])"
 
-    # URI components (RFC3986)
-    unreserved = rf"(?:{ALPHA}|{DIGIT}|[-._~])"
-    pct_encoded = rf"(?:%{HEXDIG}{HEXDIG})"
-    sub_delims = r"(?:[!$&'()*+,;=])"
-    pchar = rf"(?:{unreserved}|{pct_encoded}|{sub_delims}|[:@])"
+    # assigned-name
+    NID = rf"{ALPHANUM}(?:{ALPHANUM}|-){{0,30}}{ALPHANUM}"
+    NSS = rf"{pchar}(?:{pchar}|/)*"
+    assigned_name = rf"urn:{NID}:{NSS}"
 
-    # assigned-name components
-    ldh = rf"(?:{ALPHANUM}|-)"
-    NID = rf"(?:{ALPHANUM}(?:{ldh}){{0,30}}{ALPHANUM}|{ALPHANUM})"
-
-    # NSS: pchar seguito da zero o più (pchar o "/")
-    NSS = rf"(?:{pchar}(?:{pchar}|/)*)"
-
-    assigned_name = rf"(?:{NID}:{NSS})"
-
-    # optionals r-component and q-component
-    r_component = rf"(?:{pchar}(?:{pchar}|/|\?)*)"
-    q_component = rf"(?:{pchar}(?:{pchar}|/|\?)*)"
-    rq_components = rf"(?:\?\+{r_component})?(?:\?={q_component})?"
-
-    # f-component (fragment)
-    fragment = rf"(?:(?:{pchar}|/|\?)*)"
-    f_component = rf"(?:#{fragment})?"
-
-    # Full URN regex (RFC 8141)
-    urn_pattern = (
-        rf"^urn:{assigned_name}"
-        rf"{rq_components}"
-        rf"{f_component}$"
+    # optional r/q components
+    rq_components = (
+        rf"(?:\?\+{pchar}(?:{pchar}|/|\?)*)?(?:\?={pchar}(?:{pchar}|/|\?)*)?"
     )
+
+    # optional f-component
+    f_component = rf"{pchar}(?:{pchar}|/|\?)*"
+
+    # complete URN regex (RFC 8141)
+    urn_pattern = rf"^{assigned_name}{rq_components}(?:#{f_component})?$"
 
     message = (
         "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' "

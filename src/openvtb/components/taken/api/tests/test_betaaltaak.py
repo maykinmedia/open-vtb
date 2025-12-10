@@ -18,7 +18,7 @@ class BetaalTaakTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # create 1 betaaltaak
         ExterneTaakFactory.create(betaaltaak=True)
@@ -53,10 +53,10 @@ class BetaalTaakTests(APITestCase):
                         ),
                         "datumHerinnering": betaaltaak.datum_herinnering,
                         "toelichting": betaaltaak.toelichting,
-                        "partijIsToegewezenAan": "",
-                        "medewerkerWordtBehandeldDoor": "",
-                        "zaakHoortBij": "",
-                        "productHeeftBetrekkingOp": "",
+                        "isToegewezenAanPartij": "",
+                        "wordtBehandeldDoorMedewerker": "",
+                        "hoortBijZaak": "",
+                        "heeftBetrekkingOpProduct": "",
                         "taakSoort": betaaltaak.taak_soort,
                         "details": {
                             "bedrag": betaaltaak.details["bedrag"],
@@ -108,10 +108,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
-                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
-                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
-                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -143,7 +143,7 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_create(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief1",
@@ -174,10 +174,10 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
-                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
-                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
-                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -194,14 +194,14 @@ class BetaalTaakTests(APITestCase):
         )
 
     def test_valid_create_with_external_relations(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief1",
-            "partijIsToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
-            "medewerkerWordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
-            "zaakHoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "productHeeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
+            "isToegewezenAanPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "wordtBehandeldDoorMedewerker": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
+            "hoortBijZaak": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "heeftBetrekkingOpProduct": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
@@ -229,10 +229,10 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
-                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
-                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
-                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -249,7 +249,7 @@ class BetaalTaakTests(APITestCase):
         )
 
     def test_invalid_create_required_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {}
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -280,7 +280,7 @@ class BetaalTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # empty details values
         data = {
@@ -373,10 +373,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
-                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
-                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
-                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -482,10 +482,10 @@ class BetaalTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
-                "partijIsToegewezenAan": betaaltaak.partij_is_toegewezen_aan,
-                "medewerkerWordtBehandeldDoor": betaaltaak.medewerker_wordt_behandeld_door,
-                "zaakHoortBij": betaaltaak.zaak_hoort_bij,
-                "productHeeftBetrekkingOp": betaaltaak.product_heeft_betrekking_op,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -552,14 +552,14 @@ class BetaalTaakTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
 
 class BetaalTaakValidationTests(APITestCase):
     list_url = reverse("taken:betaaltaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         # wrong soort_taak
         data = {
             "titel": "test",
@@ -626,7 +626,7 @@ class BetaalTaakValidationTests(APITestCase):
         )
 
     def test_invalid_create_type_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
@@ -652,7 +652,7 @@ class BetaalTaakValidationTests(APITestCase):
                     "reason": "startdatum should be before einddatum_handelings_termijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("invalid iban format"):
             data = {
@@ -677,7 +677,7 @@ class BetaalTaakValidationTests(APITestCase):
                     "reason": "'test' is not a valid IBAN",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("invalid pass valuta"):
             data = {
@@ -703,4 +703,4 @@ class BetaalTaakValidationTests(APITestCase):
                     "reason": "Het is niet toegestaan een andere waarde dan EUR door te geven.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())

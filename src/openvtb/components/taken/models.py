@@ -75,26 +75,26 @@ class ExterneTaak(models.Model):
         encoder=DjangoJSONEncoder,
     )
     # partij relation
-    partij_is_toegewezen_aan = URNField(
-        _("is toegewezen aan"),
+    is_toegewezen_aan_partij = URNField(
+        _("is toegewezen aan partij"),
         help_text=_("Persoon aan wie de taak is toegewezen"),
         blank=True,
     )
     # medewerker relation
-    medewerker_wordt_behandeld_door = URNField(
-        _("wordt behandeld door"),
+    wordt_behandeld_door_medewerker = URNField(
+        _("wordt behandeld door medewerker"),
         help_text=_("Medewerker die de taak uitvoert"),
         blank=True,
     )
-    # zaak relations
-    zaak_hoort_bij = URNField(
-        _("wordt behandeld door"),
+    # zaak relation
+    hoort_bij_zaak = URNField(
+        _("hoort bij zaak"),
         help_text=_("Hoort bij zaak"),
         blank=True,
     )
-    # product relations
-    product_heeft_betrekking_op = URNField(
-        _("wordt behandeld door"),
+    # product relation
+    heeft_betrekking_op_product = URNField(
+        _("heeft betrekking op product"),
         help_text=_("Betreft het product"),
         blank=True,
     )

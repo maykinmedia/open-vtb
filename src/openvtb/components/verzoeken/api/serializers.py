@@ -8,10 +8,10 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
+from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.serializers import (
-    UrnModelSerializer,
+    URNModelSerializer,
     URNRelatedField,
-    get_from_serializer_data_or_instance,
 )
 from openvtb.utils.validators import validate_jsonschema
 
@@ -105,7 +105,7 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
         )
 
 
-class VerzoekTypeSerializer(UrnModelSerializer, serializers.ModelSerializer):
+class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
     version = NestedHyperlinkedRelatedField(
         read_only=True,
         source="last_version",
@@ -146,13 +146,12 @@ class VerzoekTypeSerializer(UrnModelSerializer, serializers.ModelSerializer):
             },
             "urn": {
                 "lookup_field": "uuid",
-                "view_name": "verzoeken:verzoektype-detail",
-                "help_text": _("De unieke URN van de verzoektype deze API."),
+                "help_text": _("De Uniform Resource Name van het verzoektype."),
             },
         }
 
 
-class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
+class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
@@ -162,7 +161,6 @@ class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type"),
     )
     verzoek_type_urn = URNRelatedField(
-        view_name="verzoeken:verzoektype-detail",
         lookup_field="uuid",
         source="verzoek_type",
         urn_resource="verzoektype",
@@ -195,10 +193,10 @@ class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
             "geometrie",
             "aanvraag_gegevens",
             "bijlagen",
-            "partij_is_ingediend_door",
-            "betrokkene_is_ingediend_door",
-            "zaak_heeft_geleid_tot",
-            "auth_context",
+            "is_ingediend_door_partij",
+            "is_ingediend_door_betrokkene",
+            "heeft_geleid_tot_zaak",
+            "authenticatie_context",
             "verzoek_bron",
             "verzoek_betaling",
         )
@@ -214,8 +212,7 @@ class VerzoekSerializer(UrnModelSerializer, serializers.ModelSerializer):
             },
             "urn": {
                 "lookup_field": "uuid",
-                "view_name": "verzoeken:verzoek-detail",
-                "help_text": _("De unieke URN van de Verzoek deze API."),
+                "help_text": _("De Uniform Resource Name van het Verzoek."),
             },
             "aanvraag_gegevens": {
                 "required": True,

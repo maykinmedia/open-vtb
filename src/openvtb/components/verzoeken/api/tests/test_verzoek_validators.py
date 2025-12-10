@@ -17,7 +17,7 @@ class VerzoekValidatorsTests(APITestCase):
 
     def test_verzoektype_exists(self):
         url = reverse("verzoeken:verzoek-list")
-        self.assertEqual(Verzoek.objects.all().count(), 0)
+        self.assertFalse(Verzoek.objects.exists())
 
         # verzoekType does not exists
         data = {
