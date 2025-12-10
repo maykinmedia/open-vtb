@@ -12,6 +12,7 @@ from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
 from .constants import SoortTaak, StatusTaak
+from .schemas import FORMULIER_DEFINITIE_SCHEMA
 from .utils import get_json_schema
 
 
@@ -114,6 +115,12 @@ class ExterneTaak(models.Model):
                 label="details",
                 schema=get_json_schema(self.taak_soort),
             )
+            if self.taak_soort == SoortTaak.FORMULIERTAAK:
+                validate_jsonschema(
+                    instance=self.details["formulierDefinitie"],
+                    label="formulierDefinitie",
+                    schema=FORMULIER_DEFINITIE_SCHEMA,
+                )
         except ValidationError as error:
             raise ValidationError({"details": str(error)})
 
