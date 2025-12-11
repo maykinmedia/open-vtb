@@ -19,6 +19,7 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "jsonsuit.apps.JSONSuitConfig",
     # Project applications.
     "openvtb.accounts",
+    "openvtb.utils",
     "openvtb.components.taken",
     "openvtb.components.verzoeken",
     # Django libraries
@@ -78,4 +79,10 @@ GDAL_LIBRARY_PATH = config(
     help_text=(
         "Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty."
     ),
+)
+
+# URN settings
+URN_NAMESPACE = config(
+    "URN_NAMESPACE",
+    help_text=("Namespace used in URNs schemas."),
 )

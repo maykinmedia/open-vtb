@@ -6,7 +6,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ExterneTaakFactory
+from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -18,7 +18,7 @@ class FormulierTaakTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # create 1 formuliertaak
         ExterneTaakFactory.create(formuliertaak=True)
@@ -39,6 +39,7 @@ class FormulierTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                         "uuid": str(formuliertaak.uuid),
                         "titel": formuliertaak.titel,
                         "status": formuliertaak.status,
@@ -51,6 +52,10 @@ class FormulierTaakTests(APITestCase):
                         ),
                         "datumHerinnering": formuliertaak.datum_herinnering,
                         "toelichting": formuliertaak.toelichting,
+                        "isToegewezenAanPartij": "",
+                        "wordtBehandeldDoorMedewerker": "",
+                        "hoortBijZaak": "",
+                        "heeftBetrekkingOpProduct": "",
                         "taakSoort": formuliertaak.taak_soort,
                         "details": {
                             "formulierDefinitie": formuliertaak.details[
@@ -92,6 +97,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -104,6 +110,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "isToegewezenAanPartij": formuliertaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": formuliertaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": formuliertaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": formuliertaak.heeft_betrekking_op_product,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -129,7 +139,7 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_create(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
@@ -159,6 +169,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -169,6 +180,10 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "isToegewezenAanPartij": formuliertaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": formuliertaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": formuliertaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": formuliertaak.heeft_betrekking_op_product,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -219,39 +234,6 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
 
         # create form.io example TextField
-        FORM_IO = {
-            "display": "form",
-            "settings": {
-                "pdf": {
-                    "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
-                    "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
-                }
-            },
-            "components": [
-                {
-                    "type": "button",
-                    "label": "Submit",
-                    "key": "submit",
-                    "disableOnInvalid": True,
-                    "input": True,
-                    "tableView": False,
-                },
-                {
-                    "label": "Text Field",
-                    "placeholder": "Add Test",
-                    "description": "Description ",
-                    "tooltip": "Tooltip",
-                    "prefix": "Test",
-                    "applyMaskOn": "change",
-                    "tableView": True,
-                    "validateWhenHidden": False,
-                    "key": "textField",
-                    "type": "textfield",
-                    "input": True,
-                },
-            ],
-        }
-
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
@@ -267,8 +249,66 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(formuliertaak.details["formulierDefinitie"], FORM_IO)
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
 
+    def test_valid_create_with_external_relations(self):
+        self.assertFalse(ExterneTaak.objects.exists())
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief",
+            "isToegewezenAanPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "wordtBehandeldDoorMedewerker": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
+            "hoortBijZaak": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "heeftBetrekkingOpProduct": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
+            "details": {
+                "formulierDefinitie": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
+                "ontvangenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                        "datetime": datetime.datetime.now(),
+                    },
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+        formuliertaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
+                "uuid": str(formuliertaak.uuid),
+                "titel": formuliertaak.titel,
+                "status": formuliertaak.status,
+                "startdatum": formuliertaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": formuliertaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": formuliertaak.datum_herinnering,
+                "toelichting": formuliertaak.toelichting,
+                "isToegewezenAanPartij": formuliertaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": formuliertaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": formuliertaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": formuliertaak.heeft_betrekking_op_product,
+                "taakSoort": formuliertaak.taak_soort,
+                "details": {
+                    "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
+                },
+            },
+        )
+
     def test_invalid_create_required_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {}
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -299,7 +339,7 @@ class FormulierTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # empty details values
         data = {
@@ -320,7 +360,7 @@ class FormulierTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
     def test_valid_update_partial(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
@@ -336,6 +376,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -348,6 +389,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "isToegewezenAanPartij": formuliertaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": formuliertaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": formuliertaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": formuliertaak.heeft_betrekking_op_product,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -364,7 +409,7 @@ class FormulierTaakTests(APITestCase):
 
         # PATCH one field from json_data
         self.assertEqual(
-            formuliertaak.details["formulierDefinitie"], {"key": "value"}
+            formuliertaak.details["formulierDefinitie"], FORM_IO
         )  # default factory value
         response = self.client.patch(
             detail_url,
@@ -406,9 +451,7 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(
             formuliertaak.details["ontvangenGegevens"], {"new_key": "new_value"}
         )
-        self.assertNotEqual(
-            formuliertaak.details["ontvangenGegevens"], {"key": "value"}
-        )
+        self.assertNotEqual(formuliertaak.details["ontvangenGegevens"], FORM_IO)
 
     def test_valid_update(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
@@ -441,6 +484,7 @@ class FormulierTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(formuliertaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(formuliertaak.uuid)}",
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
@@ -453,6 +497,10 @@ class FormulierTaakTests(APITestCase):
                 ),
                 "datumHerinnering": formuliertaak.datum_herinnering,
                 "toelichting": formuliertaak.toelichting,
+                "isToegewezenAanPartij": formuliertaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": formuliertaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": formuliertaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": formuliertaak.heeft_betrekking_op_product,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -485,14 +533,14 @@ class FormulierTaakTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
 
 class FormulierTaakValidationTests(APITestCase):
     list_url = reverse("taken:formuliertaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         # wrong soort_taak
         data = {
             "titel": "titel",
@@ -561,7 +609,7 @@ class FormulierTaakValidationTests(APITestCase):
         )
 
     def test_invalid_create_type_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
@@ -588,7 +636,7 @@ class FormulierTaakValidationTests(APITestCase):
                     "reason": "startdatum should be before einddatum_handelings_termijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("null value formulierDefinitie"):
             data = {
@@ -609,4 +657,4 @@ class FormulierTaakValidationTests(APITestCase):
                     "reason": "Dit veld mag niet leeg zijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())

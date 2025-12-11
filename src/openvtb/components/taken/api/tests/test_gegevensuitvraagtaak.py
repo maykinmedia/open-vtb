@@ -18,7 +18,7 @@ class GegevensuitvraagTaakTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # create 1 gegevensuitvraagtaak
         ExterneTaakFactory.create(gegevensuitvraagtaak=True)
@@ -39,6 +39,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                         "uuid": str(gegevensuitvraagtaak.uuid),
                         "titel": gegevensuitvraagtaak.titel,
                         "status": gegevensuitvraagtaak.status,
@@ -51,6 +52,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                         ),
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                         "toelichting": gegevensuitvraagtaak.toelichting,
+                        "isToegewezenAanPartij": "",
+                        "wordtBehandeldDoorMedewerker": "",
+                        "hoortBijZaak": "",
+                        "heeftBetrekkingOpProduct": "",
                         "taakSoort": gegevensuitvraagtaak.taak_soort,
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
@@ -92,6 +97,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -104,6 +110,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": gegevensuitvraagtaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": gegevensuitvraagtaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": gegevensuitvraagtaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": gegevensuitvraagtaak.heeft_betrekking_op_product,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -131,7 +141,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_create(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief",
@@ -154,6 +164,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -164,6 +175,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": gegevensuitvraagtaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": gegevensuitvraagtaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": gegevensuitvraagtaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": gegevensuitvraagtaak.heeft_betrekking_op_product,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -203,8 +218,57 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
         self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
 
+    def test_valid_create_with_external_relations(self):
+        self.assertFalse(ExterneTaak.objects.exists())
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief",
+            "details": {
+                "uitvraagLink": "http://example.com/",
+                "ontvangenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
+                "uuid": str(gegevensuitvraagtaak.uuid),
+                "titel": gegevensuitvraagtaak.titel,
+                "status": gegevensuitvraagtaak.status,
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": gegevensuitvraagtaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": gegevensuitvraagtaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": gegevensuitvraagtaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": gegevensuitvraagtaak.heeft_betrekking_op_product,
+                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "details": {
+                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "ontvangenGegevens": gegevensuitvraagtaak.details[
+                        "ontvangenGegevens"
+                    ],
+                },
+            },
+        )
+
     def test_invalid_create_required_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {}
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -235,7 +299,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # empty details values
         data = {
@@ -256,7 +320,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
     def test_valid_update_partial(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
@@ -272,6 +336,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -284,6 +349,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": gegevensuitvraagtaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": gegevensuitvraagtaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": gegevensuitvraagtaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": gegevensuitvraagtaak.heeft_betrekking_op_product,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -355,6 +424,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
@@ -367,6 +437,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": gegevensuitvraagtaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": gegevensuitvraagtaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": gegevensuitvraagtaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": gegevensuitvraagtaak.heeft_betrekking_op_product,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -394,14 +468,14 @@ class GegevensuitvraagTaakTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
 
 class GegevensuitvraagTaakValidationTests(APITestCase):
     list_url = reverse("taken:gegevensuitvraagtaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         # wrong soort_taak
         data = {
             "titel": "titel",
@@ -441,7 +515,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         )
 
     def test_invalid_create_type_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
@@ -462,7 +536,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
                     "reason": "startdatum should be before einddatum_handelings_termijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("invalid url"):
             data = {
@@ -482,7 +556,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
                     "reason": "Voer een geldige URL in.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("invalid none url"):
             data = {
@@ -502,7 +576,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
                     "reason": "Dit veld mag niet leeg zijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
         with self.subTest("null value ontvangenGegevens"):
             data = {
@@ -524,7 +598,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
                     "reason": "Dit veld mag niet leeg zijn.",
                 },
             )
-            self.assertEqual(ExterneTaak.objects.all().count(), 0)
+            self.assertFalse(ExterneTaak.objects.exists())
 
     def test_invalid_update_partial(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)

@@ -5,6 +5,39 @@ import factory
 from ..constants import SoortTaak
 from ..models import ExterneTaak
 
+FORM_IO = {
+    "display": "form",
+    "settings": {
+        "pdf": {
+            "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+            "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+        }
+    },
+    "components": [
+        {
+            "type": "button",
+            "label": "Submit",
+            "key": "submit",
+            "disableOnInvalid": True,
+            "input": True,
+            "tableView": False,
+        },
+        {
+            "label": "Text Field",
+            "placeholder": "Add Test",
+            "description": "Description ",
+            "tooltip": "Tooltip",
+            "prefix": "Test",
+            "applyMaskOn": "change",
+            "tableView": True,
+            "validateWhenHidden": False,
+            "key": "textField",
+            "type": "textfield",
+            "input": True,
+        },
+    ],
+}
+
 
 class ExterneTaakFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -41,9 +74,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         formuliertaak = factory.Trait(
             taak_soort=SoortTaak.FORMULIERTAAK,
             details={
-                "formulierDefinitie": {
-                    "key": "value",
-                },
+                "formulierDefinitie": FORM_IO,
                 "ontvangenGegevens": {
                     "key": "value",
                 },

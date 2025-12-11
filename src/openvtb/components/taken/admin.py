@@ -22,6 +22,10 @@ class ExterneTaakForm(forms.ModelForm):
             "einddatum_handelings_termijn",
             "datum_herinnering",
             "toelichting",
+            "is_toegewezen_aan_partij",
+            "wordt_behandeld_door_medewerker",
+            "hoort_bij_zaak",
+            "heeft_betrekking_op_product",
             "taak_soort",
             "details",
         )

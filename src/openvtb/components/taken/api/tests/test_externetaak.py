@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -9,14 +11,13 @@ from openvtb.utils.api_testcase import APITestCase
 
 class ExterneTaakTests(APITestCase):
     list_url = reverse("taken:externetaak-list")
-    maxDiff = None
 
     def test_list(self):
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # create taak
         ExterneTaakFactory.create(betaaltaak=True)
@@ -36,6 +37,7 @@ class ExterneTaakTests(APITestCase):
                 "results": [
                     {
                         "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(externetaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(externetaak.uuid)}",
                         "uuid": str(externetaak.uuid),
                         "titel": externetaak.titel,
                         "status": externetaak.status,
@@ -48,6 +50,10 @@ class ExterneTaakTests(APITestCase):
                         ),
                         "datumHerinnering": externetaak.datum_herinnering,
                         "toelichting": externetaak.toelichting,
+                        "isToegewezenAanPartij": "",
+                        "wordtBehandeldDoorMedewerker": "",
+                        "hoortBijZaak": "",
+                        "heeftBetrekkingOpProduct": "",
                         "taakSoort": externetaak.taak_soort,
                         "details": externetaak.details,
                     }
@@ -89,6 +95,7 @@ class ExterneTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(externetaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(externetaak.uuid)}",
                 "uuid": str(externetaak.uuid),
                 "titel": externetaak.titel,
                 "status": externetaak.status,
@@ -99,13 +106,17 @@ class ExterneTaakTests(APITestCase):
                 ),
                 "datumHerinnering": externetaak.datum_herinnering,
                 "toelichting": externetaak.toelichting,
+                "isToegewezenAanPartij": externetaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": externetaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": externetaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": externetaak.heeft_betrekking_op_product,
                 "taakSoort": externetaak.taak_soort,
                 "details": externetaak.details,
             },
         )
 
     def test_valid_create(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": "handelingsPerspectief1",
@@ -128,6 +139,7 @@ class ExterneTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
@@ -136,6 +148,66 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": None,
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
+                "taakSoort": betaaltaak.taak_soort,
+                "details": {
+                    "bedrag": betaaltaak.details["bedrag"],
+                    "valuta": betaaltaak.details["valuta"],
+                    "transactieomschrijving": betaaltaak.details[
+                        "transactieomschrijving"
+                    ],
+                    "doelrekening": {
+                        "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "iban": betaaltaak.details["doelrekening"]["iban"],
+                    },
+                },
+            },
+        )
+
+    def test_valid_create_with_external_relations(self):
+        self.assertFalse(ExterneTaak.objects.exists())
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief1",
+            "taakSoort": SoortTaak.BETAALTAAK.value,
+            "isToegewezenAanPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "wordtBehandeldDoorMedewerker": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
+            "hoortBijZaak": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "heeftBetrekkingOpProduct": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
+            "details": {
+                "bedrag": "11",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ExterneTaak.objects.all().count(), 1)
+
+        betaaltaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            response.json(),
+            {
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
+                "uuid": str(betaaltaak.uuid),
+                "titel": betaaltaak.titel,
+                "status": betaaltaak.status,
+                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "handelingsPerspectief": betaaltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": None,
+                "datumHerinnering": betaaltaak.datum_herinnering,
+                "toelichting": betaaltaak.toelichting,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -152,7 +224,7 @@ class ExterneTaakTests(APITestCase):
         )
 
     def test_invalid_create_required_fields(self):
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
         details = {}
         response = self.client.post(self.list_url, details)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -191,7 +263,7 @@ class ExterneTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
 
         # invalid taakSoort value
         data = {
@@ -295,6 +367,7 @@ class ExterneTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
@@ -305,6 +378,10 @@ class ExterneTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": str(betaaltaak.taak_soort),
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -389,6 +466,7 @@ class ExterneTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(betaaltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
@@ -399,6 +477,10 @@ class ExterneTaakTests(APITestCase):
                 ),
                 "datumHerinnering": betaaltaak.datum_herinnering,
                 "toelichting": betaaltaak.toelichting,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": str(betaaltaak.taak_soort),
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -458,6 +540,7 @@ class ExterneTaakTests(APITestCase):
             response.json(),
             {
                 "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": str(gegevensuitvraagtaak.status),
@@ -470,6 +553,10 @@ class ExterneTaakTests(APITestCase):
                 ),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
                 "toelichting": gegevensuitvraagtaak.toelichting,
+                "isToegewezenAanPartij": betaaltaak.is_toegewezen_aan_partij,
+                "wordtBehandeldDoorMedewerker": betaaltaak.wordt_behandeld_door_medewerker,
+                "hoortBijZaak": betaaltaak.hoort_bij_zaak,
+                "heeftBetrekkingOpProduct": betaaltaak.heeft_betrekking_op_product,
                 "taakSoort": str(gegevensuitvraagtaak.taak_soort),
                 "details": gegevensuitvraagtaak.details,
             },
@@ -488,4 +575,83 @@ class ExterneTaakTests(APITestCase):
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
-        self.assertEqual(ExterneTaak.objects.all().count(), 0)
+        self.assertFalse(ExterneTaak.objects.exists())
+
+
+class ExterneTaakValidationTests(APITestCase):
+    list_url = reverse("taken:externetaak-list")
+
+    def test_invalid_create_type_fields(self):
+        self.assertFalse(ExterneTaak.objects.exists())
+        data = {
+            "titel": "test",
+            "handelingsPerspectief": "test",
+            "taakSoort": SoortTaak.BETAALTAAK.value,
+            "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
+            "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+            "details": {
+                "bedrag": "11",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
+            {
+                "name": "einddatumHandelingsTermijn",
+                "code": "date-mismatch",
+                "reason": "startdatum should be before einddatum_handelings_termijn.",
+            },
+        )
+        self.assertFalse(ExterneTaak.objects.exists())
+
+    def test_invalid_create_urn_fields(self):
+        self.assertFalse(ExterneTaak.objects.exists())
+        data = {
+            "titel": "titel",
+            "handelingsPerspectief": "handelingsPerspectief1",
+            "taakSoort": SoortTaak.BETAALTAAK.value,
+            "isToegewezenAanPartij": "test",
+            "wordtBehandeldDoorMedewerker": "test:maykin:medewerker:brp:nnp:bsn:1234567892",  # doesn't start with urn
+            "hoortBijZaak": "urn:maykinmaykinmaykinmaykinmaykinmaykinmaykinmaykinmaykin:1",  # long NID
+            "details": {
+                "bedrag": "11",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "iban": "NL18BANK23481326",
+                },
+            },
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "isToegewezenAanPartij"),
+            {
+                "name": "isToegewezenAanPartij",
+                "code": "invalid_urn",
+                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "wordtBehandeldDoorMedewerker"),
+            {
+                "name": "wordtBehandeldDoorMedewerker",
+                "code": "invalid_urn",
+                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "hoortBijZaak"),
+            {
+                "name": "hoortBijZaak",
+                "code": "invalid_urn",
+                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
+            },
+        )
+        self.assertFalse(ExterneTaak.objects.exists())
