@@ -15,6 +15,7 @@ from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschem
 
 from ..constants import Valuta
 from ..models import ExterneTaak
+from .validators import FormulierDefinitieValidator
 
 
 class DoelrekeningSerializer(serializers.Serializer):
@@ -82,6 +83,10 @@ class FormulierTaakSerializer(serializers.Serializer):
         default=dict,
         help_text=_("Ontvangen gegevens als key-value object"),
     )
+
+    validators = [
+        FormulierDefinitieValidator(),
+    ]
 
     def to_representation(self, instance):
         instance = {camel_to_underscore(k): v for k, v in instance.items()}

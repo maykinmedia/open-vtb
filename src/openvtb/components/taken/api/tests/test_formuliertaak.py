@@ -150,6 +150,16 @@ class FormulierTaakTests(APITestCase):
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
                     },
+                    "components": [
+                        {
+                            "type": "button",
+                            "label": "Submit",
+                            "key": "submit",
+                            "disableOnInvalid": True,
+                            "input": True,
+                            "tableView": False,
+                        },
+                    ],
                 },
                 "ontvangenGegevens": {
                     "key1": "value1",
@@ -203,6 +213,16 @@ class FormulierTaakTests(APITestCase):
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
                     },
+                    "components": [
+                        {
+                            "type": "button",
+                            "label": "Submit",
+                            "key": "submit",
+                            "disableOnInvalid": True,
+                            "input": True,
+                            "tableView": False,
+                        },
+                    ],
                 }
             },
         }
@@ -223,6 +243,16 @@ class FormulierTaakTests(APITestCase):
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
                     },
+                    "components": [
+                        {
+                            "type": "button",
+                            "label": "Submit",
+                            "key": "submit",
+                            "disableOnInvalid": True,
+                            "input": True,
+                            "tableView": False,
+                        },
+                    ],
                 },
                 "ontvangenGegevens": {},
             },
@@ -265,6 +295,16 @@ class FormulierTaakTests(APITestCase):
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
                     },
+                    "components": [
+                        {
+                            "type": "button",
+                            "label": "Submit",
+                            "key": "submit",
+                            "disableOnInvalid": True,
+                            "input": True,
+                            "tableView": False,
+                        },
+                    ],
                 },
                 "ontvangenGegevens": {
                     "key1": "value1",
@@ -416,11 +456,23 @@ class FormulierTaakTests(APITestCase):
             {
                 "details": {
                     "formulierDefinitie": {
+                        # test camelCase and snake_case
                         "key1": "value1",
                         "key2": {
                             "keyCamelCase": "value_2",
                             "key_snake_case": ["value_3"],
                         },
+                        # required
+                        "components": [
+                            {
+                                "type": "button",
+                                "label": "Submit",
+                                "key": "submit",
+                                "disableOnInvalid": True,
+                                "input": True,
+                                "tableView": False,
+                            },
+                        ],
                     }
                 }
             },
@@ -435,6 +487,16 @@ class FormulierTaakTests(APITestCase):
                     "keyCamelCase": "value_2",
                     "key_snake_case": ["value_3"],
                 },
+                "components": [
+                    {
+                        "type": "button",
+                        "label": "Submit",
+                        "key": "submit",
+                        "disableOnInvalid": True,
+                        "input": True,
+                        "tableView": False,
+                    },
+                ],
             },
         )
 
@@ -474,6 +536,16 @@ class FormulierTaakTests(APITestCase):
                             "keyCamelCase": "value_2",
                             "key_snake_case": ["value_3"],
                         },
+                        "components": [
+                            {
+                                "type": "button",
+                                "label": "Submit",
+                                "key": "submit",
+                                "disableOnInvalid": True,
+                                "input": True,
+                                "tableView": False,
+                            },
+                        ],
                     },
                 },
             },
@@ -516,6 +588,16 @@ class FormulierTaakTests(APITestCase):
                     "keyCamelCase": "value_2",
                     "key_snake_case": ["value_3"],
                 },
+                "components": [
+                    {
+                        "type": "button",
+                        "label": "Submit",
+                        "key": "submit",
+                        "disableOnInvalid": True,
+                        "input": True,
+                        "tableView": False,
+                    },
+                ],
             },
         )
 
@@ -553,6 +635,16 @@ class FormulierTaakValidationTests(APITestCase):
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
                     },
+                    "components": [
+                        {
+                            "type": "button",
+                            "label": "Submit",
+                            "key": "submit",
+                            "disableOnInvalid": True,
+                            "input": True,
+                            "tableView": False,
+                        },
+                    ],
                 },
             },
         }
@@ -623,6 +715,16 @@ class FormulierTaakValidationTests(APITestCase):
                             "keyCamelCase": "value_2",
                             "key_snake_case": ["value_3"],
                         },
+                        "components": [
+                            {
+                                "type": "button",
+                                "label": "Submit",
+                                "key": "submit",
+                                "disableOnInvalid": True,
+                                "input": True,
+                                "tableView": False,
+                            },
+                        ],
                     }
                 },
             }
