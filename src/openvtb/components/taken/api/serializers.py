@@ -10,10 +10,10 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.utils import get_json_schema
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
+from openvtb.utils.constants import Valuta
 from openvtb.utils.serializers import URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
-from ..constants import Valuta
 from ..models import ExterneTaak
 from .validators import FormulierDefinitieValidator
 

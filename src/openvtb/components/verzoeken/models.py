@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
@@ -212,6 +213,13 @@ class VerzoekBetaling(models.Model):
         null=True,
         decimal_places=2,
         help_text=_("Het bedrag van de betaling."),
+    )
+    valuta = models.CharField(
+        _("valuta"),
+        max_length=20,
+        default=Valuta.EUR,
+        choices=Valuta.choices,
+        help_text=_("Valuta van de betaling"),
     )
     voltooid = models.BooleanField(
         _("voltooid"),
