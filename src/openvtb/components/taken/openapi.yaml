@@ -35,7 +35,7 @@ paths:
       tags:
       - betaaltaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -63,7 +63,7 @@ paths:
               $ref: '#/components/schemas/BetaalTaakCreateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -95,7 +95,7 @@ paths:
       tags:
       - betaaltaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -132,7 +132,7 @@ paths:
               $ref: '#/components/schemas/BetaalTaakUpdateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -168,7 +168,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedBetaalTaakPartialUpdateRequest'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -199,7 +199,7 @@ paths:
       tags:
       - betaaltaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -231,7 +231,7 @@ paths:
       tags:
       - externetaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -258,7 +258,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -290,7 +290,7 @@ paths:
       tags:
       - externetaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -326,7 +326,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ExterneTaakPolymorphic'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -362,7 +362,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedExterneTaakPolymorphic'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -393,7 +393,7 @@ paths:
       tags:
       - externetaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -425,7 +425,7 @@ paths:
       tags:
       - formuliertaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -453,7 +453,7 @@ paths:
               $ref: '#/components/schemas/FormulierTaakCreateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -485,7 +485,7 @@ paths:
       tags:
       - formuliertaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -522,7 +522,7 @@ paths:
               $ref: '#/components/schemas/FormulierTaakUpdateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -558,7 +558,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedFormulierTaakPartialUpdateRequest'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -589,7 +589,7 @@ paths:
       tags:
       - formuliertaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -621,7 +621,7 @@ paths:
       tags:
       - gegevensuitvraagtaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -649,7 +649,7 @@ paths:
               $ref: '#/components/schemas/GegevensUitvraagTaakCreateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -681,7 +681,7 @@ paths:
       tags:
       - gegevensuitvraagtaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -718,7 +718,7 @@ paths:
               $ref: '#/components/schemas/GegevensUitvraagTaakUpdateRequest'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -754,7 +754,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedGegevensUitvraagTaakPartialUpdateRequest'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -785,7 +785,7 @@ paths:
       tags:
       - gegevensuitvraagtaken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -3178,10 +3178,9 @@ components:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
       - $ref: '#/components/schemas/details_GegevensUitvraagTaak'
   securitySchemes:
-    jwtAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
     tokenAuth:
       type: apiKey
       in: header

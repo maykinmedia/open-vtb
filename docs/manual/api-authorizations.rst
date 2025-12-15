@@ -56,7 +56,6 @@ Once the access token has been generated, you can use it to call the API as foll
 
     curl --request GET \
       --header "Authorization: Bearer {{ access_token }}" \
-      --header "Content-Type: application/json" \
       {{ API_URL }}
 
 

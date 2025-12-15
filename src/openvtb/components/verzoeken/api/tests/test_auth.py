@@ -16,7 +16,7 @@ from openvtb.components.verzoeken.tests.factories import (
     VerzoekTypeFactory,
     VerzoekTypeVersionFactory,
 )
-from openvtb.utils.oidc_auth.utils import generate_token
+from openvtb.utils.oidc_auth.tests.utils import generate_token
 
 User = get_user_model()
 
@@ -174,8 +174,7 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
             self.assertEqual(response.status_code, HTTP_401_UNAUTHORIZED)
             self.assertEqual(
                 response.data["detail"],
-                "OIDC authentication failed with status code: 403 www_authenticate: "
-                "{'Bearer realm': 'test', 'error': 'insufficient_scope', 'error_description': 'Missing openid scope'}",
+                "OIDC authentication failed with status code: 403 www_authenticate: Missing openid scope",
             )
             self.assertEqual(response.data["title"], "Ongeldige authenticatiegegevens.")
             self.assertEqual(response.data["code"], "authentication_failed")

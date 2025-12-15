@@ -35,7 +35,7 @@ paths:
       tags:
       - verzoeken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -63,7 +63,7 @@ paths:
               $ref: '#/components/schemas/Verzoek'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -94,7 +94,7 @@ paths:
       tags:
       - verzoeken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -130,7 +130,7 @@ paths:
               $ref: '#/components/schemas/Verzoek'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -165,7 +165,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoek'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -195,7 +195,7 @@ paths:
       tags:
       - verzoeken
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -227,7 +227,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -255,7 +255,7 @@ paths:
               $ref: '#/components/schemas/VerzoekType'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -286,7 +286,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -322,7 +322,7 @@ paths:
               $ref: '#/components/schemas/VerzoekType'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -357,7 +357,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoekType'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -387,7 +387,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -426,7 +426,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -462,7 +462,7 @@ paths:
               $ref: '#/components/schemas/VerzoekTypeVersion'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -502,7 +502,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -547,7 +547,7 @@ paths:
               $ref: '#/components/schemas/VerzoekTypeVersion'
         required: true
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -591,7 +591,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoekTypeVersion'
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -630,7 +630,7 @@ paths:
       tags:
       - verzoektypen
       security:
-      - jwtAuth: []
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -1293,10 +1293,9 @@ components:
       - version
       - verzoekType
   securitySchemes:
-    jwtAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
     tokenAuth:
       type: apiKey
       in: header

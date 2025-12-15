@@ -29,10 +29,6 @@ REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
     "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication",
     "rest_framework.authentication.TokenAuthentication",
 )
-REST_FRAMEWORK["AUTHENTICATION_WHITELIST"] = [
-    "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication",
-    "rest_framework.authentication.TokenAuthentication",
-]
 REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "openvtb.utils.schema.AutoSchema"
 
 SPECTACULAR_SETTINGS = {

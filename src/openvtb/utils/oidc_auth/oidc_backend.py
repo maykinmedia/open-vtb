@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 
 from drf_spectacular.extensions import OpenApiAuthenticationExtension, _SchemaType
 from drf_spectacular.openapi import AutoSchema
-from drf_spectacular.plumbing import build_bearer_security_scheme_object
 from mozilla_django_oidc_db.backends import (
     OIDCAuthenticationBackend as _OIDCAuthenticationBackendDB,
 )
@@ -27,13 +26,14 @@ class OIDCAuthenticationBackend(_OIDCAuthenticationBackendDB):
         return super().get_or_create_user(access_token, id_token, payload)
 
 
-class JWTScheme(OpenApiAuthenticationExtension):
+class OIDCScheme(OpenApiAuthenticationExtension):
     target_class = "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication"
-    name = "jwtAuth"
+    name = "OpenID"
 
     def get_security_definition(
         self, auto_schema: "AutoSchema"
     ) -> _SchemaType | list[_SchemaType]:
-        return build_bearer_security_scheme_object(
-            header_name="Authorization", token_prefix="Bearer", bearer_format="JWT"
-        )
+        return {
+            "type": "openIdConnect",
+            "openIdConnectUrl": "https://example.com/.well-known/openid-configuration",
+        }
