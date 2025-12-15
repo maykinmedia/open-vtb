@@ -77,7 +77,14 @@ class GegevensUitvraagTaakSerializer(serializers.Serializer):
 class FormulierTaakSerializer(serializers.Serializer):
     formulier_definitie = serializers.JSONField(
         required=True,
-        help_text=_("Definitie van het formulier in JSON"),
+        help_text=_(
+            "Definitie van het formulier in JSON. Het formulier moet minimaal het veld 'components' bevatten. "
+            "Elke component moet de volgende verplichte velden hebben:\n"
+            "- 'label': de naam die weergegeven wordt voor het veld\n"
+            "- 'key': de unieke identifier voor het veld\n"
+            "- 'type': het type van het veld, bijvoorbeeld 'text', 'number' of 'date'\n \n "
+            "Andere velden, zoals 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen gebruikt worden om het gedrag of de weergave van het veld aan te passen."
+        ),
     )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,

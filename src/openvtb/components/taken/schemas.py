@@ -121,7 +121,7 @@ SCHEMA_MAPPING = {
 
 FORMULIER_DEFINITIE_SCHEMA = {
     "$schema": Draft7Validator.META_SCHEMA["$id"],
-    "title": "Generated schema for Root",
+    "title": "Formulier Schema",
     "type": "object",
     "properties": {
         "components": {

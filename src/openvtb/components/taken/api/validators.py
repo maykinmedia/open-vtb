@@ -22,7 +22,7 @@ class FormulierDefinitieValidator:
         instance = get_from_serializer_data_or_instance(
             "formulier_definitie", attrs, serializer
         )
-        if not instance:
+        if instance is None:
             return
 
         try:

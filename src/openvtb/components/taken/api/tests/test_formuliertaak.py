@@ -760,3 +760,175 @@ class FormulierTaakValidationTests(APITestCase):
                 },
             )
             self.assertFalse(ExterneTaak.objects.exists())
+
+    def test_invalid_formulier_definitie_schema(self):
+        with self.subTest("formulierDefinitie invalid type"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": "",
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.formulierDefinitie"),
+                {
+                    "name": "details.formulierDefinitie",
+                    "code": "invalid-json-schema",
+                    "reason": "'' is not of type 'object'",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("formulierDefinitie is None"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": None,
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.formulierDefinitie"),
+                {
+                    "name": "details.formulierDefinitie",
+                    "code": "null",
+                    "reason": "Dit veld mag niet leeg zijn.",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("components required"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": {},
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "details.formulierDefinitie"),
+                {
+                    "name": "details.formulierDefinitie",
+                    "code": "invalid-json-schema",
+                    "reason": "'components' is a required property",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("components invalid type"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": {"components": "test"},
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response, "details.formulierDefinitie.components"
+                ),
+                {
+                    "name": "details.formulierDefinitie.components",
+                    "code": "invalid-json-schema",
+                    "reason": "'test' is not of type 'array'",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("components required 'label' field"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": {
+                        "components": [
+                            {},
+                        ]
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response, "details.formulierDefinitie.components.0"
+                ),
+                {
+                    "name": "details.formulierDefinitie.components.0",
+                    "code": "invalid-json-schema",
+                    "reason": "'label' is a required property",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("components required 'key' field"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": {
+                        "components": [
+                            {"label": "test"},
+                        ]
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(
+                get_validation_errors(
+                    response, "details.formulierDefinitie.components.0"
+                ),
+                {
+                    "name": "details.formulierDefinitie.components.0",
+                    "code": "invalid-json-schema",
+                    "reason": "'key' is a required property",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
+
+        with self.subTest("components required 'type' field"):
+            data = {
+                "titel": "titel",
+                "handelingsPerspectief": "handelingsPerspectief1",
+                "details": {
+                    "formulierDefinitie": {
+                        "components": [
+                            {
+                                "label": "test",
+                                "key": "test",
+                            },
+                        ]
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response, "details.formulierDefinitie.components.0"
+                ),
+                {
+                    "name": "details.formulierDefinitie.components.0",
+                    "code": "invalid-json-schema",
+                    "reason": "'type' is a required property",
+                },
+            )
+            self.assertFalse(ExterneTaak.objects.exists())
