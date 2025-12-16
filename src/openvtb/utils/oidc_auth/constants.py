@@ -1,0 +1,1 @@
+OIDC_API_CONFIG_IDENTIFIER = "api-oidc"

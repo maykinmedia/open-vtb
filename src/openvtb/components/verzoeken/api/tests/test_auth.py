@@ -16,6 +16,7 @@ from openvtb.components.verzoeken.tests.factories import (
     VerzoekTypeFactory,
     VerzoekTypeVersionFactory,
 )
+from openvtb.utils.oidc_auth.constants import OIDC_API_CONFIG_IDENTIFIER
 from openvtb.utils.oidc_auth.tests.utils import generate_token
 
 User = get_user_model()
@@ -46,6 +47,9 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
             with_keycloak_provider=True,
             with_admin=True,
             with_admin_options=True,
+            oidc_rp_client_id="api-testid",
+            oidc_rp_client_secret="y9qhit0CNdAyszI4q2qz35IahT000Nlp",
+            identifier=OIDC_API_CONFIG_IDENTIFIER,
         )
         cls.oidc_client.options["user_settings"]["claim_mappings"]["username"] = ["sub"]
         cls.oidc_client.save()

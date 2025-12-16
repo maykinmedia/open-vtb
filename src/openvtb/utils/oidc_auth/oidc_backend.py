@@ -5,8 +5,9 @@ from drf_spectacular.openapi import AutoSchema
 from mozilla_django_oidc_db.backends import (
     OIDCAuthenticationBackend as _OIDCAuthenticationBackendDB,
 )
-from mozilla_django_oidc_db.constants import OIDC_ADMIN_CONFIG_IDENTIFIER
 from mozilla_django_oidc_db.models import OIDCClient
+
+from openvtb.utils.oidc_auth.constants import OIDC_API_CONFIG_IDENTIFIER
 
 User = get_user_model()
 
@@ -22,7 +23,7 @@ class OIDCAuthenticationBackend(_OIDCAuthenticationBackendDB):
     """
 
     def get_or_create_user(self, access_token: str, id_token: str, payload):
-        self.config = OIDCClient.objects.resolve(OIDC_ADMIN_CONFIG_IDENTIFIER)
+        self.config = OIDCClient.objects.resolve(OIDC_API_CONFIG_IDENTIFIER)
         return super().get_or_create_user(access_token, id_token, payload)
 
 

@@ -40,3 +40,33 @@ oidc_db_config_admin_auth:
         make_users_staff: true
         superuser_group_names:
           - Registreerders
+
+  - identifier: api-oidc
+    enabled: true
+    oidc_rp_client_id: api-testid
+    oidc_rp_client_secret: y9qhit0CNdAyszI4q2qz35IahT000Nlp
+    oidc_rp_scopes_list:
+    - openid
+    - email
+    - profile
+    oidc_rp_sign_algo: RS256
+    oidc_provider_identifier: admin-oidc
+    options:
+      user_settings:
+        claim_mappings:
+          username:
+            - sub
+          first_name:
+            - given_name
+          email:
+            - email
+        username_case_sensitive: true
+      groups_settings:
+        claim_mapping:
+          - groups
+        sync: true
+        sync_pattern: '*'
+        default_groups: []
+        make_users_staff: true
+        superuser_group_names:
+          - Registreerders
