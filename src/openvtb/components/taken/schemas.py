@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
 
-from jsonschema import Draft202012Validator
+from jsonschema import Draft7Validator, Draft202012Validator
 
 from .constants import SoortTaak
 
@@ -117,4 +117,67 @@ SCHEMA_MAPPING = {
     SoortTaak.BETAALTAAK: BETAAL_SCHEMA,
     SoortTaak.GEGEVENSUITVRAAGTAAK: GEGEVENS_SCHEMA,
     SoortTaak.FORMULIERTAAK: FORMULIER_SCHEMA,
+}
+
+FORMULIER_DEFINITIE_SCHEMA = {
+    "$schema": Draft7Validator.META_SCHEMA["$id"],
+    "title": "Formulier Schema",
+    "type": "object",
+    "properties": {
+        "components": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "label": {"type": "string"},
+                    "key": {"type": "string"},
+                    "type": {"type": "string"},
+                    "fileTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "label": {"type": "string"},
+                                "value": {"type": "string"},
+                            },
+                            "required": ["label", "value"],
+                        },
+                    },
+                    "values": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "label": {"type": "string"},
+                                "value": {"type": "string"},
+                            },
+                            "required": ["label", "value"],
+                        },
+                    },
+                    "format": {"type": "string"},
+                    "enableTime": {"type": "boolean"},
+                    "decimalLimit": {"type": "number"},
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "values": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "label": {"type": "string"},
+                                        "value": {"type": "string"},
+                                    },
+                                    "required": ["label", "value"],
+                                },
+                            }
+                        },
+                        "required": ["values"],
+                    },
+                },
+                "required": ["label", "key", "type"],
+            },
+        }
+    },
+    "required": ["components"],
 }

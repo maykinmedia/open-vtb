@@ -15,6 +15,7 @@ from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschem
 
 from ..constants import Valuta
 from ..models import ExterneTaak
+from .validators import FormulierDefinitieValidator
 
 
 class DoelrekeningSerializer(serializers.Serializer):
@@ -76,12 +77,23 @@ class GegevensUitvraagTaakSerializer(serializers.Serializer):
 class FormulierTaakSerializer(serializers.Serializer):
     formulier_definitie = serializers.JSONField(
         required=True,
-        help_text=_("Definitie van het formulier in JSON"),
+        help_text=_(
+            "Definitie van het formulier in JSON. Het formulier moet minimaal het veld 'components' bevatten. "
+            "Elke component moet de volgende verplichte velden hebben:\n"
+            "- 'label': de naam die weergegeven wordt voor het veld\n"
+            "- 'key': de unieke identifier voor het veld\n"
+            "- 'type': het type van het veld, bijvoorbeeld 'text', 'number' of 'date'\n \n "
+            "Andere velden, zoals 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen gebruikt worden om het gedrag of de weergave van het veld aan te passen."
+        ),
     )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,
         help_text=_("Ontvangen gegevens als key-value object"),
     )
+
+    validators = [
+        FormulierDefinitieValidator(),
+    ]
 
     def to_representation(self, instance):
         instance = {camel_to_underscore(k): v for k, v in instance.items()}

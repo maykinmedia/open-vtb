@@ -73,9 +73,12 @@ def validate_jsonschema(instance: Any, schema: Any, label: str = "instance") -> 
         validate(instance=instance, schema=schema, format_checker=format_checker)
     except JSONValidationError as json_error:
         logger.exception("validate_jsonschema failed: JSON not valid")
-        path = ".".join(getattr(json_error, "absolute_path", [])) or label
-        if not path.startswith(label):
-            path = f"{label}.{path}"
+
+        path_list = [str(err) for err in getattr(json_error, "absolute_path", [])]
+        if label not in path_list:
+            path_list.insert(0, label)
+        path = ".".join(path_list)
+
         raise ValidationError({path: json_error.message})
 
 

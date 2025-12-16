@@ -1527,7 +1527,13 @@ components:
       type: object
       properties:
         formulierDefinitie:
-          description: Definitie van het formulier in JSON
+          description: "Definitie van het formulier in JSON. Het formulier moet minimaal\
+            \ het veld 'components' bevatten. Elke component moet de volgende verplichte\
+            \ velden hebben:\n- 'label': de naam die weergegeven wordt voor het veld\n\
+            - 'key': de unieke identifier voor het veld\n- 'type': het type van het\
+            \ veld, bijvoorbeeld 'text', 'number' of 'date'\n \n Andere velden, zoals\
+            \ 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen\
+            \ gebruikt worden om het gedrag of de weergave van het veld aan te passen."
           type: object
         ontvangenGegevens:
           description: Ontvangen gegevens als key-value object
