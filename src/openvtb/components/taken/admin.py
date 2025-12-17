@@ -41,7 +41,7 @@ class ExterneTaakdmin(admin.ModelAdmin):
         "status",
         "startdatum",
     )
-
+    readonly_fields = ("uuid",)
     list_filter = (
         "taak_soort",
         "status",

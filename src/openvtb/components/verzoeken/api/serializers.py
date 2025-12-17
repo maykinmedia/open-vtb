@@ -16,6 +16,8 @@ from openvtb.utils.serializers import (
 from openvtb.utils.validators import validate_jsonschema
 
 from ..models import (
+    Bijlage,
+    BijlageType,
     Verzoek,
     VerzoekBetaling,
     VerzoekBron,
@@ -51,7 +53,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "lookup_url_kwarg": "verzoektype_version",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
-                    "De unieke URL van deze verzoektype versie binnen deze API."
+                    "De unieke URL van deze VerzoekType versie binnen deze API."
                 ),
             },
             "version": {"read_only": True},
@@ -85,6 +87,44 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
 
         valid_attrs["verzoek_type"] = verzoek_type
         return valid_attrs
+
+
+class BijlageTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = BijlageType
+        fields = (
+            "urn",
+            "url",
+            "omschrijving",
+        )
+
+        extra_kwargs = {
+            "urn": {
+                "lookup_field": "uuid",
+                "urn_component": "verzoeken",
+                "urn_resource": "bijlagetype",
+                "help_text": _("De Uniform Resource Name van het bijlagetype."),
+            },
+        }
+
+
+class BijlageSerializer(URNModelSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = Bijlage
+        fields = (
+            "urn",
+            "url",
+            "omschrijving",
+        )
+
+        extra_kwargs = {
+            "urn": {
+                "lookup_field": "uuid",
+                "urn_component": "verzoeken",
+                "urn_resource": "bijlage",
+                "help_text": _("De Uniform Resource Name van het bijlage."),
+            },
+        }
 
 
 class VerzoekBronSerializer(serializers.ModelSerializer):
@@ -122,6 +162,11 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoeken.VerzoekTypeVersion", "aanvraag_gegevens_schema"
         ),
     )
+    bijlage_typen = BijlageTypeSerializer(
+        required=False,
+        many=True,
+        help_text="",  # TODO
+    )
 
     class Meta:
         model = VerzoekType
@@ -142,13 +187,35 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "url": {
                 "view_name": "verzoeken:verzoektype-detail",
                 "lookup_field": "uuid",
-                "help_text": _("De unieke URL van het verzoektype binnen deze API."),
+                "help_text": _("De unieke URL van het VerzoekType binnen deze API."),
             },
             "urn": {
                 "lookup_field": "uuid",
-                "help_text": _("De Uniform Resource Name van het verzoektype."),
+                "help_text": _("De Uniform Resource Name van het VerzoekType."),
             },
         }
+
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().create(validated_data)
+
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.create(verzoek_type=instance, **bijlage_type)
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().update(instance, validated_data)
+
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.update_or_create(
+                    verzoek_type=instance, defaults={**bijlage_type}
+                )
+        return instance
 
 
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -179,6 +246,11 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_betaling = VerzoekBetalingSerializer(
         source="betaling",
         required=False,
+        help_text="",  # TODO
+    )
+    bijlagen = BijlageSerializer(
+        required=False,
+        many=True,
         help_text="",  # TODO
     )
 
@@ -237,19 +309,23 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     def create(self, validated_data):
         bron = validated_data.pop("bron", None)
         betaling = validated_data.pop("betaling", None)
+        bijlagen = validated_data.pop("bijlagen", None)
         instance = super().create(validated_data)
 
         if bron:
             VerzoekBron.objects.create(verzoek=instance, **bron)
         if betaling:
             VerzoekBetaling.objects.create(verzoek=instance, **betaling)
-
+        if bijlagen:
+            for bijlage in bijlagen:
+                Bijlage.objects.create(verzoek=instance, **bijlage)
         return instance
 
     @transaction.atomic
     def update(self, instance, validated_data):
         bron = validated_data.pop("bron", None)
         betaling = validated_data.pop("betaling", None)
+        bijlagen = validated_data.pop("bijlagen", None)
         instance = super().update(instance, validated_data)
         if bron:
             VerzoekBron.objects.update_or_create(verzoek=instance, defaults={**bron})
@@ -257,4 +333,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             VerzoekBetaling.objects.update_or_create(
                 verzoek=instance, defaults={**betaling}
             )
+        if bijlagen:
+            for bijlage in bijlagen:
+                Bijlage.objects.update_or_create(verzoek=instance, defaults={**bijlage})
         return instance

@@ -41,7 +41,7 @@ class VerzoekTypeTests(APITestCase):
                         "naam": verzoektype.naam,
                         "toelichting": verzoektype.toelichting,
                         "opvolging": verzoektype.opvolging,
-                        "bijlageTypen": verzoektype.bijlage_typen,
+                        "bijlageTypen": [],
                         "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
                     }
                 ],
@@ -73,7 +73,7 @@ class VerzoekTypeTests(APITestCase):
                 "naam": verzoektype.naam,
                 "toelichting": verzoektype.toelichting,
                 "opvolging": verzoektype.opvolging,
-                "bijlageTypen": verzoektype.bijlage_typen,
+                "bijlageTypen": [],
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
@@ -83,6 +83,12 @@ class VerzoekTypeTests(APITestCase):
             "naam": "string",
             "toelichting": "string",
             "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
+            "bijlageTypen": [
+                {
+                    "url": "https://www.example.com/document/1",
+                    "omschrijving": "test1",
+                },
+            ],
         }
 
         response = self.client.post(self.list_url, data)
@@ -101,7 +107,13 @@ class VerzoekTypeTests(APITestCase):
                 "naam": "string",
                 "toelichting": "string",
                 "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
-                "bijlageTypen": verzoektype.bijlage_typen,
+                "bijlageTypen": [
+                    {
+                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
+                        "url": "https://www.example.com/document/1",
+                        "omschrijving": "test1",
+                    }
+                ],
                 "aanvraagGegevensSchema": {},
             },
         )
@@ -168,6 +180,12 @@ class VerzoekTypeTests(APITestCase):
         data = {
             "naam": "new_naam",
             "toelichting": "new_toelichting",
+            "bijlageTypen": [
+                {
+                    "url": "https://www.example.com/document/1",
+                    "omschrijving": "test1",
+                },
+            ],
         }
         response = self.client.patch(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -182,7 +200,13 @@ class VerzoekTypeTests(APITestCase):
                 "naam": "new_naam",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,
-                "bijlageTypen": verzoektype.bijlage_typen,
+                "bijlageTypen": [
+                    {
+                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
+                        "url": "https://www.example.com/document/1",
+                        "omschrijving": "test1",
+                    }
+                ],
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
@@ -204,7 +228,13 @@ class VerzoekTypeTests(APITestCase):
                 "naam": "new_naam_2",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,
-                "bijlageTypen": verzoektype.bijlage_typen,
+                "bijlageTypen": [
+                    {
+                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
+                        "url": "https://www.example.com/document/1",
+                        "omschrijving": "test1",
+                    }
+                ],
                 "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
