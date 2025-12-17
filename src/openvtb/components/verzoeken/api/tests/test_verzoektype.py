@@ -1,9 +1,15 @@
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.verzoeken.constants import VerzoektypeOpvolging
+from openvtb.components.verzoeken.constants import (
+    VerzoektypeOpvolging,
+    VerzoekTypeVersionStatus,
+)
 from openvtb.components.verzoeken.models import VerzoekType
-from openvtb.components.verzoeken.tests.factories import VerzoekTypeFactory
+from openvtb.components.verzoeken.tests.factories import (
+    VerzoekTypeFactory,
+    VerzoekTypeVersionFactory,
+)
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -37,7 +43,13 @@ class VerzoekTypeTests(APITestCase):
                         "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                         "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "uuid": str(verzoektype.uuid),
-                        "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                        "versions": [
+                            {
+                                "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                                "version": verzoektype.last_version.version,
+                                "status": verzoektype.last_version.status,
+                            },
+                        ],
                         "naam": verzoektype.naam,
                         "toelichting": verzoektype.toelichting,
                         "opvolging": verzoektype.opvolging,
@@ -57,6 +69,7 @@ class VerzoekTypeTests(APITestCase):
 
     def test_detail(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )
@@ -68,7 +81,18 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                "versions": [
+                    {
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': 2}))}",
+                        "version": 2,
+                        "status": VerzoekTypeVersionStatus.DRAFT,
+                    },
+                    {
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': 1}))}",
+                        "version": 1,
+                        "status": VerzoekTypeVersionStatus.DRAFT,
+                    },
+                ],
                 "naam": verzoektype.naam,
                 "toelichting": verzoektype.toelichting,
                 "opvolging": verzoektype.opvolging,
@@ -101,7 +125,7 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "version": None,
+                "versions": [],
                 "naam": "string",
                 "toelichting": "string",
                 "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
@@ -192,7 +216,13 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                "versions": [
+                    {
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                        "version": verzoektype.last_version.version,
+                        "status": verzoektype.last_version.status,
+                    },
+                ],
                 "naam": "new_naam",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,
@@ -219,7 +249,13 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "version": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                "versions": [
+                    {
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
+                        "version": verzoektype.last_version.version,
+                        "status": verzoektype.last_version.status,
+                    },
+                ],
                 "naam": "new_naam_2",
                 "toelichting": "new_toelichting",
                 "opvolging": verzoektype.opvolging,

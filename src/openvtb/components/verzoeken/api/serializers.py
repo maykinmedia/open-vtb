@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
-from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
@@ -144,15 +143,34 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
         )
 
 
+class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
+
+    class Meta:
+        model = VerzoekTypeVersion
+        fields = (
+            "url",
+            "version",
+            "status",
+        )
+        extra_kwargs = {
+            "url": {
+                "lookup_field": "version",
+                "lookup_url_kwarg": "verzoektype_version",
+                "view_name": "verzoeken:verzoektypeversion-detail",
+                "help_text": _(
+                    "De unieke URL van deze verzoektype versie binnen deze API."
+                ),
+            },
+            "version": {"read_only": True},
+        }
+
+
 class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    version = NestedHyperlinkedRelatedField(
+    versions = VerzoekTypeVersionReadOnlySerializer(
         read_only=True,
-        source="last_version",
-        lookup_field="version",
-        lookup_url_kwarg="verzoektype_version",
-        view_name="verzoeken:verzoektypeversion-detail",
-        parent_lookup_kwargs={"verzoektype_uuid": "verzoek_type__uuid"},
-        help_text=get_help_text("verzoeken.VerzoekTypeVersion", "version"),
+        many=True,
+        help_text="",  # TODO
     )
 
     bijlage_typen = BijlageTypeSerializer(
@@ -167,7 +185,7 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "url",
             "urn",
             "uuid",
-            "version",
+            "versions",
             "naam",
             "toelichting",
             "opvolging",
