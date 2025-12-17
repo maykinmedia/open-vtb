@@ -55,8 +55,6 @@ class VerzoekType(models.Model):
         verbose_name_plural = _("VerzoekTypes")
 
     def __str__(self):
-        if self.last_version:
-            return f"{self.naam} {self.last_version}"
         return f"{self.naam}"
 
     @property
@@ -64,18 +62,6 @@ class VerzoekType(models.Model):
         if self.versions:
             return self.versions.order_by("-version").first()
         return None
-
-    @property
-    def aanvraag_gegevens_schema(self):
-        if self.last_version:
-            return self.last_version.aanvraag_gegevens_schema
-        return {}
-
-    @property
-    def status(self):
-        if self.last_version:
-            return self.last_version.status
-        return ""
 
     @property
     def ordered_versions(self):
@@ -253,6 +239,12 @@ class Verzoek(models.Model):
         on_delete=models.PROTECT,
         help_text=_("Type van het Verzoek."),
     )
+    version = models.PositiveSmallIntegerField(
+        _("version"),
+        help_text=_(
+            "Versie van VerzoekType om het gegevensschema van het verzoek te valideren"
+        ),
+    )
     geometrie = GeometryField(
         _("geometrie"),
         blank=True,
@@ -301,11 +293,13 @@ class Verzoek(models.Model):
 
     def clean(self):
         super().clean()
-        if not self.verzoek_type.last_version:
+        if self.version not in self.verzoek_type.versions.values_list(
+            "version", flat=True
+        ):
             raise ValidationError(
                 {
-                    "verzoek_type": _(
-                        "Onbekend VerzoekType schema: geen schema beschikbaar."
+                    "version": _(
+                        "Onbekend VerzoekType schema versie: geen schema beschikbaar."
                     )
                 },
                 code="unknown-schema",
@@ -315,7 +309,9 @@ class Verzoek(models.Model):
             validate_jsonschema(
                 instance=self.aanvraag_gegevens,
                 label="aanvraag_gegevens",
-                schema=self.verzoek_type.last_version.aanvraag_gegevens_schema,
+                schema=self.verzoek_type.versions.get(
+                    version=self.version
+                ).aanvraag_gegevens_schema,
             )
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens": str(error)})

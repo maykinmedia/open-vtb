@@ -38,6 +38,13 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "version",
+                    models.PositiveSmallIntegerField(
+                        help_text="Versie van VerzoekType om het gegevensschema van het verzoek te valideren",
+                        verbose_name="version",
+                    ),
+                ),
+                (
                     "geometrie",
                     django.contrib.gis.db.models.fields.GeometryField(
                         blank=True,

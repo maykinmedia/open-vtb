@@ -4,6 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.fields import get_attribute
 
+from openvtb.utils.api_utils import get_from_serializer_data_or_instance
+from openvtb.utils.validators import validate_jsonschema
+
 from ..constants import VerzoekTypeVersionStatus
 from ..utils import check_json_schema
 
@@ -53,14 +56,14 @@ class CheckVerzoekTypeVersion:
     """
     Ensures that the given instance has a last version available.
 
-    Raises a ValidationError if `instance.last_version` is None.
+    Raises a ValidationError if `instance.versions.exists()` is None.
     """
 
     message = _("Onbekend VerzoekType schema: geen schema beschikbaar.")
     code = "unknown-schema"
 
     def __call__(self, instance):
-        if not instance.last_version:
+        if not instance.versions.exists():
             raise serializers.ValidationError(self.message, code=self.code)
 
 
@@ -85,3 +88,47 @@ class IsImmutableValidator:
 
         if new_value != current_value:
             raise serializers.ValidationError(self.message, code=self.code)
+
+
+class AanvraagGegevensValidator:
+    """
+    Validates `aanvraag_gegevens` against the JSON Schema for the selected
+    `VerzoekType` and `Version`.
+
+    Raises a `ValidationError` if the schema version is unknown or if
+    JSON Schema validation fails.
+    """
+
+    code = "invalid-json-schema"
+    label = "aanvraagGegevens"
+    requires_context = True
+
+    def __call__(self, attrs, serializer):
+        verzoek_type = get_from_serializer_data_or_instance(
+            "verzoek_type", attrs, serializer
+        )
+        aanvraag_gegevens = get_from_serializer_data_or_instance(
+            "aanvraag_gegevens", attrs, serializer
+        )
+        version = get_from_serializer_data_or_instance("version", attrs, serializer)
+        if version not in verzoek_type.versions.values_list("version", flat=True):
+            raise serializers.ValidationError(
+                {
+                    "version": _(
+                        "Onbekend VerzoekType schema versie: geen schema beschikbaar."
+                    )
+                },
+                code="unknown-schema",
+            )
+
+        try:
+            validate_jsonschema(
+                instance=aanvraag_gegevens,
+                schema=verzoek_type.versions.get(
+                    version=version
+                ).aanvraag_gegevens_schema,
+                label="aanvraagGegevens",
+            )
+        except ValidationError as error:
+            raise serializers.ValidationError(error.message_dict, code=self.code)
+        return attrs

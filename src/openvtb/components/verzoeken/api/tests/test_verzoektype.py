@@ -42,7 +42,6 @@ class VerzoekTypeTests(APITestCase):
                         "toelichting": verzoektype.toelichting,
                         "opvolging": verzoektype.opvolging,
                         "bijlageTypen": [],
-                        "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
                     }
                 ],
             },
@@ -74,7 +73,6 @@ class VerzoekTypeTests(APITestCase):
                 "toelichting": verzoektype.toelichting,
                 "opvolging": verzoektype.opvolging,
                 "bijlageTypen": [],
-                "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
 
@@ -114,7 +112,6 @@ class VerzoekTypeTests(APITestCase):
                         "omschrijving": "test1",
                     }
                 ],
-                "aanvraagGegevensSchema": {},
             },
         )
 
@@ -122,7 +119,6 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(verzoektype.toelichting, "string")
         self.assertEqual(verzoektype.opvolging, VerzoektypeOpvolging.NIET_TOT_ZAAK)
         self.assertEqual(verzoektype.last_version, None)
-        self.assertEqual(verzoektype.aanvraag_gegevens_schema, {})
 
     def test_invalid_create(self):
         self.assertFalse(VerzoekType.objects.exists())
@@ -207,7 +203,6 @@ class VerzoekTypeTests(APITestCase):
                         "omschrijving": "test1",
                     }
                 ],
-                "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
 
@@ -235,7 +230,6 @@ class VerzoekTypeTests(APITestCase):
                         "omschrijving": "test1",
                     }
                 ],
-                "aanvraagGegevensSchema": verzoektype.aanvraag_gegevens_schema,
             },
         )
 

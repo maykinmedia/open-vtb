@@ -5,10 +5,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
 from openvtb.components.verzoeken.models import Verzoek, VerzoekType
-from openvtb.components.verzoeken.tests.factories import (
-    JSON_SCHEMA,
-    VerzoekTypeFactory,
-)
+from openvtb.components.verzoeken.tests.factories import JSON_SCHEMA, VerzoekTypeFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -25,6 +22,7 @@ class VerzoekValidatorsTests(APITestCase):
                 "verzoeken:verzoektype-detail", kwargs={"uuid": str(uuid.uuid4())}
             ),
             "aanvraagGegevens": {"diameter": 10},
+            "version": 1,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -47,6 +45,7 @@ class VerzoekValidatorsTests(APITestCase):
                 "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
             ),
             "aanvraagGegevens": {"diameter": 10},
+            "version": 1,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -57,12 +56,13 @@ class VerzoekValidatorsTests(APITestCase):
         verzoektype = VerzoekTypeFactory.create()
 
         # verzoekType versions does not exists
-        self.assertIsNone(verzoektype.last_version)
+        self.assertFalse(verzoektype.versions.exists())
         data = {
             "verzoekType": reverse(
                 "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
             ),
             "aanvraagGegevens": {"diameter": 10},
+            "version": 1,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -84,12 +84,13 @@ class VerzoekValidatorsTests(APITestCase):
                 "verzoeken:verzoektypeversion-list",
                 kwargs={"verzoektype_uuid": str(verzoektype.uuid)},
             ),
-            {"aanvraagGegevensSchema": JSON_SCHEMA},
+            {
+                "aanvraagGegevensSchema": JSON_SCHEMA,
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoektype = VerzoekType.objects.get()
-        self.assertEqual(verzoektype.versions.count(), 1)
-        self.assertIsNotNone(verzoektype.last_version)
+        self.assertTrue(verzoektype.versions.exists())
 
         # re-CREATE Verzoek
         response = self.client.post(url, data)
@@ -99,6 +100,22 @@ class VerzoekValidatorsTests(APITestCase):
         self.assertEqual(verzoek.verzoek_type.last_version.version, 1)
         self.assertEqual(
             verzoek.verzoek_type.last_version.aanvraag_gegevens_schema, JSON_SCHEMA
+        )
+
+        # re-CREATE Verzoek with non-existent version
+        data["version"] = 2
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "version"),
+            {
+                "name": "version",
+                "code": "unknown-schema",
+                "reason": "Onbekend VerzoekType schema versie: geen schema beschikbaar.",
+            },
         )
 
     def test_update_verzoek_with_new_version(self):
@@ -111,6 +128,7 @@ class VerzoekValidatorsTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
+            "version": 1,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -125,7 +143,9 @@ class VerzoekValidatorsTests(APITestCase):
                     "verzoektype_version": verzoektype.last_version.version,
                 },
             ),
-            {"status": VerzoekTypeVersionStatus.PUBLISHED},
+            {
+                "status": VerzoekTypeVersionStatus.PUBLISHED,
+            },
         )
         new_json_schema = {
             "type": "object",
@@ -154,6 +174,10 @@ class VerzoekValidatorsTests(APITestCase):
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
         )
+
+        # update data with the new version
+        data["version"] = 2
+
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
@@ -163,10 +187,11 @@ class VerzoekValidatorsTests(APITestCase):
             get_validation_errors(response, "aanvraagGegevens"),
             {
                 "name": "aanvraagGegevens",
-                "code": "invalid",
+                "code": "invalid-json-schema",
                 "reason": "'new_field' is a required property",
             },
         )
+
         # new data
         response = self.client.put(
             detail_url,
@@ -176,6 +201,7 @@ class VerzoekValidatorsTests(APITestCase):
                     kwargs={"uuid": str(verzoektype.uuid)},
                 ),
                 "aanvraagGegevens": {"new_field": "test"},
+                "version": 2,
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -192,6 +218,7 @@ class VerzoekValidatorsTests(APITestCase):
                 kwargs={"uuid": str(verzoektype_old.uuid)},
             ),
             "aanvraagGegevens": {"diameter": 10},
+            "version": 1,
         }
         response = self.client.post(url, data)
 
@@ -235,6 +262,7 @@ class VerzoekValidatorsTests(APITestCase):
             data = {
                 "verzoekType": verzoektype_url,
                 "aanvraagGegevens": {"diameter": 10, "randomBool": False},
+                "version": 1,
             }
             response = self.client.post(url, data)
 
@@ -243,7 +271,7 @@ class VerzoekValidatorsTests(APITestCase):
                 get_validation_errors(response, "aanvraagGegevens"),
                 {
                     "name": "aanvraagGegevens",
-                    "code": "invalid",
+                    "code": "invalid-json-schema",
                     "reason": "Additional properties are not allowed ('randomBool' was unexpected)",
                 },
             )
@@ -252,6 +280,7 @@ class VerzoekValidatorsTests(APITestCase):
             data = {
                 "verzoekType": verzoektype_url,
                 "aanvraagGegevens": {"diameter": False},
+                "version": 1,
             }
             response = self.client.post(url, data)
 
@@ -260,7 +289,7 @@ class VerzoekValidatorsTests(APITestCase):
                 get_validation_errors(response, "aanvraagGegevens.diameter"),
                 {
                     "name": "aanvraagGegevens.diameter",
-                    "code": "invalid",
+                    "code": "invalid-json-schema",
                     "reason": "False is not of type 'integer'",
                 },
             )

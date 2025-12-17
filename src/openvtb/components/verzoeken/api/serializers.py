@@ -8,12 +8,10 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
-from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.serializers import (
     URNModelSerializer,
     URNRelatedField,
 )
-from openvtb.utils.validators import validate_jsonschema
 
 from ..models import (
     Bijlage,
@@ -25,6 +23,7 @@ from ..models import (
     VerzoekTypeVersion,
 )
 from .validators import (
+    AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
     IsImmutableValidator,
     JsonSchemaValidator,
@@ -156,12 +155,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         help_text=get_help_text("verzoeken.VerzoekTypeVersion", "version"),
     )
 
-    aanvraag_gegevens_schema = serializers.JSONField(
-        read_only=True,
-        help_text=get_help_text(
-            "verzoeken.VerzoekTypeVersion", "aanvraag_gegevens_schema"
-        ),
-    )
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
@@ -179,7 +172,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "toelichting",
             "opvolging",
             "bijlage_typen",
-            "aanvraag_gegevens_schema",
         )
 
         extra_kwargs = {
@@ -264,6 +256,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoek_type_urn",
             "geometrie",
             "aanvraag_gegevens",
+            "version",
             "bijlagen",
             "is_ingediend_door_partij",
             "is_ingediend_door_betrokkene",
@@ -291,19 +284,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             },
         }
 
-    def validate(self, attrs):
-        valid_attrs = super().validate(attrs)
-        verzoektype = get_from_serializer_data_or_instance("verzoek_type", attrs, self)
-        aanvraag_gegevens = get_from_serializer_data_or_instance(
-            "aanvraag_gegevens", attrs, self
-        )
-        validate_jsonschema(
-            instance=aanvraag_gegevens,
-            schema=verzoektype.aanvraag_gegevens_schema,
-            label="aanvraagGegevens",
-        )
-
-        return valid_attrs
+    validators = [
+        AanvraagGegevensValidator(),
+    ]
 
     @transaction.atomic
     def create(self, validated_data):

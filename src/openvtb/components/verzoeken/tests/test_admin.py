@@ -257,6 +257,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps(
             {"diameter": 10, "extra": {"key": "value"}}
         )
@@ -284,6 +285,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
 
         response = form.submit()
 
@@ -309,6 +311,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps({"random_key": 10})
         response = form.submit()
 
@@ -326,6 +329,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
         response = form.submit()
 
@@ -337,4 +341,22 @@ class VerzoekAdminTests(WebTest):
         self.assertEqual(
             str(error_list[0]),
             """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'aanvraag_gegevens.diameter': ["'test' is not of type 'integer'"]}</li></ul>""",
+        )
+
+        # invalid version
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+        form["version"] = 2
+        form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            str(error_list[0]),
+            """<ul class="errorlist" id="id_version_error"><li>Onbekend VerzoekType schema versie: geen schema beschikbaar.</li></ul>""",
         )
