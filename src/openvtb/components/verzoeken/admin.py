@@ -9,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm
 from .models import (
+    Bijlage,
+    BijlageType,
     Verzoek,
     VerzoekBetaling,
     VerzoekBron,
@@ -16,6 +18,12 @@ from .models import (
     VerzoekTypeVersion,
 )
 from .widgets import JSONSuit
+
+
+class BijlageTypeInline(admin.StackedInline):
+    model = BijlageType
+    extra = 0
+    readonly_fields = ("uuid",)
 
 
 class VerzoekTypeVersionInline(admin.StackedInline):
@@ -57,7 +65,7 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
         "naam",
         "uuid",
     )
-    inlines = [VerzoekTypeVersionInline]
+    inlines = [VerzoekTypeVersionInline, BijlageTypeInline]
     list_filter = ("opvolging",)
     readonly_fields = ("uuid",)
 
@@ -69,7 +77,7 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
         self.message_user(
             request,
             format_html(
-                _("The verzoektype {version} has been published successfully!"),
+                _("The VerzoekType {version} has been published successfully!"),
                 version=obj.last_version,
             ),
             level=messages.SUCCESS,
@@ -117,12 +125,18 @@ class VerzoekBronInline(admin.StackedInline):
     max_num = 1
 
 
+class BijlageInline(admin.StackedInline):
+    model = Bijlage
+    extra = 0
+    readonly_fields = ("uuid",)
+
+
 @admin.register(Verzoek)
 class VerzoekAdmin(admin.ModelAdmin):
     list_display = ("uuid", "verzoek_type")
     readonly_fields = ("uuid",)
     search_fields = ("uuid", "verzoek_type__naam", "bron__naam")
-    inlines = [VerzoekBronInline, VerzoekBetalingInline]
+    inlines = [VerzoekBronInline, VerzoekBetalingInline, BijlageInline]
     list_filter = ("verzoek_type",)
     formfield_overrides = {
         GeometryField: {"widget": forms.Textarea},

@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
@@ -47,12 +48,6 @@ class VerzoekType(models.Model):
         _("modified at"),
         auto_now=True,
         help_text=_("Laatste datum waarop het VerzoekType is gewijzigd"),
-    )
-    bijlage_typen = ArrayField(
-        URNField(_("bijlage_typen URN")),
-        blank=True,
-        default=list,
-        help_text=_("bijlage typen urn"),  # TODO check help_text
     )
 
     class Meta:
@@ -213,6 +208,13 @@ class VerzoekBetaling(models.Model):
         decimal_places=2,
         help_text=_("Het bedrag van de betaling."),
     )
+    valuta = models.CharField(
+        _("valuta"),
+        max_length=20,
+        default=Valuta.EUR,
+        choices=Valuta.choices,
+        help_text=_("Valuta van de betaling"),
+    )
     voltooid = models.BooleanField(
         _("voltooid"),
         default=False,
@@ -264,13 +266,6 @@ class Verzoek(models.Model):
         default=dict,
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
-    )
-    # bijlagen relation
-    bijlagen = ArrayField(
-        URNField(_("bijlagen URN")),
-        blank=True,
-        default=list,
-        help_text=_("Eventuele bijlagen van het Verzoek (URNs van documenten)."),
     )
     # partij relation
     is_ingediend_door_partij = URNField(
@@ -324,3 +319,63 @@ class Verzoek(models.Model):
             )
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens": str(error)})
+
+
+class Bijlage(models.Model):
+    uuid = models.UUIDField(
+        unique=True,
+        default=uuid.uuid4,
+        help_text=_("Unieke identificatiecode (UUID4) voor het Bijlage."),
+    )
+    verzoek = models.ForeignKey(
+        Verzoek,
+        on_delete=models.CASCADE,
+        related_name="bijlagen",
+        help_text=_("Bijlagen gekoppeld aan het Verzoek."),
+    )
+    url = models.URLField(
+        _("url"),
+        help_text=_("URL van het document."),
+    )
+    omschrijving = models.TextField(
+        _("omschrijving"),
+        blank=True,
+        help_text=_("Omschrijving van de bijlage."),
+    )
+
+    class Meta:
+        verbose_name = _("Bijlage")
+        verbose_name_plural = _("Bijlagen")
+
+    def __str__(self):
+        return self.url
+
+
+class BijlageType(models.Model):
+    uuid = models.UUIDField(
+        unique=True,
+        default=uuid.uuid4,
+        help_text=_("Unieke identificatiecode (UUID4) voor het BijlageType."),
+    )
+    verzoek_type = models.ForeignKey(
+        VerzoekType,
+        on_delete=models.CASCADE,
+        related_name="bijlage_typen",
+        help_text=_("Bijlagetypen gekoppeld aan het VerzoekType."),
+    )
+    url = models.URLField(
+        _("url"),
+        help_text=_("URL van het bijlagetype."),
+    )
+    omschrijving = models.TextField(
+        _("omschrijving"),
+        blank=True,
+        help_text=_("Omschrijving van het bijlagetype."),
+    )
+
+    class Meta:
+        verbose_name = _("BijlageType")
+        verbose_name_plural = _("BijlageTypen")
+
+    def __str__(self):
+        return self.url

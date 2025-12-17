@@ -129,8 +129,7 @@ class VerzoekTests(APITestCase):
                 "diameter": 10,
             },
             "bijlagen": [
-                "urn:maykin:document:1111111111",
-                "urn:maykin:document:2222222222",
+                {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
             ],
             "verzoekBron": {
                 "naam": "string",
@@ -157,7 +156,13 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
-                "bijlagen": verzoek.bijlagen,
+                "bijlagen": [
+                    {
+                        "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
+                        "url": "https://www.example.com/document/1",
+                        "omschrijving": "test1",
+                    }
+                ],
                 "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
                 "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
                 "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
@@ -189,8 +194,7 @@ class VerzoekTests(APITestCase):
                 "diameter": 10,
             },
             "bijlagen": [
-                "urn:maykin:document:1111111111",
-                "urn:maykin:document:2222222222",
+                {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
             ],
             "isIngediendDoorPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "isIngediendDoorBetrokkene": "urn:maykin:betrokkene:brp:nnp:bsn:11112222",
@@ -221,7 +225,13 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
-                "bijlagen": verzoek.bijlagen,
+                "bijlagen": [
+                    {
+                        "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
+                        "url": "https://www.example.com/document/1",
+                        "omschrijving": "test1",
+                    }
+                ],
                 "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
                 "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
                 "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
@@ -327,6 +337,9 @@ class VerzoekTests(APITestCase):
                 "bedrag": "10",
                 "transactieReferentie": "new_ref",
             },
+            "bijlagen": [
+                {"url": "https://www.example.com/document/2", "omschrijving": "test1"},
+            ],
         }
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -337,6 +350,10 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.betaling.bedrag, Decimal(10))
         self.assertEqual(verzoek.betaling.transactie_referentie, "new_ref")
         self.assertEqual(verzoek.aanvraag_gegevens["diameter"], 20)
+        self.assertEqual(
+            verzoek.bijlagen.first().url, "https://www.example.com/document/2"
+        )
+        self.assertEqual(verzoek.bijlagen.first().omschrijving, "test1")
 
     def test_invalid_update_required(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)

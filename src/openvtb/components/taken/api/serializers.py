@@ -10,10 +10,10 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.utils import get_json_schema
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
+from openvtb.utils.constants import Valuta
 from openvtb.utils.serializers import URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
-from ..constants import Valuta
 from ..models import ExterneTaak
 from .validators import FormulierDefinitieValidator
 
@@ -126,10 +126,10 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
             "einddatum_handelings_termijn",
             "datum_herinnering",
             "toelichting",
-            "is_toegewezen_aan_partij",
-            "wordt_behandeld_door_medewerker",
-            "hoort_bij_zaak",
-            "heeft_betrekking_op_product",
+            "is_toegewezen_aan",
+            "wordt_behandeld_door",
+            "hoort_bij",
+            "heeft_betrekking_op",
             "taak_soort",
             "details",
         )
