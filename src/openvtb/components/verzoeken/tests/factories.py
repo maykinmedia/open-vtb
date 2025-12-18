@@ -74,6 +74,7 @@ class DataFactory(factory.DictFactory):
 class VerzoekFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
     aanvraag_gegevens = factory.SubFactory(DataFactory)
+    version = 1
 
     class Meta:
         model = Verzoek

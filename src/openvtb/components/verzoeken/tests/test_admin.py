@@ -60,17 +60,10 @@ class VerzoekTypeAdminTests(WebTest):
         response = form.submit()
 
         self.assertEqual(response.status_code, 200)
-
         error_list = response.html.find_all("ul", {"class": "errorlist"})
 
-        self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_naam_error"><li>Dit veld is vereist.</li></ul>""",
-        )
-        self.assertEqual(
-            str(error_list[1]),
-            """<ul class="errorlist" id="id_versions-0-aanvraag_gegevens_schema_error"><li>Dit veld is vereist.</li></ul>""",
-        )
+        self.assertEqual(error_list[0].get_text(strip=True), "Dit veld is vereist.")
+        self.assertEqual(error_list[1].get_text(strip=True), "Dit veld is vereist.")
         self.assertEqual(VerzoekType.objects.count(), 0)
         self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
 
@@ -87,20 +80,15 @@ class VerzoekTypeAdminTests(WebTest):
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_versions-0-aanvraag_gegevens_schema_error"><li>Voer een geldige JSON in.</li></ul>""",
+            error_list[0].get_text(strip=True), "Voer een geldige JSON in."
         )
-
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
         form["versions-0-aanvraag_gegevens_schema"] = {}
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
-        self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_versions-0-aanvraag_gegevens_schema_error"><li>Dit veld is vereist.</li></ul>""",
-        )
+        self.assertEqual(error_list[0].get_text(strip=True), "Dit veld is vereist.")
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
@@ -108,10 +96,7 @@ class VerzoekTypeAdminTests(WebTest):
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
-        self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_versions-0-aanvraag_gegevens_schema_error"><li>Dit veld is vereist.</li></ul>""",
-        )
+        self.assertEqual(error_list[0].get_text(strip=True), "Dit veld is vereist.")
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
@@ -127,7 +112,7 @@ class VerzoekTypeAdminTests(WebTest):
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertIn(
             "'any' is not valid under any of the given schemas",
-            str(error_list[0]),
+            error_list[0].get_text(strip=True),
         )
 
         form = response.forms.get("verzoektype_form")
@@ -144,7 +129,7 @@ class VerzoekTypeAdminTests(WebTest):
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertIn(
             "False is not of type 'string'",
-            str(error_list[0]),
+            error_list[0].get_text(strip=True),
         )
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
@@ -158,10 +143,7 @@ class VerzoekTypeAdminTests(WebTest):
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
-        self.assertIn(
-            "'test' is not a 'uri'",
-            str(error_list[0]),
-        )
+        self.assertIn("'test' is not a 'uri'", error_list[0].get_text(strip=True))
 
         self.assertEqual(VerzoekType.objects.count(), 0)
         self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
@@ -257,6 +239,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps(
             {"diameter": 10, "extra": {"key": "value"}}
         )
@@ -284,6 +267,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
 
         response = form.submit()
 
@@ -294,8 +278,8 @@ class VerzoekAdminTests(WebTest):
 
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>Dit veld is vereist.</li><li>{'aanvraag_gegevens': ["'diameter' is a required property"]}</li></ul>""",
+            error_list[0].get_text(strip=True),
+            """Dit veld is vereist.{'aanvraag_gegevens': ["'diameter' is a required property"]}""",
         )
 
     def test_create_verzoek_invalid_json_schema(self):
@@ -309,6 +293,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps({"random_key": 10})
         response = form.submit()
 
@@ -318,14 +303,15 @@ class VerzoekAdminTests(WebTest):
         self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'aanvraag_gegevens': ["'diameter' is a required property"]}</li></ul>""",
+            error_list[0].get_text(strip=True),
+            """{'aanvraag_gegevens': ["'diameter' is a required property"]}""",
         )
 
         # invalid type
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
+        form["version"] = 1
         form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
         response = form.submit()
 
@@ -335,6 +321,24 @@ class VerzoekAdminTests(WebTest):
         self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
         self.assertEqual(
-            str(error_list[0]),
-            """<ul class="errorlist" id="id_aanvraag_gegevens_error"><li>{'aanvraag_gegevens.diameter': ["'test' is not of type 'integer'"]}</li></ul>""",
+            error_list[0].get_text(strip=True),
+            """{'aanvraag_gegevens.diameter': ["'test' is not of type 'integer'"]}""",
+        )
+
+        # invalid version
+        response = self.app.get(self.url)
+        form = response.forms.get("verzoek_form")
+        form["verzoek_type"] = verzoek_type.id
+        form["version"] = 2
+        form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Verzoek.objects.count(), 0)
+        self.assertEqual(VerzoekType.objects.count(), 1)
+        self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            error_list[0].get_text(strip=True),
+            """Onbekend VerzoekType schema versie: geen schema beschikbaar.""",
         )

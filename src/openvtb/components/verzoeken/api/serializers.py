@@ -3,17 +3,14 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
-from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
-from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.serializers import (
     URNModelSerializer,
     URNRelatedField,
 )
-from openvtb.utils.validators import validate_jsonschema
 
 from ..models import (
     Bijlage,
@@ -25,6 +22,7 @@ from ..models import (
     VerzoekTypeVersion,
 )
 from .validators import (
+    AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
     IsImmutableValidator,
     JsonSchemaValidator,
@@ -33,7 +31,22 @@ from .validators import (
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
+    """
+    Serializer for a specific version of a ``VerzoekType``.
+
+    Used in nested endpoints under ``VerzoekType`` and exposes
+    version fields and a read-only URN reference to the related ``VerzoekType``.
+    """
+
     parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
+
+    verzoek_type_urn = URNRelatedField(
+        lookup_field="uuid",
+        source="verzoek_type",
+        urn_resource="verzoektype",
+        read_only=True,
+        help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
+    )
 
     class Meta:
         model = VerzoekTypeVersion
@@ -41,6 +54,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "url",
             "version",
             "verzoek_type",
+            "verzoek_type_urn",
             "status",
             "aanvraag_gegevens_schema",
             "created_at",
@@ -145,23 +159,41 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
         )
 
 
+class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
+    """
+    Read-only serializer for a ``VerzoekTypeVersion``.
+
+    Exposes minimal version information for nested endpoints.
+    """
+
+    parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
+
+    class Meta:
+        model = VerzoekTypeVersion
+        fields = (
+            "url",
+            "version",
+            "status",
+        )
+        extra_kwargs = {
+            "url": {
+                "lookup_field": "version",
+                "lookup_url_kwarg": "verzoektype_version",
+                "view_name": "verzoeken:verzoektypeversion-detail",
+                "help_text": _(
+                    "De unieke URL van deze VerzoekType versie binnen deze API."
+                ),
+            },
+        }
+
+
 class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    version = NestedHyperlinkedRelatedField(
+    versions = VerzoekTypeVersionReadOnlySerializer(
         read_only=True,
-        source="last_version",
-        lookup_field="version",
-        lookup_url_kwarg="verzoektype_version",
-        view_name="verzoeken:verzoektypeversion-detail",
-        parent_lookup_kwargs={"verzoektype_uuid": "verzoek_type__uuid"},
-        help_text=get_help_text("verzoeken.VerzoekTypeVersion", "version"),
+        many=True,
+        help_text="",  # TODO
     )
 
-    aanvraag_gegevens_schema = serializers.JSONField(
-        read_only=True,
-        help_text=get_help_text(
-            "verzoeken.VerzoekTypeVersion", "aanvraag_gegevens_schema"
-        ),
-    )
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
@@ -174,12 +206,11 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "url",
             "urn",
             "uuid",
-            "version",
+            "versions",
             "naam",
             "toelichting",
             "opvolging",
             "bijlage_typen",
-            "aanvraag_gegevens_schema",
         )
 
         extra_kwargs = {
@@ -264,6 +295,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoek_type_urn",
             "geometrie",
             "aanvraag_gegevens",
+            "version",
             "bijlagen",
             "is_ingediend_door_partij",
             "is_ingediend_door_betrokkene",
@@ -291,19 +323,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             },
         }
 
-    def validate(self, attrs):
-        valid_attrs = super().validate(attrs)
-        verzoektype = get_from_serializer_data_or_instance("verzoek_type", attrs, self)
-        aanvraag_gegevens = get_from_serializer_data_or_instance(
-            "aanvraag_gegevens", attrs, self
-        )
-        validate_jsonschema(
-            instance=aanvraag_gegevens,
-            schema=verzoektype.aanvraag_gegevens_schema,
-            label="aanvraagGegevens",
-        )
-
-        return valid_attrs
+    validators = [
+        AanvraagGegevensValidator(),
+    ]
 
     @transaction.atomic
     def create(self, validated_data):

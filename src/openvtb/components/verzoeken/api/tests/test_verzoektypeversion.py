@@ -44,6 +44,7 @@ class VerzoekTypeVersionTests(APITestCase):
                 "url": version_url,
                 "version": 5,
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
+                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "status": "draft",
                 "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
                 "createdAt": "2025-01-01",

@@ -8,6 +8,7 @@ from openvtb.components.verzoeken.models import Verzoek, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
     VerzoekFactory,
     VerzoekTypeFactory,
+    VerzoekTypeVersionFactory,
 )
 from openvtb.utils.api_testcase import APITestCase
 
@@ -46,6 +47,7 @@ class VerzoekTests(APITestCase):
                         "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                         "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "geometrie": None,
+                        "version": 1,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
                         "isIngediendDoorPartij": "",
@@ -97,6 +99,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": None,
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
+                "version": 1,
                 "bijlagen": [],
                 "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
                 "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
@@ -128,6 +131,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
+            "version": 1,
             "bijlagen": [
                 {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
             ],
@@ -156,6 +160,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
+                "version": 1,
                 "bijlagen": [
                     {
                         "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
@@ -193,6 +198,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
+            "version": 1,
             "bijlagen": [
                 {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
             ],
@@ -225,6 +231,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
+                "version": 1,
                 "bijlagen": [
                     {
                         "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
@@ -258,7 +265,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 2)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "verzoekType"),
             {
@@ -271,6 +278,14 @@ class VerzoekTests(APITestCase):
             get_validation_errors(response, "aanvraagGegevens"),
             {
                 "name": "aanvraagGegevens",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "version"),
+            {
+                "name": "version",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -318,6 +333,7 @@ class VerzoekTests(APITestCase):
 
     def test_valid_update(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
@@ -329,6 +345,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 20,
             },
+            "version": 2,
             "verzoekBron": {
                 "naam": "new_naam",
                 "kenmerk": "new_kenmerk",
@@ -350,6 +367,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.betaling.bedrag, Decimal(10))
         self.assertEqual(verzoek.betaling.transactie_referentie, "new_ref")
         self.assertEqual(verzoek.aanvraag_gegevens["diameter"], 20)
+        self.assertEqual(verzoek.version, 2)
         self.assertEqual(
             verzoek.bijlagen.first().url, "https://www.example.com/document/2"
         )
@@ -366,7 +384,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 2)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "verzoekType"),
             {
@@ -379,6 +397,14 @@ class VerzoekTests(APITestCase):
             get_validation_errors(response, "aanvraagGegevens"),
             {
                 "name": "aanvraagGegevens",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "version"),
+            {
+                "name": "version",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },

@@ -70,16 +70,18 @@ class ValidateVerzoekSchemaTestCase(TestCase):
         self.verzoek.full_clean()
 
     def test_without_verzoek_type_schema(self):
-        self.assertEqual(self.verzoek_type.last_version.version, 1)
-        self.assertEqual(
-            self.verzoek_type.last_version.aanvraag_gegevens_schema, JSON_SCHEMA
-        )
         with self.assertRaises(ValidationError) as error:
             self.verzoek = VerzoekFactory.create(aanvraag_gegevens={"diameter": 1})
             self.verzoek.full_clean()
+
+        self.assertFalse(self.verzoek.verzoek_type.versions.exists())
         self.assertEqual(
             error.exception.message_dict,
-            {"verzoek_type": ["Onbekend VerzoekType schema: geen schema beschikbaar."]},
+            {
+                "version": [
+                    "Onbekend VerzoekType schema versie: geen schema beschikbaar."
+                ]
+            },
         )
 
     def test_invalid_schema(self):
