@@ -31,7 +31,22 @@ from .validators import (
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
+    """
+    Serializer for a specific version of a ``VerzoekType``.
+
+    Used in nested endpoints under ``VerzoekType`` and exposes
+    version fields and a read-only URN reference to the related ``VerzoekType``.
+    """
+
     parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
+
+    verzoek_type_urn = URNRelatedField(
+        lookup_field="uuid",
+        source="verzoek_type",
+        urn_resource="verzoektype",
+        read_only=True,
+        help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
+    )
 
     class Meta:
         model = VerzoekTypeVersion
@@ -39,6 +54,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "url",
             "version",
             "verzoek_type",
+            "verzoek_type_urn",
             "status",
             "aanvraag_gegevens_schema",
             "created_at",
@@ -144,6 +160,12 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
 
 
 class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
+    """
+    Read-only serializer for a ``VerzoekTypeVersion``.
+
+    Exposes minimal version information for nested endpoints.
+    """
+
     parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
 
     class Meta:
@@ -159,10 +181,9 @@ class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
                 "lookup_url_kwarg": "verzoektype_version",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
-                    "De unieke URL van deze verzoektype versie binnen deze API."
+                    "De unieke URL van deze VerzoekType versie binnen deze API."
                 ),
             },
-            "version": {"read_only": True},
         }
 
 

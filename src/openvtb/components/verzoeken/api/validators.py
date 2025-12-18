@@ -111,7 +111,8 @@ class AanvraagGegevensValidator:
             "aanvraag_gegevens", attrs, serializer
         )
         version = get_from_serializer_data_or_instance("version", attrs, serializer)
-        if version not in verzoek_type.versions.values_list("version", flat=True):
+
+        if not verzoek_type.versions.filter(version=version).exists():
             raise serializers.ValidationError(
                 {
                     "version": _(

@@ -151,7 +151,7 @@ class Migration(migrations.Migration):
                             ("meerdere", "Leidt altijd tot meerdere zaken"),
                         ],
                         default="niet",
-                        help_text="Opvolging over het VerzoekType",
+                        help_text="Geeft aan op welke manier een VerzoekType kan leiden tot één of meerdere zaken.",
                         max_length=20,
                         verbose_name="opvolging",
                     ),

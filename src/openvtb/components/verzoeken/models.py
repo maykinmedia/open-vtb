@@ -35,9 +35,11 @@ class VerzoekType(models.Model):
     opvolging = models.CharField(
         _("opvolging"),
         max_length=20,
-        default=VerzoektypeOpvolging.NIET_TOT_ZAAK,  # TODO chek for default
+        default=VerzoektypeOpvolging.NIET_TOT_ZAAK,
         choices=VerzoektypeOpvolging.choices,
-        help_text=_("Opvolging over het VerzoekType"),
+        help_text=_(
+            "Geeft aan op welke manier een VerzoekType kan leiden tot één of meerdere zaken."
+        ),
     )
     created_at = models.DateField(
         _("created at"),
@@ -55,7 +57,7 @@ class VerzoekType(models.Model):
         verbose_name_plural = _("VerzoekTypes")
 
     def __str__(self):
-        return f"{self.naam}"
+        return self.naam
 
     @property
     def last_version(self):
@@ -293,9 +295,7 @@ class Verzoek(models.Model):
 
     def clean(self):
         super().clean()
-        if self.version not in self.verzoek_type.versions.values_list(
-            "version", flat=True
-        ):
+        if not self.verzoek_type.versions.filter(version=self.version).exists():
             raise ValidationError(
                 {
                     "version": _(

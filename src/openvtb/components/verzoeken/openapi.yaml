@@ -884,6 +884,13 @@ components:
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
           type: object
+        version:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Versie van VerzoekType om het gegevensschema van het verzoek
+            te valideren
         bijlagen:
           type: array
           items:
@@ -924,24 +931,24 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van het verzoektype binnen deze API.
+          description: De unieke URL van het VerzoekType binnen deze API.
           minLength: 1
           maxLength: 1000
         urn:
           type: string
           example: urn:namespace:component:resource:uuid
           readOnly: true
-          description: De Uniform Resource Name van het verzoektype.
+          description: De Uniform Resource Name van het VerzoekType.
         uuid:
           type: string
           format: uuid
           readOnly: true
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
-        version:
-          type: string
-          format: uri
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
           readOnly: true
-          description: Integer-versie van het VerzoekType.
         naam:
           type: string
           description: Naam voor het VerzoekType
@@ -952,31 +959,25 @@ components:
         opvolging:
           allOf:
           - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Opvolging over het VerzoekType
+          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
+            of meerdere zaken.
         bijlageTypen:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-        aanvraagGegevensSchema:
-          readOnly: true
-          description: JSON schema voor validatie van VerzoekType
-          type: object
     PatchedVerzoekTypeVersion:
       type: object
       description: |-
-        A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
-        of primary key relationships.  Specifically:
+        Serializer for a specific version of a ``VerzoekType``.
 
-        * A 'url' field is included instead of the 'id' field.
-        * Relationships to other instances are hyperlinks, instead of primary keys.
-
-        NOTE: this only works with DRF 3.1.0 and above.
+        Used in nested endpoints under ``VerzoekType`` and exposes
+        version fields and a read-only URN reference to the related ``VerzoekType``.
       properties:
         url:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze verzoektype versie binnen deze API.
+          description: De unieke URL van deze VerzoekType versie binnen deze API.
         version:
           type: integer
           readOnly: true
@@ -987,6 +988,11 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
+        verzoekTypeUrn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: Type van het Verzoek.URN field
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1103,6 +1109,13 @@ components:
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
           type: object
+        version:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Versie van VerzoekType om het gegevensschema van het verzoek
+            te valideren
         bijlagen:
           type: array
           items:
@@ -1141,6 +1154,7 @@ components:
       - url
       - urn
       - uuid
+      - version
       - verzoekType
       - verzoekTypeUrn
     VerzoekBetaling:
@@ -1191,24 +1205,24 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van het verzoektype binnen deze API.
+          description: De unieke URL van het VerzoekType binnen deze API.
           minLength: 1
           maxLength: 1000
         urn:
           type: string
           example: urn:namespace:component:resource:uuid
           readOnly: true
-          description: De Uniform Resource Name van het verzoektype.
+          description: De Uniform Resource Name van het VerzoekType.
         uuid:
           type: string
           format: uuid
           readOnly: true
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
-        version:
-          type: string
-          format: uri
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
           readOnly: true
-          description: Integer-versie van het VerzoekType.
         naam:
           type: string
           description: Naam voor het VerzoekType
@@ -1219,38 +1233,31 @@ components:
         opvolging:
           allOf:
           - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Opvolging over het VerzoekType
+          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
+            of meerdere zaken.
         bijlageTypen:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-        aanvraagGegevensSchema:
-          readOnly: true
-          description: JSON schema voor validatie van VerzoekType
-          type: object
       required:
-      - aanvraagGegevensSchema
       - naam
       - url
       - urn
       - uuid
-      - version
+      - versions
     VerzoekTypeVersion:
       type: object
       description: |-
-        A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
-        of primary key relationships.  Specifically:
+        Serializer for a specific version of a ``VerzoekType``.
 
-        * A 'url' field is included instead of the 'id' field.
-        * Relationships to other instances are hyperlinks, instead of primary keys.
-
-        NOTE: this only works with DRF 3.1.0 and above.
+        Used in nested endpoints under ``VerzoekType`` and exposes
+        version fields and a read-only URN reference to the related ``VerzoekType``.
       properties:
         url:
           type: string
           format: uri
           readOnly: true
-          description: De unieke URL van deze verzoektype versie binnen deze API.
+          description: De unieke URL van deze VerzoekType versie binnen deze API.
         version:
           type: integer
           readOnly: true
@@ -1261,6 +1268,11 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
+        verzoekTypeUrn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: Type van het Verzoek.URN field
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1292,6 +1304,32 @@ components:
       - url
       - version
       - verzoekType
+      - verzoekTypeUrn
+    VerzoekTypeVersionReadOnly:
+      type: object
+      description: |-
+        Read-only serializer for a ``VerzoekTypeVersion``.
+
+        Exposes minimal version information for nested endpoints.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van deze VerzoekType versie binnen deze API.
+        version:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          title: Versie
+          description: Integer-versie van het VerzoekType.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van het VerzoekTypeVersion
+      required:
+      - url
+      - version
   securitySchemes:
     tokenAuth:
       type: apiKey

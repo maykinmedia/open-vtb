@@ -143,9 +143,7 @@ class VerzoekValidatorsTests(APITestCase):
                     "verzoektype_version": verzoektype.last_version.version,
                 },
             ),
-            {
-                "status": VerzoekTypeVersionStatus.PUBLISHED,
-            },
+            {"status": VerzoekTypeVersionStatus.PUBLISHED},
         )
         new_json_schema = {
             "type": "object",
