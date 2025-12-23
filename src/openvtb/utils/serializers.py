@@ -30,7 +30,7 @@ class URNRelatedField(RelatedField):
     """
     A DRF field for representing related objects as URNs.
 
-    URN format: urn:<component>:<resource>:<lookup_value>
+    URN format: urn:<namespace>:<component>:<resource>:<lookup_value>
 
     - urn_namespace: required or derived from the settings default
     - urn_component: derived from the view

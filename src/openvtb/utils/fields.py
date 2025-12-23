@@ -10,7 +10,9 @@ class URNField(models.CharField):
     https://datatracker.ietf.org/doc/html/rfc8141
 
     This field extends CharField and automatically validates the value
-    against a basic URN pattern: `urn:<namespace>:<resource>`.
+    against a basic URN pattern: `"urn" ":" NID ":" NSS`.
+
+    Example: `urn:<namespace>:<resource>`
     """
 
     default_validators = [URNValidator()]
