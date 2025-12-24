@@ -26,6 +26,7 @@ REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
     "vng_api_common.pagination.DynamicPageSizePagination"
 )
 REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
+    "openvtb.utils.oidc_auth.oidc_drf_middleware.OIDCAuthentication",
     "rest_framework.authentication.TokenAuthentication",
 )
 REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "openvtb.utils.schema.AutoSchema"
