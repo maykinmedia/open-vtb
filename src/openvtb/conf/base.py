@@ -86,3 +86,15 @@ URN_NAMESPACE = config(
     "URN_NAMESPACE",
     help_text=("Namespace used in URNs schemas."),
 )
+
+
+# MOZILLA DJANGO OIDC
+
+OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_auth.oidc_backend.OIDCAuthenticationBackend"
+
+
+# django-setup-configuration
+
+SETUP_CONFIGURATION_STEPS = (
+    "mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep",
+)

@@ -1,4 +1,5 @@
 # Inspired by https://docs.docker.com/compose/django/
+version: '3'
 
 services:
   db:
@@ -20,7 +21,7 @@ services:
   web:
     build: .
     image: maykinmedia/open-vtb:latest
-    environment:
+    environment: &web_env
       DJANGO_SETTINGS_MODULE: openvtb.conf.docker
       IS_HTTPS: no
       DB_NAME: openvtb
@@ -68,11 +69,31 @@ services:
         condition: service_started
       redis:
         condition: service_started
+      web-init:
+        condition: service_completed_successfully
     labels:
       client: dev
       target: test
       app: open-vtb
       service: web
+    networks:
+      - open-vtb-dev
+
+  web-init:
+    build: .
+    environment:
+      <<: *web_env
+      #
+      # Django-setup-configuration
+      RUN_SETUP_CONFIG: ${RUN_SETUP_CONFIG:-true}
+
+    command: sh -c "/setup_configuration.sh"
+    volumes:
+      - log:/app/log
+      - ./docker/setup_configuration:/app/setup_configuration
+    depends_on:
+      - db
+      - redis
     networks:
       - open-vtb-dev
 

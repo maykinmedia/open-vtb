@@ -35,6 +35,7 @@ paths:
       tags:
       - verzoeken
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -62,6 +63,7 @@ paths:
               $ref: '#/components/schemas/Verzoek'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -92,6 +94,7 @@ paths:
       tags:
       - verzoeken
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -127,6 +130,7 @@ paths:
               $ref: '#/components/schemas/Verzoek'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -161,6 +165,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoek'
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -190,6 +195,7 @@ paths:
       tags:
       - verzoeken
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -221,6 +227,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -248,6 +255,7 @@ paths:
               $ref: '#/components/schemas/VerzoekType'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -278,6 +286,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -313,6 +322,7 @@ paths:
               $ref: '#/components/schemas/VerzoekType'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -347,6 +357,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoekType'
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -376,6 +387,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -414,6 +426,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -449,6 +462,7 @@ paths:
               $ref: '#/components/schemas/VerzoekTypeVersion'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '201':
@@ -488,6 +502,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -532,6 +547,7 @@ paths:
               $ref: '#/components/schemas/VerzoekTypeVersion'
         required: true
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -575,6 +591,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedVerzoekTypeVersion'
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '200':
@@ -613,6 +630,7 @@ paths:
       tags:
       - verzoektypen
       security:
+      - OpenID: []
       - tokenAuth: []
       responses:
         '204':
@@ -1331,6 +1349,9 @@ components:
       - url
       - version
   securitySchemes:
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: https://example.com/.well-known/openid-configuration
     tokenAuth:
       type: apiKey
       in: header

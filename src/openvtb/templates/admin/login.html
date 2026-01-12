@@ -1,0 +1,16 @@
+{% extends "admin/login.html" %}
+{% load mozilla_django_oidc_db i18n %}
+
+
+{% block content %}
+{{ block.super }}
+
+{% get_oidc_admin_client as oidc_config %}
+{% if oidc_config.enabled %}
+<div class="admin-login-option">{% trans "or" %}</div>
+<div class="admin-login-option">
+    <a href="{% url 'oidc_authentication_init' %}">{% trans "Login with organization account" %}</a>
+</div>
+{% endif %}
+
+{% endblock %}

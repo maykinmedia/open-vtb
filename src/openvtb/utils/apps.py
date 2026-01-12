@@ -20,5 +20,7 @@ class UtilsConfig(AppConfig):
     name = "openvtb.utils"
 
     def ready(self):
+        from .oidc_auth import plugins  # noqa
+
         field_mapping = ModelSerializer.serializer_field_mapping
         field_mapping[URNField] = URNSerializerField
