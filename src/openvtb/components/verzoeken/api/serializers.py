@@ -30,6 +30,18 @@ from .validators import (
 )
 
 
+class BijlageTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BijlageType
+        fields = (
+            "informatie_objecttype",
+            "omschrijving",
+        )
+        extra_kwargs = {
+            "informatie_objecttype": {"required": True},
+        }
+
+
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
     """
     Serializer for a specific version of a ``VerzoekType``.
@@ -48,6 +60,12 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
     )
 
+    bijlage_typen = BijlageTypeSerializer(
+        required=False,
+        many=True,
+        help_text="",  # TODO
+    )
+
     class Meta:
         model = VerzoekTypeVersion
         fields = (
@@ -55,6 +73,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "version",
             "verzoek_type",
             "verzoek_type_urn",
+            "bijlage_typen",
             "status",
             "aanvraag_gegevens_schema",
             "created_at",
@@ -102,24 +121,54 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         valid_attrs["verzoek_type"] = verzoek_type
         return valid_attrs
 
+    def validate_bijlage_typen(self, value):
+        """
+        Ensure that each nested object has the 'informatie_objecttype' field filled in.
+        """
+        for obj in value:
+            if not obj.get("informatie_objecttype"):
+                raise serializers.ValidationError(
+                    _("bijlageType must have a informatieObjecttype."),
+                    code="required",
+                )
+        return value
 
-class BijlageTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = BijlageType
-        fields = (
-            "urn",
-            "url",
-            "omschrijving",
-        )
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().create(validated_data)
 
-        extra_kwargs = {
-            "urn": {
-                "lookup_field": "uuid",
-                "urn_component": "verzoeken",
-                "urn_resource": "bijlagetype",
-                "help_text": _("De Uniform Resource Name van het bijlagetype."),
-            },
-        }
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                if instance.bijlage_typen.filter(
+                    informatie_objecttype=bijlage_type["informatie_objecttype"]
+                ).exists():
+                    raise serializers.ValidationError(
+                        {
+                            "bijlageTypen": _(
+                                "bijlageType with the specified informatieObjecttype already exists."
+                            )
+                        },
+                        code="bijlagetype-unique",
+                    )
+                else:
+                    BijlageType.objects.create(
+                        verzoek_type_version=instance, **bijlage_type
+                    )
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().update(instance, validated_data)
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.update_or_create(
+                    verzoek_type_version=instance,
+                    informatie_objecttype=bijlage_type["informatie_objecttype"],
+                    defaults={**bijlage_type},
+                )
+        return instance
 
 
 class BijlageSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -194,12 +243,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         help_text="",  # TODO
     )
 
-    bijlage_typen = BijlageTypeSerializer(
-        required=False,
-        many=True,
-        help_text="",  # TODO
-    )
-
     class Meta:
         model = VerzoekType
         fields = (
@@ -209,8 +252,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "versions",
             "naam",
             "toelichting",
-            "opvolging",
-            "bijlage_typen",
         )
 
         extra_kwargs = {
@@ -225,28 +266,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
                 "help_text": _("De Uniform Resource Name van het VerzoekType."),
             },
         }
-
-    @transaction.atomic
-    def create(self, validated_data):
-        bijlage_typen = validated_data.pop("bijlage_typen", None)
-        instance = super().create(validated_data)
-
-        if bijlage_typen:
-            for bijlage_type in bijlage_typen:
-                BijlageType.objects.create(verzoek_type=instance, **bijlage_type)
-        return instance
-
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        bijlage_typen = validated_data.pop("bijlage_typen", None)
-        instance = super().update(instance, validated_data)
-
-        if bijlage_typen:
-            for bijlage_type in bijlage_typen:
-                BijlageType.objects.update_or_create(
-                    verzoek_type=instance, defaults={**bijlage_type}
-                )
-        return instance
 
 
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):

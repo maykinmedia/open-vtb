@@ -789,13 +789,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Point2D'
-    OpvolgingEnum:
-      enum:
-      - niet
-      - mogelijk
-      - altijd
-      - meerdere
-      type: string
     PaginatedVerzoekList:
       type: object
       required:
@@ -974,11 +967,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        opvolging:
-          allOf:
-          - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
-            of meerdere zaken.
         bijlageTypen:
           type: array
           items:
@@ -1248,11 +1236,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        opvolging:
-          allOf:
-          - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
-            of meerdere zaken.
         bijlageTypen:
           type: array
           items:

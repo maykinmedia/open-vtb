@@ -1,10 +1,7 @@
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.verzoeken.constants import (
-    VerzoektypeOpvolging,
-    VerzoekTypeVersionStatus,
-)
+from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
 from openvtb.components.verzoeken.models import VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
     VerzoekTypeFactory,
@@ -52,8 +49,6 @@ class VerzoekTypeTests(APITestCase):
                         ],
                         "naam": verzoektype.naam,
                         "toelichting": verzoektype.toelichting,
-                        "opvolging": verzoektype.opvolging,
-                        "bijlageTypen": [],
                     }
                 ],
             },
@@ -95,8 +90,6 @@ class VerzoekTypeTests(APITestCase):
                 ],
                 "naam": verzoektype.naam,
                 "toelichting": verzoektype.toelichting,
-                "opvolging": verzoektype.opvolging,
-                "bijlageTypen": [],
             },
         )
 
@@ -104,13 +97,6 @@ class VerzoekTypeTests(APITestCase):
         data = {
             "naam": "string",
             "toelichting": "string",
-            "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
-            "bijlageTypen": [
-                {
-                    "url": "https://www.example.com/document/1",
-                    "omschrijving": "test1",
-                },
-            ],
         }
 
         response = self.client.post(self.list_url, data)
@@ -128,20 +114,11 @@ class VerzoekTypeTests(APITestCase):
                 "versions": [],
                 "naam": "string",
                 "toelichting": "string",
-                "opvolging": VerzoektypeOpvolging.NIET_TOT_ZAAK,
-                "bijlageTypen": [
-                    {
-                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
-                        "url": "https://www.example.com/document/1",
-                        "omschrijving": "test1",
-                    }
-                ],
             },
         )
 
         self.assertEqual(verzoektype.naam, "string")
         self.assertEqual(verzoektype.toelichting, "string")
-        self.assertEqual(verzoektype.opvolging, VerzoektypeOpvolging.NIET_TOT_ZAAK)
         self.assertEqual(verzoektype.last_version, None)
 
     def test_invalid_create(self):
@@ -163,27 +140,6 @@ class VerzoekTypeTests(APITestCase):
         )
         self.assertFalse(VerzoekType.objects.exists())
 
-        # invalid values
-        data = {
-            "naam": "new_naam",
-            "opvolging": "test",  # invalid choice
-        }
-        response = self.client.post(self.list_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
-
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "opvolging"),
-            {
-                "name": "opvolging",
-                "code": "invalid_choice",
-                "reason": '"test" is een ongeldige keuze.',
-            },
-        )
-        self.assertFalse(VerzoekType.objects.exists())
-
     def test_valid_update(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         detail_url = reverse(
@@ -197,16 +153,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # PATCH
-        data = {
-            "naam": "new_naam",
-            "toelichting": "new_toelichting",
-            "bijlageTypen": [
-                {
-                    "url": "https://www.example.com/document/1",
-                    "omschrijving": "test1",
-                },
-            ],
-        }
+        data = {"naam": "new_naam", "toelichting": "new_toelichting"}
         response = self.client.patch(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verzoektype = VerzoekType.objects.get()
@@ -225,14 +172,6 @@ class VerzoekTypeTests(APITestCase):
                 ],
                 "naam": "new_naam",
                 "toelichting": "new_toelichting",
-                "opvolging": verzoektype.opvolging,
-                "bijlageTypen": [
-                    {
-                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
-                        "url": "https://www.example.com/document/1",
-                        "omschrijving": "test1",
-                    }
-                ],
             },
         )
 
@@ -258,14 +197,6 @@ class VerzoekTypeTests(APITestCase):
                 ],
                 "naam": "new_naam_2",
                 "toelichting": "new_toelichting",
-                "opvolging": verzoektype.opvolging,
-                "bijlageTypen": [
-                    {
-                        "urn": f"urn:maykin:verzoeken:bijlagetype:{verzoektype.bijlage_typen.first().uuid}",
-                        "url": "https://www.example.com/document/1",
-                        "omschrijving": "test1",
-                    }
-                ],
             },
         )
 
@@ -275,30 +206,7 @@ class VerzoekTypeTests(APITestCase):
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )
         response = self.client.get(detail_url)
-
         verzoektype = VerzoekType.objects.get()
-        old_naam = verzoektype.naam
-
-        # PATCH
-        data = {
-            "naam": "new_naam",
-            "opvolging": "test",  # invalid choice
-        }
-        response = self.client.patch(detail_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "opvolging"),
-            {
-                "name": "opvolging",
-                "code": "invalid_choice",
-                "reason": '"test" is een ongeldige keuze.',
-            },
-        )
-        verzoektype = VerzoekType.objects.get()
-        new_naam = verzoektype.naam
-        self.assertEqual(old_naam, new_naam)
 
         # PUT
         data = {}

@@ -12,7 +12,7 @@ from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
-from .constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
+from .constants import VerzoekTypeVersionStatus
 from .utils import check_json_schema
 
 
@@ -31,15 +31,6 @@ class VerzoekType(models.Model):
         _("toelichting"),
         blank=True,
         help_text=_("Uitleg over het VerzoekType"),
-    )
-    opvolging = models.CharField(
-        _("opvolging"),
-        max_length=20,
-        default=VerzoektypeOpvolging.NIET_TOT_ZAAK,
-        choices=VerzoektypeOpvolging.choices,
-        help_text=_(
-            "Geeft aan op welke manier een VerzoekType kan leiden tot één of meerdere zaken."
-        ),
     )
     created_at = models.DateField(
         _("created at"),
@@ -353,20 +344,27 @@ class BijlageType(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het BijlageType."),
     )
-    verzoek_type = models.ForeignKey(
-        VerzoekType,
+    verzoek_type_version = models.ForeignKey(
+        VerzoekTypeVersion,
         on_delete=models.CASCADE,
         related_name="bijlage_typen",
-        help_text=_("Bijlagetypen gekoppeld aan het VerzoekType."),
+        help_text=_("Bijlagetypen gekoppeld aan het VerzoekTypeVersion."),
     )
-    url = models.URLField(
-        _("url"),
-        help_text=_("URL van het bijlagetype."),
+    informatie_objecttype = URNField(
+        _("informatie objecttype"),
+        help_text=_(
+            "URN van het INFORMATIEOBJECTTYPE. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        ),
+        blank=True,
     )
     omschrijving = models.TextField(
         _("omschrijving"),
         blank=True,
-        help_text=_("Omschrijving van het bijlagetype."),
+        help_text=_(
+            "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE."
+        ),
     )
 
     class Meta:

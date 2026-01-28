@@ -6,7 +6,7 @@ from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
-from openvtb.components.verzoeken.models import VerzoekType
+from openvtb.components.verzoeken.models import BijlageType, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
     JSON_SCHEMA,
     VerzoekTypeFactory,
@@ -47,6 +47,7 @@ class VerzoekTypeVersionTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "status": "draft",
                 "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
+                "bijlageTypen": [],
                 "createdAt": "2025-01-01",
                 "modifiedAt": "2025-01-01",
                 "publishedAt": None,
@@ -146,6 +147,63 @@ class VerzoekTypeVersionTests(APITestCase):
         # version auto generated
         self.assertEqual(version.version, 3)
         self.assertEqual(version.verzoek_type, verzoektype)
+
+    def test_create_version_with_bijlage_typen(self):
+        data = {
+            "aanvraagGegevensSchema": JSON_SCHEMA,
+            "bijlageTypen": [
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:3c30bea0-cbf2-4fae-8d12-13b16395af1c",
+                    "omschrijving": "test1",
+                },
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "omschrijving": "test2",
+                },
+            ],
+        }
+        verzoektype = VerzoekTypeFactory.create()
+        self.assertEqual(verzoektype.versions.count(), 0)
+
+        url = reverse(
+            "verzoeken:verzoektypeversion-list",
+            kwargs={"verzoektype_uuid": str(verzoektype.uuid)},
+        )
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoektype = VerzoekType.objects.get()
+
+        self.assertEqual(verzoektype.versions.count(), 1)
+        version = verzoektype.last_version
+        self.assertEqual(version.bijlage_typen.count(), 2)
+
+        # invalid arleady exists with this informatieObjecttype
+        data = {
+            "aanvraagGegevensSchema": JSON_SCHEMA,
+            "bijlageTypen": [
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "omschrijving": "test1",
+                },
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "omschrijving": "test1",
+                },
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlageTypen"),
+            {
+                "name": "bijlageTypen",
+                "code": "bijlagetype-unique",
+                "reason": "bijlageType with the specified informatieObjecttype already exists.",
+            },
+        )
 
     def test_invalid_create_version(self):
         verzoektype = VerzoekTypeFactory.create()
@@ -325,6 +383,104 @@ class VerzoekTypeVersionTests(APITestCase):
         verzoektype.refresh_from_db()
         self.assertEqual(
             verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+        )
+
+    def test_update_with_bijlage_typen(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        version_url = reverse(
+            "verzoeken:verzoektypeversion-detail",
+            kwargs={
+                "verzoektype_uuid": str(verzoektype.uuid),
+                "verzoektype_version": verzoektype.last_version.version,
+            },
+        )
+        BijlageType.objects.create(
+            verzoek_type_version=verzoektype.last_version,
+            informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+            omschrijving="description1",
+        )
+        BijlageType.objects.create(
+            verzoek_type_version=verzoektype.last_version,
+            informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:3c30bea0-cbf2-4fae-8d12-13b16395af1c",
+            omschrijving="description2",
+        )
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 2)
+
+        # create in this case, because doesn't exist with this informatieObjecttype
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70",
+                        "omschrijving": "description3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+
+        # check before and later `omschrijving`
+        self.assertEqual(
+            verzoektype.last_version.bijlage_typen.get(
+                informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
+            ).omschrijving,
+            "description3",
+        )
+        # update in this case, because it exist with this informatie_objecttype
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70",
+                        "omschrijving": "new_description_3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(
+            verzoektype.last_version.bijlage_typen.get(
+                informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
+            ).omschrijving,
+            "new_description_3",
+        )
+
+        # invalid informatie_objecttype required
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        # "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                        "omschrijving": "new_description_3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlageTypen"),
+            {
+                "name": "bijlageTypen",
+                "code": "required",
+                "reason": "bijlageType must have a informatieObjecttype.",
+            },
         )
 
     def test_destroy_version(self):
