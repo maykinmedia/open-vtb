@@ -163,22 +163,15 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         return instance
 
 
-class BijlageSerializer(URNModelSerializer, serializers.ModelSerializer):
+class BijlageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bijlage
         fields = (
-            "urn",
-            "url",
-            "omschrijving",
+            "informatie_object",
+            "toelichting",
         )
-
         extra_kwargs = {
-            "urn": {
-                "lookup_field": "uuid",
-                "urn_component": "verzoeken",
-                "urn_resource": "bijlage",
-                "help_text": _("De Uniform Resource Name van het bijlage."),
-            },
+            "informatie_object": {"required": True},
         }
 
 
@@ -308,9 +301,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens",
             "version",
             "bijlagen",
-            "is_ingediend_door_partij",
-            "is_ingediend_door_betrokkene",
-            "heeft_geleid_tot_zaak",
+            "is_ingediend_door",
+            "is_gerelaterd_aan",
+            "kanaal",
             "authenticatie_context",
             "verzoek_bron",
             "verzoek_betaling",
@@ -338,6 +331,18 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         AanvraagGegevensValidator(),
     ]
 
+    def validate_bijlagen(self, value):
+        """
+        Ensure that each nested object has the 'informatie_object' field filled in.
+        """
+        for obj in value:
+            if not obj.get("informatie_object"):
+                raise serializers.ValidationError(
+                    _("bijlage must have a informatieObject."),
+                    code="required",
+                )
+        return value
+
     @transaction.atomic
     def create(self, validated_data):
         bron = validated_data.pop("bron", None)
@@ -349,9 +354,22 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             VerzoekBron.objects.create(verzoek=instance, **bron)
         if betaling:
             VerzoekBetaling.objects.create(verzoek=instance, **betaling)
+
         if bijlagen:
             for bijlage in bijlagen:
-                Bijlage.objects.create(verzoek=instance, **bijlage)
+                if instance.bijlagen.filter(
+                    informatie_object=bijlage["informatie_object"]
+                ).exists():
+                    raise serializers.ValidationError(
+                        {
+                            "bijlagen": _(
+                                "bijlage with the specified informatieObject already exists."
+                            )
+                        },
+                        code="bijlage-unique",
+                    )
+                else:
+                    Bijlage.objects.create(verzoek=instance, **bijlage)
         return instance
 
     @transaction.atomic
@@ -368,5 +386,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             )
         if bijlagen:
             for bijlage in bijlagen:
-                Bijlage.objects.update_or_create(verzoek=instance, defaults={**bijlage})
+                Bijlage.objects.update_or_create(
+                    verzoek=instance,
+                    informatie_object=bijlage["informatie_object"],
+                    defaults={**bijlage},
+                )
         return instance

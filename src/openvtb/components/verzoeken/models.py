@@ -273,23 +273,23 @@ class Verzoek(models.Model):
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
     )
-    # partij relation
-    is_ingediend_door_partij = URNField(
+    is_ingediend_door = URNField(
         _("is ingediend door partij"),
         help_text=_("is ingediend door Partij urn"),  # TODO check help_text
         blank=True,
     )
-    # betrokkene relation
-    is_ingediend_door_betrokkene = URNField(
-        _("is ingediend door betrokkene"),
-        help_text=_("is ingediend door Betrokkene urn"),  # TODO check help_text
+    is_gerelaterd_aan = URNField(
+        _("is_gerelaterd_aan"),
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+        ),
         blank=True,
     )
-    # zaak relation
-    heeft_geleid_tot_zaak = URNField(
-        _("heeft geleid tot"),
-        help_text=_("heeft geleid tot Zaak urn"),  # TODO check help_text
+    kanaal = models.CharField(
+        _("kanaal"),
         blank=True,
+        max_length=200,
+        help_text=_("Geeft aan via welk kanaal dit verzoek is binnengekomen."),
     )
     # authenticatie_context relation
     authenticatie_context = URNField(
@@ -341,14 +341,21 @@ class Bijlage(models.Model):
         related_name="bijlagen",
         help_text=_("Bijlagen gekoppeld aan het Verzoek."),
     )
-    url = models.URLField(
-        _("url"),
-        help_text=_("URL van het document."),
-    )
-    omschrijving = models.TextField(
-        _("omschrijving"),
+    informatie_object = URNField(
+        _("informatie object"),
+        help_text=_(
+            "URN naar het ENKELVOUDIGINFORMATIEOBJECT. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        ),
         blank=True,
-        help_text=_("Omschrijving van de bijlage."),
+    )
+    toelichting = models.TextField(
+        _("toelichting"),
+        blank=True,
+        help_text=_(
+            "toelichting van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECT."
+        ),
     )
 
     class Meta:
@@ -383,7 +390,7 @@ class BijlageType(models.Model):
         _("omschrijving"),
         blank=True,
         help_text=_(
-            "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Omschrijving van het soort bijlage type, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
             "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE."
         ),
     )

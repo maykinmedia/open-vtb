@@ -4,7 +4,7 @@ from decimal import Decimal
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.verzoeken.models import Verzoek, VerzoekType
+from openvtb.components.verzoeken.models import Bijlage, Verzoek, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
     VerzoekFactory,
     VerzoekTypeFactory,
@@ -50,9 +50,9 @@ class VerzoekTests(APITestCase):
                         "version": 1,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
-                        "isIngediendDoorPartij": "",
-                        "isIngediendDoorBetrokkene": "",
-                        "heeftGeleidTotZaak": "",
+                        "isIngediendDoor": "",
+                        "isGerelaterdAan": "",
+                        "kanaal": "",
                         "authenticatieContext": "",
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
@@ -101,9 +101,9 @@ class VerzoekTests(APITestCase):
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "version": 1,
                 "bijlagen": [],
-                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
-                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
-                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "isIngediendDoor": verzoek.is_ingediend_door,
+                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
@@ -133,12 +133,16 @@ class VerzoekTests(APITestCase):
             },
             "version": 1,
             "bijlagen": [
-                {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
             ],
             "verzoekBron": {
                 "naam": "string",
                 "kenmerk": "string",
             },
+            "kanaal": "test",
             "verzoekBetaling": {
                 "kenmerken": ["string"],
                 "bedrag": "10",
@@ -163,14 +167,13 @@ class VerzoekTests(APITestCase):
                 "version": 1,
                 "bijlagen": [
                     {
-                        "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
-                        "url": "https://www.example.com/document/1",
-                        "omschrijving": "test1",
+                        "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                        "toelichting": "test1",
                     }
                 ],
-                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
-                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
-                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "isIngediendDoor": verzoek.is_ingediend_door,
+                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
@@ -200,11 +203,13 @@ class VerzoekTests(APITestCase):
             },
             "version": 1,
             "bijlagen": [
-                {"url": "https://www.example.com/document/1", "omschrijving": "test1"},
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
             ],
-            "isIngediendDoorPartij": "urn:maykin:partij:brp:nnp:bsn:1234567892",
-            "isIngediendDoorBetrokkene": "urn:maykin:betrokkene:brp:nnp:bsn:11112222",
-            "heeftGeleidTotZaak": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "isIngediendDoor": "urn:maykin:partij:brp:nnp:bsn:1234567892",
+            "isGerelaterdAan": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
             "authenticatieContext": "",
             "verzoekBron": {
                 "naam": "string",
@@ -234,14 +239,13 @@ class VerzoekTests(APITestCase):
                 "version": 1,
                 "bijlagen": [
                     {
-                        "urn": f"urn:maykin:verzoeken:bijlage:{verzoek.bijlagen.first().uuid}",
-                        "url": "https://www.example.com/document/1",
-                        "omschrijving": "test1",
+                        "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                        "toelichting": "test1",
                     }
                 ],
-                "isIngediendDoorPartij": verzoek.is_ingediend_door_partij,
-                "isIngediendDoorBetrokkene": verzoek.is_ingediend_door_betrokkene,
-                "heeftGeleidTotZaak": verzoek.heeft_geleid_tot_zaak,
+                "isIngediendDoor": verzoek.is_ingediend_door,
+                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
@@ -258,6 +262,70 @@ class VerzoekTests(APITestCase):
                 },
             },
         )
+
+    def test_create_bijlagen(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        data = {
+            "geometrie": {"type": "Point", "coordinates": [0, 0]},
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {
+                "diameter": 10,
+            },
+            "version": 1,
+            "bijlagen": [
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:7bf3ab4a-3458-400f-80ad-8a2c85b12a8d",
+                    "toelichting": "test2",
+                },
+            ],
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoek = Verzoek.objects.get()
+
+        self.assertEqual(verzoek.bijlagen.count(), 2)
+
+        # invalid already exists
+        data = {
+            "geometrie": {"type": "Point", "coordinates": [0, 0]},
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {
+                "diameter": 10,
+            },
+            "version": 1,
+            "bijlagen": [
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
+            ],
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlagen"),
+            {
+                "name": "bijlagen",
+                "code": "bijlage-unique",
+                "reason": "bijlage with the specified informatieObject already exists.",
+            },
+        )
+        verzoek = Verzoek.objects.get()
+
+        self.assertEqual(verzoek.bijlagen.count(), 2)
 
     def test_invalid_create_required(self):
         data = {}
@@ -355,7 +423,10 @@ class VerzoekTests(APITestCase):
                 "transactieReferentie": "new_ref",
             },
             "bijlagen": [
-                {"url": "https://www.example.com/document/2", "omschrijving": "test1"},
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "toelichting": "test1",
+                },
             ],
         }
         response = self.client.put(detail_url, data)
@@ -369,9 +440,83 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.aanvraag_gegevens["diameter"], 20)
         self.assertEqual(verzoek.version, 2)
         self.assertEqual(
-            verzoek.bijlagen.first().url, "https://www.example.com/document/2"
+            verzoek.bijlagen.first().informatie_object,
+            "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
         )
-        self.assertEqual(verzoek.bijlagen.first().omschrijving, "test1")
+        self.assertEqual(verzoek.bijlagen.first().toelichting, "test1")
+
+    def test_update_with_bijlagen(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+        verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
+        detail_url = reverse(
+            "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
+        )
+        Bijlage.objects.create(
+            verzoek=verzoek,
+            informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+            toelichting="description1",
+        )
+        Bijlage.objects.create(
+            verzoek=verzoek,
+            informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:2f985cf7-e9f0-45fb-8c52-05688e06705d",
+            toelichting="description2",
+        )
+
+        # create in this case, because doesn't exist with this informatie_object
+        data = {
+            "bijlagen": [
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
+                    "toelichting": "test3",
+                },
+            ],
+        }
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        verzoek.refresh_from_db()
+        self.assertEqual(verzoek.bijlagen.count(), 3)
+
+        # update in this case, because it exist with this informatie_object
+        data = {
+            "bijlagen": [
+                {
+                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
+                    "toelichting": "new_test3",
+                },
+            ],
+        }
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        verzoek.refresh_from_db()
+        self.assertEqual(verzoek.bijlagen.count(), 3)
+        self.assertEqual(
+            verzoek.bijlagen.get(
+                informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6"
+            ).toelichting,
+            "new_test3",
+        )
+
+        # invalid informatie_object required
+        data = {
+            "bijlagen": [
+                {
+                    # "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
+                    "toelichting": "new_test3",
+                },
+            ],
+        }
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlagen"),
+            {
+                "name": "bijlagen",
+                "code": "required",
+                "reason": "bijlage must have a informatieObject.",
+            },
+        )
 
     def test_invalid_update_required(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
