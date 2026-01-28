@@ -8,9 +8,10 @@ from rest_framework import serializers
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
-from openvtb.components.taken.utils import get_json_schema
+from openvtb.components.taken.schemas import SOORTTAAK_SCHEMA_MAPPING
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.constants import Valuta
+from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.serializers import URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
@@ -212,7 +213,7 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
         validate_jsonschema(
             instance=details,
             label="details",
-            schema=get_json_schema(taak_soort),
+            schema=get_json_schema(taak_soort, SOORTTAAK_SCHEMA_MAPPING),
         )
         attrs["details"] = details
         return super().validate(attrs)

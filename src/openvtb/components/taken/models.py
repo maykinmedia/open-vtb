@@ -9,11 +9,11 @@ from django.utils.translation import gettext_lazy as _
 from django_jsonform.models.fields import JSONField
 
 from openvtb.utils.fields import URNField
+from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
 from .constants import SoortTaak, StatusTaak
-from .schemas import FORMULIER_DEFINITIE_SCHEMA
-from .utils import get_json_schema
+from .schemas import FORMULIER_DEFINITIE_SCHEMA, SOORTTAAK_SCHEMA_MAPPING
 
 
 class ExterneTaak(models.Model):
@@ -121,7 +121,7 @@ class ExterneTaak(models.Model):
             validate_jsonschema(
                 instance=self.details,
                 label="details",
-                schema=get_json_schema(self.taak_soort),
+                schema=get_json_schema(self.taak_soort, SOORTTAAK_SCHEMA_MAPPING),
             )
             if self.taak_soort == SoortTaak.FORMULIERTAAK:
                 validate_jsonschema(

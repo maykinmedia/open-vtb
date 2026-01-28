@@ -5,25 +5,23 @@ from django.utils.translation import gettext_lazy as _
 
 import structlog
 
-from .schemas import SCHEMA_MAPPING
-
 logger = structlog.stdlib.get_logger(__name__)
 
 
-def get_json_schema(key: str) -> Any:
+def get_json_schema(key: str, schema_mapping: Any) -> Any:
     """
     Retrieve a JSON schema from SCHEMA_MAPPING by key.
 
     Args:
         key (str): The key identifying the schema.
-
+        schema_mapping (Any): schema_mapping
     Raises:
         ValidationError: If no schema is found for the given key.
 
     Returns:
         Any: The JSON schema associated with the key.
     """
-    schema = SCHEMA_MAPPING.get(key)
+    schema = schema_mapping.get(key)
     if not schema:
         raise ValidationError(
             _("Onbekend '{key}': geen schema beschikbaar.".format(key=key)),

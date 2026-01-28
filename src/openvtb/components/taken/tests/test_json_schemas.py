@@ -1,17 +1,20 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+from openvtb.components.taken.schemas import SOORTTAAK_SCHEMA_MAPPING
+from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
 from ..constants import SoortTaak
-from ..utils import get_json_schema
 
 
 class ValidateJSONSchemaTestCase(TestCase):
     def test_invalid_key_schema(self):
         for key in ["", "test", None]:
             with self.assertRaises(ValidationError):
-                validate_jsonschema(instance={}, schema=get_json_schema(key))
+                validate_jsonschema(
+                    instance={}, schema=get_json_schema(key, SOORTTAAK_SCHEMA_MAPPING)
+                )
 
     def test_invalid_data_schema(self):
         # data values
@@ -19,7 +22,9 @@ class ValidateJSONSchemaTestCase(TestCase):
             with self.assertRaises(ValidationError) as error:
                 validate_jsonschema(
                     instance=instance,
-                    schema=get_json_schema(SoortTaak.BETAALTAAK.value),
+                    schema=get_json_schema(
+                        SoortTaak.BETAALTAAK.value, SOORTTAAK_SCHEMA_MAPPING
+                    ),
                 )
             self.assertTrue("instance" in error.exception.message_dict)
 
@@ -28,7 +33,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
         self.taak_soort = SoortTaak.BETAALTAAK.value
-        self.json_schema = get_json_schema(self.taak_soort)
+        self.json_schema = get_json_schema(self.taak_soort, SOORTTAAK_SCHEMA_MAPPING)
 
     def test_valid_schema(self):
         # all data
@@ -281,7 +286,7 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
         self.taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK.value
-        self.json_schema = get_json_schema(self.taak_soort)
+        self.json_schema = get_json_schema(self.taak_soort, SOORTTAAK_SCHEMA_MAPPING)
 
     def test_valid_schema(self):
         instance = {
@@ -356,7 +361,7 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
         self.taak_soort = SoortTaak.FORMULIERTAAK.value
-        self.json_schema = get_json_schema(self.taak_soort)
+        self.json_schema = get_json_schema(self.taak_soort, SOORTTAAK_SCHEMA_MAPPING)
 
     def test_valid_schema(self):
         example = {
