@@ -26,7 +26,15 @@ class VerzoekTypeVersionInline(admin.StackedInline):
     extra = 0
     max_num = 1
     min_num = 1
-    readonly_fields = ("version", "status", "published_at", "created_at", "modified_at")
+
+    readonly_fields = (
+        "version",
+        "status",
+        "begin_geldigheid",
+        "aangemaakt_op",
+        "gewijzigd_op",
+        "einde_geldigheid",
+    )
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -49,8 +57,8 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
     list_display = (
         "naam",
         "uuid",
-        "created_at",
-        "modified_at",
+        "aangemaakt_op",
+        "gewijzigd_op",
         "last_version",
     )
     search_fields = (

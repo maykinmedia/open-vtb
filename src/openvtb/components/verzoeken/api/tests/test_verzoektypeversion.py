@@ -44,13 +44,13 @@ class VerzoekTypeVersionTests(APITestCase):
                 "url": version_url,
                 "version": 5,
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
-                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "status": "draft",
                 "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
                 "bijlageTypen": [],
-                "createdAt": "2025-01-01",
-                "modifiedAt": "2025-01-01",
-                "publishedAt": None,
+                "aangemaaktOp": "2025-01-01",
+                "gewijzigdOp": "2025-01-01",
+                "beginGeldigheid": None,
+                "eindeGeldigheid": None,
             },
         )
 
@@ -111,9 +111,10 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
         self.assertEqual(version.version, 1)
         self.assertEqual(version.status, VerzoekTypeVersionStatus.DRAFT)
-        self.assertEqual(version.created_at, date(2025, 1, 1))
-        self.assertEqual(version.modified_at, date(2025, 1, 1))
-        self.assertEqual(version.published_at, None)
+        self.assertEqual(version.aangemaakt_op, date(2025, 1, 1))
+        self.assertEqual(version.gewijzigd_op, date(2025, 1, 1))
+        self.assertEqual(version.begin_geldigheid, None)
+        self.assertEqual(version.einde_geldigheid, None)
 
         # verzoekType is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
@@ -384,6 +385,57 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(
             verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
         )
+
+    def test_automatically_update_expired_date(self):
+        verzoektype = VerzoekTypeFactory.create()
+        v1 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+        self.assertEqual(v1.version, 1)
+        v2 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+        self.assertEqual(v2.version, 2)
+
+        version_url = reverse(
+            "verzoeken:verzoektypeversion-detail",
+            kwargs={
+                "verzoektype_uuid": str(verzoektype.uuid),
+                "verzoektype_version": verzoektype.last_version.version,
+            },
+        )
+
+        # V2 DRAFT -> PUBLISHED
+        self.assertEqual(v2.status, VerzoekTypeVersionStatus.DRAFT)
+        response = self.client.patch(
+            version_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        v1.refresh_from_db()
+        v2.refresh_from_db()
+
+        self.assertEqual(v2.status, VerzoekTypeVersionStatus.PUBLISHED)
+        self.assertFalse(v2.is_expired)
+
+        # v1 must be expired
+        self.assertTrue(v1.is_expired)
+
+    def test_manually_update_expired_date(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+
+        self.assertFalse(verzoektype.last_version.is_expired)
+
+        response = self.client.patch(
+            reverse(
+                "verzoeken:verzoektypeversion-detail",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                    "verzoektype_version": verzoektype.last_version.version,
+                },
+            ),
+            {"eindeGeldigheid": date.today()},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+        self.assertTrue(verzoektype.last_version.is_expired)
 
     def test_update_with_bijlage_typen(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)

@@ -52,14 +52,6 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
 
     parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
 
-    verzoek_type_urn = URNRelatedField(
-        lookup_field="uuid",
-        source="verzoek_type",
-        urn_resource="verzoektype",
-        read_only=True,
-        help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
-    )
-
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
@@ -72,13 +64,13 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "url",
             "version",
             "verzoek_type",
-            "verzoek_type_urn",
             "bijlage_typen",
             "status",
             "aanvraag_gegevens_schema",
-            "created_at",
-            "modified_at",
-            "published_at",
+            "aangemaakt_op",
+            "gewijzigd_op",
+            "begin_geldigheid",
+            "einde_geldigheid",
         )
         extra_kwargs = {
             "url": {
@@ -99,9 +91,9 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "validators": [JsonSchemaValidator()],
                 "required": True,
             },
-            "created_at": {"read_only": True},
-            "modified_at": {"read_only": True},
-            "published_at": {"read_only": True},
+            "aangemaakt_op": {"read_only": True},
+            "gewijzigd_op": {"read_only": True},
+            "begin_geldigheid": {"read_only": True},
         }
         validators = [VersionStatusValidator()]
 

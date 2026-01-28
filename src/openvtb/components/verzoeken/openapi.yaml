@@ -665,22 +665,19 @@ components:
     BijlageType:
       type: object
       properties:
-        urn:
+        informatieObjecttype:
           type: string
           example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het bijlagetype.
-        url:
-          type: string
-          format: uri
-          description: URL van het bijlagetype.
-          maxLength: 200
+          description: 'URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
         omschrijving:
           type: string
-          description: Omschrijving van het bijlagetype.
+          description: Omschrijving van het soort bijlage, zoals dat door eind gebruikers
+            gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
+            omschrijving als die van het INFORMATIEOBJECTTYPE.
       required:
-      - url
-      - urn
+      - informatieObjecttype
     GeoJSONGeometry:
       title: GeoJSONGeometry
       type: object
@@ -967,10 +964,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        bijlageTypen:
-          type: array
-          items:
-            $ref: '#/components/schemas/BijlageType'
     PatchedVerzoekTypeVersion:
       type: object
       description: |-
@@ -994,11 +987,10 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
-        verzoekTypeUrn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Type van het Verzoek.URN field
+        bijlageTypen:
+          type: array
+          items:
+            $ref: '#/components/schemas/BijlageType'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1006,22 +998,28 @@ components:
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
           type: object
-        createdAt:
+        aangemaaktOp:
           type: string
           format: date
           readOnly: true
           description: Datum waarop de versie is gemaakt
-        modifiedAt:
+        gewijzigdOp:
           type: string
           format: date
           readOnly: true
           description: Laatste datum waarop de versie is gewijzigd
-        publishedAt:
+        beginGeldigheid:
           type: string
           format: date
           readOnly: true
           nullable: true
           description: Datum waarop de versie is gepubliceerd
+        eindeGeldigheid:
+          type: string
+          format: date
+          nullable: true
+          description: Einde geldigheid voor de versie, automatisch ingesteld wanneer
+            een nieuwere versie wordt gepubliceerd
     Point:
       type: object
       description: GeoJSON point geometry
@@ -1236,10 +1234,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        bijlageTypen:
-          type: array
-          items:
-            $ref: '#/components/schemas/BijlageType'
       required:
       - naam
       - url
@@ -1269,11 +1263,10 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
-        verzoekTypeUrn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Type van het Verzoek.URN field
+        bijlageTypen:
+          type: array
+          items:
+            $ref: '#/components/schemas/BijlageType'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1281,31 +1274,36 @@ components:
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
           type: object
-        createdAt:
+        aangemaaktOp:
           type: string
           format: date
           readOnly: true
           description: Datum waarop de versie is gemaakt
-        modifiedAt:
+        gewijzigdOp:
           type: string
           format: date
           readOnly: true
           description: Laatste datum waarop de versie is gewijzigd
-        publishedAt:
+        beginGeldigheid:
           type: string
           format: date
           readOnly: true
           nullable: true
           description: Datum waarop de versie is gepubliceerd
+        eindeGeldigheid:
+          type: string
+          format: date
+          nullable: true
+          description: Einde geldigheid voor de versie, automatisch ingesteld wanneer
+            een nieuwere versie wordt gepubliceerd
       required:
+      - aangemaaktOp
       - aanvraagGegevensSchema
-      - createdAt
-      - modifiedAt
-      - publishedAt
+      - beginGeldigheid
+      - gewijzigdOp
       - url
       - version
       - verzoekType
-      - verzoekTypeUrn
     VerzoekTypeVersionReadOnly:
       type: object
       description: |-

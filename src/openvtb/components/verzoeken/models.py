@@ -32,13 +32,13 @@ class VerzoekType(models.Model):
         blank=True,
         help_text=_("Uitleg over het VerzoekType"),
     )
-    created_at = models.DateField(
-        _("created at"),
+    aangemaakt_op = models.DateField(
+        _("aangemaakt op"),
         auto_now_add=True,
         help_text=_("Datum waarop het VerzoekType is aangemaakt"),
     )
-    modified_at = models.DateField(
-        _("modified at"),
+    gewijzigd_op = models.DateField(
+        _("gewijzigd op"),
         auto_now=True,
         help_text=_("Laatste datum waarop het VerzoekType is gewijzigd"),
     )
@@ -72,21 +72,29 @@ class VerzoekTypeVersion(models.Model):
         _("version"),
         help_text=_("Integer-versie van het VerzoekType."),
     )
-    created_at = models.DateField(
-        _("created at"),
+    aangemaakt_op = models.DateField(
+        _("aangemaakt_op"),
         auto_now_add=True,
         help_text=_("Datum waarop de versie is gemaakt"),
     )
-    modified_at = models.DateField(
-        _("modified at"),
+    gewijzigd_op = models.DateField(
+        _("gewijzigd op"),
         auto_now=True,
         help_text=_("Laatste datum waarop de versie is gewijzigd"),
     )
-    published_at = models.DateField(
-        _("published_at"),
+    begin_geldigheid = models.DateField(
+        _("begin geldigheid"),
         null=True,
         blank=True,
         help_text=_("Datum waarop de versie is gepubliceerd"),
+    )
+    einde_geldigheid = models.DateField(
+        _("einde geldigheid"),
+        default=None,
+        null=True,
+        help_text=_(
+            "Einde geldigheid voor de versie, automatisch ingesteld wanneer een nieuwere versie wordt gepubliceerd"
+        ),
     )
     aanvraag_gegevens_schema = models.JSONField(
         _("aanvraag gegevens schema"),
@@ -104,7 +112,7 @@ class VerzoekTypeVersion(models.Model):
 
     class Meta:
         unique_together = ("verzoek_type", "version")
-        ordering = ["-version", "-created_at"]
+        ordering = ["-version", "-aangemaakt_op"]
 
     def __str__(self):
         return f"Version {self.version} ({self.status})"
@@ -113,7 +121,7 @@ class VerzoekTypeVersion(models.Model):
         if not self.version:
             self.version = self.generate_version_number()
 
-        # save published_at
+        # save published_at and set previouos version as expired
         previous_status = (
             VerzoekTypeVersion.objects.get(id=self.id).status if self.id else None
         )
@@ -121,9 +129,22 @@ class VerzoekTypeVersion(models.Model):
             self.status == VerzoekTypeVersionStatus.PUBLISHED
             and previous_status != self.status
         ):
-            self.published_at = date.today()
+            self.begin_geldigheid = date.today()
+            if (
+                previous_version := VerzoekTypeVersion.objects.filter(
+                    verzoek_type=self.verzoek_type
+                )
+                .exclude(id=self.id)
+                .first()
+            ):
+                previous_version.einde_geldigheid = date.today()
+                previous_version.save()
 
         super().save(*args, **kwargs)
+
+    @property
+    def is_expired(self):
+        return bool(self.einde_geldigheid)
 
     def clean(self):
         super().clean()
