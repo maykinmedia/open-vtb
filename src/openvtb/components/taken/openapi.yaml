@@ -2322,6 +2322,11 @@ components:
           type: string
           format: uri
           description: Link naar de externe gegevensaanvraag
+        voorinvullenGegevens:
+          description: Arbitraire sleutel-waarde gegevens die ingevuld moeten worden
+            in de uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier,
+            of een veld in een sjabloon.
+          type: object
         ontvangenGegevens:
           description: Ontvangen gegevens als key-value object
           type: object
