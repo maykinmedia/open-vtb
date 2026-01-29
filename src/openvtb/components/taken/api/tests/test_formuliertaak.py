@@ -4,7 +4,7 @@ import uuid
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import SoortTaak
+from openvtb.components.taken.constants import ActionTaak, SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -142,7 +142,7 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -205,7 +205,7 @@ class FormulierTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -235,7 +235,7 @@ class FormulierTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -266,7 +266,7 @@ class FormulierTaakTests(APITestCase):
         # create form.io example TextField
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "formulierDefinitie": FORM_IO,
                 "ontvangenGegevens": {},
@@ -283,7 +283,7 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
@@ -354,19 +354,11 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 2)
         self.assertEqual(
             get_validation_errors(response, "titel"),
             {
                 "name": "titel",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
-            {
-                "name": "handelingsPerspectief",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -384,7 +376,7 @@ class FormulierTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -528,7 +520,7 @@ class FormulierTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {
                         "key1": "value1",
@@ -626,7 +618,7 @@ class FormulierTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "formulierDefinitie": {
@@ -705,7 +697,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
                 "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
                 "details": {
@@ -743,7 +735,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("null value formulierDefinitie"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": None,
                 },
@@ -765,7 +757,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": "",
                 },
@@ -786,7 +778,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie is None"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": None,
                 },
@@ -807,7 +799,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {},
                 },
@@ -828,7 +820,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {"components": "test"},
                 },
@@ -851,7 +843,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'label' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {
                         "components": [
@@ -878,7 +870,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'key' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {
                         "components": [
@@ -906,7 +898,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'type' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "formulierDefinitie": {
                         "components": [
