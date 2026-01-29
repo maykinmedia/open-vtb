@@ -7,7 +7,9 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
+from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.serializers import (
+    URNField,
     URNModelSerializer,
     URNRelatedField,
 )
@@ -253,6 +255,96 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         }
 
 
+class AuthentiekeVerwijzingSerializer(serializers.Serializer):
+    urn = URNField(required=True, help_text=_("Authentieke Referentie URN"))
+
+
+class NietAuthentiekePersoonsgegevensSerializer(serializers.Serializer):
+    voornaam = serializers.CharField(
+        max_length=100,
+        required=True,
+        help_text="De voornaam van de persoon.",
+    )
+    achternaam = serializers.CharField(
+        max_length=100,
+        required=True,
+        help_text="De achternaam van de persoon.",
+    )
+    geboortedatum = serializers.DateField(
+        required=True,
+        help_text="De geboortedatum van de persoon in het formaat YYYY-MM-DD.",
+    )
+    emailadres = serializers.EmailField(
+        required=True,
+        help_text="Het e-mailadres van de persoon.",
+    )
+    telefoonnummer = serializers.CharField(
+        max_length=20,
+        required=True,
+        help_text="Het telefoonnummer van de persoon.",
+    )
+    postadres = serializers.CharField(
+        max_length=255,
+        required=True,
+        help_text="Het postadres van de persoon.",
+    )
+    verblijfsadres = serializers.CharField(
+        max_length=255,
+        required=True,
+        help_text="Het huidige verblijfsadres van de persoon.",
+    )
+
+
+class NietAuthentiekeOrganisatiegegevensSerializer(
+    CamelToUnderscoreMixin, serializers.Serializer
+):
+    statutaire_naam = serializers.CharField(
+        max_length=200,
+        required=True,
+        help_text="De officiële statutaire naam van de organisatie.",
+    )
+    bezoekadres = serializers.CharField(
+        max_length=255,
+        required=True,
+        help_text="Het bezoekadres van de organisatie.",
+    )
+    postadres = serializers.CharField(
+        max_length=255,
+        required=True,
+        help_text="Het postadres van de organisatie.",
+    )
+    emailadres = serializers.EmailField(
+        required=True,
+        help_text="Het e-mailadres van de organisatie.",
+    )
+    telefoonnummer = serializers.CharField(
+        max_length=20,
+        required=True,
+        help_text="Het telefoonnummer van de organisatie.",
+    )
+
+
+class IsIngediendDoorSerializer(CamelToUnderscoreMixin, serializers.Serializer):
+    authentieke_verwijzing = AuthentiekeVerwijzingSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object dat een authentieke verwijzing vertegenwoordigt. "
+        "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
+        "Bijvoorbeeld: "
+        "urn:nld:brp.bsn:111222333, urn:nld.hr.kvknummer:444555666 of urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999",
+    )
+    niet_authentieke_persoonsgegevens = NietAuthentiekePersoonsgegevensSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object met niet-authentieke persoonsgegevens.",
+    )
+    niet_authentieke_organisatiegegevens = NietAuthentiekeOrganisatiegegevensSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object met niet-authentieke organisatiegegevens.",
+    )
+
+
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
@@ -287,6 +379,14 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         required=False,
         many=True,
         help_text="",  # TODO
+    )
+    is_ingediend_door = IsIngediendDoorSerializer(
+        required=False,
+        help_text=(
+            "Gegevens over wie het verzoek heeft ingediend. "
+            "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
+            "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
+        ),
     )
 
     class Meta:
