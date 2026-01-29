@@ -417,6 +417,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "is_gerelaterd_aan",
             "kanaal",
             "authenticatie_context",
+            "informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
         )

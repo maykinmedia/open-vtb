@@ -307,6 +307,13 @@ class Verzoek(models.Model):
         help_text=_("authentication context urn"),  # TODO check help_text
         blank=True,
     )
+    informatie_object = URNField(
+        _("informatie object"),
+        help_text=_(
+            "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
+        ),
+        blank=True,
+    )
 
     class Meta:
         verbose_name = _("Verzoek")
