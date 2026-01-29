@@ -13,6 +13,7 @@ from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
 from .constants import VerzoekTypeVersionStatus
+from .schemas import IS_INGEDIEND_DOOR_SCHEMA
 from .utils import check_json_schema
 
 
@@ -273,10 +274,19 @@ class Verzoek(models.Model):
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
     )
-    is_ingediend_door = URNField(
-        _("is ingediend door partij"),
-        help_text=_("is ingediend door Partij urn"),  # TODO check help_text
+    is_ingediend_door = models.JSONField(
+        _("Is ingediend door"),
+        default=dict,
         blank=True,
+        help_text=_(
+            "JSON-object dat aangeeft door wie het verzoek is ingediend. "
+            "Kan één van de volgende vormen hebben:\n"
+            "- authentiekeVerwijzing: object met een 'urn' string (bijv. 'urn:...')\n"
+            "- nietAuthentiekePersoonsgegevens: object met persoonsgegevens zoals voornaam, achternaam, geboortedatum, emailadres, telefoonnummer, postadres en verblijfsadres\n"
+            "- nietAuthentiekeOrganisatiegegevens: object met organisatiegegevens zoals statutaireNaam, bezoekadres, postadres, emailadres en telefoonnummer\n"
+            "Dit JSON-object wordt gebruikt voor validatie van het VerzoekType."
+        ),
+        encoder=DjangoJSONEncoder,
     )
     is_gerelaterd_aan = URNField(
         _("is_gerelaterd_aan"),
@@ -305,8 +315,32 @@ class Verzoek(models.Model):
     def __str__(self):
         return f"{self.uuid}"
 
-    def clean(self):
-        super().clean()
+    def clean_is_ingediend_door(self):
+        if not self.is_ingediend_door:
+            return
+
+        if len(self.is_ingediend_door.keys()) > 1:
+            raise ValidationError(
+                {
+                    "is_ingediend_door": _(
+                        "It must have only one of the three permitted keys: "
+                        "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
+                    )
+                },
+                code="invalid",
+            )
+        try:
+            validate_jsonschema(
+                instance=self.is_ingediend_door,
+                label="is_ingediend_door",
+                schema=IS_INGEDIEND_DOOR_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_ingediend_door": str(error)})
+
+    def clean_verzoek_type(self):
+        if not self.verzoek_type_id:
+            return
         if not self.verzoek_type.versions.filter(version=self.version).exists():
             raise ValidationError(
                 {
@@ -327,6 +361,11 @@ class Verzoek(models.Model):
             )
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens": str(error)})
+
+    def clean(self):
+        super().clean()
+        self.clean_verzoek_type()
+        self.clean_is_ingediend_door()
 
 
 class Bijlage(models.Model):
@@ -353,7 +392,7 @@ class Bijlage(models.Model):
         _("toelichting"),
         blank=True,
         help_text=_(
-            "toelichting van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Toelichting van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
             "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECT."
         ),
     )
