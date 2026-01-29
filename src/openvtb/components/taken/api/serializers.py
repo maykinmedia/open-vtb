@@ -3,12 +3,12 @@ import json
 from django.utils.translation import gettext_lazy as _
 
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
-from djangorestframework_camel_case.util import camel_to_underscore
 from rest_framework import serializers
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.schemas import SOORTTAAK_SCHEMA_MAPPING
+from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.constants import Valuta
 from openvtb.utils.json_utils import get_json_schema
@@ -19,7 +19,7 @@ from ..models import ExterneTaak
 from .validators import FormulierDefinitieValidator
 
 
-class DoelrekeningSerializer(serializers.Serializer):
+class DoelrekeningSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     naam = serializers.CharField(
         required=True,
         max_length=200,
@@ -60,7 +60,7 @@ class BetaalTaakSerializer(serializers.Serializer):
         return value
 
 
-class GegevensUitvraagTaakSerializer(serializers.Serializer):
+class GegevensUitvraagTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     uitvraag_link = serializers.URLField(
         required=True,
         help_text=_("Link naar de externe gegevensaanvraag"),
@@ -70,12 +70,8 @@ class GegevensUitvraagTaakSerializer(serializers.Serializer):
         help_text=_("Ontvangen gegevens als key-value object"),
     )
 
-    def to_representation(self, instance):
-        instance = {camel_to_underscore(k): v for k, v in instance.items()}
-        return super().to_representation(instance)
 
-
-class FormulierTaakSerializer(serializers.Serializer):
+class FormulierTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     formulier_definitie = serializers.JSONField(
         required=True,
         help_text=_(
@@ -95,10 +91,6 @@ class FormulierTaakSerializer(serializers.Serializer):
     validators = [
         FormulierDefinitieValidator(),
     ]
-
-    def to_representation(self, instance):
-        instance = {camel_to_underscore(k): v for k, v in instance.items()}
-        return super().to_representation(instance)
 
 
 class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer):
