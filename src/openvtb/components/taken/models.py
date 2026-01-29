@@ -11,7 +11,7 @@ from django_jsonform.models.fields import JSONField
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
-from .constants import SoortTaak, StatusTaak
+from .constants import ActionTaak, SoortTaak, StatusTaak
 from .schemas import FORMULIER_DEFINITIE_SCHEMA
 from .utils import get_json_schema
 
@@ -21,20 +21,24 @@ class ExterneTaak(models.Model):
         unique=True,
         default=_uuid.uuid4,
         help_text=(
-            "Een UUID waarmee een ZAC een link kan leggen tussen de taak en zijn eigen administratie."
+            "Een UUID waarmee een ZAC een link kan leggen tussen "
+            "de taak en zijn eigen administratie."
         ),
     )
     titel = models.CharField(
         _("titel"),
         max_length=100,
-        help_text=_("Titel van de taak (max. 1 zin)"),
+        help_text=_(
+            "Titel van de uit te voeren taak, zoals dat door eind "
+            "gebruikers gezien kan worden in bijvoorbeeld een portaal."
+        ),
     )
     status = models.CharField(
         _("status"),
         max_length=20,
         default=StatusTaak.OPEN,
         choices=StatusTaak.choices,
-        help_text=_("Status van de taak"),
+        help_text=_("Status van de taak."),
     )
     startdatum = models.DateTimeField(
         _("start datum"),
@@ -44,13 +48,17 @@ class ExterneTaak(models.Model):
     handelings_perspectief = models.CharField(
         _("handelings perspectief"),
         max_length=100,
-        help_text=_("Handelings perspectief"),
+        blank=True,
+        choices=ActionTaak.choices,
+        help_text=_(
+            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
+        ),
     )
     einddatum_handelings_termijn = models.DateTimeField(
         _("einddatum handelings termijn"),
         blank=True,
         null=True,
-        help_text=_("Einddatum handelings termijn"),
+        help_text=_("Einddatum handelings termijn."),
     )
     datum_herinnering = models.DateTimeField(
         _("datum herinnering"),
@@ -61,18 +69,21 @@ class ExterneTaak(models.Model):
     toelichting = models.TextField(
         _("toelichting"),
         blank=True,
-        help_text=_("Uitleg van de taak"),
+        help_text=_(
+            "Toelichting van de uit te voeren taak, zoals dat door eind gebruikers "
+            "gezien kan worden in bijvoorbeeld een portaal."
+        ),
     )
     taak_soort = models.CharField(
         _("taak soort"),
         max_length=20,
         choices=SoortTaak.choices,
-        help_text=_("Het soort taak"),
+        help_text=_("Het soort taak."),
     )
     details = JSONField(
         _("details"),
         default=dict,
-        help_text=_("Details van de taak met validaties op basis van het soort taak"),
+        help_text=_("De attributen die horen bij de `taakSoort`."),
         encoder=DjangoJSONEncoder,
     )
     # partij relation
@@ -97,14 +108,18 @@ class ExterneTaak(models.Model):
     hoort_bij = URNField(
         _("hoort bij zaak"),
         help_text=_(
-            "De zaak waartoe deze taak behoort, waarmee de taak kan worden gekoppeld aan een specifieke zaak."
+            "URN naar de ZAAK. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
         ),
         blank=True,
     )
     # product relation
     heeft_betrekking_op = URNField(
         _("heeft betrekking op product"),
-        help_text=_("Het product waarop deze taak betrekking heeft"),
+        help_text=_(
+            "URN naar het PRODUCT. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        ),
         blank=True,
     )
 
