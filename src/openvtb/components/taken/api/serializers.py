@@ -65,6 +65,13 @@ class GegevensUitvraagTaakSerializer(CamelToUnderscoreMixin, serializers.Seriali
         required=True,
         help_text=_("Link naar de externe gegevensaanvraag"),
     )
+    voorinvullen_gegevens = serializers.JSONField(
+        default=dict,
+        help_text=_(
+            "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de uitvraag. "
+            "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+        ),
+    )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,
         help_text=_("Ontvangen gegevens als key-value object"),

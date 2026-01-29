@@ -66,6 +66,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
             taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK,
             details={
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key": "value",
+                },
                 "ontvangenGegevens": {
                     "key": "value",
                 },

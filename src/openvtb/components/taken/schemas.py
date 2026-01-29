@@ -70,6 +70,16 @@ GEGEVENS_SCHEMA = {
             "type": "string",
             "format": "uri",
         },
+        "voorinvullenGegevens": {
+            "type": "object",
+            "title": "voorinvullenGegevens",
+            "description": _(
+                "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de uitvraag. "
+                "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+            ),
+            "keys": {},
+            "additionalProperties": True,
+        },
         "ontvangenGegevens": {
             "type": "object",
             "title": "ontvangenGegevens",
