@@ -643,6 +643,16 @@ paths:
           description: No response body
 components:
   schemas:
+    AuthentiekeVerwijzing:
+      type: object
+      properties:
+        urn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: Authentieke Referentie URN
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+      required:
+      - urn
     Bijlage:
       type: object
       properties:
@@ -654,7 +664,7 @@ components:
           maxLength: 255
         toelichting:
           type: string
-          description: toelichting van het soort bijlage, zoals dat door eind gebruikers
+          description: Toelichting van het soort bijlage, zoals dat door eind gebruikers
             gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
             omschrijving als die van het INFORMATIEOBJECT.
       required:
@@ -716,6 +726,26 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Geometry'
+    IsIngediendDoor:
+      type: object
+      properties:
+        authentiekeVerwijzing:
+          allOf:
+          - $ref: '#/components/schemas/AuthentiekeVerwijzing'
+          nullable: true
+          description: 'Object dat een authentieke verwijzing vertegenwoordigt. URN
+            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: urn:nld:brp.bsn:111222333,
+            urn:nld.hr.kvknummer:444555666 of urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999'
+        nietAuthentiekePersoonsgegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekePersoonsgegevens'
+          nullable: true
+          description: Object met niet-authentieke persoonsgegevens.
+        nietAuthentiekeOrganisatiegegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekeOrganisatiegegevens'
+          nullable: true
+          description: Object met niet-authentieke organisatiegegevens.
     LineString:
       type: object
       description: GeoJSON line-string geometry
@@ -783,6 +813,74 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Point2D'
+    NietAuthentiekeOrganisatiegegevens:
+      type: object
+      properties:
+        statutaireNaam:
+          type: string
+          description: De officiële statutaire naam van de organisatie.
+          maxLength: 200
+        bezoekadres:
+          type: string
+          description: Het bezoekadres van de organisatie.
+          maxLength: 255
+        postadres:
+          type: string
+          description: Het postadres van de organisatie.
+          maxLength: 255
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de organisatie.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de organisatie.
+          maxLength: 20
+      required:
+      - bezoekadres
+      - emailadres
+      - postadres
+      - statutaireNaam
+      - telefoonnummer
+    NietAuthentiekePersoonsgegevens:
+      type: object
+      properties:
+        voornaam:
+          type: string
+          description: De voornaam van de persoon.
+          maxLength: 100
+        achternaam:
+          type: string
+          description: De achternaam van de persoon.
+          maxLength: 100
+        geboortedatum:
+          type: string
+          format: date
+          description: De geboortedatum van de persoon in het formaat YYYY-MM-DD.
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de persoon.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de persoon.
+          maxLength: 20
+        postadres:
+          type: string
+          description: Het postadres van de persoon.
+          maxLength: 255
+        verblijfsadres:
+          type: string
+          description: Het huidige verblijfsadres van de persoon.
+          maxLength: 255
+      required:
+      - achternaam
+      - emailadres
+      - geboortedatum
+      - postadres
+      - telefoonnummer
+      - verblijfsadres
+      - voornaam
     PaginatedVerzoekList:
       type: object
       required:
@@ -901,12 +999,11 @@ components:
           items:
             $ref: '#/components/schemas/Bijlage'
         isIngediendDoor:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is ingediend door partij
-          description: is ingediend door Partij urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
+            ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         isGerelaterdAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1120,12 +1217,11 @@ components:
           items:
             $ref: '#/components/schemas/Bijlage'
         isIngediendDoor:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is ingediend door partij
-          description: is ingediend door Partij urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
+            ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         isGerelaterdAan:
           type: string
           example: urn:namespace:component:resource:uuid

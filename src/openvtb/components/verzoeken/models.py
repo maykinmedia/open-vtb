@@ -319,7 +319,10 @@ class Verzoek(models.Model):
         if not self.is_ingediend_door:
             return
 
-        if len(self.is_ingediend_door.keys()) > 1:
+        # remove keys with None value
+        data = {k: v for k, v in self.is_ingediend_door.items() if v is not None}
+
+        if len(data.keys()) > 1:
             raise ValidationError(
                 {
                     "is_ingediend_door": _(
@@ -331,7 +334,7 @@ class Verzoek(models.Model):
             )
         try:
             validate_jsonschema(
-                instance=self.is_ingediend_door,
+                instance=data,
                 label="is_ingediend_door",
                 schema=IS_INGEDIEND_DOOR_SCHEMA,
             )

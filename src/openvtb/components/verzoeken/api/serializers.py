@@ -1,6 +1,9 @@
+import json
+
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
+from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
@@ -27,6 +30,7 @@ from .validators import (
     AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
     IsImmutableValidator,
+    IsIngediendDoorValidator,
     JsonSchemaValidator,
     VersionStatusValidator,
 )
@@ -259,7 +263,9 @@ class AuthentiekeVerwijzingSerializer(serializers.Serializer):
     urn = URNField(required=True, help_text=_("Authentieke Referentie URN"))
 
 
-class NietAuthentiekePersoonsgegevensSerializer(serializers.Serializer):
+class NietAuthentiekePersoonsgegevensSerializer(
+    CamelToUnderscoreMixin, serializers.Serializer
+):
     voornaam = serializers.CharField(
         max_length=100,
         required=True,
@@ -343,6 +349,12 @@ class IsIngediendDoorSerializer(CamelToUnderscoreMixin, serializers.Serializer):
         allow_null=True,
         help_text="Object met niet-authentieke organisatiegegevens.",
     )
+
+    def validate(self, data):
+        # clean data
+        renderer = CamelCaseJSONRenderer()
+        data = json.loads(renderer.render(data))
+        return data
 
 
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -429,6 +441,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
 
     validators = [
         AanvraagGegevensValidator(),
+        IsIngediendDoorValidator(),
     ]
 
     def validate_bijlagen(self, value):

@@ -8,6 +8,7 @@ from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.validators import validate_jsonschema
 
 from ..constants import VerzoekTypeVersionStatus
+from ..schemas import IS_INGEDIEND_DOOR_SCHEMA
 from ..utils import check_json_schema
 
 
@@ -128,7 +129,47 @@ class AanvraagGegevensValidator:
                 schema=verzoek_type.versions.get(
                     version=version
                 ).aanvraag_gegevens_schema,
-                label="aanvraagGegevens",
+                label=self.label,
+            )
+        except ValidationError as error:
+            raise serializers.ValidationError(error.message_dict, code=self.code)
+        return attrs
+
+
+class IsIngediendDoorValidator:
+    """
+    Validates `is_ingediend_door` against the IS_INGEDIEND_DOOR_SCHEMA
+    """
+
+    code = "invalid-json-schema"
+    label = "isIngediendDoor"
+    requires_context = True
+
+    def __call__(self, attrs, serializer):
+        data = get_from_serializer_data_or_instance(
+            "is_ingediend_door", attrs, serializer
+        )
+
+        if not data:
+            return attrs
+
+        # remove keys with None value
+        data = {k: v for k, v in data.items() if v is not None}
+
+        if len(data.keys()) > 1:
+            raise serializers.ValidationError(
+                {
+                    "is_ingediend_door": _(
+                        "It must have only one of the three permitted keys: "
+                        "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
+                    ),
+                }
+            )
+        try:
+            validate_jsonschema(
+                instance=data,
+                schema=IS_INGEDIEND_DOOR_SCHEMA,
+                label=self.label,
             )
         except ValidationError as error:
             raise serializers.ValidationError(error.message_dict, code=self.code)
