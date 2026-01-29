@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
+from rest_framework.fields import CharField
 from rest_framework.relations import (
     ObjectTypeError,
     ObjectValueError,
@@ -252,3 +253,13 @@ class URNModelSerializer(serializers.ModelSerializer):
         field_kwargs = get_nested_relation_kwargs(relation_info)
 
         return field_class, field_kwargs
+
+
+@extend_schema_field(
+    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
+)
+class URNField(CharField):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        validator = URNValidator()
+        self.validators.append(validator)
