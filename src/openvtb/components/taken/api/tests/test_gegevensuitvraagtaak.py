@@ -4,7 +4,7 @@ import uuid
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import SoortTaak
+from openvtb.components.taken.constants import ActionTaak, SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -60,6 +60,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
                                 "uitvraagLink"
+                            ],
+                            "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                                "voorinvullenGegevens"
                             ],
                             "ontvangenGegevens": gegevensuitvraagtaak.details[
                                 "ontvangenGegevens"
@@ -117,6 +120,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -144,9 +150,16 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -182,6 +195,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -192,7 +208,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "uitvraagLink": "http://example.com/",
             },
@@ -206,9 +222,16 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {},
             },
         }
@@ -222,9 +245,16 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -260,6 +290,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -274,19 +307,11 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 2)
         self.assertEqual(
             get_validation_errors(response, "titel"),
             {
                 "name": "titel",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
-            {
-                "name": "handelingsPerspectief",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -304,7 +329,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -356,6 +381,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -399,6 +427,25 @@ class GegevensuitvraagTaakTests(APITestCase):
             gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
         )
 
+        # update voorinvullenGegevens
+        self.assertEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
+        )  # default
+        response = self.client.patch(
+            detail_url, {"details": {"voorinvullenGegevens": {"new_key": "new_value"}}}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+
+        # new value
+        self.assertEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"],
+            {"new_key": "new_value"},
+        )
+        self.assertNotEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
+        )
+
     def test_valid_update(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
@@ -412,7 +459,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "uitvraagLink": "http://example-new-url.com/",
                 },
@@ -444,6 +491,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -479,7 +529,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -519,7 +569,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
                 "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
                 "details": {
@@ -541,7 +591,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "uitvraagLink": "test",
                 },
@@ -561,7 +611,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid none url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "uitvraagLink": None,
                 },
@@ -581,7 +631,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("null value ontvangenGegevens"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "handelingsPerspectief": ActionTaak.LEZEN,
                 "details": {
                     "uitvraagLink": "http://example.com/",
                     "ontvangenGegevens": None,

@@ -3,7 +3,7 @@ import datetime
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import SoortTaak
+from openvtb.components.taken.constants import ActionTaak, SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -119,7 +119,7 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
                 "bedrag": "11",
@@ -171,7 +171,7 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
@@ -230,19 +230,11 @@ class ExterneTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 4)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "titel"),
             {
                 "name": "titel",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
-            {
-                "name": "handelingsPerspectief",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -268,7 +260,7 @@ class ExterneTaakTests(APITestCase):
         # invalid taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": "test",
             "details": {},
         }
@@ -289,7 +281,7 @@ class ExterneTaakTests(APITestCase):
         # empty taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": "",
             "details": {},
         }
@@ -310,7 +302,7 @@ class ExterneTaakTests(APITestCase):
         # invalid details schema
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -447,7 +439,7 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "taak_soort": SoortTaak.BETAALTAAK.value,
                 "details": {
                     "bedrag": "100",
@@ -501,7 +493,7 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
@@ -529,7 +521,7 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "taakSoort": SoortTaak.GEGEVENSUITVRAAGTAAK.value,
                 "details": {"uitvraagLink": "http://example.com/"},
             },
@@ -585,7 +577,7 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
             "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
@@ -614,7 +606,7 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "test",
             "wordtBehandeldDoor": "test:maykin:medewerker:brp:nnp:bsn:1234567892",  # doesn't start with urn
