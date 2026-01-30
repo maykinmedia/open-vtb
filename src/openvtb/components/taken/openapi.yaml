@@ -902,19 +902,19 @@ components:
       properties:
         bedrag:
           type: string
-          description: Bedrag dat betaald moet worden
+          description: Bedrag dat betaald moet worden.
         valuta:
           type: string
           default: EUR
-          description: Valuta van de betaling
+          description: Valuta van de betaling.
         transactieomschrijving:
           type: string
-          description: Omschrijving van de transactie
+          description: Omschrijving van de transactie.
           maxLength: 80
         doelrekening:
           allOf:
           - $ref: '#/components/schemas/Doelrekening'
-          description: Gegevens van de ontvangende bankrekening
+          description: Gegevens van de ontvangende bankrekening.
       required:
       - bedrag
       - doelrekening
@@ -1603,12 +1603,18 @@ components:
       properties:
         naam:
           type: string
-          description: Naam van de ontvanger van de betaling
+          description: Naam van de ontvanger van de betaling.
           maxLength: 200
+        code:
+          type: string
+          description: Een arbitraire code die gebruikt kan worden om de juiste rekening
+            en/of betaalprovider te kiezen in het systeem dat de taak afhandeld.
+          maxLength: 100
         iban:
           type: string
-          description: IBAN code van de ontvanger
+          description: IBAN code van de ontvanger.
       required:
+      - code
       - iban
       - naam
     ExterneTaakPolymorphic:
@@ -1635,7 +1641,7 @@ components:
             \ gebruikt worden om het gedrag of de weergave van het veld aan te passen."
           type: object
         ontvangenGegevens:
-          description: Ontvangen gegevens als key-value object
+          description: Ontvangen gegevens als key-value object.
           type: object
       required:
       - formulierDefinitie
@@ -2321,14 +2327,14 @@ components:
         uitvraagLink:
           type: string
           format: uri
-          description: Link naar de externe gegevensaanvraag
+          description: Link naar de externe gegevensaanvraag.
         voorinvullenGegevens:
           description: Arbitraire sleutel-waarde gegevens die ingevuld moeten worden
             in de uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier,
             of een veld in een sjabloon.
           type: object
         ontvangenGegevens:
-          description: Ontvangen gegevens als key-value object
+          description: Ontvangen gegevens als key-value object.
           type: object
       required:
       - uitvraagLink

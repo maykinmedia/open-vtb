@@ -38,6 +38,10 @@ BETAAL_SCHEMA = {
                     "type": "string",
                     "maxLength": 200,
                 },
+                "code": {
+                    "type": "string",
+                    "maxLength": 100,
+                },
                 "iban": {
                     "type": "string",
                     "format": "iban",
@@ -45,6 +49,7 @@ BETAAL_SCHEMA = {
             },
             "required": [
                 "naam",
+                "code",
                 "iban",
             ],
         },

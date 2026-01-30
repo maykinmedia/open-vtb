@@ -58,6 +58,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },

@@ -126,6 +126,7 @@ class ExterneTaakTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -161,6 +162,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -182,6 +184,7 @@ class ExterneTaakTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -217,6 +220,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -383,6 +387,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -447,6 +452,7 @@ class ExterneTaakTests(APITestCase):
                     "transactieomschrijving": "new_test",
                     "doelrekening": {
                         "naam": "new_test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     },
                 },
@@ -482,6 +488,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -500,6 +507,7 @@ class ExterneTaakTests(APITestCase):
                     "transactieomschrijving": "new_test",
                     "doelrekening": {
                         "naam": "new_test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     },
                 },
@@ -586,6 +594,7 @@ class ExterneTaakValidationTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -616,6 +625,7 @@ class ExterneTaakValidationTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
