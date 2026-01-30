@@ -146,15 +146,10 @@ class IsIngediendDoorValidator:
     requires_context = True
 
     def __call__(self, attrs, serializer):
-        data = get_from_serializer_data_or_instance(
-            "is_ingediend_door", attrs, serializer
-        )
+        data = attrs.get("is_ingediend_door", {})
 
         if not data:
             return attrs
-
-        # remove keys with None value
-        data = {k: v for k, v in data.items() if v is not None}
 
         if len(data.keys()) > 1:
             raise serializers.ValidationError(

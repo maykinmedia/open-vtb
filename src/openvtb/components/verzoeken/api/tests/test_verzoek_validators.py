@@ -311,8 +311,8 @@ class VerzoekValidatorsTests(APITestCase):
                     "authentiekeVerwijzing": {"urn": "urn:example:12345"},
                     "nietAuthentiekeOrganisatiegegevens": {
                         "statutaireNaam": "Acme BV",
-                        "bezoekadres": "Hoofdstraat 123, 1000 AB Amsterdam",
-                        "postadres": "Postbus 456, 1000 CD Amsterdam",
+                        "bezoekadres": {"key": "value"},
+                        "postadres": {"key": "value"},
                         "emailadres": "info@acme.nl",
                         "telefoonnummer": "+31201234567",
                     },
@@ -331,6 +331,30 @@ class VerzoekValidatorsTests(APITestCase):
                 },
             )
 
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {
+                    "diameter": 10,
+                },
+                "version": 1,
+                "isIngediendDoor": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                },
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isIngediendDoor"),
+                {
+                    "name": "isIngediendDoor",
+                    "code": "invalid",
+                    "reason": "It must have only one of the three permitted keys: one of `authentiekeVerwijzing`,"
+                    " `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`.",
+                },
+            )
         with self.subTest("required field"):
             data = {
                 "verzoekType": verzoektype_url,

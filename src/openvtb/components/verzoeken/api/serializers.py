@@ -1,6 +1,6 @@
 import json
 
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
@@ -44,7 +44,7 @@ class BijlageTypeSerializer(serializers.ModelSerializer):
             "omschrijving",
         )
         extra_kwargs = {
-            "informatie_objecttype": {"required": True},
+            "informatie_objecttype": {"required": True, "validators": []},
         }
 
 
@@ -137,22 +137,20 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         instance = super().create(validated_data)
 
         if bijlage_typen:
-            for bijlage_type in bijlage_typen:
-                if instance.bijlage_typen.filter(
-                    informatie_objecttype=bijlage_type["informatie_objecttype"]
-                ).exists():
-                    raise serializers.ValidationError(
-                        {
-                            "bijlageTypen": _(
-                                "bijlageType with the specified informatieObjecttype already exists."
-                            )
-                        },
-                        code="bijlagetype-unique",
-                    )
-                else:
-                    BijlageType.objects.create(
-                        verzoek_type_version=instance, **bijlage_type
-                    )
+            try:
+                objs = [
+                    BijlageType(verzoek_type_version=instance, **data)
+                    for data in bijlage_typen
+                ]
+                BijlageType.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                    },
+                    code="unique",
+                )
+
         return instance
 
     @transaction.atomic
@@ -177,7 +175,7 @@ class BijlageSerializer(serializers.ModelSerializer):
             "toelichting",
         )
         extra_kwargs = {
-            "informatie_object": {"required": True},
+            "informatie_object": {"required": True, "validators": []},
         }
 
 
@@ -289,14 +287,13 @@ class NietAuthentiekePersoonsgegevensSerializer(
         required=True,
         help_text="Het telefoonnummer van de persoon.",
     )
-    postadres = serializers.CharField(
-        max_length=255,
-        required=True,
+    postadres = serializers.JSONField(
+        default=dict,
         help_text="Het postadres van de persoon.",
     )
-    verblijfsadres = serializers.CharField(
-        max_length=255,
-        required=True,
+
+    verblijfsadres = serializers.JSONField(
+        default=dict,
         help_text="Het huidige verblijfsadres van de persoon.",
     )
 
@@ -309,14 +306,12 @@ class NietAuthentiekeOrganisatiegegevensSerializer(
         required=True,
         help_text="De officiële statutaire naam van de organisatie.",
     )
-    bezoekadres = serializers.CharField(
-        max_length=255,
-        required=True,
+    bezoekadres = serializers.JSONField(
+        default=dict,
         help_text="Het bezoekadres van de organisatie.",
     )
-    postadres = serializers.CharField(
-        max_length=255,
-        required=True,
+    postadres = serializers.JSONField(
+        default=dict,
         help_text="Het postadres van de organisatie.",
     )
     emailadres = serializers.EmailField(
@@ -414,7 +409,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "version",
             "bijlagen",
             "is_ingediend_door",
-            "is_gerelaterd_aan",
+            "is_gerelateerd_aan",
             "kanaal",
             "authenticatie_context",
             "informatie_object",
@@ -468,22 +463,17 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             VerzoekBron.objects.create(verzoek=instance, **bron)
         if betaling:
             VerzoekBetaling.objects.create(verzoek=instance, **betaling)
-
         if bijlagen:
-            for bijlage in bijlagen:
-                if instance.bijlagen.filter(
-                    informatie_object=bijlage["informatie_object"]
-                ).exists():
-                    raise serializers.ValidationError(
-                        {
-                            "bijlagen": _(
-                                "bijlage with the specified informatieObject already exists."
-                            )
-                        },
-                        code="bijlage-unique",
-                    )
-                else:
-                    Bijlage.objects.create(verzoek=instance, **bijlage)
+            try:
+                objs = [Bijlage(verzoek=instance, **data) for data in bijlagen]
+                Bijlage.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlagen": "Bijlage with the specified informatieObject already exists."
+                    },
+                    code="unique",
+                )
         return instance
 
     @transaction.atomic

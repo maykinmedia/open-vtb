@@ -28,8 +28,8 @@ NIET_AUTHENTIEKE_PERSOONSGEGEVENS = {
         "geboortedatum": {"type": "string", "format": "date"},
         "emailadres": {"type": "string", "format": "email"},
         "telefoonnummer": {"type": "string"},
-        "postadres": {"type": "string"},
-        "verblijfsadres": {"type": "string"},
+        "postadres": {"type": "object", "keys": {}},
+        "verblijfsadres": {"type": "object", "keys": {}},
     },
     "required": [
         "voornaam",
@@ -37,8 +37,6 @@ NIET_AUTHENTIEKE_PERSOONSGEGEVENS = {
         "geboortedatum",
         "emailadres",
         "telefoonnummer",
-        "postadres",
-        "verblijfsadres",
     ],
 }
 
@@ -50,15 +48,13 @@ NIET_AUTHENTIEKE_ORGANISATIEGEGEVENS = {
     "additionalProperties": False,
     "properties": {
         "statutaireNaam": {"type": "string"},
-        "bezoekadres": {"type": "string"},
-        "postadres": {"type": "string"},
+        "bezoekadres": {"type": "object", "keys": {}},
+        "postadres": {"type": "object", "keys": {}},
         "emailadres": {"type": "string", "format": "email"},
         "telefoonnummer": {"type": "string"},
     },
     "required": [
         "statutaireNaam",
-        "bezoekadres",
-        "postadres",
         "emailadres",
         "telefoonnummer",
     ],

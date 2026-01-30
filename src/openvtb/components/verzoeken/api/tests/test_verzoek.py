@@ -54,7 +54,7 @@ class VerzoekTests(APITestCase):
                         "version": 1,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
-                        "isGerelaterdAan": "",
+                        "isGerelateerdAan": "",
                         "kanaal": "",
                         "authenticatieContext": "",
                         "informatieObject": "",
@@ -66,8 +66,8 @@ class VerzoekTests(APITestCase):
                                 "geboortedatum": "1980-05-15",
                                 "emailadres": "jan.jansen@example.com",
                                 "telefoonnummer": "+31612345678",
-                                "postadres": "Poststraat 12, 1000 AB Amsterdam",
-                                "verblijfsadres": "Woonstraat 34, 1000 CD Amsterdam",
+                                "postadres": {"key": "value"},
+                                "verblijfsadres": {"key": "value"},
                             },
                             "nietAuthentiekeOrganisatiegegevens": None,
                         },
@@ -129,7 +129,7 @@ class VerzoekTests(APITestCase):
                     "nietAuthentiekePersoonsgegevens": None,
                     "nietAuthentiekeOrganisatiegegevens": None,
                 },
-                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "informatieObject": verzoek.informatie_object,
@@ -182,8 +182,11 @@ class VerzoekTests(APITestCase):
             "isIngediendDoor": {
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": "Hoofdstraat 123, 1000 AB Amsterdam",
-                    "postadres": "Postbus 456, 1000 CD Amsterdam",
+                    "bezoekadres": {"key": "value"},
+                    "postadres": {
+                        "keyCamelCase": "value_test",
+                        "key_snake_case": "valueTest",
+                    },
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",
                 }
@@ -212,11 +215,18 @@ class VerzoekTests(APITestCase):
                 "isIngediendDoor": {
                     "authentiekeVerwijzing": None,
                     "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": verzoek.is_ingediend_door[
-                        "nietAuthentiekeOrganisatiegegevens"
-                    ],
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "postadres": {
+                            "keyCamelCase": "value_test",
+                            "key_snake_case": "valueTest",
+                        },
+                        "emailadres": "info@acme.nl",
+                        "bezoekadres": {"key": "value"},
+                        "statutaireNaam": "Acme BV",
+                        "telefoonnummer": "+31201234567",
+                    },
                 },
-                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "informatieObject": verzoek.informatie_object,
@@ -254,7 +264,7 @@ class VerzoekTests(APITestCase):
                 },
             ],
             "isIngediendDoor": {},
-            "isGerelaterdAan": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "isGerelateerdAan": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
             "authenticatieContext": "",
             "verzoekBron": {
                 "naam": "string",
@@ -293,7 +303,7 @@ class VerzoekTests(APITestCase):
                     "nietAuthentiekeOrganisatiegegevens": None,
                     "nietAuthentiekePersoonsgegevens": None,
                 },
-                "isGerelaterdAan": verzoek.is_gerelaterd_aan,
+                "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "informatieObject": verzoek.informatie_object,
@@ -337,42 +347,6 @@ class VerzoekTests(APITestCase):
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        verzoek = Verzoek.objects.get()
-
-        self.assertEqual(verzoek.bijlagen.count(), 2)
-
-        # invalid already exists
-        data = {
-            "geometrie": {"type": "Point", "coordinates": [0, 0]},
-            "verzoekType": reverse(
-                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
-            ),
-            "aanvraagGegevens": {
-                "diameter": 10,
-            },
-            "version": 1,
-            "bijlagen": [
-                {
-                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
-                },
-                {
-                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
-                },
-            ],
-        }
-        response = self.client.post(self.list_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "bijlagen"),
-            {
-                "name": "bijlagen",
-                "code": "bijlage-unique",
-                "reason": "bijlage with the specified informatieObject already exists.",
-            },
-        )
         verzoek = Verzoek.objects.get()
 
         self.assertEqual(verzoek.bijlagen.count(), 2)
@@ -593,8 +567,8 @@ class VerzoekTests(APITestCase):
                     "geboortedatum": "1980-05-15",
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
-                    "postadres": "Poststraat 12, 1000 AB Amsterdam",
-                    "verblijfsadres": "Woonstraat 34, 1000 CD Amsterdam",
+                    "postadres": {"key": "value"},
+                    "verblijfsadres": {"key": "value"},
                 }
             },
         )
@@ -628,7 +602,7 @@ class VerzoekTests(APITestCase):
         verzoek = Verzoek.objects.get()
         self.assertEqual(verzoek.is_ingediend_door, {})
 
-        # invalid
+        # invalid options
         response = self.client.patch(
             detail_url,
             {

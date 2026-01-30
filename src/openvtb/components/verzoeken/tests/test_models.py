@@ -142,8 +142,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
                 "geboortedatum": "1982-01-01",
                 "emailadres": "test@admin.com",
                 "telefoonnummer": "",
-                "postadres": "",
-                "verblijfsadres": "",
+                "postadres": {"key": "value"},
+                "verblijfsadres": {"key": "value"},
             }
         }
         verzoek.save()
@@ -153,8 +153,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
         verzoek.is_ingediend_door = {
             "nietAuthentiekeOrganisatiegegevens": {
                 "statutaireNaam": "ACME",
-                "bezoekadres": "",
-                "postadres": "",
+                "bezoekadres": {"key": "value"},
+                "postadres": {"key": "value"},
                 "emailadres": "test@admin.com",
                 "telefoonnummer": "",
             }
@@ -255,8 +255,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
                     "geboortedatum": "1982-01-01",
                     "emailadres": "test@admin.com",
                     "telefoonnummer": "",
-                    "postadres": "",
-                    "verblijfsadres": "",
+                    "postadres": {"key": "value"},
+                    "verblijfsadres": {"key": "value"},
                 },
             }
             verzoek.save()
@@ -306,8 +306,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
             verzoek.is_ingediend_door = {
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": 1,
-                    "bezoekadres": "",
-                    "postadres": "",
+                    "bezoekadres": {"key": "value"},
+                    "postadres": {"key": "value"},
                     "emailadres": "test@admin.com",
                     "telefoonnummer": "",
                 },

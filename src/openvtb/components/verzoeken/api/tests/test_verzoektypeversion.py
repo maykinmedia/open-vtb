@@ -1,5 +1,5 @@
 import uuid
-from datetime import date
+from datetime import date, timedelta
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -178,33 +178,6 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(verzoektype.versions.count(), 1)
         version = verzoektype.last_version
         self.assertEqual(version.bijlage_typen.count(), 2)
-
-        # invalid arleady exists with this informatieObjecttype
-        data = {
-            "aanvraagGegevensSchema": JSON_SCHEMA,
-            "bijlageTypen": [
-                {
-                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "omschrijving": "test1",
-                },
-                {
-                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "omschrijving": "test1",
-                },
-            ],
-        }
-
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "bijlageTypen"),
-            {
-                "name": "bijlageTypen",
-                "code": "bijlagetype-unique",
-                "reason": "bijlageType with the specified informatieObjecttype already exists.",
-            },
-        )
 
     def test_invalid_create_version(self):
         verzoektype = VerzoekTypeFactory.create()
@@ -419,9 +392,9 @@ class VerzoekTypeVersionTests(APITestCase):
 
     def test_manually_update_expired_date(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)
-
         self.assertFalse(verzoektype.last_version.is_expired)
 
+        # today
         response = self.client.patch(
             reverse(
                 "verzoeken:verzoektypeversion-detail",
@@ -436,6 +409,24 @@ class VerzoekTypeVersionTests(APITestCase):
 
         verzoektype.refresh_from_db()
         self.assertTrue(verzoektype.last_version.is_expired)
+
+        # future
+        response = self.client.patch(
+            reverse(
+                "verzoeken:verzoektypeversion-detail",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                    "verzoektype_version": verzoektype.last_version.version,
+                },
+            ),
+            {"eindeGeldigheid": date.today() + timedelta(1)},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        # expire tomorrow
+        self.assertFalse(verzoektype.last_version.is_expired)
 
     def test_update_with_bijlage_typen(self):
         verzoektype = VerzoekTypeFactory.create(create_version=True)

@@ -74,7 +74,7 @@ class VerzoekTypeVersion(models.Model):
         help_text=_("Integer-versie van het VerzoekType."),
     )
     aangemaakt_op = models.DateField(
-        _("aangemaakt_op"),
+        _("aangemaakt op"),
         auto_now_add=True,
         help_text=_("Datum waarop de versie is gemaakt"),
     )
@@ -145,7 +145,7 @@ class VerzoekTypeVersion(models.Model):
 
     @property
     def is_expired(self):
-        return bool(self.einde_geldigheid)
+        return bool(self.einde_geldigheid and self.einde_geldigheid <= date.today())
 
     def clean(self):
         super().clean()
@@ -288,8 +288,8 @@ class Verzoek(models.Model):
         ),
         encoder=DjangoJSONEncoder,
     )
-    is_gerelaterd_aan = URNField(
-        _("is_gerelaterd_aan"),
+    is_gerelateerd_aan = URNField(
+        _("is gerelateerd aan"),
         help_text=_(
             "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
         ),
@@ -326,10 +326,7 @@ class Verzoek(models.Model):
         if not self.is_ingediend_door:
             return
 
-        # remove keys with None value
-        data = {k: v for k, v in self.is_ingediend_door.items() if v is not None}
-
-        if len(data.keys()) > 1:
+        if len(self.is_ingediend_door.keys()) > 1:
             raise ValidationError(
                 {
                     "is_ingediend_door": _(
@@ -341,7 +338,7 @@ class Verzoek(models.Model):
             )
         try:
             validate_jsonschema(
-                instance=data,
+                instance=self.is_ingediend_door,
                 label="is_ingediend_door",
                 schema=IS_INGEDIEND_DOOR_SCHEMA,
             )
@@ -402,7 +399,7 @@ class Bijlage(models.Model):
         _("toelichting"),
         blank=True,
         help_text=_(
-            "Toelichting van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Toelichting van de bijlage, zoals die door eindgebruikers gezien kan worden in bijvoorbeeld een portaal. "
             "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECT."
         ),
     )
@@ -410,9 +407,10 @@ class Bijlage(models.Model):
     class Meta:
         verbose_name = _("Bijlage")
         verbose_name_plural = _("Bijlagen")
+        unique_together = ("verzoek", "informatie_object")
 
     def __str__(self):
-        return self.url
+        return self.informatie_object
 
 
 class BijlageType(models.Model):
@@ -439,7 +437,7 @@ class BijlageType(models.Model):
         _("omschrijving"),
         blank=True,
         help_text=_(
-            "Omschrijving van het soort bijlage type, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
             "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE."
         ),
     )
@@ -448,5 +446,7 @@ class BijlageType(models.Model):
         verbose_name = _("BijlageType")
         verbose_name_plural = _("BijlageTypen")
 
+        unique_together = ("verzoek_type_version", "informatie_objecttype")
+
     def __str__(self):
-        return self.url
+        return self.informatie_objecttype

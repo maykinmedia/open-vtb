@@ -19,6 +19,9 @@ REST_FRAMEWORK["JSON_UNDERSCOREIZE"] = {
         "formulier_definitie",
         "aanvraag_gegevens",
         "aanvraag_gegevens_schema",
+        "postadres",
+        "verblijfsadres",
+        "bezoekadres",
     ),
     "ignore_keys": None,
 }

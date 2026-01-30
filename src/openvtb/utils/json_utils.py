@@ -1,5 +1,3 @@
-from typing import Any
-
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -8,7 +6,7 @@ import structlog
 logger = structlog.stdlib.get_logger(__name__)
 
 
-def get_json_schema(key: str, schema_mapping: Any) -> Any:
+def get_json_schema(key: str, schema_mapping: dict[str, object]) -> dict[str, object]:
     """
     Retrieve a JSON schema from SCHEMA_MAPPING by key.
 

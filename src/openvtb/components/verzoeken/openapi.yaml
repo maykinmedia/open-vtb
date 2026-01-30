@@ -660,13 +660,13 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
         toelichting:
           type: string
-          description: Toelichting van het soort bijlage, zoals dat door eind gebruikers
-            gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
-            omschrijving als die van het INFORMATIEOBJECT.
+          description: Toelichting van de bijlage, zoals die door eindgebruikers gezien
+            kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving
+            als die van het INFORMATIEOBJECT.
       required:
       - informatieObject
     BijlageType:
@@ -676,13 +676,13 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
         omschrijving:
           type: string
-          description: Omschrijving van het soort bijlage type, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal. Typisch is dit
-            dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE.
+          description: Omschrijving van het soort bijlage, zoals dat door eind gebruikers
+            gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
+            omschrijving als die van het INFORMATIEOBJECTTYPE.
       required:
       - informatieObjecttype
     GeoJSONGeometry:
@@ -821,13 +821,11 @@ components:
           description: De officiële statutaire naam van de organisatie.
           maxLength: 200
         bezoekadres:
-          type: string
           description: Het bezoekadres van de organisatie.
-          maxLength: 255
+          type: object
         postadres:
-          type: string
           description: Het postadres van de organisatie.
-          maxLength: 255
+          type: object
         emailadres:
           type: string
           format: email
@@ -837,9 +835,7 @@ components:
           description: Het telefoonnummer van de organisatie.
           maxLength: 20
       required:
-      - bezoekadres
       - emailadres
-      - postadres
       - statutaireNaam
       - telefoonnummer
     NietAuthentiekePersoonsgegevens:
@@ -866,20 +862,16 @@ components:
           description: Het telefoonnummer van de persoon.
           maxLength: 20
         postadres:
-          type: string
           description: Het postadres van de persoon.
-          maxLength: 255
+          type: object
         verblijfsadres:
-          type: string
           description: Het huidige verblijfsadres van de persoon.
-          maxLength: 255
+          type: object
       required:
       - achternaam
       - emailadres
       - geboortedatum
-      - postadres
       - telefoonnummer
-      - verblijfsadres
       - voornaam
     PaginatedVerzoekList:
       type: object
@@ -1004,7 +996,7 @@ components:
           description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
             ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
             **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
-        isGerelaterdAan:
+        isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
@@ -1229,7 +1221,7 @@ components:
           description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
             ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
             **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
-        isGerelaterdAan:
+        isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'

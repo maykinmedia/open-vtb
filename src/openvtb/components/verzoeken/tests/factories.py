@@ -104,8 +104,12 @@ class VerzoekFactory(DjangoModelFactory):
                     "geboortedatum": "1980-05-15",
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
-                    "postadres": "Poststraat 12, 1000 AB Amsterdam",
-                    "verblijfsadres": "Woonstraat 34, 1000 CD Amsterdam",
+                    "postadres": {
+                        "key": "value",
+                    },
+                    "verblijfsadres": {
+                        "key": "value",
+                    },
                 }
             }
         )
@@ -113,8 +117,12 @@ class VerzoekFactory(DjangoModelFactory):
             is_ingediend_door={
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": "Hoofdstraat 123, 1000 AB Amsterdam",
-                    "postadres": "Postbus 456, 1000 CD Amsterdam",
+                    "bezoekadres": {
+                        "key": "value",
+                    },
+                    "postadres": {
+                        "key": "value",
+                    },
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",
                 }
