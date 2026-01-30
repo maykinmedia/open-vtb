@@ -115,6 +115,16 @@ FORMULIER_SCHEMA = {
             "keys": {},
             "additionalProperties": True,
         },
+        "voorinvullenGegevens": {
+            "type": "object",
+            "title": "voorinvullenGegevens",
+            "description": _(
+                "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het formulier. "
+                "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+            ),
+            "keys": {},
+            "additionalProperties": True,
+        },
         "ontvangenGegevens": {
             "type": "object",
             "title": "ontvangenGegevens",

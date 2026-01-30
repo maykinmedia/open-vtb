@@ -1640,6 +1640,11 @@ components:
             \ 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen\
             \ gebruikt worden om het gedrag of de weergave van het veld aan te passen."
           type: object
+        voorinvullenGegevens:
+          description: Arbitraire sleutel-waarde gegevens die ingevuld moeten worden
+            in het formulier. De sleutel kan bijvoorbeeld een veldnaam zijn in een
+            formulier, of een veld in een sjabloon.
+          type: object
         ontvangenGegevens:
           description: Ontvangen gegevens als key-value object.
           type: object

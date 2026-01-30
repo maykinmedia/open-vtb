@@ -61,6 +61,9 @@ class FormulierTaakTests(APITestCase):
                             "formulierDefinitie": formuliertaak.details[
                                 "formulierDefinitie"
                             ],
+                            "voorinvullenGegevens": formuliertaak.details[
+                                "voorinvullenGegevens"
+                            ],
                             "ontvangenGegevens": formuliertaak.details[
                                 "ontvangenGegevens"
                             ],
@@ -117,6 +120,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -161,6 +167,13 @@ class FormulierTaakTests(APITestCase):
                         },
                     ],
                 },
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -197,6 +210,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -223,7 +239,10 @@ class FormulierTaakTests(APITestCase):
                             "tableView": False,
                         },
                     ],
-                }
+                },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
             },
         }
         response = self.client.post(self.list_url, data)
@@ -254,6 +273,9 @@ class FormulierTaakTests(APITestCase):
                         },
                     ],
                 },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {},
             },
         }
@@ -269,6 +291,9 @@ class FormulierTaakTests(APITestCase):
             "handelingsPerspectief": ActionTaak.LEZEN,
             "details": {
                 "formulierDefinitie": FORM_IO,
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {},
             },
         }
@@ -306,6 +331,9 @@ class FormulierTaakTests(APITestCase):
                         },
                     ],
                 },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -342,6 +370,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -428,6 +459,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -465,7 +499,10 @@ class FormulierTaakTests(APITestCase):
                                 "tableView": False,
                             },
                         ],
-                    }
+                    },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 }
             },
         )
@@ -490,6 +527,10 @@ class FormulierTaakTests(APITestCase):
                     },
                 ],
             },
+        )
+        self.assertEqual(
+            formuliertaak.details["voorinvullenGegevens"],
+            {"textField": "Test value"},
         )
 
         # update ontvangenGegevens
@@ -539,6 +580,9 @@ class FormulierTaakTests(APITestCase):
                             },
                         ],
                     },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 },
             },
         )
@@ -568,6 +612,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -637,6 +684,9 @@ class FormulierTaakValidationTests(APITestCase):
                             "tableView": False,
                         },
                     ],
+                },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
                 },
             },
         }
@@ -717,7 +767,10 @@ class FormulierTaakValidationTests(APITestCase):
                                 "tableView": False,
                             },
                         ],
-                    }
+                    },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 },
             }
             response = self.client.post(self.list_url, data)

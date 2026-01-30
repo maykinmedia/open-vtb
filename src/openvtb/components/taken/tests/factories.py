@@ -79,6 +79,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
             taak_soort=SoortTaak.FORMULIERTAAK,
             details={
                 "formulierDefinitie": FORM_IO,
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {
                     "key": "value",
                 },
