@@ -98,6 +98,13 @@ class FormulierTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
             "Andere velden, zoals 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen gebruikt worden om het gedrag of de weergave van het veld aan te passen."
         ),
     )
+    voorinvullen_gegevens = serializers.JSONField(
+        default=dict,
+        help_text=_(
+            "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het formulier. "
+            "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+        ),
+    )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,
         help_text=_("Ontvangen gegevens als key-value object."),
