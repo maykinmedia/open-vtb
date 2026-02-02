@@ -3,10 +3,12 @@ from django.utils.translation import gettext_lazy as _
 
 import structlog
 
+from .typing import JSONObject
+
 logger = structlog.stdlib.get_logger(__name__)
 
 
-def get_json_schema(key: str, schema_mapping: dict[str, object]) -> dict[str, object]:
+def get_json_schema(key: str, schema_mapping: dict[str, JSONObject]) -> JSONObject:
     """
     Retrieve a JSON schema from SCHEMA_MAPPING by key.
 
