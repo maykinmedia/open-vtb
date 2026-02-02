@@ -335,8 +335,8 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
                 },
                 "url": "http://example.com",  # string representing a URL
                 "email": "user@example.com",  # string representing an email
-                "date": "2025-11-03",  # string representing a date
-                "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
+                "date": "2026-11-03",  # string representing a date
+                "datetime": "2026-11-03T12:34:56Z",  # string representing ISO8601 datetime
                 "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
             },
         }
@@ -397,8 +397,8 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
             },
             "url": "http://example.com",  # string representing a URL
             "email": "user@example.com",  # string representing an email
-            "date": "2025-11-03",  # string representing a date
-            "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
+            "date": "2026-11-03",  # string representing a date
+            "datetime": "2026-11-03T12:34:56Z",  # string representing ISO8601 datetime
             "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
         }
         instance = {

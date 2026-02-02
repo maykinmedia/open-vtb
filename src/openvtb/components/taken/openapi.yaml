@@ -841,7 +841,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -892,6 +891,7 @@ components:
           type: object
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -962,7 +962,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1008,6 +1007,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -1055,7 +1055,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1105,6 +1104,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1153,7 +1153,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1203,6 +1202,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1251,7 +1251,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1301,6 +1300,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1349,7 +1349,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1399,6 +1398,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1447,7 +1447,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1493,6 +1492,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -1540,7 +1540,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1590,6 +1589,7 @@ components:
           $ref: '#/components/schemas/BetaalTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1693,7 +1693,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1739,6 +1738,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -1786,7 +1786,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1836,6 +1835,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1884,7 +1884,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -1934,6 +1933,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -1982,7 +1982,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2032,6 +2031,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2080,7 +2080,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2130,6 +2129,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2178,7 +2178,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2224,6 +2223,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -2271,7 +2271,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2321,6 +2320,7 @@ components:
           $ref: '#/components/schemas/FormulierTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2386,7 +2386,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2432,6 +2431,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -2479,7 +2479,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2529,6 +2528,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2577,7 +2577,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2627,6 +2626,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2675,7 +2675,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2725,6 +2724,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2773,7 +2773,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2823,6 +2822,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -2871,7 +2871,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -2917,6 +2916,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - titel
       - url
       - urn
@@ -2964,7 +2964,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -3014,6 +3013,7 @@ components:
           $ref: '#/components/schemas/GegevensUitvraagTaak'
       required:
       - details
+      - einddatumHandelingsTermijn
       - taakSoort
       - titel
       - url
@@ -3160,7 +3160,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -3258,7 +3257,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
@@ -3345,7 +3343,6 @@ components:
         einddatumHandelingsTermijn:
           type: string
           format: date-time
-          nullable: true
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string

@@ -112,6 +112,7 @@ Optional
 * ``DISABLE_2FA``: Whether or not two factor authentication should be disabled. Defaults to: ``False``.
 * ``GEOS_LIBRARY_PATH``: Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty. Defaults to: ``None``.
 * ``GDAL_LIBRARY_PATH``: Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty. Defaults to: ``None``.
+* ``TAKEN_DEFAULT_REMINDER_IN_DAYS``: Sends a system notification on this date at the system-set time. This value is automatically set to a system-set number of days before the `einddatumHandelingsTermijn`. If `0`, it's unset. Defaults to: ``7``.
 
 
 

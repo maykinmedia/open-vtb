@@ -2,7 +2,7 @@ from django.utils import timezone
 
 import factory
 
-from ..constants import SoortTaak
+from ..constants import ActionTaak, SoortTaak
 from ..models import ExterneTaak
 
 FORM_IO = {
@@ -44,7 +44,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         model = ExterneTaak
 
     titel = factory.Faker("sentence")
-    handelings_perspectief = factory.Faker("word")
+    handelings_perspectief = ActionTaak.LEZEN
     einddatum_handelings_termijn = factory.LazyFunction(
         lambda: timezone.now() + timezone.timedelta(days=7)
     )

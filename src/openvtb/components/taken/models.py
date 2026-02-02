@@ -1,5 +1,7 @@
 import uuid as _uuid
+from datetime import timedelta
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
@@ -57,8 +59,6 @@ class ExterneTaak(models.Model):
     )
     einddatum_handelings_termijn = models.DateTimeField(
         _("einddatum handelings termijn"),
-        blank=True,
-        null=True,
         help_text=_("Einddatum handelings termijn."),
     )
     datum_herinnering = models.DateTimeField(
@@ -131,8 +131,18 @@ class ExterneTaak(models.Model):
     def __str__(self):
         return f"{self.titel} ({self.status})"
 
-    def clean(self):
-        super().clean()
+    def save(self, *args, **kwargs):
+        if not self.datum_herinnering:
+            if (
+                self.einddatum_handelings_termijn
+                and settings.TAKEN_DEFAULT_REMINDER_IN_DAYS > 0
+            ):
+                self.datum_herinnering = self.einddatum_handelings_termijn - timedelta(
+                    days=settings.TAKEN_DEFAULT_REMINDER_IN_DAYS
+                )
+        super().save(*args, **kwargs)
+
+    def clean_details(self):
         try:
             validate_jsonschema(
                 instance=self.details,
@@ -148,7 +158,18 @@ class ExterneTaak(models.Model):
         except ValidationError as error:
             raise ValidationError({"details": str(error)})
 
+    def clean_dates(self):
         try:
+            # startdatum <= einddatum_handelings_termijn
             validate_date(self.startdatum, self.einddatum_handelings_termijn)
+
+            # datum_herinnering <= einddatum_handelings_termijn
+            validate_date(self.datum_herinnering, self.einddatum_handelings_termijn)
         except ValidationError as error:
             raise ValidationError({"einddatum_handelings_termijn": error})
+
+    def clean(self):
+        super().clean()
+
+        self.clean_details()
+        self.clean_dates()

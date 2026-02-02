@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -10,6 +11,7 @@ from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
+@freeze_time("2026-01-01")
 class BetaalTaakTests(APITestCase):
     list_url = reverse("taken:betaaltaak-list")
 
@@ -51,7 +53,9 @@ class BetaalTaakTests(APITestCase):
                         "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
                             "+00:00", "Z"
                         ),
-                        "datumHerinnering": betaaltaak.datum_herinnering,
+                        "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                            "+00:00", "Z"
+                        ),
                         "toelichting": betaaltaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -107,7 +111,9 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                    "+00:00", "Z"
+                ),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -149,6 +155,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "handelingsPerspectief": ActionTaak.LEZEN,
+            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
@@ -174,8 +181,12 @@ class BetaalTaakTests(APITestCase):
                 "status": betaaltaak.status,
                 "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                    "+00:00", "Z"
+                ),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -197,11 +208,19 @@ class BetaalTaakTests(APITestCase):
             },
         )
 
+        # test datumHerinnering auto filled
+        # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
+        self.assertEqual(
+            betaaltaak.datum_herinnering,
+            datetime.datetime(2026, 1, 3, 0, 0, 0, tzinfo=datetime.UTC.utc),
+        )
+
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": ActionTaak.LEZEN,
+            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
@@ -231,8 +250,12 @@ class BetaalTaakTests(APITestCase):
                 "status": betaaltaak.status,
                 "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
+                    "+00:00", "Z"
+                ),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                    "+00:00", "Z"
+                ),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -261,7 +284,7 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 2)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "titel"),
             {
@@ -278,12 +301,21 @@ class BetaalTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
+        self.assertEqual(
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
+            {
+                "name": "einddatumHandelingsTermijn",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
         self.assertFalse(ExterneTaak.objects.exists())
 
         # empty details values
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
+            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -319,6 +351,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
+            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
             "details": {
                 "bedrag": "12",
                 "transactieomschrijving": "12",
@@ -363,6 +396,7 @@ class BetaalTaakTests(APITestCase):
         )
         # empty PATCH
         response = self.client.patch(detail_url, {})
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json(),
@@ -377,7 +411,9 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                    "+00:00", "Z"
+                ),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -464,6 +500,7 @@ class BetaalTaakTests(APITestCase):
             {
                 "titel": "new_titel",
                 "handelingsPerspectief": ActionTaak.INVULLEN,
+                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
                 "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
@@ -491,7 +528,9 @@ class BetaalTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
+                    "+00:00", "Z"
+                ),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -525,7 +564,7 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 2)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "titel"),
             {
@@ -538,6 +577,14 @@ class BetaalTaakTests(APITestCase):
             get_validation_errors(response, "details"),
             {
                 "name": "details",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
+            {
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -568,6 +615,7 @@ class BetaalTaakValidationTests(APITestCase):
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
+            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "bedrag": "11",
@@ -636,8 +684,8 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "startdatum": datetime.datetime(2026, 1, 10, 0, 0, 0),  # end < start
+                "einddatumHandelingsTermijn": datetime.datetime(2025, 1, 10, 0, 0, 0),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
@@ -664,6 +712,7 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
+                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
@@ -690,6 +739,7 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
+                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
                 "details": {
                     "bedrag": "11",
                     "valuta": "ABC",  # different valuta

@@ -150,6 +150,9 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
         )
         validators = [
             StartBeforeEndValidator("startdatum", "einddatum_handelings_termijn"),
+            StartBeforeEndValidator(
+                "datum_herinnering", "einddatum_handelings_termijn"
+            ),
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

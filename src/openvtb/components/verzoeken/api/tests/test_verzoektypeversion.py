@@ -15,7 +15,7 @@ from openvtb.components.verzoeken.tests.factories import (
 from openvtb.utils.api_testcase import APITestCase
 
 
-@freeze_time("2025-01-01")
+@freeze_time("2026-01-01")
 class VerzoekTypeVersionTests(APITestCase):
     list_url = reverse("verzoeken:verzoektype-list")
     maxDiff = None
