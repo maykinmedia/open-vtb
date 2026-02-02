@@ -1109,8 +1109,9 @@ components:
           type: string
           format: date
           nullable: true
-          description: Einde geldigheid voor de versie, automatisch ingesteld wanneer
-            een nieuwere versie wordt gepubliceerd
+          description: Einde van de geldigheidsduur van de versie, automatisch ingesteld
+            wanneer een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld
+            voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum.
     Point:
       type: object
       description: GeoJSON point geometry
@@ -1389,8 +1390,9 @@ components:
           type: string
           format: date
           nullable: true
-          description: Einde geldigheid voor de versie, automatisch ingesteld wanneer
-            een nieuwere versie wordt gepubliceerd
+          description: Einde van de geldigheidsduur van de versie, automatisch ingesteld
+            wanneer een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld
+            voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum.
       required:
       - aangemaaktOp
       - aanvraagGegevensSchema

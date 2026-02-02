@@ -94,9 +94,11 @@ class VerzoekTypeVersion(models.Model):
         default=None,
         null=True,
         help_text=_(
-            "Einde geldigheid voor de versie, automatisch ingesteld wanneer een nieuwere versie wordt gepubliceerd"
+            "Einde van de geldigheidsduur van de versie, automatisch ingesteld wanneer een nieuwere versie wordt gepubliceerd. "
+            "Als de waarde wordt ingesteld voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum."
         ),
     )
+
     aanvraag_gegevens_schema = models.JSONField(
         _("aanvraag gegevens schema"),
         default=dict,
