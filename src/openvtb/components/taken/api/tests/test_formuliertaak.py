@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -10,6 +11,7 @@ from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
+@freeze_time("2026-01-01")
 class FormulierTaakTests(APITestCase):
     list_url = reverse("taken:formuliertaak-list")
 
@@ -43,14 +45,10 @@ class FormulierTaakTests(APITestCase):
                         "uuid": str(formuliertaak.uuid),
                         "titel": formuliertaak.titel,
                         "status": formuliertaak.status,
-                        "startdatum": formuliertaak.startdatum.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "startdatum": formuliertaak.startdatum.isoformat(),
                         "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
-                        "datumHerinnering": formuliertaak.datum_herinnering,
+                        "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                         "toelichting": formuliertaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -60,6 +58,9 @@ class FormulierTaakTests(APITestCase):
                         "details": {
                             "formulierDefinitie": formuliertaak.details[
                                 "formulierDefinitie"
+                            ],
+                            "voorinvullenGegevens": formuliertaak.details[
+                                "voorinvullenGegevens"
                             ],
                             "ontvangenGegevens": formuliertaak.details[
                                 "ontvangenGegevens"
@@ -101,14 +102,10 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
-                "startdatum": formuliertaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": formuliertaak.datum_herinnering,
+                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
@@ -117,6 +114,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -142,7 +142,7 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -161,11 +161,19 @@ class FormulierTaakTests(APITestCase):
                         },
                     ],
                 },
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
+                        "date": datetime.date.today(),
                         "datetime": datetime.datetime.now(),
                     },
                 },
@@ -183,12 +191,10 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
-                "startdatum": formuliertaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": formuliertaak.datum_herinnering,
+                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
@@ -197,6 +203,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -205,7 +214,7 @@ class FormulierTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -223,7 +232,10 @@ class FormulierTaakTests(APITestCase):
                             "tableView": False,
                         },
                     ],
-                }
+                },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
             },
         }
         response = self.client.post(self.list_url, data)
@@ -235,7 +247,7 @@ class FormulierTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -253,6 +265,9 @@ class FormulierTaakTests(APITestCase):
                             "tableView": False,
                         },
                     ],
+                },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
                 },
                 "ontvangenGegevens": {},
             },
@@ -266,9 +281,12 @@ class FormulierTaakTests(APITestCase):
         # create form.io example TextField
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": FORM_IO,
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {},
             },
         }
@@ -279,11 +297,15 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(formuliertaak.details["formulierDefinitie"], FORM_IO)
         self.assertEqual(formuliertaak.details["ontvangenGegevens"], {})
 
+        # test datumHerinnering auto filled
+        # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
+        self.assertEqual(formuliertaak.datum_herinnering, datetime.date(2026, 1, 3))
+
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
@@ -306,11 +328,15 @@ class FormulierTaakTests(APITestCase):
                         },
                     ],
                 },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
                         "keyCamelCase": "value_2",
                         "key_snake_case": ["value_3"],
+                        "date": datetime.date.today(),
                         "datetime": datetime.datetime.now(),
                     },
                 },
@@ -328,12 +354,10 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
-                "startdatum": formuliertaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": formuliertaak.datum_herinnering,
+                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
@@ -342,6 +366,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -364,9 +391,9 @@ class FormulierTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
             {
-                "name": "handelingsPerspectief",
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -384,7 +411,7 @@ class FormulierTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -420,14 +447,10 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
-                "startdatum": formuliertaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": formuliertaak.datum_herinnering,
+                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
@@ -436,6 +459,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -473,7 +499,10 @@ class FormulierTaakTests(APITestCase):
                                 "tableView": False,
                             },
                         ],
-                    }
+                    },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 }
             },
         )
@@ -498,6 +527,10 @@ class FormulierTaakTests(APITestCase):
                     },
                 ],
             },
+        )
+        self.assertEqual(
+            formuliertaak.details["voorinvullenGegevens"],
+            {"textField": "Test value"},
         )
 
         # update ontvangenGegevens
@@ -528,7 +561,7 @@ class FormulierTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
                         "key1": "value1",
@@ -547,6 +580,9 @@ class FormulierTaakTests(APITestCase):
                             },
                         ],
                     },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 },
             },
         )
@@ -560,14 +596,10 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
-                "startdatum": formuliertaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": formuliertaak.datum_herinnering,
+                "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
@@ -576,6 +608,9 @@ class FormulierTaakTests(APITestCase):
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
+                    "voorinvullenGegevens": formuliertaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": formuliertaak.details["ontvangenGegevens"],
                 },
             },
@@ -626,7 +661,7 @@ class FormulierTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "formulierDefinitie": {
@@ -645,6 +680,9 @@ class FormulierTaakValidationTests(APITestCase):
                             "tableView": False,
                         },
                     ],
+                },
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
                 },
             },
         }
@@ -705,9 +743,8 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "startdatum": datetime.date(2026, 1, 10),  # end < start
+                "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
                     "formulierDefinitie": {
                         "key1": "value1",
@@ -725,7 +762,10 @@ class FormulierTaakValidationTests(APITestCase):
                                 "tableView": False,
                             },
                         ],
-                    }
+                    },
+                    "voorinvullenGegevens": {
+                        "textField": "Test value",
+                    },
                 },
             }
             response = self.client.post(self.list_url, data)
@@ -743,7 +783,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("null value formulierDefinitie"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": None,
                 },
@@ -765,7 +805,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": "",
                 },
@@ -786,7 +826,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie is None"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": None,
                 },
@@ -807,7 +847,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {},
                 },
@@ -828,7 +868,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {"components": "test"},
                 },
@@ -851,7 +891,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'label' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
                         "components": [
@@ -878,7 +918,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'key' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
                         "components": [
@@ -906,7 +946,7 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'type' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
                         "components": [

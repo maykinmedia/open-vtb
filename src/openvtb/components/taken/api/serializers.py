@@ -23,31 +23,39 @@ class DoelrekeningSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     naam = serializers.CharField(
         required=True,
         max_length=200,
-        help_text=_("Naam van de ontvanger van de betaling"),
+        help_text=_("Naam van de ontvanger van de betaling."),
+    )
+    code = serializers.CharField(
+        required=True,
+        max_length=100,
+        help_text=_(
+            "Een arbitraire code die gebruikt kan worden om de juiste rekening "
+            "en/of betaalprovider te kiezen in het systeem dat de taak afhandeld."
+        ),
     )
     iban = serializers.CharField(
         required=True,
-        help_text=_("IBAN code van de ontvanger"),
+        help_text=_("IBAN code van de ontvanger."),
     )
 
 
 class BetaalTaakSerializer(serializers.Serializer):
     bedrag = serializers.CharField(
         required=True,
-        help_text=_("Bedrag dat betaald moet worden"),
+        help_text=_("Bedrag dat betaald moet worden."),
     )
     valuta = serializers.CharField(
         default=Valuta.EUR,
-        help_text=_("Valuta van de betaling"),
+        help_text=_("Valuta van de betaling."),
     )
     transactieomschrijving = serializers.CharField(
         required=True,
         max_length=80,
-        help_text=_("Omschrijving van de transactie"),
+        help_text=_("Omschrijving van de transactie."),
     )
     doelrekening = DoelrekeningSerializer(
         required=True,
-        help_text=_("Gegevens van de ontvangende bankrekening"),
+        help_text=_("Gegevens van de ontvangende bankrekening."),
     )
 
     def validate_valuta(self, value):
@@ -63,11 +71,18 @@ class BetaalTaakSerializer(serializers.Serializer):
 class GegevensUitvraagTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     uitvraag_link = serializers.URLField(
         required=True,
-        help_text=_("Link naar de externe gegevensaanvraag"),
+        help_text=_("Link naar de externe gegevensaanvraag."),
+    )
+    voorinvullen_gegevens = serializers.JSONField(
+        default=dict,
+        help_text=_(
+            "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de uitvraag. "
+            "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+        ),
     )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,
-        help_text=_("Ontvangen gegevens als key-value object"),
+        help_text=_("Ontvangen gegevens als key-value object."),
     )
 
 
@@ -83,9 +98,16 @@ class FormulierTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
             "Andere velden, zoals 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen gebruikt worden om het gedrag of de weergave van het veld aan te passen."
         ),
     )
+    voorinvullen_gegevens = serializers.JSONField(
+        default=dict,
+        help_text=_(
+            "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het formulier. "
+            "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+        ),
+    )
     ontvangen_gegevens = serializers.JSONField(
         default=dict,
-        help_text=_("Ontvangen gegevens als key-value object"),
+        help_text=_("Ontvangen gegevens als key-value object."),
     )
 
     validators = [
@@ -128,6 +150,9 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
         )
         validators = [
             StartBeforeEndValidator("startdatum", "einddatum_handelings_termijn"),
+            StartBeforeEndValidator(
+                "datum_herinnering", "einddatum_handelings_termijn"
+            ),
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

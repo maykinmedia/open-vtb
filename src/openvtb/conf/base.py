@@ -63,9 +63,12 @@ ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
 
 #
 # Define this variable here to ensure it shows up in the envvar documentation
+#
 DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
+#
 # Geospatial libraries
+#
 GEOS_LIBRARY_PATH = config(
     "GEOS_LIBRARY_PATH",
     None,
@@ -81,20 +84,32 @@ GDAL_LIBRARY_PATH = config(
     ),
 )
 
+#
 # URN settings
+#
 URN_NAMESPACE = config(
     "URN_NAMESPACE",
     help_text=("Namespace used in URNs schemas."),
 )
 
-
+#
 # MOZILLA DJANGO OIDC
-
+#
 OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_auth.oidc_backend.OIDCAuthenticationBackend"
 
-
+#
 # django-setup-configuration
-
+#
 SETUP_CONFIGURATION_STEPS = (
     "mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep",
+)
+
+
+TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
+    "TAKEN_DEFAULT_REMINDER_IN_DAYS",
+    default=7,
+    help_text=(
+        "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
+        "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
+    ),
 )

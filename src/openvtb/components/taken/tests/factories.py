@@ -1,4 +1,4 @@
-from django.utils import timezone
+import datetime
 
 import factory
 
@@ -44,9 +44,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         model = ExterneTaak
 
     titel = factory.Faker("sentence")
-    handelings_perspectief = factory.Faker("word")
+    handelings_perspectief = "lezen"
     einddatum_handelings_termijn = factory.LazyFunction(
-        lambda: timezone.now() + timezone.timedelta(days=7)
+        lambda: datetime.date.today() + datetime.timedelta(days=7)
     )
 
     class Params:
@@ -58,6 +58,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -66,6 +67,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
             taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK,
             details={
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key": "value",
+                },
                 "ontvangenGegevens": {
                     "key": "value",
                 },
@@ -75,6 +79,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
             taak_soort=SoortTaak.FORMULIERTAAK,
             details={
                 "formulierDefinitie": FORM_IO,
+                "voorinvullenGegevens": {
+                    "textField": "Test value",
+                },
                 "ontvangenGegevens": {
                     "key": "value",
                 },

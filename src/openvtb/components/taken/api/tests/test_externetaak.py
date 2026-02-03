@@ -1,5 +1,6 @@
 import datetime
 
+from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -9,6 +10,7 @@ from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
+@freeze_time("2026-01-01")
 class ExterneTaakTests(APITestCase):
     list_url = reverse("taken:externetaak-list")
 
@@ -41,14 +43,10 @@ class ExterneTaakTests(APITestCase):
                         "uuid": str(externetaak.uuid),
                         "titel": externetaak.titel,
                         "status": externetaak.status,
-                        "startdatum": externetaak.startdatum.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "startdatum": externetaak.startdatum.isoformat(),
                         "handelingsPerspectief": externetaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
-                        "datumHerinnering": externetaak.datum_herinnering,
+                        "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                         "toelichting": externetaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -99,12 +97,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(externetaak.uuid),
                 "titel": externetaak.titel,
                 "status": externetaak.status,
-                "startdatum": externetaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": externetaak.startdatum.isoformat(),
                 "handelingsPerspectief": externetaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": externetaak.datum_herinnering,
+                "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                 "toelichting": externetaak.toelichting,
                 "isToegewezenAan": externetaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": externetaak.wordt_behandeld_door,
@@ -119,13 +115,14 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -143,10 +140,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -161,17 +158,22 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
         )
 
+        # test datumHerinnering auto filled
+        # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
+        self.assertEqual(betaaltaak.datum_herinnering, datetime.date(2026, 1, 3))
+
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
@@ -182,6 +184,7 @@ class ExterneTaakTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -199,10 +202,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -217,6 +220,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -240,17 +244,17 @@ class ExterneTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
+            get_validation_errors(response, "taakSoort"),
             {
-                "name": "handelingsPerspectief",
+                "name": "taakSoort",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "taakSoort"),
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
             {
-                "name": "taakSoort",
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -268,7 +272,7 @@ class ExterneTaakTests(APITestCase):
         # invalid taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": "test",
             "details": {},
         }
@@ -289,7 +293,7 @@ class ExterneTaakTests(APITestCase):
         # empty taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": "",
             "details": {},
         }
@@ -310,7 +314,7 @@ class ExterneTaakTests(APITestCase):
         # invalid details schema
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -371,12 +375,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -391,6 +393,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -447,7 +450,7 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "taak_soort": SoortTaak.BETAALTAAK.value,
                 "details": {
                     "bedrag": "100",
@@ -455,6 +458,7 @@ class ExterneTaakTests(APITestCase):
                     "transactieomschrijving": "new_test",
                     "doelrekening": {
                         "naam": "new_test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     },
                 },
@@ -470,12 +474,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -490,6 +492,7 @@ class ExterneTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -501,13 +504,14 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
                     "transactieomschrijving": "new_test",
                     "doelrekening": {
                         "naam": "new_test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     },
                 },
@@ -529,7 +533,7 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "taakSoort": SoortTaak.GEGEVENSUITVRAAGTAAK.value,
                 "details": {"uitvraagLink": "http://example.com/"},
             },
@@ -544,14 +548,10 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": str(gegevensuitvraagtaak.status),
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -585,15 +585,15 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
             "taakSoort": SoortTaak.BETAALTAAK.value,
-            "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-            "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+            "startdatum": datetime.date(2026, 1, 10),  # end < start
+            "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -614,7 +614,7 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "test",
             "wordtBehandeldDoor": "test:maykin:medewerker:brp:nnp:bsn:1234567892",  # doesn't start with urn
@@ -624,6 +624,7 @@ class ExterneTaakValidationTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },

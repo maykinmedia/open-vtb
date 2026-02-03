@@ -176,7 +176,7 @@ class VerzoekTests(APITestCase):
                 "kenmerken": ["string"],
                 "bedrag": "10",
                 "voltooid": True,
-                "transactieDatum": "2025-01-01T14:15:22Z",
+                "transactieDatum": "2026-01-01T14:15:22Z",
                 "transactieReferentie": "string",
             },
             "isIngediendDoor": {
@@ -274,7 +274,7 @@ class VerzoekTests(APITestCase):
                 "kenmerken": ["string"],
                 "bedrag": "10",
                 "voltooid": True,
-                "transactieDatum": "2025-01-01T14:15:22Z",
+                "transactieDatum": "2026-01-01T14:15:22Z",
                 "transactieReferentie": "string",
             },
         }

@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -10,6 +11,7 @@ from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
+@freeze_time("2026-01-01")
 class GegevensuitvraagTaakTests(APITestCase):
     list_url = reverse("taken:gegevensuitvraagtaak-list")
 
@@ -43,14 +45,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "uuid": str(gegevensuitvraagtaak.uuid),
                         "titel": gegevensuitvraagtaak.titel,
                         "status": gegevensuitvraagtaak.status,
-                        "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                         "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
-                        "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                        "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                         "toelichting": gegevensuitvraagtaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -60,6 +58,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
                                 "uitvraagLink"
+                            ],
+                            "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                                "voorinvullenGegevens"
                             ],
                             "ontvangenGegevens": gegevensuitvraagtaak.details[
                                 "ontvangenGegevens"
@@ -101,14 +102,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
@@ -117,6 +114,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -144,9 +144,16 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -168,12 +175,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
@@ -182,6 +187,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -192,7 +200,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
             },
@@ -206,9 +214,16 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {},
             },
         }
@@ -218,13 +233,26 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
         self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
 
+        # test datumHerinnering auto filled
+        # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
+        self.assertEqual(
+            gegevensuitvraagtaak.datum_herinnering, datetime.date(2026, 1, 3)
+        )
+
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
+                "voorinvullenGegevens": {
+                    "key1": "value1",
+                    "key2": {
+                        "keyCamelCase": "value_2",
+                        "key_snake_case": ["value_3"],
+                    },
+                },
                 "ontvangenGegevens": {
                     "key1": "value1",
                     "key2": {
@@ -246,12 +274,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
@@ -260,6 +286,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -284,9 +313,9 @@ class GegevensuitvraagTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
             {
-                "name": "handelingsPerspectief",
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -304,7 +333,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -340,14 +369,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
@@ -356,6 +381,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -399,6 +427,25 @@ class GegevensuitvraagTaakTests(APITestCase):
             gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
         )
 
+        # update voorinvullenGegevens
+        self.assertEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
+        )  # default
+        response = self.client.patch(
+            detail_url, {"details": {"voorinvullenGegevens": {"new_key": "new_value"}}}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+
+        # new value
+        self.assertEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"],
+            {"new_key": "new_value"},
+        )
+        self.assertNotEqual(
+            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
+        )
+
     def test_valid_update(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
@@ -412,7 +459,7 @@ class GegevensuitvraagTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "http://example-new-url.com/",
                 },
@@ -428,14 +475,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "uuid": str(gegevensuitvraagtaak.uuid),
                 "titel": gegevensuitvraagtaak.titel,
                 "status": gegevensuitvraagtaak.status,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
                 "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering,
+                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
@@ -444,6 +487,9 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                        "voorinvullenGegevens"
+                    ],
                     "ontvangenGegevens": gegevensuitvraagtaak.details[
                         "ontvangenGegevens"
                     ],
@@ -479,7 +525,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -519,9 +565,8 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "startdatum": datetime.date(2026, 1, 10),  # end < start
+                "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
                     "uitvraagLink": "http://example.com/",
                 },
@@ -541,7 +586,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "test",
                 },
@@ -561,7 +606,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid none url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": None,
                 },
@@ -581,7 +626,7 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("null value ontvangenGegevens"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": "handelingsPerspectief1",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "http://example.com/",
                     "ontvangenGegevens": None,

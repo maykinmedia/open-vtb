@@ -104,7 +104,7 @@ class URNValidatorTests(TestCase):
         valid_urns = [
             "urn:isbn:9780143127796",
             "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
-            "urn:example:document/2025/12",
+            "urn:example:document/2026/12",
             "urn:maykin:abc:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
             "urn:maykin:abc:ztc:zaak:abc:cde:123:456",
             "urn:isbn:abc%5E123",  # percent-encoded

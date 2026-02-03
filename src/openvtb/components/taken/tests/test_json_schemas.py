@@ -43,6 +43,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
             "transactieomschrijving": "test",
             "doelrekening": {
                 "naam": "test",
+                "code": "123-ABC",
                 "iban": "NL18BANK23481326",
             },
         }
@@ -56,6 +57,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -74,6 +76,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 # "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -91,6 +94,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 # "doelrekening": {
                 # "naam": "test",
+                # "code": "123-ABC",
                 # "iban": "NL18BANK23481326",
                 # },
             }
@@ -108,6 +112,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     # "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -125,6 +130,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     # "iban": "NL18BANK23481326",
                 },
             }
@@ -143,6 +149,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -159,6 +166,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -176,6 +184,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -193,6 +202,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": 123,
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -238,6 +248,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": True,
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             }
@@ -255,6 +266,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": 123,
                 },
             }
@@ -271,6 +283,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "wrong-format",
                 },
             }
@@ -322,8 +335,8 @@ class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
                 },
                 "url": "http://example.com",  # string representing a URL
                 "email": "user@example.com",  # string representing an email
-                "date": "2025-11-03",  # string representing a date
-                "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
+                "date": "2026-11-03",  # string representing a date
+                "datetime": "2026-11-03T12:34:56Z",  # string representing ISO8601 datetime
                 "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
             },
         }
@@ -384,8 +397,8 @@ class ValidateFormulierTaakSchemaTestCase(TestCase):
             },
             "url": "http://example.com",  # string representing a URL
             "email": "user@example.com",  # string representing an email
-            "date": "2025-11-03",  # string representing a date
-            "datetime": "2025-11-03T12:34:56Z",  # string representing ISO8601 datetime
+            "date": "2026-11-03",  # string representing a date
+            "datetime": "2026-11-03T12:34:56Z",  # string representing ISO8601 datetime
             "bytes_example": "SGVsbG8=",  # bytes encoded as base64 string
         }
         instance = {

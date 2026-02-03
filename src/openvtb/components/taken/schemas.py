@@ -38,6 +38,10 @@ BETAAL_SCHEMA = {
                     "type": "string",
                     "maxLength": 200,
                 },
+                "code": {
+                    "type": "string",
+                    "maxLength": 100,
+                },
                 "iban": {
                     "type": "string",
                     "format": "iban",
@@ -45,6 +49,7 @@ BETAAL_SCHEMA = {
             },
             "required": [
                 "naam",
+                "code",
                 "iban",
             ],
         },
@@ -69,6 +74,16 @@ GEGEVENS_SCHEMA = {
         "uitvraagLink": {
             "type": "string",
             "format": "uri",
+        },
+        "voorinvullenGegevens": {
+            "type": "object",
+            "title": "voorinvullenGegevens",
+            "description": _(
+                "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de uitvraag. "
+                "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+            ),
+            "keys": {},
+            "additionalProperties": True,
         },
         "ontvangenGegevens": {
             "type": "object",
@@ -97,6 +112,16 @@ FORMULIER_SCHEMA = {
             "type": "object",
             "title": "formulierDefinitie",
             "description": _("JSON-structuur van het formulier (FormIO)"),
+            "keys": {},
+            "additionalProperties": True,
+        },
+        "voorinvullenGegevens": {
+            "type": "object",
+            "title": "voorinvullenGegevens",
+            "description": _(
+                "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het formulier. "
+                "De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld in een sjabloon."
+            ),
             "keys": {},
             "additionalProperties": True,
         },

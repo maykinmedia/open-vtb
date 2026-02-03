@@ -1,6 +1,7 @@
 import datetime
 import uuid
 
+from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
@@ -10,6 +11,7 @@ from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
+@freeze_time("2026-01-01")
 class BetaalTaakTests(APITestCase):
     list_url = reverse("taken:betaaltaak-list")
 
@@ -30,7 +32,6 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
 
         betaaltaak = ExterneTaak.objects.get()
-
         self.assertEqual(
             response.json(),
             {
@@ -44,14 +45,10 @@ class BetaalTaakTests(APITestCase):
                         "uuid": str(betaaltaak.uuid),
                         "titel": betaaltaak.titel,
                         "status": betaaltaak.status,
-                        "startdatum": betaaltaak.startdatum.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "startdatum": betaaltaak.startdatum.isoformat(),
                         "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
-                        "datumHerinnering": betaaltaak.datum_herinnering,
+                        "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                         "toelichting": betaaltaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -66,6 +63,7 @@ class BetaalTaakTests(APITestCase):
                             ],
                             "doelrekening": {
                                 "naam": betaaltaak.details["doelrekening"]["naam"],
+                                "code": betaaltaak.details["doelrekening"]["code"],
                                 "iban": betaaltaak.details["doelrekening"]["iban"],
                             },
                         },
@@ -101,12 +99,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -121,6 +117,7 @@ class BetaalTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -146,12 +143,13 @@ class BetaalTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -169,10 +167,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -187,17 +185,22 @@ class BetaalTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
             },
         )
 
+        # test datumHerinnering auto filled
+        # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
+        self.assertEqual(betaaltaak.datum_herinnering, datetime.date(2026, 1, 3))
+
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": "handelingsPerspectief1",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
@@ -207,6 +210,7 @@ class BetaalTaakTests(APITestCase):
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -224,10 +228,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": None,
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -242,6 +246,7 @@ class BetaalTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -265,17 +270,17 @@ class BetaalTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
+            get_validation_errors(response, "details"),
             {
-                "name": "handelingsPerspectief",
+                "name": "details",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "details"),
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
             {
-                "name": "details",
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -285,7 +290,7 @@ class BetaalTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -320,7 +325,7 @@ class BetaalTaakTests(APITestCase):
         # details.doelrekening empty values
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "12",
                 "transactieomschrijving": "12",
@@ -331,11 +336,19 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Invalid input.")
-        self.assertEqual(len(response.data["invalid_params"]), 2)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "details.doelrekening.naam"),
             {
                 "name": "details.doelrekening.naam",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "details.doelrekening.code"),
+            {
+                "name": "details.doelrekening.code",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -357,7 +370,9 @@ class BetaalTaakTests(APITestCase):
         )
         # empty PATCH
         response = self.client.patch(detail_url, {})
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertEqual(
             response.json(),
             {
@@ -366,12 +381,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -386,6 +399,7 @@ class BetaalTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -417,6 +431,7 @@ class BetaalTaakTests(APITestCase):
             betaaltaak.details["doelrekening"],
             {
                 "naam": "test",
+                "code": "123-ABC",
                 "iban": "NL18BANK23481326",
             },
         )  # default factory value
@@ -426,6 +441,7 @@ class BetaalTaakTests(APITestCase):
                 "details": {
                     "doelrekening": {
                         "naam": "new_naam",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     }
                 }
@@ -437,6 +453,7 @@ class BetaalTaakTests(APITestCase):
             betaaltaak.details["doelrekening"],
             {
                 "naam": "new_naam",
+                "code": "123-ABC",
                 "iban": "NL18BANK23481111",
             },
         )
@@ -453,13 +470,14 @@ class BetaalTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": "new_handelingsPerspectief",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
                     "transactieomschrijving": "new_test",
                     "doelrekening": {
                         "naam": "new_test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481111",  # new iban
                     },
                 },
@@ -475,12 +493,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering,
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -495,6 +511,7 @@ class BetaalTaakTests(APITestCase):
                     ],
                     "doelrekening": {
                         "naam": betaaltaak.details["doelrekening"]["naam"],
+                        "code": betaaltaak.details["doelrekening"]["code"],
                         "iban": betaaltaak.details["doelrekening"]["iban"],
                     },
                 },
@@ -523,17 +540,17 @@ class BetaalTaakTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "handelingsPerspectief"),
+            get_validation_errors(response, "details"),
             {
-                "name": "handelingsPerspectief",
+                "name": "details",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "details"),
+            get_validation_errors(response, "einddatumHandelingsTermijn"),
             {
-                "name": "details",
+                "name": "einddatumHandelingsTermijn",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -563,13 +580,14 @@ class BetaalTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "test",
-            "handelingsPerspectief": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
                 "doelrekening": {
                     "naam": "test",
+                    "code": "123-ABC",
                     "iban": "NL18BANK23481326",
                 },
             },
@@ -630,14 +648,14 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
-                "startdatum": datetime.datetime(2025, 1, 1, 10, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2024, 1, 1, 10, 0, 0),
+                "startdatum": datetime.date(2026, 1, 10),  # end < start
+                "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
                     "doelrekening": {
                         "naam": "test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481326",
                     },
                 },
@@ -657,12 +675,13 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid iban format"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
                     "doelrekening": {
                         "naam": "test",
+                        "code": "123-ABC",
                         "iban": "test",
                     },
                 },
@@ -682,13 +701,14 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid pass valuta"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": "test",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "valuta": "ABC",  # different valuta
                     "transactieomschrijving": "test",
                     "doelrekening": {
                         "naam": "test",
+                        "code": "123-ABC",
                         "iban": "NL18BANK23481326",
                     },
                 },

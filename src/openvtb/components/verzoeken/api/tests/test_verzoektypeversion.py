@@ -15,7 +15,7 @@ from openvtb.components.verzoeken.tests.factories import (
 from openvtb.utils.api_testcase import APITestCase
 
 
-@freeze_time("2025-01-01")
+@freeze_time("2026-01-01")
 class VerzoekTypeVersionTests(APITestCase):
     list_url = reverse("verzoeken:verzoektype-list")
     maxDiff = None
@@ -47,8 +47,8 @@ class VerzoekTypeVersionTests(APITestCase):
                 "status": "draft",
                 "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
                 "bijlageTypen": [],
-                "aangemaaktOp": "2025-01-01",
-                "gewijzigdOp": "2025-01-01",
+                "aangemaaktOp": "2026-01-01",
+                "gewijzigdOp": "2026-01-01",
                 "beginGeldigheid": None,
                 "eindeGeldigheid": None,
             },
@@ -111,8 +111,8 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
         self.assertEqual(version.version, 1)
         self.assertEqual(version.status, VerzoekTypeVersionStatus.DRAFT)
-        self.assertEqual(version.aangemaakt_op, date(2025, 1, 1))
-        self.assertEqual(version.gewijzigd_op, date(2025, 1, 1))
+        self.assertEqual(version.aangemaakt_op, date(2026, 1, 1))
+        self.assertEqual(version.gewijzigd_op, date(2026, 1, 1))
         self.assertEqual(version.begin_geldigheid, None)
         self.assertEqual(version.einde_geldigheid, None)
 
