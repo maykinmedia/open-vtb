@@ -11,6 +11,21 @@ from ..models import (
     VerzoekTypeVersion,
 )
 
+ADRES = {
+    "woonplaats": "Amsterdam",
+    "postcode": "1000 AB",
+    "huisnummer": "12",
+    "huisletter": "A",
+    "huisnummertoevoeging": "bis",
+    "buitenland": {
+        "landcode": "NL",
+        "landnaam": "Nederland",
+        "adresregel1": "Straatnaam 12A",
+        "adresregel2": "",
+        "adresregel3": "",
+    },
+}
+
 JSON_SCHEMA = {
     "type": "object",
     "title": "Tree",
@@ -101,12 +116,8 @@ class VerzoekFactory(DjangoModelFactory):
                     "geboortedatum": "1980-05-15",
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
-                    "postadres": {
-                        "key": "value",
-                    },
-                    "verblijfsadres": {
-                        "key": "value",
-                    },
+                    "postadres": ADRES,
+                    "verblijfsadres": ADRES,
                 }
             }
         )
@@ -114,12 +125,8 @@ class VerzoekFactory(DjangoModelFactory):
             is_ingediend_door={
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": {
-                        "key": "value",
-                    },
-                    "postadres": {
-                        "key": "value",
-                    },
+                    "bezoekadres": ADRES,
+                    "postadres": ADRES,
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",
                 }
