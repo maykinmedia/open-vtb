@@ -643,6 +643,35 @@ paths:
           description: No response body
 components:
   schemas:
+    Adres:
+      type: object
+      properties:
+        woonplaats:
+          type: string
+          description: Plaats van het adres.
+          maxLength: 100
+        postcode:
+          type: string
+          description: Postcode van het adres.
+          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
+          maxLength: 100
+        huisnummer:
+          type: string
+          description: Huisnummer van het adres.
+          maxLength: 10
+        huisletter:
+          type: string
+          description: Huisletter van het adres, indien aanwezig.
+          maxLength: 10
+        huisnummertoevoeging:
+          type: string
+          description: Toevoeging bij het huisnummer, indien aanwezig.
+          maxLength: 20
+        buitenland:
+          allOf:
+          - $ref: '#/components/schemas/Buitenland'
+          description: Dit veld mag null zijn en mag uitsluitend worden ingevuld indien
+            de bovenstaande adresvelden leeg zijn.
     AuthentiekeVerwijzing:
       type: object
       properties:
@@ -659,7 +688,7 @@ components:
         informatieObject:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           maxLength: 255
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
         toelichting:
@@ -675,7 +704,7 @@ components:
         informatieObjecttype:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: 'URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           maxLength: 255
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
         omschrijving:
@@ -685,6 +714,29 @@ components:
             omschrijving als die van het INFORMATIEOBJECTTYPE.
       required:
       - informatieObjecttype
+    Buitenland:
+      type: object
+      properties:
+        landcode:
+          type: string
+          description: ISO landcode van het buitenland.
+          maxLength: 2
+        landnaam:
+          type: string
+          description: Naam van het buitenland.
+          maxLength: 100
+        adresregel1:
+          type: string
+          description: Eerste regel van het buitenlandse adres.
+          maxLength: 100
+        adresregel2:
+          type: string
+          description: Tweede regel van het buitenlandse adres.
+          maxLength: 100
+        adresregel3:
+          type: string
+          description: Derde regel van het buitenlandse adres.
+          maxLength: 100
     GeoJSONGeometry:
       title: GeoJSONGeometry
       type: object
@@ -734,8 +786,8 @@ components:
           - $ref: '#/components/schemas/AuthentiekeVerwijzing'
           nullable: true
           description: 'Object dat een authentieke verwijzing vertegenwoordigt. URN
-            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: urn:nld:brp.bsn:111222333,
-            urn:nld.hr.kvknummer:444555666 of urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999'
+            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp.bsn:111222333`,
+            `urn:nld.hr.kvknummer:444555666` of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
         nietAuthentiekePersoonsgegevens:
           allOf:
           - $ref: '#/components/schemas/NietAuthentiekePersoonsgegevens'
@@ -821,11 +873,13 @@ components:
           description: De officiële statutaire naam van de organisatie.
           maxLength: 200
         bezoekadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
           description: Het bezoekadres van de organisatie.
-          type: object
         postadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
           description: Het postadres van de organisatie.
-          type: object
         emailadres:
           type: string
           format: email
@@ -862,11 +916,13 @@ components:
           description: Het telefoonnummer van de persoon.
           maxLength: 20
         postadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
           description: Het postadres van de persoon.
-          type: object
         verblijfsadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
           description: Het huidige verblijfsadres van de persoon.
-          type: object
       required:
       - achternaam
       - emailadres
@@ -999,7 +1055,7 @@ components:
         isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         kanaal:
@@ -1225,7 +1281,7 @@ components:
         isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         kanaal:

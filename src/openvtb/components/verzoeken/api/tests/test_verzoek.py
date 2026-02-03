@@ -6,6 +6,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.models import Bijlage, Verzoek, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
+    ADRES,
     VerzoekFactory,
     VerzoekTypeFactory,
     VerzoekTypeVersionFactory,
@@ -66,8 +67,8 @@ class VerzoekTests(APITestCase):
                                 "geboortedatum": "1980-05-15",
                                 "emailadres": "jan.jansen@example.com",
                                 "telefoonnummer": "+31612345678",
-                                "postadres": {"key": "value"},
-                                "verblijfsadres": {"key": "value"},
+                                "postadres": ADRES,
+                                "verblijfsadres": ADRES,
                             },
                             "nietAuthentiekeOrganisatiegegevens": None,
                         },
@@ -182,11 +183,8 @@ class VerzoekTests(APITestCase):
             "isIngediendDoor": {
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": {"key": "value"},
-                    "postadres": {
-                        "keyCamelCase": "value_test",
-                        "key_snake_case": "valueTest",
-                    },
+                    "bezoekadres": {},
+                    "postadres": ADRES,
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",
                 }
@@ -216,13 +214,10 @@ class VerzoekTests(APITestCase):
                     "authentiekeVerwijzing": None,
                     "nietAuthentiekePersoonsgegevens": None,
                     "nietAuthentiekeOrganisatiegegevens": {
-                        "postadres": {
-                            "keyCamelCase": "value_test",
-                            "key_snake_case": "valueTest",
-                        },
-                        "emailadres": "info@acme.nl",
-                        "bezoekadres": {"key": "value"},
                         "statutaireNaam": "Acme BV",
+                        "bezoekadres": {},
+                        "postadres": ADRES,
+                        "emailadres": "info@acme.nl",
                         "telefoonnummer": "+31201234567",
                     },
                 },
@@ -567,8 +562,8 @@ class VerzoekTests(APITestCase):
                     "geboortedatum": "1980-05-15",
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
-                    "postadres": {"key": "value"},
-                    "verblijfsadres": {"key": "value"},
+                    "postadres": ADRES,
+                    "verblijfsadres": ADRES,
                 }
             },
         )

@@ -13,16 +13,13 @@ REST_FRAMEWORK["PAGE_SIZE"] = 100
 
 # content of these fields must not be converted to camelCase
 REST_FRAMEWORK["JSON_UNDERSCOREIZE"] = {
-    "no_underscore_before_number": False,
+    "no_underscore_before_number": True,
     "ignore_fields": (
         "ontvangen_gegevens",
         "formulier_definitie",
         "voorinvullen_gegevens",
         "aanvraag_gegevens",
         "aanvraag_gegevens_schema",
-        "postadres",
-        "verblijfsadres",
-        "bezoekadres",
     ),
     "ignore_keys": None,
 }

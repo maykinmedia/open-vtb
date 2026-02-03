@@ -6,9 +6,85 @@ from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import serializers
 
 from openvtb.utils.api_mixins import CamelToUnderscoreMixin
-from openvtb.utils.serializers import (
-    URNField,
-)
+from openvtb.utils.serializers import URNField
+from openvtb.utils.validators import validate_postal_code
+
+
+class BuitenlandSerializer(serializers.Serializer):
+    landcode = serializers.CharField(
+        max_length=2,
+        allow_blank=True,
+        required=False,
+        help_text=_("ISO landcode van het buitenland."),
+    )
+    landnaam = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Naam van het buitenland."),
+    )
+    adresregel1 = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Eerste regel van het buitenlandse adres."),
+    )
+    adresregel2 = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Tweede regel van het buitenlandse adres."),
+    )
+    adresregel3 = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Derde regel van het buitenlandse adres."),
+    )
+
+
+class AdresSerializer(serializers.Serializer):
+    woonplaats = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Plaats van het adres."),
+    )
+    postcode = serializers.CharField(
+        max_length=100,
+        allow_blank=True,
+        required=False,
+        help_text=_("Postcode van het adres."),
+        validators=[validate_postal_code],
+    )
+    huisnummer = serializers.CharField(
+        max_length=10,
+        allow_blank=True,
+        required=False,
+        help_text=_("Huisnummer van het adres."),
+    )
+    huisletter = serializers.CharField(
+        max_length=10,
+        allow_blank=True,
+        required=False,
+        help_text=_("Huisletter van het adres, indien aanwezig."),
+    )
+    huisnummertoevoeging = serializers.CharField(
+        max_length=20,
+        allow_blank=True,
+        required=False,
+        help_text=_("Toevoeging bij het huisnummer, indien aanwezig."),
+    )
+    buitenland = BuitenlandSerializer(
+        required=False,
+        help_text=_(
+            "Dit veld mag null zijn en mag uitsluitend worden ingevuld indien de bovenstaande adresvelden leeg zijn."
+        ),
+    )
+
+    def validate(self, data):
+        # TODO:
+        return data
 
 
 class AuthentiekeVerwijzingSerializer(serializers.Serializer):
@@ -44,13 +120,13 @@ class NietAuthentiekePersoonsgegevensSerializer(
         required=True,
         help_text="Het telefoonnummer van de persoon.",
     )
-    postadres = serializers.JSONField(
-        default=dict,
+    postadres = AdresSerializer(
+        required=False,
         help_text="Het postadres van de persoon.",
     )
 
-    verblijfsadres = serializers.JSONField(
-        default=dict,
+    verblijfsadres = AdresSerializer(
+        required=False,
         help_text="Het huidige verblijfsadres van de persoon.",
     )
 
@@ -63,12 +139,12 @@ class NietAuthentiekeOrganisatiegegevensSerializer(
         required=True,
         help_text="De officiële statutaire naam van de organisatie.",
     )
-    bezoekadres = serializers.JSONField(
-        default=dict,
+    bezoekadres = AdresSerializer(
+        required=False,
         help_text="Het bezoekadres van de organisatie.",
     )
-    postadres = serializers.JSONField(
-        default=dict,
+    postadres = AdresSerializer(
+        required=False,
         help_text="Het postadres van de organisatie.",
     )
     emailadres = serializers.EmailField(
