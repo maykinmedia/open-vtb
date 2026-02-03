@@ -643,44 +643,48 @@ paths:
           description: No response body
 components:
   schemas:
+    AuthentiekeVerwijzing:
+      type: object
+      properties:
+        urn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: Authentieke Referentie URN
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+      required:
+      - urn
     Bijlage:
       type: object
       properties:
-        urn:
+        informatieObject:
           type: string
           example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het bijlage.
-        url:
+          description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          maxLength: 255
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+        toelichting:
           type: string
-          format: uri
-          description: URL van het document.
-          maxLength: 200
-        omschrijving:
-          type: string
-          description: Omschrijving van de bijlage.
+          description: Toelichting van de bijlage, zoals die door eindgebruikers gezien
+            kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving
+            als die van het INFORMATIEOBJECT.
       required:
-      - url
-      - urn
+      - informatieObject
     BijlageType:
       type: object
       properties:
-        urn:
+        informatieObjecttype:
           type: string
           example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het bijlagetype.
-        url:
-          type: string
-          format: uri
-          description: URL van het bijlagetype.
-          maxLength: 200
+          description: 'URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          maxLength: 255
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
         omschrijving:
           type: string
-          description: Omschrijving van het bijlagetype.
+          description: Omschrijving van het soort bijlage, zoals dat door eind gebruikers
+            gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
+            omschrijving als die van het INFORMATIEOBJECTTYPE.
       required:
-      - url
-      - urn
+      - informatieObjecttype
     GeoJSONGeometry:
       title: GeoJSONGeometry
       type: object
@@ -722,6 +726,26 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Geometry'
+    IsIngediendDoor:
+      type: object
+      properties:
+        authentiekeVerwijzing:
+          allOf:
+          - $ref: '#/components/schemas/AuthentiekeVerwijzing'
+          nullable: true
+          description: 'Object dat een authentieke verwijzing vertegenwoordigt. URN
+            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: urn:nld:brp.bsn:111222333,
+            urn:nld.hr.kvknummer:444555666 of urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999'
+        nietAuthentiekePersoonsgegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekePersoonsgegevens'
+          nullable: true
+          description: Object met niet-authentieke persoonsgegevens.
+        nietAuthentiekeOrganisatiegegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekeOrganisatiegegevens'
+          nullable: true
+          description: Object met niet-authentieke organisatiegegevens.
     LineString:
       type: object
       description: GeoJSON line-string geometry
@@ -789,13 +813,66 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/Point2D'
-    OpvolgingEnum:
-      enum:
-      - niet
-      - mogelijk
-      - altijd
-      - meerdere
-      type: string
+    NietAuthentiekeOrganisatiegegevens:
+      type: object
+      properties:
+        statutaireNaam:
+          type: string
+          description: De officiële statutaire naam van de organisatie.
+          maxLength: 200
+        bezoekadres:
+          description: Het bezoekadres van de organisatie.
+          type: object
+        postadres:
+          description: Het postadres van de organisatie.
+          type: object
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de organisatie.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de organisatie.
+          maxLength: 20
+      required:
+      - emailadres
+      - statutaireNaam
+      - telefoonnummer
+    NietAuthentiekePersoonsgegevens:
+      type: object
+      properties:
+        voornaam:
+          type: string
+          description: De voornaam van de persoon.
+          maxLength: 100
+        achternaam:
+          type: string
+          description: De achternaam van de persoon.
+          maxLength: 100
+        geboortedatum:
+          type: string
+          format: date
+          description: De geboortedatum van de persoon in het formaat YYYY-MM-DD.
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de persoon.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de persoon.
+          maxLength: 20
+        postadres:
+          description: Het postadres van de persoon.
+          type: object
+        verblijfsadres:
+          description: Het huidige verblijfsadres van de persoon.
+          type: object
+      required:
+      - achternaam
+      - emailadres
+      - geboortedatum
+      - telefoonnummer
+      - voornaam
     PaginatedVerzoekList:
       type: object
       required:
@@ -913,29 +990,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bijlage'
-        isIngediendDoorPartij:
+        isIngediendDoor:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
+            ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
+        isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: is ingediend door Partij urn
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
-        isIngediendDoorBetrokkene:
+        kanaal:
           type: string
-          example: urn:namespace:component:resource:uuid
-          description: is ingediend door Betrokkene urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        heeftGeleidTotZaak:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Heeft geleid tot
-          description: heeft geleid tot Zaak urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
+          description: Geeft aan via welk kanaal dit verzoek is binnengekomen.
+          maxLength: 200
         authenticatieContext:
           type: string
           example: urn:namespace:component:resource:uuid
           description: authentication context urn
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        informatieObject:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek
+            als document zoals gezien door de aanvrager.
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         verzoekBron:
@@ -974,15 +1055,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        opvolging:
-          allOf:
-          - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
-            of meerdere zaken.
-        bijlageTypen:
-          type: array
-          items:
-            $ref: '#/components/schemas/BijlageType'
     PatchedVerzoekTypeVersion:
       type: object
       description: |-
@@ -1006,11 +1078,10 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
-        verzoekTypeUrn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Type van het Verzoek.URN field
+        bijlageTypen:
+          type: array
+          items:
+            $ref: '#/components/schemas/BijlageType'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1018,22 +1089,29 @@ components:
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
           type: object
-        createdAt:
+        aangemaaktOp:
           type: string
           format: date
           readOnly: true
           description: Datum waarop de versie is gemaakt
-        modifiedAt:
+        gewijzigdOp:
           type: string
           format: date
           readOnly: true
           description: Laatste datum waarop de versie is gewijzigd
-        publishedAt:
+        beginGeldigheid:
           type: string
           format: date
           readOnly: true
           nullable: true
           description: Datum waarop de versie is gepubliceerd
+        eindeGeldigheid:
+          type: string
+          format: date
+          nullable: true
+          description: Einde van de geldigheidsduur van de versie, automatisch ingesteld
+            wanneer een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld
+            voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum.
     Point:
       type: object
       description: GeoJSON point geometry
@@ -1138,29 +1216,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bijlage'
-        isIngediendDoorPartij:
+        isIngediendDoor:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over wie het verzoek heeft ingediend. Let op: slechts
+            ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
+        isGerelateerdAan:
           type: string
           example: urn:namespace:component:resource:uuid
-          description: is ingediend door Partij urn
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
-        isIngediendDoorBetrokkene:
+        kanaal:
           type: string
-          example: urn:namespace:component:resource:uuid
-          description: is ingediend door Betrokkene urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        heeftGeleidTotZaak:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Heeft geleid tot
-          description: heeft geleid tot Zaak urn
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
+          description: Geeft aan via welk kanaal dit verzoek is binnengekomen.
+          maxLength: 200
         authenticatieContext:
           type: string
           example: urn:namespace:component:resource:uuid
           description: authentication context urn
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        informatieObject:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek
+            als document zoals gezien door de aanvrager.
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         verzoekBron:
@@ -1248,15 +1330,6 @@ components:
         toelichting:
           type: string
           description: Uitleg over het VerzoekType
-        opvolging:
-          allOf:
-          - $ref: '#/components/schemas/OpvolgingEnum'
-          description: Geeft aan op welke manier een VerzoekType kan leiden tot één
-            of meerdere zaken.
-        bijlageTypen:
-          type: array
-          items:
-            $ref: '#/components/schemas/BijlageType'
       required:
       - naam
       - url
@@ -1286,11 +1359,10 @@ components:
           format: uri
           readOnly: true
           description: Het VerzoekType waartoe deze versie behoort.
-        verzoekTypeUrn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Type van het Verzoek.URN field
+        bijlageTypen:
+          type: array
+          items:
+            $ref: '#/components/schemas/BijlageType'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1298,31 +1370,37 @@ components:
         aanvraagGegevensSchema:
           description: JSON schema voor validatie van VerzoekType
           type: object
-        createdAt:
+        aangemaaktOp:
           type: string
           format: date
           readOnly: true
           description: Datum waarop de versie is gemaakt
-        modifiedAt:
+        gewijzigdOp:
           type: string
           format: date
           readOnly: true
           description: Laatste datum waarop de versie is gewijzigd
-        publishedAt:
+        beginGeldigheid:
           type: string
           format: date
           readOnly: true
           nullable: true
           description: Datum waarop de versie is gepubliceerd
+        eindeGeldigheid:
+          type: string
+          format: date
+          nullable: true
+          description: Einde van de geldigheidsduur van de versie, automatisch ingesteld
+            wanneer een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld
+            voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum.
       required:
+      - aangemaaktOp
       - aanvraagGegevensSchema
-      - createdAt
-      - modifiedAt
-      - publishedAt
+      - beginGeldigheid
+      - gewijzigdOp
       - url
       - version
       - verzoekType
-      - verzoekTypeUrn
     VerzoekTypeVersionReadOnly:
       type: object
       description: |-

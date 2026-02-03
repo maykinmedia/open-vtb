@@ -1,12 +1,12 @@
 import uuid
-from datetime import date
+from datetime import date, timedelta
 
 from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
-from openvtb.components.verzoeken.models import VerzoekType
+from openvtb.components.verzoeken.models import BijlageType, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
     JSON_SCHEMA,
     VerzoekTypeFactory,
@@ -44,12 +44,13 @@ class VerzoekTypeVersionTests(APITestCase):
                 "url": version_url,
                 "version": 5,
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
-                "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "status": "draft",
                 "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
-                "createdAt": "2025-01-01",
-                "modifiedAt": "2025-01-01",
-                "publishedAt": None,
+                "bijlageTypen": [],
+                "aangemaaktOp": "2025-01-01",
+                "gewijzigdOp": "2025-01-01",
+                "beginGeldigheid": None,
+                "eindeGeldigheid": None,
             },
         )
 
@@ -110,9 +111,10 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
         self.assertEqual(version.version, 1)
         self.assertEqual(version.status, VerzoekTypeVersionStatus.DRAFT)
-        self.assertEqual(version.created_at, date(2025, 1, 1))
-        self.assertEqual(version.modified_at, date(2025, 1, 1))
-        self.assertEqual(version.published_at, None)
+        self.assertEqual(version.aangemaakt_op, date(2025, 1, 1))
+        self.assertEqual(version.gewijzigd_op, date(2025, 1, 1))
+        self.assertEqual(version.begin_geldigheid, None)
+        self.assertEqual(version.einde_geldigheid, None)
 
         # verzoekType is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
@@ -146,6 +148,36 @@ class VerzoekTypeVersionTests(APITestCase):
         # version auto generated
         self.assertEqual(version.version, 3)
         self.assertEqual(version.verzoek_type, verzoektype)
+
+    def test_create_version_with_bijlage_typen(self):
+        data = {
+            "aanvraagGegevensSchema": JSON_SCHEMA,
+            "bijlageTypen": [
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:3c30bea0-cbf2-4fae-8d12-13b16395af1c",
+                    "omschrijving": "test1",
+                },
+                {
+                    "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                    "omschrijving": "test2",
+                },
+            ],
+        }
+        verzoektype = VerzoekTypeFactory.create()
+        self.assertEqual(verzoektype.versions.count(), 0)
+
+        url = reverse(
+            "verzoeken:verzoektypeversion-list",
+            kwargs={"verzoektype_uuid": str(verzoektype.uuid)},
+        )
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        verzoektype = VerzoekType.objects.get()
+
+        self.assertEqual(verzoektype.versions.count(), 1)
+        version = verzoektype.last_version
+        self.assertEqual(version.bijlage_typen.count(), 2)
 
     def test_invalid_create_version(self):
         verzoektype = VerzoekTypeFactory.create()
@@ -325,6 +357,173 @@ class VerzoekTypeVersionTests(APITestCase):
         verzoektype.refresh_from_db()
         self.assertEqual(
             verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+        )
+
+    def test_automatically_update_expired_date(self):
+        verzoektype = VerzoekTypeFactory.create()
+        v1 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+        self.assertEqual(v1.version, 1)
+        v2 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+        self.assertEqual(v2.version, 2)
+
+        version_url = reverse(
+            "verzoeken:verzoektypeversion-detail",
+            kwargs={
+                "verzoektype_uuid": str(verzoektype.uuid),
+                "verzoektype_version": verzoektype.last_version.version,
+            },
+        )
+
+        # V2 DRAFT -> PUBLISHED
+        self.assertEqual(v2.status, VerzoekTypeVersionStatus.DRAFT)
+        response = self.client.patch(
+            version_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        v1.refresh_from_db()
+        v2.refresh_from_db()
+
+        self.assertEqual(v2.status, VerzoekTypeVersionStatus.PUBLISHED)
+        self.assertFalse(v2.is_expired)
+
+        # v1 must be expired
+        self.assertTrue(v1.is_expired)
+
+    def test_manually_update_expired_date(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        self.assertFalse(verzoektype.last_version.is_expired)
+
+        # today
+        response = self.client.patch(
+            reverse(
+                "verzoeken:verzoektypeversion-detail",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                    "verzoektype_version": verzoektype.last_version.version,
+                },
+            ),
+            {"eindeGeldigheid": date.today()},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+        self.assertTrue(verzoektype.last_version.is_expired)
+
+        # future
+        response = self.client.patch(
+            reverse(
+                "verzoeken:verzoektypeversion-detail",
+                kwargs={
+                    "verzoektype_uuid": str(verzoektype.uuid),
+                    "verzoektype_version": verzoektype.last_version.version,
+                },
+            ),
+            {"eindeGeldigheid": date.today() + timedelta(1)},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        # expire tomorrow
+        self.assertFalse(verzoektype.last_version.is_expired)
+
+    def test_update_with_bijlage_typen(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        version_url = reverse(
+            "verzoeken:verzoektypeversion-detail",
+            kwargs={
+                "verzoektype_uuid": str(verzoektype.uuid),
+                "verzoektype_version": verzoektype.last_version.version,
+            },
+        )
+        BijlageType.objects.create(
+            verzoek_type_version=verzoektype.last_version,
+            informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+            omschrijving="description1",
+        )
+        BijlageType.objects.create(
+            verzoek_type_version=verzoektype.last_version,
+            informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:3c30bea0-cbf2-4fae-8d12-13b16395af1c",
+            omschrijving="description2",
+        )
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 2)
+
+        # create in this case, because doesn't exist with this informatieObjecttype
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70",
+                        "omschrijving": "description3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+
+        # check before and later `omschrijving`
+        self.assertEqual(
+            verzoektype.last_version.bijlage_typen.get(
+                informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
+            ).omschrijving,
+            "description3",
+        )
+        # update in this case, because it exist with this informatie_objecttype
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70",
+                        "omschrijving": "new_description_3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(
+            verzoektype.last_version.bijlage_typen.get(
+                informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
+            ).omschrijving,
+            "new_description_3",
+        )
+
+        # invalid informatie_objecttype required
+        response = self.client.patch(
+            version_url,
+            {
+                "bijlageTypen": [
+                    {
+                        # "informatieObjecttype": "urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+                        "omschrijving": "new_description_3",
+                    },
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        verzoektype.refresh_from_db()
+
+        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlageTypen"),
+            {
+                "name": "bijlageTypen",
+                "code": "required",
+                "reason": "bijlageType must have a informatieObjecttype.",
+            },
         )
 
     def test_destroy_version(self):

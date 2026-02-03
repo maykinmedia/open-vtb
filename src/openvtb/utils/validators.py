@@ -20,6 +20,8 @@ from rest_framework import serializers
 
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 
+from .typing import JSONObject
+
 logger = structlog.stdlib.get_logger(__name__)
 format_checker = FormatChecker()
 
@@ -57,14 +59,16 @@ def is_valid_iban(value: str) -> bool:
     return True
 
 
-def validate_jsonschema(instance: Any, schema: Any, label: str = "instance") -> None:
+def validate_jsonschema(
+    instance: JSONObject, schema: JSONObject, label: str = "instance"
+) -> None:
     """
     Validator for JSONField with appropriate JSON schema.
 
     Args:
-        instance (Any): The JSON object to validate.
+        instance (JSONObject): The JSON object to validate.
+        schema (JSONObject): The JSON Schema to validate against.
         label (str): A label representing the root key of the instance (used in error paths).
-        schema (Any): The JSON Schema to validate against.
 
     Raises:
         ValueError: Raises a dictionary mapping the error path to the validation message.

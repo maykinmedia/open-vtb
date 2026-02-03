@@ -118,3 +118,207 @@ class ValidateVerzoekSchemaTestCase(TestCase):
                 ]
             },
         )
+
+
+class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
+    def test_valid_authentieke_verwijzing_schema(self):
+        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
+
+        # authentiekeVerwijzing
+        verzoek.is_ingediend_door = {
+            "authentiekeVerwijzing": {
+                "urn": "urn:nld:brp:bsn:111222333",
+            }
+        }
+        verzoek.save()
+        verzoek.full_clean()
+
+        # authentiekeVerwijzing
+        verzoek.is_ingediend_door = {
+            "nietAuthentiekePersoonsgegevens": {
+                "voornaam": "Pietje",
+                "achternaam": "Puk",
+                "geboortedatum": "1982-01-01",
+                "emailadres": "test@admin.com",
+                "telefoonnummer": "",
+                "postadres": {"key": "value"},
+                "verblijfsadres": {"key": "value"},
+            }
+        }
+        verzoek.save()
+        verzoek.full_clean()
+
+        # authentiekeVerwijzing
+        verzoek.is_ingediend_door = {
+            "nietAuthentiekeOrganisatiegegevens": {
+                "statutaireNaam": "ACME",
+                "bezoekadres": {"key": "value"},
+                "postadres": {"key": "value"},
+                "emailadres": "test@admin.com",
+                "telefoonnummer": "",
+            }
+        }
+        verzoek.save()
+        verzoek.full_clean()
+
+    def test_invalid_authentieke_verwijzing_schema(self):
+        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {"authentiekeVerwijzing": {}}
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.authentiekeVerwijzing': [\"'urn' is a required property\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "authentiekeVerwijzing": {
+                    "test": 1,
+                }
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door': [\"{'authentiekeVerwijzing': {'test': 1}} is not valid under any of the given schemas\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "authentiekeVerwijzing": {
+                    "urn": "test",
+                }
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.authentiekeVerwijzing.urn': [\"'test' does not match '^urn:.*$'\"]}"
+                ]
+            },
+        )
+
+    def test_invalid_niet_authentieke_persoonsgegevens_schema(self):
+        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {"nietAuthentiekePersoonsgegevens": {}}
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door': [\"{'nietAuthentiekePersoonsgegevens': {}} is not valid under any of the given schemas\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekePersoonsgegevens": {
+                    "test": 1,
+                }
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door': [\"{'nietAuthentiekePersoonsgegevens': {'test': 1}} is not valid under any of the given schemas\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": 1,
+                    "achternaam": "Puk",
+                    "geboortedatum": "1982-01-01",
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
+                    "postadres": {"key": "value"},
+                    "verblijfsadres": {"key": "value"},
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekePersoonsgegevens.voornaam': [\"1 is not of type 'string'\"]}"
+                ]
+            },
+        )
+
+    def test_invalid_niet_authentieke_organisatiegegevens_schema(self):
+        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {"nietAuthentiekeOrganisatiegegevens": {}}
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door': [\"{'nietAuthentiekeOrganisatiegegevens': {}} is not valid under any of the given schemas\"]}"
+                ]
+            },
+        )
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "test": 1,
+                }
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door': [\"{'nietAuthentiekeOrganisatiegegevens': {'test': 1}} is not valid under any of the given schemas\"]}"
+                ]
+            },
+        )
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": 1,
+                    "bezoekadres": {"key": "value"},
+                    "postadres": {"key": "value"},
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekeOrganisatiegegevens.statutaireNaam': [\"1 is not of type 'string'\"]}"
+                ]
+            },
+        )

@@ -7,7 +7,7 @@ from maykin_2fa.test import disable_admin_mfa
 
 from openvtb.accounts.tests.factories import UserFactory
 
-from ..constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
+from ..constants import VerzoekTypeVersionStatus
 from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
 from .factories import JSON_SCHEMA, VerzoekTypeFactory, VerzoekTypeVersionFactory
 
@@ -43,7 +43,6 @@ class VerzoekTypeAdminTests(WebTest):
         verzoek_type = VerzoekType.objects.get()
 
         self.assertEqual(verzoek_type.naam, "test")
-        self.assertEqual(verzoek_type.opvolging, VerzoektypeOpvolging.NIET_TOT_ZAAK)
 
         verzoek_type_version = verzoek_type.last_version
 

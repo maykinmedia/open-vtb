@@ -291,3 +291,91 @@ class VerzoekValidatorsTests(APITestCase):
                     "reason": "False is not of type 'integer'",
                 },
             )
+
+    def test_invalid_is_ingediend_door_json_schema(self):
+        url = reverse("verzoeken:verzoek-list")
+
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+        )
+
+        with self.subTest("multiple is_ingediend_door is not allowed"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {
+                    "diameter": 10,
+                },
+                "version": 1,
+                "isIngediendDoor": {
+                    "authentiekeVerwijzing": {"urn": "urn:example:12345"},
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {"key": "value"},
+                        "postadres": {"key": "value"},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isIngediendDoor"),
+                {
+                    "name": "isIngediendDoor",
+                    "code": "invalid",
+                    "reason": "It must have only one of the three permitted keys: one of `authentiekeVerwijzing`,"
+                    " `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`.",
+                },
+            )
+
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {
+                    "diameter": 10,
+                },
+                "version": 1,
+                "isIngediendDoor": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                },
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isIngediendDoor"),
+                {
+                    "name": "isIngediendDoor",
+                    "code": "invalid",
+                    "reason": "It must have only one of the three permitted keys: one of `authentiekeVerwijzing`,"
+                    " `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`.",
+                },
+            )
+        with self.subTest("required field"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {
+                    "diameter": 10,
+                },
+                "version": 1,
+                "isIngediendDoor": {
+                    "authentiekeVerwijzing": {"test": "1234"},
+                },
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response, "isIngediendDoor.authentiekeVerwijzing.urn"
+                ),
+                {
+                    "name": "isIngediendDoor.authentiekeVerwijzing.urn",
+                    "code": "required",
+                    "reason": "Dit veld is vereist.",
+                },
+            )

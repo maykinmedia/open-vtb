@@ -88,6 +88,47 @@ class VerzoekFactory(DjangoModelFactory):
             VerzoekBronFactory(verzoek=obj)
             VerzoekBetalingFactory(verzoek=obj)
 
+    class Params:
+        authentieke_verwijzing = factory.Trait(
+            is_ingediend_door={
+                "authentiekeVerwijzing": {
+                    "urn": "urn:nld:brp:bsn:111222333",
+                }
+            }
+        )
+        niet_authentieke_persoonsgegevens = factory.Trait(
+            is_ingediend_door={
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": "Jan",
+                    "achternaam": "Jansen",
+                    "geboortedatum": "1980-05-15",
+                    "emailadres": "jan.jansen@example.com",
+                    "telefoonnummer": "+31612345678",
+                    "postadres": {
+                        "key": "value",
+                    },
+                    "verblijfsadres": {
+                        "key": "value",
+                    },
+                }
+            }
+        )
+        niet_authentieke_organisatiegegevens = factory.Trait(
+            is_ingediend_door={
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": {
+                        "key": "value",
+                    },
+                    "postadres": {
+                        "key": "value",
+                    },
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                }
+            }
+        )
+
 
 class VerzoekBronFactory(DjangoModelFactory):
     verzoek = factory.SubFactory(VerzoekFactory)

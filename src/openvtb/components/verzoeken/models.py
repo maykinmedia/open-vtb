@@ -12,7 +12,8 @@ from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
-from .constants import VerzoektypeOpvolging, VerzoekTypeVersionStatus
+from .constants import VerzoekTypeVersionStatus
+from .schemas import IS_INGEDIEND_DOOR_SCHEMA
 from .utils import check_json_schema
 
 
@@ -32,22 +33,13 @@ class VerzoekType(models.Model):
         blank=True,
         help_text=_("Uitleg over het VerzoekType"),
     )
-    opvolging = models.CharField(
-        _("opvolging"),
-        max_length=20,
-        default=VerzoektypeOpvolging.NIET_TOT_ZAAK,
-        choices=VerzoektypeOpvolging.choices,
-        help_text=_(
-            "Geeft aan op welke manier een VerzoekType kan leiden tot één of meerdere zaken."
-        ),
-    )
-    created_at = models.DateField(
-        _("created at"),
+    aangemaakt_op = models.DateField(
+        _("aangemaakt op"),
         auto_now_add=True,
         help_text=_("Datum waarop het VerzoekType is aangemaakt"),
     )
-    modified_at = models.DateField(
-        _("modified at"),
+    gewijzigd_op = models.DateField(
+        _("gewijzigd op"),
         auto_now=True,
         help_text=_("Laatste datum waarop het VerzoekType is gewijzigd"),
     )
@@ -81,22 +73,32 @@ class VerzoekTypeVersion(models.Model):
         _("version"),
         help_text=_("Integer-versie van het VerzoekType."),
     )
-    created_at = models.DateField(
-        _("created at"),
+    aangemaakt_op = models.DateField(
+        _("aangemaakt op"),
         auto_now_add=True,
         help_text=_("Datum waarop de versie is gemaakt"),
     )
-    modified_at = models.DateField(
-        _("modified at"),
+    gewijzigd_op = models.DateField(
+        _("gewijzigd op"),
         auto_now=True,
         help_text=_("Laatste datum waarop de versie is gewijzigd"),
     )
-    published_at = models.DateField(
-        _("published_at"),
+    begin_geldigheid = models.DateField(
+        _("begin geldigheid"),
         null=True,
         blank=True,
         help_text=_("Datum waarop de versie is gepubliceerd"),
     )
+    einde_geldigheid = models.DateField(
+        _("einde geldigheid"),
+        default=None,
+        null=True,
+        help_text=_(
+            "Einde van de geldigheidsduur van de versie, automatisch ingesteld wanneer een nieuwere versie wordt gepubliceerd. "
+            "Als de waarde wordt ingesteld voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum."
+        ),
+    )
+
     aanvraag_gegevens_schema = models.JSONField(
         _("aanvraag gegevens schema"),
         default=dict,
@@ -113,7 +115,7 @@ class VerzoekTypeVersion(models.Model):
 
     class Meta:
         unique_together = ("verzoek_type", "version")
-        ordering = ["-version", "-created_at"]
+        ordering = ["-version", "-aangemaakt_op"]
 
     def __str__(self):
         return f"Version {self.version} ({self.status})"
@@ -122,7 +124,7 @@ class VerzoekTypeVersion(models.Model):
         if not self.version:
             self.version = self.generate_version_number()
 
-        # save published_at
+        # save published_at and set previouos version as expired
         previous_status = (
             VerzoekTypeVersion.objects.get(id=self.id).status if self.id else None
         )
@@ -130,9 +132,22 @@ class VerzoekTypeVersion(models.Model):
             self.status == VerzoekTypeVersionStatus.PUBLISHED
             and previous_status != self.status
         ):
-            self.published_at = date.today()
+            self.begin_geldigheid = date.today()
+            if (
+                previous_version := VerzoekTypeVersion.objects.filter(
+                    verzoek_type=self.verzoek_type
+                )
+                .exclude(id=self.id)
+                .first()
+            ):
+                previous_version.einde_geldigheid = date.today()
+                previous_version.save()
 
         super().save(*args, **kwargs)
+
+    @property
+    def is_expired(self):
+        return bool(self.einde_geldigheid and self.einde_geldigheid <= date.today())
 
     def clean(self):
         super().clean()
@@ -261,28 +276,44 @@ class Verzoek(models.Model):
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
     )
-    # partij relation
-    is_ingediend_door_partij = URNField(
-        _("is ingediend door partij"),
-        help_text=_("is ingediend door Partij urn"),  # TODO check help_text
+    is_ingediend_door = models.JSONField(
+        _("Is ingediend door"),
+        default=dict,
+        blank=True,
+        help_text=_(
+            "JSON-object dat aangeeft door wie het verzoek is ingediend. "
+            "Kan één van de volgende vormen hebben:\n"
+            "- authentiekeVerwijzing: object met een 'urn' string (bijv. 'urn:...')\n"
+            "- nietAuthentiekePersoonsgegevens: object met persoonsgegevens zoals voornaam, achternaam, geboortedatum, emailadres, telefoonnummer, postadres en verblijfsadres\n"
+            "- nietAuthentiekeOrganisatiegegevens: object met organisatiegegevens zoals statutaireNaam, bezoekadres, postadres, emailadres en telefoonnummer\n"
+            "Dit JSON-object wordt gebruikt voor validatie van het VerzoekType."
+        ),
+        encoder=DjangoJSONEncoder,
+    )
+    is_gerelateerd_aan = URNField(
+        _("is gerelateerd aan"),
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+        ),
         blank=True,
     )
-    # betrokkene relation
-    is_ingediend_door_betrokkene = URNField(
-        _("is ingediend door betrokkene"),
-        help_text=_("is ingediend door Betrokkene urn"),  # TODO check help_text
+    kanaal = models.CharField(
+        _("kanaal"),
         blank=True,
-    )
-    # zaak relation
-    heeft_geleid_tot_zaak = URNField(
-        _("heeft geleid tot"),
-        help_text=_("heeft geleid tot Zaak urn"),  # TODO check help_text
-        blank=True,
+        max_length=200,
+        help_text=_("Geeft aan via welk kanaal dit verzoek is binnengekomen."),
     )
     # authenticatie_context relation
     authenticatie_context = URNField(
         _("authenticatie context"),
         help_text=_("authentication context urn"),  # TODO check help_text
+        blank=True,
+    )
+    informatie_object = URNField(
+        _("informatie object"),
+        help_text=_(
+            "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
+        ),
         blank=True,
     )
 
@@ -293,8 +324,32 @@ class Verzoek(models.Model):
     def __str__(self):
         return f"{self.uuid}"
 
-    def clean(self):
-        super().clean()
+    def clean_is_ingediend_door(self):
+        if not self.is_ingediend_door:
+            return
+
+        if len(self.is_ingediend_door.keys()) > 1:
+            raise ValidationError(
+                {
+                    "is_ingediend_door": _(
+                        "It must have only one of the three permitted keys: "
+                        "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
+                    )
+                },
+                code="invalid",
+            )
+        try:
+            validate_jsonschema(
+                instance=self.is_ingediend_door,
+                label="is_ingediend_door",
+                schema=IS_INGEDIEND_DOOR_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_ingediend_door": str(error)})
+
+    def clean_verzoek_type(self):
+        if not self.verzoek_type_id:
+            return
         if not self.verzoek_type.versions.filter(version=self.version).exists():
             raise ValidationError(
                 {
@@ -316,6 +371,11 @@ class Verzoek(models.Model):
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens": str(error)})
 
+    def clean(self):
+        super().clean()
+        self.clean_verzoek_type()
+        self.clean_is_ingediend_door()
+
 
 class Bijlage(models.Model):
     uuid = models.UUIDField(
@@ -329,22 +389,30 @@ class Bijlage(models.Model):
         related_name="bijlagen",
         help_text=_("Bijlagen gekoppeld aan het Verzoek."),
     )
-    url = models.URLField(
-        _("url"),
-        help_text=_("URL van het document."),
-    )
-    omschrijving = models.TextField(
-        _("omschrijving"),
+    informatie_object = URNField(
+        _("informatie object"),
+        help_text=_(
+            "URN naar het ENKELVOUDIGINFORMATIEOBJECT. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        ),
         blank=True,
-        help_text=_("Omschrijving van de bijlage."),
+    )
+    toelichting = models.TextField(
+        _("toelichting"),
+        blank=True,
+        help_text=_(
+            "Toelichting van de bijlage, zoals die door eindgebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECT."
+        ),
     )
 
     class Meta:
         verbose_name = _("Bijlage")
         verbose_name_plural = _("Bijlagen")
+        unique_together = ("verzoek", "informatie_object")
 
     def __str__(self):
-        return self.url
+        return self.informatie_object
 
 
 class BijlageType(models.Model):
@@ -353,25 +421,34 @@ class BijlageType(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het BijlageType."),
     )
-    verzoek_type = models.ForeignKey(
-        VerzoekType,
+    verzoek_type_version = models.ForeignKey(
+        VerzoekTypeVersion,
         on_delete=models.CASCADE,
         related_name="bijlage_typen",
-        help_text=_("Bijlagetypen gekoppeld aan het VerzoekType."),
+        help_text=_("Bijlagetypen gekoppeld aan het VerzoekTypeVersion."),
     )
-    url = models.URLField(
-        _("url"),
-        help_text=_("URL van het bijlagetype."),
+    informatie_objecttype = URNField(
+        _("informatie objecttype"),
+        help_text=_(
+            "URN van het INFORMATIEOBJECTTYPE. "
+            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        ),
+        blank=True,
     )
     omschrijving = models.TextField(
         _("omschrijving"),
         blank=True,
-        help_text=_("Omschrijving van het bijlagetype."),
+        help_text=_(
+            "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE."
+        ),
     )
 
     class Meta:
         verbose_name = _("BijlageType")
         verbose_name_plural = _("BijlageTypen")
 
+        unique_together = ("verzoek_type_version", "informatie_objecttype")
+
     def __str__(self):
-        return self.url
+        return self.informatie_objecttype

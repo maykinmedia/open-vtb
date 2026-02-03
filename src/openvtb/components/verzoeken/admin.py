@@ -10,7 +10,6 @@ from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm
 from .models import (
     Bijlage,
-    BijlageType,
     Verzoek,
     VerzoekBetaling,
     VerzoekBron,
@@ -20,12 +19,6 @@ from .models import (
 from .widgets import JSONSuit
 
 
-class BijlageTypeInline(admin.StackedInline):
-    model = BijlageType
-    extra = 0
-    readonly_fields = ("uuid",)
-
-
 class VerzoekTypeVersionInline(admin.StackedInline):
     model = VerzoekTypeVersion
     form = VerzoekTypeVersionForm
@@ -33,7 +26,15 @@ class VerzoekTypeVersionInline(admin.StackedInline):
     extra = 0
     max_num = 1
     min_num = 1
-    readonly_fields = ("version", "status", "published_at", "created_at", "modified_at")
+
+    readonly_fields = (
+        "version",
+        "status",
+        "begin_geldigheid",
+        "aangemaakt_op",
+        "gewijzigd_op",
+        "einde_geldigheid",
+    )
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -56,17 +57,15 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
     list_display = (
         "naam",
         "uuid",
-        "opvolging",
-        "created_at",
-        "modified_at",
+        "aangemaakt_op",
+        "gewijzigd_op",
         "last_version",
     )
     search_fields = (
         "naam",
         "uuid",
     )
-    inlines = [VerzoekTypeVersionInline, BijlageTypeInline]
-    list_filter = ("opvolging",)
+    inlines = [VerzoekTypeVersionInline]
     readonly_fields = ("uuid",)
 
     def publish(self, request, obj):

@@ -1,13 +1,18 @@
-from django.db import transaction
+import json
+
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
+from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
+from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.serializers import (
+    URNField,
     URNModelSerializer,
     URNRelatedField,
 )
@@ -25,9 +30,22 @@ from .validators import (
     AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
     IsImmutableValidator,
+    IsIngediendDoorValidator,
     JsonSchemaValidator,
     VersionStatusValidator,
 )
+
+
+class BijlageTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BijlageType
+        fields = (
+            "informatie_objecttype",
+            "omschrijving",
+        )
+        extra_kwargs = {
+            "informatie_objecttype": {"required": True, "validators": []},
+        }
 
 
 class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
@@ -40,12 +58,10 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
 
     parent_lookup_kwargs = {"verzoektype_uuid": "verzoek_type__uuid"}
 
-    verzoek_type_urn = URNRelatedField(
-        lookup_field="uuid",
-        source="verzoek_type",
-        urn_resource="verzoektype",
-        read_only=True,
-        help_text=get_help_text("verzoeken.Verzoek", "verzoek_type") + _("URN field"),
+    bijlage_typen = BijlageTypeSerializer(
+        required=False,
+        many=True,
+        help_text="",  # TODO
     )
 
     class Meta:
@@ -54,12 +70,13 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             "url",
             "version",
             "verzoek_type",
-            "verzoek_type_urn",
+            "bijlage_typen",
             "status",
             "aanvraag_gegevens_schema",
-            "created_at",
-            "modified_at",
-            "published_at",
+            "aangemaakt_op",
+            "gewijzigd_op",
+            "begin_geldigheid",
+            "einde_geldigheid",
         )
         extra_kwargs = {
             "url": {
@@ -80,9 +97,9 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
                 "validators": [JsonSchemaValidator()],
                 "required": True,
             },
-            "created_at": {"read_only": True},
-            "modified_at": {"read_only": True},
-            "published_at": {"read_only": True},
+            "aangemaakt_op": {"read_only": True},
+            "gewijzigd_op": {"read_only": True},
+            "begin_geldigheid": {"read_only": True},
         }
         validators = [VersionStatusValidator()]
 
@@ -102,42 +119,63 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         valid_attrs["verzoek_type"] = verzoek_type
         return valid_attrs
 
+    def validate_bijlage_typen(self, value):
+        """
+        Ensure that each nested object has the 'informatie_objecttype' field filled in.
+        """
+        for obj in value:
+            if not obj.get("informatie_objecttype"):
+                raise serializers.ValidationError(
+                    _("bijlageType must have a informatieObjecttype."),
+                    code="required",
+                )
+        return value
 
-class BijlageTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = BijlageType
-        fields = (
-            "urn",
-            "url",
-            "omschrijving",
-        )
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().create(validated_data)
 
-        extra_kwargs = {
-            "urn": {
-                "lookup_field": "uuid",
-                "urn_component": "verzoeken",
-                "urn_resource": "bijlagetype",
-                "help_text": _("De Uniform Resource Name van het bijlagetype."),
-            },
-        }
+        if bijlage_typen:
+            try:
+                objs = [
+                    BijlageType(verzoek_type_version=instance, **data)
+                    for data in bijlage_typen
+                ]
+                BijlageType.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                    },
+                    code="unique",
+                )
+
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().update(instance, validated_data)
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.update_or_create(
+                    verzoek_type_version=instance,
+                    informatie_objecttype=bijlage_type["informatie_objecttype"],
+                    defaults={**bijlage_type},
+                )
+        return instance
 
 
-class BijlageSerializer(URNModelSerializer, serializers.ModelSerializer):
+class BijlageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bijlage
         fields = (
-            "urn",
-            "url",
-            "omschrijving",
+            "informatie_object",
+            "toelichting",
         )
-
         extra_kwargs = {
-            "urn": {
-                "lookup_field": "uuid",
-                "urn_component": "verzoeken",
-                "urn_resource": "bijlage",
-                "help_text": _("De Uniform Resource Name van het bijlage."),
-            },
+            "informatie_object": {"required": True, "validators": []},
         }
 
 
@@ -194,12 +232,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         help_text="",  # TODO
     )
 
-    bijlage_typen = BijlageTypeSerializer(
-        required=False,
-        many=True,
-        help_text="",  # TODO
-    )
-
     class Meta:
         model = VerzoekType
         fields = (
@@ -209,8 +241,6 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "versions",
             "naam",
             "toelichting",
-            "opvolging",
-            "bijlage_typen",
         )
 
         extra_kwargs = {
@@ -226,27 +256,100 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             },
         }
 
-    @transaction.atomic
-    def create(self, validated_data):
-        bijlage_typen = validated_data.pop("bijlage_typen", None)
-        instance = super().create(validated_data)
 
-        if bijlage_typen:
-            for bijlage_type in bijlage_typen:
-                BijlageType.objects.create(verzoek_type=instance, **bijlage_type)
-        return instance
+class AuthentiekeVerwijzingSerializer(serializers.Serializer):
+    urn = URNField(required=True, help_text=_("Authentieke Referentie URN"))
 
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        bijlage_typen = validated_data.pop("bijlage_typen", None)
-        instance = super().update(instance, validated_data)
 
-        if bijlage_typen:
-            for bijlage_type in bijlage_typen:
-                BijlageType.objects.update_or_create(
-                    verzoek_type=instance, defaults={**bijlage_type}
-                )
-        return instance
+class NietAuthentiekePersoonsgegevensSerializer(
+    CamelToUnderscoreMixin, serializers.Serializer
+):
+    voornaam = serializers.CharField(
+        max_length=100,
+        required=True,
+        help_text="De voornaam van de persoon.",
+    )
+    achternaam = serializers.CharField(
+        max_length=100,
+        required=True,
+        help_text="De achternaam van de persoon.",
+    )
+    geboortedatum = serializers.DateField(
+        required=True,
+        help_text="De geboortedatum van de persoon in het formaat YYYY-MM-DD.",
+    )
+    emailadres = serializers.EmailField(
+        required=True,
+        help_text="Het e-mailadres van de persoon.",
+    )
+    telefoonnummer = serializers.CharField(
+        max_length=20,
+        required=True,
+        help_text="Het telefoonnummer van de persoon.",
+    )
+    postadres = serializers.JSONField(
+        default=dict,
+        help_text="Het postadres van de persoon.",
+    )
+
+    verblijfsadres = serializers.JSONField(
+        default=dict,
+        help_text="Het huidige verblijfsadres van de persoon.",
+    )
+
+
+class NietAuthentiekeOrganisatiegegevensSerializer(
+    CamelToUnderscoreMixin, serializers.Serializer
+):
+    statutaire_naam = serializers.CharField(
+        max_length=200,
+        required=True,
+        help_text="De officiële statutaire naam van de organisatie.",
+    )
+    bezoekadres = serializers.JSONField(
+        default=dict,
+        help_text="Het bezoekadres van de organisatie.",
+    )
+    postadres = serializers.JSONField(
+        default=dict,
+        help_text="Het postadres van de organisatie.",
+    )
+    emailadres = serializers.EmailField(
+        required=True,
+        help_text="Het e-mailadres van de organisatie.",
+    )
+    telefoonnummer = serializers.CharField(
+        max_length=20,
+        required=True,
+        help_text="Het telefoonnummer van de organisatie.",
+    )
+
+
+class IsIngediendDoorSerializer(CamelToUnderscoreMixin, serializers.Serializer):
+    authentieke_verwijzing = AuthentiekeVerwijzingSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object dat een authentieke verwijzing vertegenwoordigt. "
+        "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
+        "Bijvoorbeeld: "
+        "urn:nld:brp.bsn:111222333, urn:nld.hr.kvknummer:444555666 of urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999",
+    )
+    niet_authentieke_persoonsgegevens = NietAuthentiekePersoonsgegevensSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object met niet-authentieke persoonsgegevens.",
+    )
+    niet_authentieke_organisatiegegevens = NietAuthentiekeOrganisatiegegevensSerializer(
+        required=False,
+        allow_null=True,
+        help_text="Object met niet-authentieke organisatiegegevens.",
+    )
+
+    def validate(self, data):
+        # clean data
+        renderer = CamelCaseJSONRenderer()
+        data = json.loads(renderer.render(data))
+        return data
 
 
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -284,6 +387,14 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         many=True,
         help_text="",  # TODO
     )
+    is_ingediend_door = IsIngediendDoorSerializer(
+        required=False,
+        help_text=(
+            "Gegevens over wie het verzoek heeft ingediend. "
+            "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
+            "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
+        ),
+    )
 
     class Meta:
         model = Verzoek
@@ -297,10 +408,11 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens",
             "version",
             "bijlagen",
-            "is_ingediend_door_partij",
-            "is_ingediend_door_betrokkene",
-            "heeft_geleid_tot_zaak",
+            "is_ingediend_door",
+            "is_gerelateerd_aan",
+            "kanaal",
             "authenticatie_context",
+            "informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
         )
@@ -325,7 +437,20 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
 
     validators = [
         AanvraagGegevensValidator(),
+        IsIngediendDoorValidator(),
     ]
+
+    def validate_bijlagen(self, value):
+        """
+        Ensure that each nested object has the 'informatie_object' field filled in.
+        """
+        for obj in value:
+            if not obj.get("informatie_object"):
+                raise serializers.ValidationError(
+                    _("bijlage must have a informatieObject."),
+                    code="required",
+                )
+        return value
 
     @transaction.atomic
     def create(self, validated_data):
@@ -339,8 +464,16 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         if betaling:
             VerzoekBetaling.objects.create(verzoek=instance, **betaling)
         if bijlagen:
-            for bijlage in bijlagen:
-                Bijlage.objects.create(verzoek=instance, **bijlage)
+            try:
+                objs = [Bijlage(verzoek=instance, **data) for data in bijlagen]
+                Bijlage.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlagen": "Bijlage with the specified informatieObject already exists."
+                    },
+                    code="unique",
+                )
         return instance
 
     @transaction.atomic
@@ -357,5 +490,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             )
         if bijlagen:
             for bijlage in bijlagen:
-                Bijlage.objects.update_or_create(verzoek=instance, defaults={**bijlage})
+                Bijlage.objects.update_or_create(
+                    verzoek=instance,
+                    informatie_object=bijlage["informatie_object"],
+                    defaults={**bijlage},
+                )
         return instance

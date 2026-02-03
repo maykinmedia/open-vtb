@@ -13,6 +13,7 @@
                     <th scope="col">{% trans 'Created at' %}</th>
                     <th scope="col">{% trans 'Modified at' %}</th>
                     <th scope="col">{% trans 'Published at' %}</th>
+                    <th scope="col">{% trans 'Expired on' %}</th>
                     <th scope="col">{% trans 'Aanvraag Gegevens Schema' %}</th>
                 </tr>
             </thead>
@@ -21,9 +22,10 @@
                 <tr>
                     <td>{{ version.version }}</td>
                     <td>{{ version.get_status_display }}</td>
-                    <td>{{ version.created_at }}</td>
-                    <td>{{ version.modified_at }}</td>
-                    <td>{{ version.published_at }}</td>
+                    <td>{{ version.aangemaakt_op }}</td>
+                    <td>{{ version.gewijzigd_op }}</td>
+                    <td>{{ version.begin_geldigheid }}</td>
+                    <td>{{ version.einde_geldigheid }}</td>
                     <td>{{ version.aanvraag_gegevens_schema }}</td>
                 </tr>
             {% endfor %}
