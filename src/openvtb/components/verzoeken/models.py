@@ -8,13 +8,13 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.utils.schemas import IS_INGEDIEND_DOOR_SCHEMA
 from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import check_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
 from .constants import VerzoekTypeVersionStatus
-from .schemas import IS_INGEDIEND_DOOR_SCHEMA
 
 
 class VerzoekType(models.Model):
@@ -293,7 +293,7 @@ class Verzoek(models.Model):
     is_gerelateerd_aan = URNField(
         _("is gerelateerd aan"),
         help_text=_(
-            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
         ),
         blank=True,
     )
@@ -393,7 +393,7 @@ class Bijlage(models.Model):
         _("informatie object"),
         help_text=_(
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT. "
-            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )
@@ -431,7 +431,7 @@ class BijlageType(models.Model):
         _("informatie objecttype"),
         help_text=_(
             "URN van het INFORMATIEOBJECTTYPE. "
-            "Bijvoorbeeld: urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )
