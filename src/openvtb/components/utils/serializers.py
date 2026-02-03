@@ -122,11 +122,13 @@ class NietAuthentiekePersoonsgegevensSerializer(
     )
     postadres = AdresSerializer(
         required=False,
+        allow_null=True,
         help_text="Het postadres van de persoon.",
     )
 
     verblijfsadres = AdresSerializer(
         required=False,
+        allow_null=True,
         help_text="Het huidige verblijfsadres van de persoon.",
     )
 
@@ -141,10 +143,12 @@ class NietAuthentiekeOrganisatiegegevensSerializer(
     )
     bezoekadres = AdresSerializer(
         required=False,
+        allow_null=True,
         help_text="Het bezoekadres van de organisatie.",
     )
     postadres = AdresSerializer(
         required=False,
+        allow_null=True,
         help_text="Het postadres van de organisatie.",
     )
     emailadres = serializers.EmailField(

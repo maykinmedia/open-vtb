@@ -183,7 +183,7 @@ class VerzoekTests(APITestCase):
             "isIngediendDoor": {
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": {},
+                    "bezoekadres": None,
                     "postadres": ADRES,
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",
@@ -215,7 +215,7 @@ class VerzoekTests(APITestCase):
                     "nietAuthentiekePersoonsgegevens": None,
                     "nietAuthentiekeOrganisatiegegevens": {
                         "statutaireNaam": "Acme BV",
-                        "bezoekadres": {},
+                        "bezoekadres": None,
                         "postadres": ADRES,
                         "emailadres": "info@acme.nl",
                         "telefoonnummer": "+31201234567",

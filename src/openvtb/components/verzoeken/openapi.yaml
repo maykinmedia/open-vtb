@@ -875,10 +875,12 @@ components:
         bezoekadres:
           allOf:
           - $ref: '#/components/schemas/Adres'
+          nullable: true
           description: Het bezoekadres van de organisatie.
         postadres:
           allOf:
           - $ref: '#/components/schemas/Adres'
+          nullable: true
           description: Het postadres van de organisatie.
         emailadres:
           type: string
@@ -918,10 +920,12 @@ components:
         postadres:
           allOf:
           - $ref: '#/components/schemas/Adres'
+          nullable: true
           description: Het postadres van de persoon.
         verblijfsadres:
           allOf:
           - $ref: '#/components/schemas/Adres'
+          nullable: true
           description: Het huidige verblijfsadres van de persoon.
       required:
       - achternaam

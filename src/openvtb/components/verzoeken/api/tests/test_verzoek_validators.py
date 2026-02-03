@@ -5,7 +5,12 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
 from openvtb.components.verzoeken.models import Verzoek, VerzoekType
-from openvtb.components.verzoeken.tests.factories import JSON_SCHEMA, VerzoekTypeFactory
+from openvtb.components.verzoeken.tests.factories import (
+    ADRES,
+    JSON_SCHEMA,
+    VerzoekFactory,
+    VerzoekTypeFactory,
+)
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -379,3 +384,177 @@ class VerzoekValidatorsTests(APITestCase):
                     "reason": "Dit veld is vereist.",
                 },
             )
+
+    def test_create_address_json_schema(self):
+        url = reverse("verzoeken:verzoek-list")
+
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+        )
+
+        with self.subTest("null values"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "version": 1,
+                "isIngediendDoor": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": None,
+                        "postadres": None,
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "postadres": None,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+        with self.subTest("empty values"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "version": 1,
+                "isIngediendDoor": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {},
+                        "postadres": {},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": {},
+                    "postadres": {},
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+        with self.subTest("set one field"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "version": 1,
+                "isIngediendDoor": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {"woonplaats": "Amsterdam"},
+                        "postadres": {"woonplaats": "Amsterdam"},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": {"woonplaats": "Amsterdam"},
+                    "postadres": {"woonplaats": "Amsterdam"},
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+        with self.subTest("set all fields"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "version": 1,
+                "isIngediendDoor": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": ADRES,
+                        "postadres": ADRES,
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": ADRES,
+                    "postadres": ADRES,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+    def test_update_address_json_schema(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoek = VerzoekFactory.create(
+            create_details=True,
+            verzoek_type=verzoektype,
+            niet_authentieke_persoonsgegevens=True,
+        )
+        verzoek = Verzoek.objects.get()
+
+        # initial assert
+        self.assertEqual(
+            verzoek.is_ingediend_door["nietAuthentiekePersoonsgegevens"]["postadres"],
+            ADRES,
+        )
+
+        detail_url = reverse(
+            "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
+        )
+
+        data = {
+            "isIngediendDoor": {
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": "Jan",
+                    "achternaam": "Jansen",
+                    "geboortedatum": "1980-05-15",
+                    "emailadres": "jan.jansen@example.com",
+                    "telefoonnummer": "+31612345678",
+                    "postadres": {"woonplaats": "Amsterdam"},
+                    "verblijfsadres": None,
+                }
+            },
+        }
+        response = self.client.patch(detail_url, data)
+        verzoek = Verzoek.objects.get()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(
+            verzoek.is_ingediend_door["nietAuthentiekePersoonsgegevens"]["postadres"],
+            ADRES,
+        )
+        # postadres full updated
+        self.assertEqual(
+            verzoek.is_ingediend_door["nietAuthentiekePersoonsgegevens"]["postadres"],
+            {"woonplaats": "Amsterdam"},
+        )

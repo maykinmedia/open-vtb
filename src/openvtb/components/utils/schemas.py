@@ -1,7 +1,7 @@
 from jsonschema import Draft202012Validator
 
 ADRES_SCHEMA = {
-    "type": "object",
+    "type": ["object", "null"],
     "additionalProperties": False,
     "properties": {
         "woonplaats": {"type": "string"},

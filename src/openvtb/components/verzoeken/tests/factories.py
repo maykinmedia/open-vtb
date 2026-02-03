@@ -17,13 +17,7 @@ ADRES = {
     "huisnummer": "12",
     "huisletter": "A",
     "huisnummertoevoeging": "bis",
-    "buitenland": {
-        "landcode": "NL",
-        "landnaam": "Nederland",
-        "adresregel1": "Straatnaam 12A",
-        "adresregel2": "",
-        "adresregel3": "",
-    },
+    "buitenland": {},
 }
 
 JSON_SCHEMA = {
