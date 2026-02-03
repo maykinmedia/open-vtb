@@ -2,7 +2,7 @@ import datetime
 
 import factory
 
-from ..constants import ActionTaak, SoortTaak
+from ..constants import SoortTaak
 from ..models import ExterneTaak
 
 FORM_IO = {
@@ -44,7 +44,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         model = ExterneTaak
 
     titel = factory.Faker("sentence")
-    handelings_perspectief = ActionTaak.LEZEN
+    handelings_perspectief = "lezen"
     einddatum_handelings_termijn = factory.LazyFunction(
         lambda: datetime.date.today() + datetime.timedelta(days=7)
     )

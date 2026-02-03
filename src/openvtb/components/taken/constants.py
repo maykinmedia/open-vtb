@@ -10,12 +10,6 @@ class StatusTaak(models.TextChoices):
     VERWERKT = "verwerkt", _("Verwerkt")
 
 
-class ActionTaak(models.TextChoices):
-    LEZEN = "lezen", _("Lezen")
-    NALEVEREN = "naleveren", _("Naleveren")
-    INVULLEN = "invullen", _("Invullen")
-
-
 class SoortTaak(models.TextChoices):
     BETAALTAAK = "betaaltaak", _("Betaallink")
     GEGEVENSUITVRAAGTAAK = "gegevensuitvraagtaak", _("Extern formulier")

@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import ActionTaak, SoortTaak
+from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -144,7 +144,6 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -201,7 +200,6 @@ class GegevensuitvraagTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -216,7 +214,6 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -246,7 +243,6 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "uitvraagLink": "http://example.com/",
@@ -337,7 +333,6 @@ class GegevensuitvraagTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
@@ -464,7 +459,6 @@ class GegevensuitvraagTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "http://example-new-url.com/",
@@ -531,7 +525,6 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
@@ -572,7 +565,6 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "startdatum": datetime.date(2026, 1, 10),  # end < start
                 "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
@@ -594,7 +586,6 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "test",
@@ -615,7 +606,6 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("invalid none url"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": None,
@@ -636,7 +626,6 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
         with self.subTest("null value ontvangenGegevens"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "uitvraagLink": "http://example.com/",

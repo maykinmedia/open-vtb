@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import ActionTaak, SoortTaak
+from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -143,7 +143,6 @@ class BetaalTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "11",
@@ -201,7 +200,6 @@ class BetaalTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
@@ -292,7 +290,6 @@ class BetaalTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
@@ -328,7 +325,6 @@ class BetaalTaakTests(APITestCase):
         # details.doelrekening empty values
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "12",
@@ -474,7 +470,6 @@ class BetaalTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "100",
@@ -585,7 +580,6 @@ class BetaalTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
@@ -654,7 +648,6 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "startdatum": datetime.date(2026, 1, 10),  # end < start
                 "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
@@ -682,7 +675,6 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid iban format"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",
@@ -709,7 +701,6 @@ class BetaalTaakValidationTests(APITestCase):
         with self.subTest("invalid pass valuta"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",

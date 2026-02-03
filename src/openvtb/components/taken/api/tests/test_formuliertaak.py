@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import ActionTaak, SoortTaak
+from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -142,7 +142,6 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
@@ -215,7 +214,6 @@ class FormulierTaakTests(APITestCase):
         # no ontvangenGegevens key
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
@@ -249,7 +247,6 @@ class FormulierTaakTests(APITestCase):
         # empty value ontvangenGegevens
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": {
@@ -284,7 +281,6 @@ class FormulierTaakTests(APITestCase):
         # create form.io example TextField
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "formulierDefinitie": FORM_IO,
@@ -309,7 +305,6 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
@@ -416,7 +411,6 @@ class FormulierTaakTests(APITestCase):
         # empty details values
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
@@ -567,7 +561,6 @@ class FormulierTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
@@ -668,7 +661,6 @@ class FormulierTaakValidationTests(APITestCase):
         # wrong soort_taak
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
@@ -751,7 +743,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("invalid start_date gt end_date"):
             data = {
                 "titel": "test",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "startdatum": datetime.date(2026, 1, 10),  # end < start
                 "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
@@ -792,7 +783,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("null value formulierDefinitie"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": None,
@@ -815,7 +805,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": "",
@@ -837,7 +826,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("formulierDefinitie is None"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": None,
@@ -859,7 +847,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {},
@@ -881,7 +868,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components invalid type"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {"components": "test"},
@@ -905,7 +891,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'label' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
@@ -933,7 +918,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'key' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {
@@ -962,7 +946,6 @@ class FormulierTaakValidationTests(APITestCase):
         with self.subTest("components required 'type' field"):
             data = {
                 "titel": "titel",
-                "handelingsPerspectief": ActionTaak.LEZEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "formulierDefinitie": {

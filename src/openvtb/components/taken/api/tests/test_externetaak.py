@@ -4,7 +4,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.taken.constants import ActionTaak, SoortTaak
+from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
@@ -115,7 +115,6 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
@@ -174,7 +173,6 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
@@ -274,7 +272,6 @@ class ExterneTaakTests(APITestCase):
         # invalid taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": "test",
             "details": {},
@@ -296,7 +293,6 @@ class ExterneTaakTests(APITestCase):
         # empty taakSoort value
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": "",
             "details": {},
@@ -318,7 +314,6 @@ class ExterneTaakTests(APITestCase):
         # invalid details schema
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
@@ -455,7 +450,6 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "taak_soort": SoortTaak.BETAALTAAK.value,
                 "details": {
@@ -510,7 +504,6 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "100",
@@ -540,7 +533,6 @@ class ExterneTaakTests(APITestCase):
             detail_url,
             {
                 "titel": "new_titel",
-                "handelingsPerspectief": ActionTaak.INVULLEN,
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "taakSoort": SoortTaak.GEGEVENSUITVRAAGTAAK.value,
                 "details": {"uitvraagLink": "http://example.com/"},
@@ -593,7 +585,6 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "test",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "startdatum": datetime.date(2026, 1, 10),  # end < start
             "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
@@ -623,7 +614,6 @@ class ExterneTaakValidationTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
-            "handelingsPerspectief": ActionTaak.LEZEN,
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "isToegewezenAan": "test",

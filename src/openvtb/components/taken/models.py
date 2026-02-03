@@ -13,7 +13,7 @@ from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
-from .constants import ActionTaak, SoortTaak, StatusTaak
+from .constants import SoortTaak, StatusTaak
 from .schemas import FORMULIER_DEFINITIE_SCHEMA, SOORTTAAK_SCHEMA_MAPPING
 
 
@@ -50,9 +50,9 @@ class ExterneTaak(models.Model):
         _("handelings perspectief"),
         max_length=100,
         blank=True,
-        choices=ActionTaak.choices,
         help_text=_(
-            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
+            "De door de toegewezen persoon of bedrijf uit te voeren handeling. "
+            "Bijvoorbeeld: `lezen`, `naleveren`, `invullen`."
         ),
     )
     einddatum_handelings_termijn = models.DateField(
