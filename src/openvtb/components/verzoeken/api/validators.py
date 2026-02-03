@@ -5,11 +5,11 @@ from rest_framework import serializers
 from rest_framework.fields import get_attribute
 
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
+from openvtb.utils.json_utils import check_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
 from ..constants import VerzoekTypeVersionStatus
 from ..schemas import IS_INGEDIEND_DOOR_SCHEMA
-from ..utils import check_json_schema
 
 
 class VersionStatusValidator:

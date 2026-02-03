@@ -10,11 +10,11 @@ from django.utils.translation import gettext_lazy as _
 
 from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
+from openvtb.utils.json_utils import check_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
 from .constants import VerzoekTypeVersionStatus
 from .schemas import IS_INGEDIEND_DOOR_SCHEMA
-from .utils import check_json_schema
 
 
 class VerzoekType(models.Model):
