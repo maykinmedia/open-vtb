@@ -109,8 +109,7 @@ TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
     "TAKEN_DEFAULT_REMINDER_IN_DAYS",
     default=7,
     help_text=(
-        "Sends a system notification on this date at the system-set time. "
-        "This value is automatically set to a system-set number of days before the `einddatumHandelingsTermijn`. "
-        "If `0`, it's unset."
+        "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
+        "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
     ),
 )

@@ -1,4 +1,4 @@
-from django.utils import timezone
+import datetime
 
 import factory
 
@@ -46,7 +46,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
     titel = factory.Faker("sentence")
     handelings_perspectief = ActionTaak.LEZEN
     einddatum_handelings_termijn = factory.LazyFunction(
-        lambda: timezone.now() + timezone.timedelta(days=7)
+        lambda: datetime.date.today() + datetime.timedelta(days=7)
     )
 
     class Params:

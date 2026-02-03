@@ -1,11 +1,10 @@
 import uuid as _uuid
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_jsonform.models.fields import JSONField
@@ -15,8 +14,7 @@ from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
 from .constants import ActionTaak, SoortTaak, StatusTaak
-from .schemas import FORMULIER_DEFINITIE_SCHEMA
-from .utils import get_json_schema
+from .schemas import FORMULIER_DEFINITIE_SCHEMA, SOORTTAAK_SCHEMA_MAPPING
 
 
 class ExterneTaak(models.Model):
@@ -32,8 +30,8 @@ class ExterneTaak(models.Model):
         _("titel"),
         max_length=100,
         help_text=_(
-            "Titel van de uit te voeren taak, zoals dat door eind "
-            "gebruikers gezien kan worden in bijvoorbeeld een portaal."
+            "Titel van de uit te voeren taak, zoals die door eindgebruikers "
+            "gezien kan worden in bijvoorbeeld een portaal."
         ),
     )
     status = models.CharField(
@@ -43,9 +41,9 @@ class ExterneTaak(models.Model):
         choices=StatusTaak.choices,
         help_text=_("Status van de taak."),
     )
-    startdatum = models.DateTimeField(
+    startdatum = models.DateField(
         _("start datum"),
-        default=timezone.now,
+        default=date.today,
         help_text=_("Startdatum van de taak."),
     )
     handelings_perspectief = models.CharField(
@@ -57,21 +55,25 @@ class ExterneTaak(models.Model):
             "De door de toegewezen persoon of bedrijf uit te voeren handeling."
         ),
     )
-    einddatum_handelings_termijn = models.DateTimeField(
+    einddatum_handelings_termijn = models.DateField(
         _("einddatum handelings termijn"),
         help_text=_("Einddatum handelings termijn."),
     )
-    datum_herinnering = models.DateTimeField(
+    datum_herinnering = models.DateField(
         _("datum herinnering"),
         blank=True,
         null=True,
-        help_text=_("Datum Herinnering"),
+        help_text=_(
+            "Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde tijdstip. "
+            "Indien deze waarde niet expliciet wordt meegegeven, dan wordt deze waarde automatisch "
+            "ingesteld op een systeem-ingesteld aantal dagen voor de 'einddatumHandelingsTermijn'."
+        ),
     )
     toelichting = models.TextField(
         _("toelichting"),
         blank=True,
         help_text=_(
-            "Toelichting van de uit te voeren taak, zoals dat door eind gebruikers "
+            "Toelichting van de uit te voeren taak, zoals die door eindgebruikers "
             "gezien kan worden in bijvoorbeeld een portaal."
         ),
     )
@@ -110,7 +112,7 @@ class ExterneTaak(models.Model):
         _("hoort bij zaak"),
         help_text=_(
             "URN naar de ZAAK. "
-            "Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
         ),
         blank=True,
     )
@@ -119,7 +121,7 @@ class ExterneTaak(models.Model):
         _("heeft betrekking op product"),
         help_text=_(
             "URN naar het PRODUCT. "
-            "Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )

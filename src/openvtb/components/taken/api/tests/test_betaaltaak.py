@@ -32,7 +32,6 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
 
         betaaltaak = ExterneTaak.objects.get()
-
         self.assertEqual(
             response.json(),
             {
@@ -46,16 +45,10 @@ class BetaalTaakTests(APITestCase):
                         "uuid": str(betaaltaak.uuid),
                         "titel": betaaltaak.titel,
                         "status": betaaltaak.status,
-                        "startdatum": betaaltaak.startdatum.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "startdatum": betaaltaak.startdatum.isoformat(),
                         "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
-                        "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                            "+00:00", "Z"
-                        ),
+                        "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                         "toelichting": betaaltaak.toelichting,
                         "isToegewezenAan": "",
                         "wordtBehandeldDoor": "",
@@ -106,14 +99,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -155,7 +144,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "handelingsPerspectief": ActionTaak.LEZEN,
-            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
@@ -179,14 +168,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -210,17 +195,14 @@ class BetaalTaakTests(APITestCase):
 
         # test datumHerinnering auto filled
         # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
-        self.assertEqual(
-            betaaltaak.datum_herinnering,
-            datetime.datetime(2026, 1, 3, 0, 0, 0, tzinfo=datetime.UTC.utc),
-        )
+        self.assertEqual(betaaltaak.datum_herinnering, datetime.date(2026, 1, 3))
 
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
             "handelingsPerspectief": ActionTaak.LEZEN,
-            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
@@ -248,14 +230,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -315,7 +293,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
-            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {},
         }
         response = self.client.post(self.list_url, data)
@@ -351,7 +329,7 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
-            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "details": {
                 "bedrag": "12",
                 "transactieomschrijving": "12",
@@ -398,6 +376,7 @@ class BetaalTaakTests(APITestCase):
         response = self.client.patch(detail_url, {})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertEqual(
             response.json(),
             {
@@ -406,14 +385,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -500,7 +475,7 @@ class BetaalTaakTests(APITestCase):
             {
                 "titel": "new_titel",
                 "handelingsPerspectief": ActionTaak.INVULLEN,
-                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "100",
                     "valuta": "EUR",
@@ -523,14 +498,10 @@ class BetaalTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
-                "startdatum": betaaltaak.startdatum.isoformat().replace("+00:00", "Z"),
+                "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat().replace(
-                    "+00:00", "Z"
-                ),
-                "datumHerinnering": betaaltaak.datum_herinnering.isoformat().replace(
-                    "+00:00", "Z"
-                ),
+                "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
@@ -615,7 +586,7 @@ class BetaalTaakValidationTests(APITestCase):
         data = {
             "titel": "test",
             "handelingsPerspectief": ActionTaak.LEZEN,
-            "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.FORMULIERTAAK.value,
             "details": {
                 "bedrag": "11",
@@ -684,8 +655,8 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
-                "startdatum": datetime.datetime(2026, 1, 10, 0, 0, 0),  # end < start
-                "einddatumHandelingsTermijn": datetime.datetime(2025, 1, 10, 0, 0, 0),
+                "startdatum": datetime.date(2026, 1, 10),  # end < start
+                "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
@@ -712,7 +683,7 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
-                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "transactieomschrijving": "test",
@@ -739,7 +710,7 @@ class BetaalTaakValidationTests(APITestCase):
             data = {
                 "titel": "test",
                 "handelingsPerspectief": ActionTaak.LEZEN,
-                "einddatumHandelingsTermijn": datetime.datetime(2026, 1, 10, 0, 0, 0),
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
                 "details": {
                     "bedrag": "11",
                     "valuta": "ABC",  # different valuta

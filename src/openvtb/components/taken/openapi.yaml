@@ -821,7 +821,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -830,7 +830,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -840,17 +840,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -872,14 +875,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -942,7 +945,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -951,7 +954,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -961,17 +964,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -993,14 +999,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1035,7 +1041,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1044,7 +1050,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1054,17 +1060,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1086,14 +1095,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1133,7 +1142,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1142,7 +1151,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1152,17 +1161,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1184,14 +1196,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1231,7 +1243,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1240,7 +1252,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1250,17 +1262,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1282,14 +1297,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1329,7 +1344,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1338,7 +1353,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1348,17 +1363,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1380,14 +1398,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1427,7 +1445,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1436,7 +1454,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1446,17 +1464,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1478,14 +1499,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1520,7 +1541,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1529,7 +1550,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1539,17 +1560,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1571,14 +1595,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1673,7 +1697,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1682,7 +1706,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1692,17 +1716,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1724,14 +1751,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1766,7 +1793,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1775,7 +1802,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1785,17 +1812,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1817,14 +1847,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1864,7 +1894,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1873,7 +1903,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1883,17 +1913,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1915,14 +1948,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1962,7 +1995,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -1971,7 +2004,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -1981,17 +2014,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2013,14 +2049,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2060,7 +2096,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2069,7 +2105,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2079,17 +2115,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2111,14 +2150,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2158,7 +2197,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2167,7 +2206,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2177,17 +2216,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2209,14 +2251,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -2251,7 +2293,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2260,7 +2302,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2270,17 +2312,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2302,14 +2347,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2366,7 +2411,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2375,7 +2420,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2385,17 +2430,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2417,14 +2465,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -2459,7 +2507,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2468,7 +2516,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2478,17 +2526,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2510,14 +2561,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2557,7 +2608,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2566,7 +2617,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2576,17 +2627,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2608,14 +2662,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2655,7 +2709,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2664,7 +2718,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2674,17 +2728,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2706,14 +2763,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2753,7 +2810,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2762,7 +2819,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2772,17 +2829,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2804,14 +2864,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2851,7 +2911,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2860,7 +2920,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2870,17 +2930,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2902,14 +2965,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -2944,7 +3007,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -2953,7 +3016,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -2963,17 +3026,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2995,14 +3061,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -3140,7 +3206,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -3149,7 +3215,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -3159,17 +3225,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3191,14 +3260,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -3237,7 +3306,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -3246,7 +3315,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -3256,17 +3325,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3288,14 +3360,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -3323,7 +3395,7 @@ components:
             en zijn eigen administratie.
         titel:
           type: string
-          description: Titel van de uit te voeren taak, zoals dat door eind gebruikers
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
         status:
@@ -3332,7 +3404,7 @@ components:
           description: Status van de taak.
         startdatum:
           type: string
-          format: date-time
+          format: date
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
@@ -3342,17 +3414,20 @@ components:
           - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
-          format: date-time
+          format: date
           description: Einddatum handelings termijn.
         datumHerinnering:
           type: string
-          format: date-time
+          format: date
           nullable: true
-          description: Datum Herinnering
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
         toelichting:
           type: string
-          description: Toelichting van de uit te voeren taak, zoals dat door eind
-            gebruikers gezien kan worden in bijvoorbeeld een portaal.
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3374,14 +3449,14 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165'
+          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e'
+          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
