@@ -17,7 +17,6 @@ ADRES = {
     "huisnummer": "12",
     "huisletter": "A",
     "huisnummertoevoeging": "bis",
-    "buitenland": {},
 }
 
 JSON_SCHEMA = {
@@ -111,7 +110,7 @@ class VerzoekFactory(DjangoModelFactory):
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
                     "postadres": ADRES,
-                    "verblijfsadres": ADRES,
+                    "verblijfsadres": None,
                 }
             }
         )
@@ -119,7 +118,7 @@ class VerzoekFactory(DjangoModelFactory):
             is_ingediend_door={
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": "Acme BV",
-                    "bezoekadres": ADRES,
+                    "bezoekadres": None,
                     "postadres": ADRES,
                     "emailadres": "info@acme.nl",
                     "telefoonnummer": "+31201234567",

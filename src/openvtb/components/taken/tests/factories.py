@@ -5,6 +5,14 @@ import factory
 from ..constants import SoortTaak
 from ..models import ExterneTaak
 
+ADRES = {
+    "woonplaats": "Amsterdam",
+    "postcode": "1000 AB",
+    "huisnummer": "12",
+    "huisletter": "A",
+    "huisnummertoevoeging": "bis",
+}
+
 FORM_IO = {
     "display": "form",
     "settings": {
@@ -86,4 +94,37 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                     "key": "value",
                 },
             },
+        )
+
+        # is_toegewezen_aan type
+        authentieke_verwijzing = factory.Trait(
+            is_toegewezen_aan={
+                "authentiekeVerwijzing": {
+                    "urn": "urn:nld:brp:bsn:111222333",
+                }
+            }
+        )
+        niet_authentieke_persoonsgegevens = factory.Trait(
+            is_toegewezen_aan={
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": "Jan",
+                    "achternaam": "Jansen",
+                    "geboortedatum": "1980-05-15",
+                    "emailadres": "jan.jansen@example.com",
+                    "telefoonnummer": "+31612345678",
+                    "postadres": ADRES,
+                    "verblijfsadres": None,
+                }
+            }
+        )
+        niet_authentieke_organisatiegegevens = factory.Trait(
+            is_toegewezen_aan={
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "postadres": ADRES,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                }
+            }
         )
