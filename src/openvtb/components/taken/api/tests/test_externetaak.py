@@ -959,3 +959,154 @@ class ExterneTaakValidationTests(APITestCase):
             taak.is_toegewezen_aan["nietAuthentiekePersoonsgegevens"]["postadres"],
             {"woonplaats": "Amsterdam"},
         )
+
+    def test_create_address_validate_buitenland(self):
+        data = {
+            "titel": "titel",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+            "taakSoort": SoortTaak.BETAALTAAK.value,
+            "details": self.details,
+            "isToegewezenAan": {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            },
+        }
+        with self.subTest("local_fields `yes` and buitenland `no`"):
+            data["isToegewezenAan"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                # "buitenland": {},
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ]["postadres"],
+                {
+                    "woonplaats": "Amsterdam",
+                    "postcode": "1000 AB",
+                    "huisnummer": "12",
+                    "huisletter": "A",
+                    "huisnummertoevoeging": "bis",
+                    # "buitenland": {},
+                },
+            )
+
+        with self.subTest("local_fields `yes` and buitenland `yes`"):
+            data["isToegewezenAan"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {},
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+            data["isToegewezenAan"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+            data["isToegewezenAan"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                # "woonplaats": "Amsterdam",
+                # "postcode": "1000 AB",
+                # "huisnummer": "12",
+                # "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isToegewezenAan.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+        with self.subTest("local_fields `no` and buitenland `yes`"):
+            data["isToegewezenAan"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ]["postadres"],
+                {
+                    "buitenland": {
+                        "landcode": "AB",
+                        "landnaam": "test",
+                    },
+                },
+            )

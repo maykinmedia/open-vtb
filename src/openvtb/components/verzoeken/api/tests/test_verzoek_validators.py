@@ -16,9 +16,9 @@ from openvtb.utils.api_testcase import APITestCase
 
 class VerzoekValidatorsTests(APITestCase):
     maxDiff = None
+    list_url = reverse("verzoeken:verzoek-list")
 
     def test_verzoektype_exists(self):
-        url = reverse("verzoeken:verzoek-list")
         self.assertFalse(Verzoek.objects.exists())
 
         # verzoekType does not exists
@@ -29,7 +29,7 @@ class VerzoekValidatorsTests(APITestCase):
             "aanvraagGegevens": {"diameter": 10},
             "version": 1,
         }
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
@@ -52,12 +52,11 @@ class VerzoekValidatorsTests(APITestCase):
             "aanvraagGegevens": {"diameter": 10},
             "version": 1,
         }
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Verzoek.objects.all().count(), 1)
 
     def test_verzoektype_version_exists(self):
-        url = reverse("verzoeken:verzoek-list")
         verzoektype = VerzoekTypeFactory.create()
 
         # verzoekType versions does not exists
@@ -69,7 +68,7 @@ class VerzoekValidatorsTests(APITestCase):
             "aanvraagGegevens": {"diameter": 10},
             "version": 1,
         }
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
@@ -98,7 +97,7 @@ class VerzoekValidatorsTests(APITestCase):
         self.assertTrue(verzoektype.versions.exists())
 
         # re-CREATE Verzoek
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoek = Verzoek.objects.get()
         self.assertEqual(verzoek.verzoek_type, verzoektype)
@@ -109,7 +108,7 @@ class VerzoekValidatorsTests(APITestCase):
 
         # re-CREATE Verzoek with non-existent version
         data["version"] = 2
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
@@ -124,18 +123,15 @@ class VerzoekValidatorsTests(APITestCase):
         )
 
     def test_update_verzoek_with_new_version(self):
-        url = reverse("verzoeken:verzoek-list")
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         data = {
             "verzoekType": reverse(
                 "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
             ),
-            "aanvraagGegevens": {
-                "diameter": 10,
-            },
+            "aanvraagGegevens": {"diameter": 10},
             "version": 1,
         }
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoek = Verzoek.objects.get()
 
@@ -212,8 +208,6 @@ class VerzoekValidatorsTests(APITestCase):
         self.assertEqual(verzoek.aanvraag_gegevens["new_field"], "test")
 
     def test_update_verzoek_with_new_verzoektype(self):
-        url = reverse("verzoeken:verzoek-list")
-
         verzoektype_old = VerzoekTypeFactory.create(create_version=True)
         data = {
             "verzoekType": reverse(
@@ -223,7 +217,7 @@ class VerzoekValidatorsTests(APITestCase):
             "aanvraagGegevens": {"diameter": 10},
             "version": 1,
         }
-        response = self.client.post(url, data)
+        response = self.client.post(self.list_url, data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoek = Verzoek.objects.get()
@@ -254,8 +248,6 @@ class VerzoekValidatorsTests(APITestCase):
         )
 
     def test_invalid_json_schema(self):
-        url = reverse("verzoeken:verzoek-list")
-
         verzoektype_old = VerzoekTypeFactory.create(create_version=True)
         verzoektype_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype_old.uuid)}
@@ -267,7 +259,7 @@ class VerzoekValidatorsTests(APITestCase):
                 "aanvraagGegevens": {"diameter": 10, "randomBool": False},
                 "version": 1,
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
@@ -285,7 +277,7 @@ class VerzoekValidatorsTests(APITestCase):
                 "aanvraagGegevens": {"diameter": False},
                 "version": 1,
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
@@ -298,8 +290,6 @@ class VerzoekValidatorsTests(APITestCase):
             )
 
     def test_invalid_is_ingediend_door_json_schema(self):
-        url = reverse("verzoeken:verzoek-list")
-
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         verzoektype_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
@@ -323,7 +313,7 @@ class VerzoekValidatorsTests(APITestCase):
                     },
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
@@ -348,7 +338,7 @@ class VerzoekValidatorsTests(APITestCase):
                     "nietAuthentiekeOrganisatiegegevens": None,
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
@@ -371,7 +361,7 @@ class VerzoekValidatorsTests(APITestCase):
                     "authentiekeVerwijzing": {"test": "1234"},
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(
@@ -386,8 +376,6 @@ class VerzoekValidatorsTests(APITestCase):
             )
 
     def test_create_address_json_schema(self):
-        url = reverse("verzoeken:verzoek-list")
-
         verzoektype = VerzoekTypeFactory.create(create_version=True)
         verzoektype_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
@@ -408,7 +396,7 @@ class VerzoekValidatorsTests(APITestCase):
                     },
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(
@@ -439,7 +427,7 @@ class VerzoekValidatorsTests(APITestCase):
                     },
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(
                 response.json()["isIngediendDoor"][
@@ -469,7 +457,7 @@ class VerzoekValidatorsTests(APITestCase):
                     },
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
             self.assertEqual(
@@ -499,7 +487,7 @@ class VerzoekValidatorsTests(APITestCase):
                     },
                 },
             }
-            response = self.client.post(url, data)
+            response = self.client.post(self.list_url, data)
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
             self.assertEqual(
                 response.json()["isIngediendDoor"][
@@ -558,3 +546,157 @@ class VerzoekValidatorsTests(APITestCase):
             verzoek.is_ingediend_door["nietAuthentiekePersoonsgegevens"]["postadres"],
             {"woonplaats": "Amsterdam"},
         )
+
+    def test_create_address_validate_buitenland(self):
+        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+        )
+        data = {
+            "verzoekType": verzoektype_url,
+            "aanvraagGegevens": {"diameter": 10},
+            "version": 1,
+            "isIngediendDoor": {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "postadres": None,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            },
+        }
+        with self.subTest("local_fields `yes` and buitenland `no`"):
+            data["isIngediendDoor"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                # "buitenland": {},
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ]["postadres"],
+                {
+                    "woonplaats": "Amsterdam",
+                    "postcode": "1000 AB",
+                    "huisnummer": "12",
+                    "huisletter": "A",
+                    "huisnummertoevoeging": "bis",
+                    # "buitenland": {},
+                },
+            )
+
+        with self.subTest("local_fields `yes` and buitenland `yes`"):
+            data["isIngediendDoor"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {},
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+            data["isIngediendDoor"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "woonplaats": "Amsterdam",
+                "postcode": "1000 AB",
+                "huisnummer": "12",
+                "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+            data["isIngediendDoor"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                # "woonplaats": "Amsterdam",
+                # "postcode": "1000 AB",
+                # "huisnummer": "12",
+                # "huisletter": "A",
+                "huisnummertoevoeging": "bis",
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response,
+                    "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                ),
+                {
+                    "name": "isIngediendDoor.nietAuthentiekeOrganisatiegegevens.postadres.buitenland",
+                    "code": "invalid",
+                    "reason": "This field can only be filled in if the local address fields are not specified.",
+                },
+            )
+
+        with self.subTest("local_fields `no` and buitenland `yes`"):
+            data["isIngediendDoor"]["nietAuthentiekeOrganisatiegegevens"][
+                "postadres"
+            ] = {
+                "buitenland": {
+                    "landcode": "AB",
+                    "landnaam": "test",
+                },
+            }
+
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isIngediendDoor"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ]["postadres"],
+                {
+                    "buitenland": {
+                        "landcode": "AB",
+                        "landnaam": "test",
+                    },
+                },
+            )

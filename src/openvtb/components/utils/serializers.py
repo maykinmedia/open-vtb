@@ -78,12 +78,24 @@ class AdresSerializer(serializers.Serializer):
     buitenland = BuitenlandSerializer(
         required=False,
         help_text=_(
-            "Dit veld mag null zijn en mag uitsluitend worden ingevuld indien de bovenstaande adresvelden leeg zijn."
+            "Dit veld kan alleen worden ingevuld als de velden voor het lokale adres niet in de aanvraag zijn opgegeven."
         ),
     )
 
     def validate(self, data):
-        # TODO:
+        """
+        The `buitenland` field can only be filled in if the local address fields are not specified.
+        """
+        if "buitenland" in data and len(data.keys()) > 1:
+            raise serializers.ValidationError(
+                {
+                    "buitenland": _(
+                        "This field can only be filled in if the local address fields are not specified."
+                    )
+                },
+                code="invalid",
+            )
+
         return data
 
 

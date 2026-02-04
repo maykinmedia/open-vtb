@@ -829,8 +829,8 @@ components:
         buitenland:
           allOf:
           - $ref: '#/components/schemas/Buitenland'
-          description: Dit veld mag null zijn en mag uitsluitend worden ingevuld indien
-            de bovenstaande adresvelden leeg zijn.
+          description: Dit veld kan alleen worden ingevuld als de velden voor het
+            lokale adres niet in de aanvraag zijn opgegeven.
     AuthentiekeVerwijzing:
       type: object
       properties:

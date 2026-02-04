@@ -7,7 +7,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import FORM_IO, ADRES, ExterneTaakFactory
+from openvtb.components.taken.tests.factories import ADRES, FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
