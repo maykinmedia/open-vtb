@@ -2,9 +2,10 @@ from django import forms
 
 from jsonsuit.widgets import ReadonlyJSONSuit
 
+from openvtb.components.utils.widgets import JSONSuit
+
 from .constants import VerzoekTypeVersionStatus
 from .models import VerzoekTypeVersion
-from .widgets import JSONSuit
 
 
 class VerzoekTypeVersionForm(forms.ModelForm):
