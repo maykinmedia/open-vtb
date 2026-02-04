@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                     models.BooleanField(
                         default=False,
                         help_text="Staat op true indien geopendOp een tijdstip heeft.",
-                        verbose_name="geopend op",
+                        verbose_name="geopend",
                     ),
                 ),
             ],
@@ -106,12 +106,13 @@ class Migration(migrations.Migration):
                     models.DateTimeField(
                         default=django.utils.timezone.now,
                         help_text="Datum/tijd waarop bericht zichtbaar moet worden voor de geadresseerde.",
-                        verbose_name="start datum",
+                        verbose_name="publicatiedatum",
                     ),
                 ),
                 (
                     "referentie",
                     models.CharField(
+                        blank=True,
                         help_text="Zenderreferentie / interne referentie.",
                         max_length=25,
                         verbose_name="referentie",
@@ -121,7 +122,7 @@ class Migration(migrations.Migration):
                     "bericht_type",
                     models.CharField(
                         blank=True,
-                        help_text="",
+                        help_text="MessageType must be an 8-character code and only relevant for MOBB.",
                         max_length=8,
                         validators=[
                             django.core.validators.MinLengthValidator(limit_value=8)

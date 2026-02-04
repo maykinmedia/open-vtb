@@ -14,6 +14,7 @@ class BerichtOntvanger(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het BerichtOntvanger."),
     )
+    # TODO should be unique?
     geadresseerde = URNField(
         _("geadresseerde"),
         help_text=_(
@@ -31,7 +32,7 @@ class BerichtOntvanger(models.Model):
         ),
     )
     geopend = models.BooleanField(
-        _("geopend op"),
+        _("geopend"),
         default=False,
         help_text=_("Staat op true indien geopendOp een tijdstip heeft."),
     )
@@ -64,7 +65,7 @@ class Bericht(models.Model):
         ),
     )
     publicatiedatum = models.DateTimeField(
-        _("start datum"),
+        _("publicatiedatum"),
         default=timezone.now,
         help_text=_(
             "Datum/tijd waarop bericht zichtbaar moet worden voor de geadresseerde."
@@ -73,6 +74,7 @@ class Bericht(models.Model):
     referentie = models.CharField(
         _("referentie"),
         max_length=25,
+        blank=True,
         help_text=_("Zenderreferentie / interne referentie."),
     )
     ontvanger = models.ForeignKey(
@@ -86,7 +88,9 @@ class Bericht(models.Model):
         _("bericht type"),
         max_length=8,
         blank=True,
-        help_text=_(""),  # TODO:
+        help_text=_(
+            "MessageType must be an 8-character code and only relevant for MOBB."
+        ),
         validators=[MinLengthValidator(limit_value=8)],
     )
     handelings_perspectief = models.CharField(
@@ -125,6 +129,7 @@ class Bijlage(models.Model):
         related_name="bijlagen",
         help_text=_("Bijlagen gekoppeld aan het bericht."),
     )
+    # TODO should be unique?
     informatie_object = URNField(
         _("informatie object"),
         help_text=_(
@@ -146,4 +151,4 @@ class Bijlage(models.Model):
         verbose_name_plural = _("Berichten bijlagen")
 
     def __str__(self):
-        return self.url
+        return self.informatie_object

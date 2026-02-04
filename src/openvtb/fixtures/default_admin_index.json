@@ -15,24 +15,24 @@
                     "user"
                 ],
                 [
-                    "sessionprofile",
-                    "sessionprofile"
-                ],
-                [
                     "auth",
                     "group"
-                ],
-                [
-                    "mozilla_django_oidc_db",
-                    "oidcprovider"
                 ],
                 [
                     "mozilla_django_oidc_db",
                     "oidcclient"
                 ],
                 [
+                    "mozilla_django_oidc_db",
+                    "oidcprovider"
+                ],
+                [
                     "otp_totp",
                     "totpdevice"
+                ],
+                [
+                    "sessionprofile",
+                    "sessionprofile"
                 ],
                 [
                     "two_factor_webauthn",
@@ -63,6 +63,27 @@
         "fields": {
             "order": 3,
             "translations": {
+                "en": "Verzoeken"
+            },
+            "name": "Verzoeken",
+            "slug": "Verzoeken",
+            "models": [
+                [
+                    "verzoeken",
+                    "verzoek"
+                ],
+                [
+                    "verzoeken",
+                    "verzoektype"
+                ]
+            ]
+        }
+    },
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
+            "order": 4,
+            "translations": {
                 "en": "Taken"
             },
             "name": "Taken",
@@ -78,20 +99,20 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 4,
+            "order": 5,
             "translations": {
-                "en": "Verzoeken"
+                "en": "Berichten"
             },
-            "name": "Verzoeken",
-            "slug": "Verzoeken",
+            "name": "Berichten",
+            "slug": "Berichten",
             "models": [
                 [
-                    "verzoeken",
-                    "verzoek"
+                    "berichten",
+                    "bericht"
                 ],
                 [
-                    "verzoeken",
-                    "verzoektype"
+                    "berichten",
+                    "berichtontvanger"
                 ]
             ]
         }
