@@ -14,10 +14,12 @@ class IsIngediendDoorValidator:
     """
 
     code = "invalid-json-schema"
-    label = "isIngediendDoor"
+
+    def __init__(self, field_name: str):
+        self.field_name = field_name
 
     def __call__(self, attrs):
-        data = attrs.get("is_ingediend_door", {})
+        data = attrs.get(self.field_name, {})
 
         if not data:
             return attrs
@@ -25,7 +27,7 @@ class IsIngediendDoorValidator:
         if len(data.keys()) > 1:
             raise serializers.ValidationError(
                 {
-                    "is_ingediend_door": _(
+                    self.field_name: _(
                         "It must have only one of the three permitted keys: "
                         "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
                     ),
@@ -35,7 +37,7 @@ class IsIngediendDoorValidator:
             validate_jsonschema(
                 instance=data,
                 schema=IS_INGEDIEND_DOOR_SCHEMA,
-                label=self.label,
+                label=self.field_name,
             )
         except ValidationError as error:
             raise serializers.ValidationError(error.message_dict, code=self.code)

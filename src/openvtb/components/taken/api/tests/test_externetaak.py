@@ -6,7 +6,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ExterneTaakFactory
+from openvtb.components.taken.tests.factories import ADRES, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -22,7 +22,10 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
         # create taak
-        ExterneTaakFactory.create(betaaltaak=True)
+        ExterneTaakFactory.create(
+            betaaltaak=True,
+            niet_authentieke_persoonsgegevens=True,
+        )
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -48,7 +51,19 @@ class ExterneTaakTests(APITestCase):
                         "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                         "toelichting": externetaak.toelichting,
-                        "isToegewezenAan": "",
+                        "isToegewezenAan": {
+                            "authentiekeVerwijzing": None,
+                            "nietAuthentiekePersoonsgegevens": {
+                                "voornaam": "Jan",
+                                "achternaam": "Jansen",
+                                "geboortedatum": "1980-05-15",
+                                "emailadres": "jan.jansen@example.com",
+                                "telefoonnummer": "+31612345678",
+                                "postadres": ADRES,
+                                "verblijfsadres": None,
+                            },
+                            "nietAuthentiekeOrganisatiegegevens": None,
+                        },
                         "wordtBehandeldDoor": "",
                         "hoortBij": "",
                         "heeftBetrekkingOp": "",
@@ -83,7 +98,10 @@ class ExterneTaakTests(APITestCase):
         )
 
     def test_detail(self):
-        externetaak = ExterneTaakFactory.create(betaaltaak=True)
+        externetaak = ExterneTaakFactory.create(
+            betaaltaak=True,
+            niet_authentieke_persoonsgegevens=True,
+        )
         detail_url = reverse(
             "taken:externetaak-detail", kwargs={"uuid": str(externetaak.uuid)}
         )
@@ -102,7 +120,13 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                 "toelichting": externetaak.toelichting,
-                "isToegewezenAan": externetaak.is_toegewezen_aan,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekePersoonsgegevens": externetaak.is_toegewezen_aan[
+                        "nietAuthentiekePersoonsgegevens"
+                    ],
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                },
                 "wordtBehandeldDoor": externetaak.wordt_behandeld_door,
                 "hoortBij": externetaak.hoort_bij,
                 "heeftBetrekkingOp": externetaak.heeft_betrekking_op,
@@ -126,6 +150,15 @@ class ExterneTaakTests(APITestCase):
                     "iban": "NL18BANK23481326",
                 },
             },
+            "isToegewezenAan": {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "postadres": ADRES,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                }
+            },
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -145,7 +178,13 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                    "nietAuthentiekeOrganisatiegegevens": betaaltaak.is_toegewezen_aan[
+                        "nietAuthentiekeOrganisatiegegevens"
+                    ],
+                },
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -175,7 +214,6 @@ class ExterneTaakTests(APITestCase):
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
-            "isToegewezenAan": "urn:maykin:partij:brp:nnp:bsn:1234567892",
             "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
             "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
             "heeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
@@ -207,11 +245,15 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                },
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
                     "valuta": betaaltaak.details["valuta"],
@@ -380,7 +422,11 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                },
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -438,6 +484,24 @@ class ExterneTaakTests(APITestCase):
             {"uitvraagLink": "http://example.com/"},
         )
 
+        # patch isToegewezenAan with the new details
+        response = self.client.patch(
+            detail_url,
+            {
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": {"urn": "urn:example:12345"}
+                },
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            gegevensuitvraagtaak.is_toegewezen_aan,
+            {
+                "authentiekeVerwijzing": {"urn": "urn:example:12345"},
+            },
+        )
+
     def test_update(self):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
 
@@ -479,7 +543,11 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                },
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -553,7 +621,11 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                },
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -580,6 +652,15 @@ class ExterneTaakTests(APITestCase):
 
 class ExterneTaakValidationTests(APITestCase):
     list_url = reverse("taken:externetaak-list")
+    details = {
+        "bedrag": "11",
+        "transactieomschrijving": "test",
+        "doelrekening": {
+            "naam": "test",
+            "code": "123-ABC",
+            "iban": "NL18BANK23481326",
+        },
+    }
 
     def test_invalid_create_type_fields(self):
         self.assertFalse(ExterneTaak.objects.exists())
@@ -588,15 +669,7 @@ class ExterneTaakValidationTests(APITestCase):
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "startdatum": datetime.date(2026, 1, 10),  # end < start
             "einddatumHandelingsTermijn": datetime.date(2025, 1, 10),
-            "details": {
-                "bedrag": "11",
-                "transactieomschrijving": "test",
-                "doelrekening": {
-                    "naam": "test",
-                    "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
-                },
-            },
+            "details": self.details,
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -616,29 +689,11 @@ class ExterneTaakValidationTests(APITestCase):
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
-            "isToegewezenAan": "test",
             "wordtBehandeldDoor": "test:maykin:medewerker:brp:nnp:bsn:1234567892",  # doesn't start with urn
             "hoortBij": "urn:maykinmaykinmaykinmaykinmaykinmaykinmaykinmaykinmaykin:1",  # long NID
-            "details": {
-                "bedrag": "11",
-                "transactieomschrijving": "test",
-                "doelrekening": {
-                    "naam": "test",
-                    "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
-                },
-            },
+            "details": self.details,
         }
         response = self.client.post(self.list_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            get_validation_errors(response, "isToegewezenAan"),
-            {
-                "name": "isToegewezenAan",
-                "code": "invalid_urn",
-                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
-            },
-        )
         self.assertEqual(
             get_validation_errors(response, "wordtBehandeldDoor"),
             {
@@ -656,3 +711,251 @@ class ExterneTaakValidationTests(APITestCase):
             },
         )
         self.assertFalse(ExterneTaak.objects.exists())
+
+    def test_invalid_is_toegewezen_aan_json_schema(self):
+        with self.subTest("multiple is_toegewezen_aan is not allowed"):
+            # invalid isToegewezenAan schema
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": {"urn": "urn:example:12345"},
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {"key": "value"},
+                        "postadres": {"key": "value"},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isToegewezenAan"),
+                {
+                    "name": "isToegewezenAan",
+                    "code": "invalid",
+                    "reason": "It must have only one of the three permitted keys: one of `authentiekeVerwijzing`,"
+                    " `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`.",
+                },
+            )
+
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": None,
+                    "nietAuthentiekePersoonsgegevens": None,
+                    "nietAuthentiekeOrganisatiegegevens": None,
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isToegewezenAan"),
+                {
+                    "name": "isToegewezenAan",
+                    "code": "invalid",
+                    "reason": "It must have only one of the three permitted keys: one of `authentiekeVerwijzing`,"
+                    " `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`.",
+                },
+            )
+        with self.subTest("required field"):
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "authentiekeVerwijzing": {"test": "1234"},
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(
+                    response, "isToegewezenAan.authentiekeVerwijzing.urn"
+                ),
+                {
+                    "name": "isToegewezenAan.authentiekeVerwijzing.urn",
+                    "code": "required",
+                    "reason": "Dit veld is vereist.",
+                },
+            )
+
+    def test_create_address_json_schema(self):
+        with self.subTest("null values"):
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": None,
+                        "postadres": None,
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": None,
+                    "postadres": None,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+        with self.subTest("empty values"):
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {},
+                        "postadres": {},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": {},
+                    "postadres": {},
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+        with self.subTest("set one field"):
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": {"woonplaats": "Amsterdam"},
+                        "postadres": {"woonplaats": "Amsterdam"},
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": {"woonplaats": "Amsterdam"},
+                    "postadres": {"woonplaats": "Amsterdam"},
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+        with self.subTest("set all fields"):
+            data = {
+                "titel": "titel",
+                "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+                "taakSoort": SoortTaak.BETAALTAAK.value,
+                "details": self.details,
+                "isToegewezenAan": {
+                    "nietAuthentiekeOrganisatiegegevens": {
+                        "statutaireNaam": "Acme BV",
+                        "bezoekadres": ADRES,
+                        "postadres": ADRES,
+                        "emailadres": "info@acme.nl",
+                        "telefoonnummer": "+31201234567",
+                    },
+                },
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(
+                response.json()["isToegewezenAan"][
+                    "nietAuthentiekeOrganisatiegegevens"
+                ],
+                {
+                    "statutaireNaam": "Acme BV",
+                    "bezoekadres": ADRES,
+                    "postadres": ADRES,
+                    "emailadres": "info@acme.nl",
+                    "telefoonnummer": "+31201234567",
+                },
+            )
+
+    def test_update_address_json_schema(self):
+        betaaltaak = ExterneTaakFactory.create(
+            betaaltaak=True, niet_authentieke_persoonsgegevens=True
+        )
+
+        detail_url = reverse(
+            "taken:externetaak-detail", kwargs={"uuid": str(betaaltaak.uuid)}
+        )
+
+        # initial assert
+        self.assertEqual(
+            betaaltaak.is_toegewezen_aan["nietAuthentiekePersoonsgegevens"][
+                "postadres"
+            ],
+            ADRES,
+        )
+
+        data = {
+            "isToegewezenAan": {
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": "Jan",
+                    "achternaam": "Jansen",
+                    "geboortedatum": "1980-05-15",
+                    "emailadres": "jan.jansen@example.com",
+                    "telefoonnummer": "+31612345678",
+                    "postadres": {"woonplaats": "Amsterdam"},
+                    "verblijfsadres": None,
+                }
+            },
+        }
+        response = self.client.patch(detail_url, data)
+        taak = ExterneTaak.objects.get()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(
+            taak.is_toegewezen_aan["nietAuthentiekePersoonsgegevens"]["postadres"],
+            ADRES,
+        )
+        # postadres full updated
+        self.assertEqual(
+            taak.is_toegewezen_aan["nietAuthentiekePersoonsgegevens"]["postadres"],
+            {"woonplaats": "Amsterdam"},
+        )

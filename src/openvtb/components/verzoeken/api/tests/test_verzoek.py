@@ -68,7 +68,7 @@ class VerzoekTests(APITestCase):
                                 "emailadres": "jan.jansen@example.com",
                                 "telefoonnummer": "+31612345678",
                                 "postadres": ADRES,
-                                "verblijfsadres": ADRES,
+                                "verblijfsadres": None,
                             },
                             "nietAuthentiekeOrganisatiegegevens": None,
                         },
@@ -563,7 +563,7 @@ class VerzoekTests(APITestCase):
                     "emailadres": "jan.jansen@example.com",
                     "telefoonnummer": "+31612345678",
                     "postadres": ADRES,
-                    "verblijfsadres": ADRES,
+                    "verblijfsadres": None,
                 }
             },
         )

@@ -338,7 +338,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
 
     validators = [
         AanvraagGegevensValidator(),
-        IsIngediendDoorValidator(),
+        IsIngediendDoorValidator("is_ingediend_door"),
     ]
 
     def validate_bijlagen(self, value):

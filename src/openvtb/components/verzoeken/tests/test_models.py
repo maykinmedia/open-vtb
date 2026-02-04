@@ -122,7 +122,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
 
 
 class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
-    def test_valid_authentieke_verwijzing_schema(self):
+    def test_valid_schemas(self):
         verzoek_type = VerzoekTypeFactory.create(create_version=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
