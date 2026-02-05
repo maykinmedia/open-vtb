@@ -1,0 +1,90 @@
+interactions:
+- request:
+    body: client_id=api-testid&client_secret=y9qhit0CNdAyszI4q2qz35IahT000Nlp&username=testuser&password=testuser&grant_type=password&scope=openid
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '136'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.32.5
+    method: POST
+    uri: http://localhost:8080/realms/test/protocol/openid-connect/token
+  response:
+    body:
+      string: '{"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0VU5RQWN2VWN2LURGVU94XzRPMWd0MTNPZEpTb3RxRUtQWnVyczJ2UVc4In0.eyJleHAiOjE3NzAyODUyMDEsImlhdCI6MTc3MDI4NDkwMSwianRpIjoiZThmMmRhNzktMTJjNC00NjlmLTk4MWItNzQzNzA5MzBjMjcxIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90ZXN0IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImFhMTBjZmM3LTJjNGQtNDFmNi04ZmFjLTdiZjQwNWM1NzJjNCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFwaS10ZXN0aWQiLCJzZXNzaW9uX3N0YXRlIjoiMjFhYzVmNTMtMTFiNy00N2VlLTllZmEtMDdmODFmMGRjNDI2IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vMTI3LjAuMC4xOjgwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtdGVzdCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMjFhYzVmNTMtMTFiNy00N2VlLTllZmEtMDdmODFmMGRjNDI2IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJncm91cHMiOlsiZGVmYXVsdC1yb2xlcy10ZXN0Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0dXNlciJ9.ejdFTlczPIsF_2HL3xOi5qEQqt1qU4WJC-JvtU7iDoU0CCj33bF0PVHgkaH9q7O-GGEAMBsembCk8fJ2gfLVGxCe-2lv-wL0djCIoy3z94cZjPgm_klhFugF4iBzVaozlbYLNgHQvo3q0BBSXsFvnJmAskiATrw0T-gJkP8WOQrvNckqOInI5na8yP2uKoBMWIM6I14d9Z_k5TpZyX3UJwR2g2XGTIB5shGY0sdiLALO1WblqR931sS1Rj5qd-b7UqeYN3PRdtZuhSnHDz0o1Httg1JltvPj6on6kZpuW3uRBZ6W1n0cqd9AFuzsa01zO2Y7zLLrACipnZS9XPJ3uw","expires_in":300,"refresh_expires_in":1800,"refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJlNzE1ZTA1MS02Y2RiLTQ4Y2MtYjRmNC1mMDcyMmM4MWY5ZDMifQ.eyJleHAiOjE3NzAyODY3MDEsImlhdCI6MTc3MDI4NDkwMSwianRpIjoiNTY5ODEzOGEtODc3My00ZDFmLThiYjUtYzNlZWFhNDI1MmZlIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90ZXN0IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90ZXN0Iiwic3ViIjoiYWExMGNmYzctMmM0ZC00MWY2LThmYWMtN2JmNDA1YzU3MmM0IiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImFwaS10ZXN0aWQiLCJzZXNzaW9uX3N0YXRlIjoiMjFhYzVmNTMtMTFiNy00N2VlLTllZmEtMDdmODFmMGRjNDI2Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjIxYWM1ZjUzLTExYjctNDdlZS05ZWZhLTA3ZjgxZjBkYzQyNiJ9.YDXzJP750i642aTWOT2HfyekpbtqJAMklA-hrLuzTLE","token_type":"Bearer","id_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0VU5RQWN2VWN2LURGVU94XzRPMWd0MTNPZEpTb3RxRUtQWnVyczJ2UVc4In0.eyJleHAiOjE3NzAyODUyMDEsImlhdCI6MTc3MDI4NDkwMSwiYXV0aF90aW1lIjowLCJqdGkiOiI5MWRhMTU1My0wNmE3LTRkYWMtOWNjMi1hMjEwZTNkNTc1ZWYiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVhbG1zL3Rlc3QiLCJhdWQiOiJhcGktdGVzdGlkIiwic3ViIjoiYWExMGNmYzctMmM0ZC00MWY2LThmYWMtN2JmNDA1YzU3MmM0IiwidHlwIjoiSUQiLCJhenAiOiJhcGktdGVzdGlkIiwic2Vzc2lvbl9zdGF0ZSI6IjIxYWM1ZjUzLTExYjctNDdlZS05ZWZhLTA3ZjgxZjBkYzQyNiIsImF0X2hhc2giOiItbnVuMU02a3RTUWxaaWkxOGxKUmZBIiwiYWNyIjoiMSIsInNpZCI6IjIxYWM1ZjUzLTExYjctNDdlZS05ZWZhLTA3ZjgxZjBkYzQyNiIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZ3JvdXBzIjpbImRlZmF1bHQtcm9sZXMtdGVzdCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXSwicHJlZmVycmVkX3VzZXJuYW1lIjoidGVzdHVzZXIifQ.uPIsA-93QlpfE0s85ix5A9QCEfwZZzTDw2f2jpWBjVUdsR67ecDvExlQjUvLwEDi37ThMlNFQ9YlkWGsMBSlTrOXNJvnBA6yBtjfokCWf_5RY1kaORg3Bb1p8p-ShhUHlSlMmTWNFQp1hRXU41s9MD6HRevgh-Yt0KgxXai28LidcuvnRZ7EK0KEoc-cIWH7yKcASMZWS6mjQEyUhHt9eSVv_znfKkKPLlt10JsPp_xjiwEqNI2D7KY5UnmEPk8Q-a-0HJVIN4gphjWDtiDHj3qzrnJXIXGxBsXfNEDaLnQfiXdeJFQUl8_oSIMMisAhcBAp9mLU3K42S9gVAQmySw","not-before-policy":0,"session_state":"21ac5f53-11b7-47ee-9efa-07f81f0dc426","scope":"openid
+        email profile"}'
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json
+      Pragma:
+      - no-cache
+      Referrer-Policy:
+      - no-referrer
+      Set-Cookie:
+      - KEYCLOAK_LOCALE=; Version=1; Comment=Expiring cookie; Expires=Thu, 01-Jan-1970
+        00:00:10 GMT; Max-Age=0; Path=/realms/test/; HttpOnly
+      - KC_RESTART=; Version=1; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0;
+        Path=/realms/test/; HttpOnly
+      - KC_AUTH_STATE=; Version=1; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0;
+        Path=/realms/test/
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '3392'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0VU5RQWN2VWN2LURGVU94XzRPMWd0MTNPZEpTb3RxRUtQWnVyczJ2UVc4In0.eyJleHAiOjE3NzAyODUyMDEsImlhdCI6MTc3MDI4NDkwMSwianRpIjoiZThmMmRhNzktMTJjNC00NjlmLTk4MWItNzQzNzA5MzBjMjcxIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy90ZXN0IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImFhMTBjZmM3LTJjNGQtNDFmNi04ZmFjLTdiZjQwNWM1NzJjNCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFwaS10ZXN0aWQiLCJzZXNzaW9uX3N0YXRlIjoiMjFhYzVmNTMtMTFiNy00N2VlLTllZmEtMDdmODFmMGRjNDI2IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vMTI3LjAuMC4xOjgwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtdGVzdCIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMjFhYzVmNTMtMTFiNy00N2VlLTllZmEtMDdmODFmMGRjNDI2IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJncm91cHMiOlsiZGVmYXVsdC1yb2xlcy10ZXN0Iiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0dXNlciJ9.ejdFTlczPIsF_2HL3xOi5qEQqt1qU4WJC-JvtU7iDoU0CCj33bF0PVHgkaH9q7O-GGEAMBsembCk8fJ2gfLVGxCe-2lv-wL0djCIoy3z94cZjPgm_klhFugF4iBzVaozlbYLNgHQvo3q0BBSXsFvnJmAskiATrw0T-gJkP8WOQrvNckqOInI5na8yP2uKoBMWIM6I14d9Z_k5TpZyX3UJwR2g2XGTIB5shGY0sdiLALO1WblqR931sS1Rj5qd-b7UqeYN3PRdtZuhSnHDz0o1Httg1JltvPj6on6kZpuW3uRBZ6W1n0cqd9AFuzsa01zO2Y7zLLrACipnZS9XPJ3uw
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: http://localhost:8080/realms/test/protocol/openid-connect/userinfo
+  response:
+    body:
+      string: '{"sub":"aa10cfc7-2c4d-41f6-8fac-7bf405c572c4","email_verified":false,"groups":["default-roles-test","offline_access","uma_authorization"],"preferred_username":"testuser"}'
+    headers:
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json
+      Referrer-Policy:
+      - no-referrer
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '170'
+    status:
+      code: 200
+      message: OK
+version: 1

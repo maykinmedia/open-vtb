@@ -19,9 +19,6 @@ class BijlageSerializer(serializers.ModelSerializer):
             "informatie_object",
             "omschrijving",
         )
-        extra_kwargs = {
-            "informatie_object": {"required": True, "validators": []},
-        }
 
 
 class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -52,6 +49,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
         fields = (
             "url",
             "urn",
+            "uuid",
             "onderwerp",
             "bericht_tekst",
             "publicatiedatum",
@@ -83,9 +81,10 @@ class BerichtOntvangerSerializer(URNModelSerializer, serializers.ModelSerializer
         fields = (
             "url",
             "urn",
+            "uuid",
             "geadresseerde",
             "geopend_op",
-            "geopend",  # TODO check  readonly
+            "geopend",
         )
         extra_kwargs = {
             "uuid": {
