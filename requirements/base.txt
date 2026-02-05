@@ -11,7 +11,7 @@ ape-pie==0.2.0
     #   zgw-consumers
 arrow==1.4.0
     # via isoduration
-asgiref==3.10.0
+asgiref==3.11.0
     # via
     #   django
     #   django-axes
@@ -32,7 +32,7 @@ boltons==25.0.0
     # via
     #   face
     #   glom
-cbor2==5.7.0
+cbor2==5.8.0
     # via webauthn
 celery==5.5.3
     # via notifications-api-common
@@ -57,7 +57,7 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-commonground-api-common==2.10.4
+commonground-api-common==2.10.7
     # via open-api-framework
 cryptography==46.0.3
     # via
@@ -262,7 +262,7 @@ mozilla-django-oidc-db==1.1.1
     # via
     #   -r requirements/base.in
     #   open-api-framework
-notifications-api-common==0.9.0
+notifications-api-common==0.10.0
     # via commonground-api-common
 open-api-framework==0.13.4
     # via -r requirements/base.in
@@ -330,7 +330,7 @@ phonenumberslite==8.13.55
     # via django-two-factor-auth
 prompt-toolkit==3.0.52
     # via click-repl
-protobuf==6.33.0
+protobuf==6.33.5
     # via
     #   googleapis-common-protos
     #   opentelemetry-proto
@@ -416,7 +416,9 @@ ruamel-yaml-clib==0.2.14
 semantic-version==2.10.0
     # via django-upgrade-check
 sentry-sdk==2.42.1
-    # via open-api-framework
+    # via
+    #   commonground-api-common
+    #   open-api-framework
 six==1.17.0
     # via
     #   furl
@@ -461,7 +463,7 @@ uri-template==1.3.0
     # via jsonschema
 uritemplate==4.2.0
     # via drf-spectacular
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   elastic-apm
     #   requests

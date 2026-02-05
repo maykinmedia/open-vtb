@@ -29,7 +29,7 @@ arrow==1.4.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   isoduration
-asgiref==3.10.0
+asgiref==3.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -78,7 +78,7 @@ bracex==2.6
     # via wcmatch
 bump-my-version==1.2.2
     # via -r requirements/dev.in
-cbor2==5.7.0
+cbor2==5.8.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -132,7 +132,7 @@ click-repl==0.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   celery
-commonground-api-common==2.10.4
+commonground-api-common==2.10.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -567,7 +567,7 @@ mozilla-django-oidc-db==1.1.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
-notifications-api-common==0.9.0
+notifications-api-common==0.10.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -683,7 +683,7 @@ prompt-toolkit==3.0.52
     #   -r requirements/ci.txt
     #   click-repl
     #   questionary
-protobuf==6.33.0
+protobuf==6.33.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -881,6 +881,7 @@ sentry-sdk==2.42.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   commonground-api-common
     #   open-api-framework
 six==1.17.0
     # via
@@ -1024,7 +1025,7 @@ uritemplate==4.2.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
