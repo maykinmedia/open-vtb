@@ -233,7 +233,7 @@ class ExterneTaakTests(APITestCase):
         response = self.client.post(self.list_url, details)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
         self.assertEqual(len(response.data["invalid_params"]), 4)
         self.assertEqual(
             get_validation_errors(response, "titel"),
@@ -279,7 +279,7 @@ class ExterneTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
             get_validation_errors(response, "taakSoort"),
@@ -300,7 +300,7 @@ class ExterneTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
             get_validation_errors(response, "taakSoort"),
@@ -330,7 +330,7 @@ class ExterneTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
         self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "details.bedrag"),
