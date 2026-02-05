@@ -24,7 +24,7 @@ from .serializers import BerichtOntvangerSerializer, BerichtSerializer
     ),
 )
 class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Bericht.objects.all()  # TODO check select_related
+    queryset = Bericht.objects.select_related("ontvanger").prefetch_related("bijlagen")
     serializer_class = BerichtSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)

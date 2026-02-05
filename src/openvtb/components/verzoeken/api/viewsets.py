@@ -44,7 +44,9 @@ from .utils import NestedViewSetMixin, verzoektype_uuid_param
     ),
 )
 class VerzoekViewSet(viewsets.ModelViewSet):
-    queryset = Verzoek.objects.all()
+    queryset = Verzoek.objects.select_related(
+        "verzoek_type", "betaling", "bron"
+    ).prefetch_related("bijlagen")
     serializer_class = VerzoekSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
