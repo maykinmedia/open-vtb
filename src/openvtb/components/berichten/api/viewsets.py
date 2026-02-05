@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
@@ -21,18 +21,6 @@ from .serializers import BerichtOntvangerSerializer, BerichtSerializer
     create=extend_schema(
         summary=_("Maak een bericht aan."),
         description=_("Maak een bericht aan."),
-    ),
-    update=extend_schema(
-        summary=_("Volledig bericht wijzigen."),
-        description=_("Volledig bericht wijzigen."),
-    ),
-    partial_update=extend_schema(
-        summary=_("Een bericht gedeeltelijk wijzigen."),
-        description=_("Een bericht gedeeltelijk wijzigen."),
-    ),
-    destroy=extend_schema(
-        summary=_("Een bericht verwijderen"),
-        description=_("Een bericht verwijderen"),
     ),
 )
 class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):

@@ -1,3 +1,4 @@
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -73,6 +74,24 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
                 "help_text": _("De Uniform Resource Name van het Bericht."),
             },
         }
+
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlagen = validated_data.pop("bijlagen", None)
+        instance = super().create(validated_data)
+
+        if bijlagen:
+            try:
+                objs = [Bijlage(bericht=instance, **data) for data in bijlagen]
+                Bijlage.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlagen": "Bijlage with the specified informatieObject already exists."
+                    },
+                    code="unique",
+                )
+        return instance
 
 
 class BerichtOntvangerSerializer(URNModelSerializer, serializers.ModelSerializer):

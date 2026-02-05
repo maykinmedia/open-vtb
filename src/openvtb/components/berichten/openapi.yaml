@@ -114,103 +114,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bericht'
           description: ''
-    put:
-      operationId: berichtenUpdate
-      description: Volledig bericht wijzigen.
-      summary: Volledig bericht wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het Bericht.
-        required: true
-      tags:
-      - berichten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Bericht'
-        required: true
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bericht'
-          description: ''
-    patch:
-      operationId: berichtenPartialUpdate
-      description: Een bericht gedeeltelijk wijzigen.
-      summary: Een bericht gedeeltelijk wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het Bericht.
-        required: true
-      tags:
-      - berichten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedBericht'
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bericht'
-          description: ''
-    delete:
-      operationId: berichtenDestroy
-      description: Een bericht verwijderen
-      summary: Een bericht verwijderen
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het Bericht.
-        required: true
-      tags:
-      - berichten
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '204':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          description: No response body
   /berichtenontvangers:
     get:
       operationId: berichtenontvangersList
@@ -420,6 +323,11 @@ components:
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van het Bericht.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het Bericht.
         onderwerp:
           type: string
           description: Onderwerp van het bericht.
@@ -476,6 +384,7 @@ components:
       - ontvangerUrn
       - url
       - urn
+      - uuid
     BerichtOntvanger:
       type: object
       properties:
@@ -491,6 +400,11 @@ components:
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van het BerichtOntvanger.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
         geadresseerde:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -515,6 +429,7 @@ components:
       - geopend
       - url
       - urn
+      - uuid
     Bijlage:
       type: object
       properties:
@@ -522,8 +437,8 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
-          maxLength: 255
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
         omschrijving:
           type: string
           description: Een korte omschrijving of de titel van de bijlage. Deze wordt
@@ -577,70 +492,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BerichtOntvanger'
-    PatchedBericht:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van het Bericht binnen deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het Bericht.
-        onderwerp:
-          type: string
-          description: Onderwerp van het bericht.
-          maxLength: 50
-        berichtTekst:
-          type: string
-          description: |-
-            Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op alle portalen. Voor portalen van lokale overheden is de basic syntax van Markdown toegestaan, voor de Mijn Overheid berichtenbox enkel newlines (
-            ).
-        publicatiedatum:
-          type: string
-          format: date-time
-          description: Datum/tijd waarop bericht zichtbaar moet worden voor de geadresseerde.
-        referentie:
-          type: string
-          description: Zenderreferentie / interne referentie.
-          maxLength: 25
-        ontvanger:
-          type: string
-          format: uri
-          description: Personen of bedrijven die het bericht moeten ontvangen.
-        ontvangerUrn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Personen of bedrijven die het bericht moeten ontvangen.URN
-            field
-        berichtType:
-          type: string
-          description: MessageType must be an 8-character code and only relevant for
-            MOBB.
-          maxLength: 8
-          minLength: 8
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 50
-        einddatumHandelingsTermijn:
-          type: string
-          format: date-time
-          nullable: true
-          description: Datum/tijd waarop handeling afgerond moet zijn.
-        bijlagen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Bijlage'
-          description: Lijst van bijlagen bij het bericht. Mijn Overheid berichtenbox
-            ondersteund slechts 1 bijlage en enkel PDF-bestanden.
     PatchedBerichtOntvanger:
       type: object
       properties:
@@ -656,6 +507,11 @@ components:
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van het BerichtOntvanger.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
         geadresseerde:
           type: string
           example: urn:namespace:component:resource:uuid
