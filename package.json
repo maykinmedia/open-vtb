@@ -44,7 +44,7 @@
         "karma-spec-reporter": "^0.0.36",
         "karma-webpack": "^5.0.1",
         "mini-css-extract-plugin": "^2.9.4",
-        "mocha": "^11.7.4",
+        "mocha": "^11.3.0",
         "postcss-loader": "^8.2.0",
         "postcss-selector-lint": "^1.0.2",
         "sass": "^1.93.2",
