@@ -1,5 +1,3 @@
-import uuid
-
 from django.utils import timezone
 
 import factory
@@ -35,7 +33,6 @@ JSON_SCHEMA = {
 
 
 class VerzoekTypeFactory(DjangoModelFactory):
-    uuid = factory.LazyFunction(uuid.uuid4)
     naam = factory.Faker("word")
     toelichting = factory.Faker("sentence", nb_words=8)
 

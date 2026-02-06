@@ -22,6 +22,7 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "openvtb.utils",
     "openvtb.components.taken",
     "openvtb.components.verzoeken",
+    "openvtb.components.berichten",
     # Django libraries
     "localflavor",
 ]
