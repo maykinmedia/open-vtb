@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Bericht, BerichtOntvanger, Bijlage
+from .models import Bericht, Bijlage
 
 
 class BijlageInline(admin.StackedInline):
@@ -11,15 +11,7 @@ class BijlageInline(admin.StackedInline):
 
 @admin.register(Bericht)
 class BerichtAdmin(admin.ModelAdmin):
-    list_display = ("uuid", "onderwerp", "publicatiedatum")
+    list_display = ("uuid", "onderwerp", "publicatiedatum", "ontvanger", "geopend_op")
     readonly_fields = ("uuid",)
     search_fields = ("uuid", "onderwerp")
     inlines = [BijlageInline]
-
-
-@admin.register(BerichtOntvanger)
-class BerichtOntvangerAdmin(admin.ModelAdmin):
-    list_display = ("uuid", "geadresseerde", "geopend_op", "geopend")
-    readonly_fields = ("uuid",)
-    search_fields = ("uuid", "geadresseerde", "geopend_op")
-    list_filter = ("geopend",)

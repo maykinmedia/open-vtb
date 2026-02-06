@@ -1,48 +1,10 @@
 import uuid
 
-from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from openvtb.utils.fields import URNField
-
-
-class BerichtOntvanger(models.Model):
-    uuid = models.UUIDField(
-        unique=True,
-        default=uuid.uuid4,
-        help_text=_("Unieke identificatiecode (UUID4) voor het BerichtOntvanger."),
-    )
-    # TODO should be unique?
-    geadresseerde = URNField(
-        _("geadresseerde"),
-        help_text=_(
-            "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
-            "Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666` "
-            "of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`"
-        ),
-    )
-    geopend_op = models.DateTimeField(
-        _("geopend op"),
-        null=True,
-        help_text=_(
-            "Het bericht is door de geadresseerde geopend op dit tijdstip in het "
-            "portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn Overheid."
-        ),
-    )
-    geopend = models.BooleanField(
-        _("geopend"),
-        default=False,
-        help_text=_("Staat op true indien geopendOp een tijdstip heeft."),
-    )
-
-    class Meta:
-        verbose_name = _("Bericht Ontvanger")
-        verbose_name_plural = _("Bericht Ontvangers")
-
-    def __str__(self):
-        return self.geadresseerde
 
 
 class Bericht(models.Model):
@@ -61,14 +23,14 @@ class Bericht(models.Model):
         help_text=_(
             "Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op alle portalen. "
             "Voor portalen van lokale overheden is de basic syntax van Markdown toegestaan, "
-            "voor de Mijn Overheid berichtenbox enkel newlines (\r\n)."
+            "voor de Mijn Overheid berichtenbox enkel newlines (\\r\\n)."
         ),
     )
     publicatiedatum = models.DateTimeField(
         _("publicatiedatum"),
         default=timezone.now,
         help_text=_(
-            "Datum/tijd waarop bericht zichtbaar moet worden voor de geadresseerde."
+            "Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger."
         ),
     )
     referentie = models.CharField(
@@ -77,21 +39,29 @@ class Bericht(models.Model):
         blank=True,
         help_text=_("Zenderreferentie / interne referentie."),
     )
-    ontvanger = models.ForeignKey(
-        BerichtOntvanger,
-        # TODO check ?
-        on_delete=models.CASCADE,
-        help_text=_("Personen of bedrijven die het bericht moeten ontvangen."),
-        related_name="berichten",
+    ontvanger = URNField(
+        _("ontvanger"),
+        help_text=_(
+            "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
+            "Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666` "
+            "of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`"
+        ),
+    )
+    geopend_op = models.DateTimeField(
+        _("geopend op"),
+        null=True,
+        help_text=_(
+            "Het bericht is door de geadresseerde geopend op dit tijdstip in het "
+            "portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn Overheid."
+        ),
     )
     bericht_type = models.CharField(
         _("bericht type"),
         max_length=8,
         blank=True,
         help_text=_(
-            "MessageType must be an 8-character code and only relevant for MOBB."
+            "Een code die hoort bij het sjabloon zoals gebruikt in de Mijn Overheid berichtenbox."
         ),
-        validators=[MinLengthValidator(limit_value=8)],
     )
     handelings_perspectief = models.CharField(
         _("handelings perspectief"),
@@ -129,7 +99,6 @@ class Bijlage(models.Model):
         related_name="bijlagen",
         help_text=_("Bijlagen gekoppeld aan het bericht."),
     )
-    # TODO should be unique?
     informatie_object = URNField(
         _("informatie object"),
         help_text=_(
@@ -145,10 +114,20 @@ class Bijlage(models.Model):
             "Een korte omschrijving of de titel van de bijlage. Deze wordt typisch getoond in een portaal."
         ),
     )
+    is_bericht_type_bijlage = models.BooleanField(
+        _("is bericht type bijlage"),
+        default=False,
+        help_text=_(
+            "Geeft aan of het een bijlage betreft die onderdeel is van het sjabloon in de Mijn Overheid berichtenbox. "
+            "Indien `true`, dan wordt deze bijlage niet doorgestuurd naar de Mijn Overheid berichtenbox. "
+            "De verwachting is dat eenzelfde bericht reeds onderdeel is van het sjabloon."
+        ),
+    )
 
     class Meta:
         verbose_name = _("Bericht bijlage")
         verbose_name_plural = _("Berichten bijlagen")
+        unique_together = ("bericht", "informatie_object")
 
     def __str__(self):
         return self.informatie_object
