@@ -190,7 +190,6 @@ class VerzoekBron(models.Model):
         return self.naam
 
 
-# TODO check optional fields
 class VerzoekBetaling(models.Model):
     verzoek = models.OneToOneField(
         "Verzoek",
