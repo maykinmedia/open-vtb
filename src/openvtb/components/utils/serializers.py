@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.serializers import URNField
-from openvtb.utils.validators import validate_postal_code
+from openvtb.utils.validators import validate_phone_number, validate_postal_code
 
 
 class BuitenlandSerializer(serializers.Serializer):
@@ -15,13 +15,13 @@ class BuitenlandSerializer(serializers.Serializer):
         max_length=2,
         allow_blank=True,
         required=False,
-        help_text=_("ISO landcode van het buitenland."),
+        help_text=_("ISO 3166-1 alpha-2 landcode van het land."),
     )
     landnaam = serializers.CharField(
         max_length=100,
         allow_blank=True,
         required=False,
-        help_text=_("Naam van het buitenland."),
+        help_text=_("Naam van het land."),
     )
     adresregel1 = serializers.CharField(
         max_length=100,
@@ -51,7 +51,7 @@ class AdresSerializer(serializers.Serializer):
         help_text=_("Plaats van het adres."),
     )
     postcode = serializers.CharField(
-        max_length=100,
+        max_length=7,
         allow_blank=True,
         required=False,
         help_text=_("Postcode van het adres."),
@@ -131,6 +131,7 @@ class NietAuthentiekePersoonsgegevensSerializer(
         max_length=20,
         required=True,
         help_text="Het telefoonnummer van de persoon.",
+        validators=[validate_phone_number],
     )
     postadres = AdresSerializer(
         required=False,

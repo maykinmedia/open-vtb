@@ -29,7 +29,8 @@ paths:
       - name: pageSize
         required: false
         in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100,
+          maximum: 500).'
         schema:
           type: integer
       tags:
@@ -221,7 +222,8 @@ paths:
       - name: pageSize
         required: false
         in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100,
+          maximum: 500).'
         schema:
           type: integer
       tags:
@@ -413,7 +415,8 @@ paths:
       - name: pageSize
         required: false
         in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100,
+          maximum: 500).'
         schema:
           type: integer
       - in: path
@@ -653,8 +656,8 @@ components:
         postcode:
           type: string
           description: Postcode van het adres.
-          pattern: ^[1-9][0-9]{3} ?[a-zA-Z]{2}$
-          maxLength: 100
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
+          maxLength: 7
         huisnummer:
           type: string
           description: Huisnummer van het adres.
@@ -719,11 +722,11 @@ components:
       properties:
         landcode:
           type: string
-          description: ISO landcode van het buitenland.
+          description: ISO 3166-1 alpha-2 landcode van het land.
           maxLength: 2
         landnaam:
           type: string
-          description: Naam van het buitenland.
+          description: Naam van het land.
           maxLength: 100
         adresregel1:
           type: string
@@ -916,6 +919,7 @@ components:
         telefoonnummer:
           type: string
           description: Het telefoonnummer van de persoon.
+          pattern: ^(0[1-9][0-9]{8}|\+[0-9]{9,15}|00[0-9]{7,13})$
           maxLength: 20
         postadres:
           allOf:

@@ -46,4 +46,4 @@ def check_json_schema(json_schema: JSONObject) -> None:
     try:
         schema_validator.check_schema(json_schema)
     except SchemaError as exc:
-        raise ValidationError(exc)
+        raise ValidationError(str(exc))
