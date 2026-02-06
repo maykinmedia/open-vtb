@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.utils.widgets import JSONSuit
+
 from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm
 from .models import (
@@ -16,7 +18,6 @@ from .models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
-from .widgets import JSONSuit
 
 
 class VerzoekTypeVersionInline(admin.StackedInline):

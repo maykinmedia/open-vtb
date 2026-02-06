@@ -47,6 +47,7 @@ class ValidatorsTestCase(TestCase):
             "1000 AAA",
             "1000AAA",
             "0000aa",
+            "0000 aa",
             "0999aa",
             "1000  aa",
             "1000 aaa",
@@ -55,44 +56,56 @@ class ValidatorsTestCase(TestCase):
             "1111,a",
             '1111"a',
             '1111"aa',
+            "1111 Aa",
+            "1111 aA",
+            "1015CJ",
         ]
         for invalid_postal_code in invalid_postal_codes:
             self.assertRaisesMessage(
                 ValidationError,
-                _("Invalid postal code."),
+                "Postcode moet aan het volgende formaat voldoen: `1234 AB` (met spatie)",
                 validate_postal_code,
                 invalid_postal_code,
             )
-
-        self.assertIsNone(validate_postal_code("1015CJ"))
         self.assertIsNone(validate_postal_code("1015 CJ"))
-        self.assertIsNone(validate_postal_code("1015cj"))
-        self.assertIsNone(validate_postal_code("1015 cj"))
-        self.assertIsNone(validate_postal_code("1015Cj"))
-        self.assertIsNone(validate_postal_code("1015 Cj"))
-        self.assertIsNone(validate_postal_code("1015cJ"))
-        self.assertIsNone(validate_postal_code("1015 cJ"))
 
     def test_validate_phone_number(self):
+        valid_phone_numbers = [
+            "0612345678",
+            "0201234567",
+            "+31612345678",
+            "+441134960000",
+            "+12065550100",
+            "0031612345678",
+            "00311234567",
+        ]
         invalid_phone_numbers = [
+            "0800123456",
+            "0900123456",
+            "0881234567",
+            "1400",
+            "14012",
+            "14079",
             "0695azerty",
             "azerty0545",
             "@4566544++8",
             "onetwothreefour",
+            "020 753 0523",
+            "+311234",
+            "316123456789",
         ]
         for invalid_phone_number in invalid_phone_numbers:
-            self.assertRaisesMessage(
-                ValidationError,
-                _("Invalid mobile phonenumber."),
-                validate_phone_number,
-                invalid_phone_number,
-            )
+            with self.subTest(invalid_phone_number):
+                self.assertRaisesMessage(
+                    ValidationError,
+                    "Het opgegeven telefoonnummer is ongeldig",
+                    validate_phone_number,
+                    invalid_phone_number,
+                )
 
-        self.assertEqual(validate_phone_number(" 0695959595"), " 0695959595")
-        self.assertEqual(validate_phone_number("+33695959595"), "+33695959595")
-        self.assertEqual(validate_phone_number("00695959595"), "00695959595")
-        self.assertEqual(validate_phone_number("00-69-59-59-59-5"), "00-69-59-59-59-5")
-        self.assertEqual(validate_phone_number("00 69 59 59 59 5"), "00 69 59 59 59 5")
+        for valid_phone_number in valid_phone_numbers:
+            with self.subTest(valid_phone_number):
+                validate_phone_number(valid_phone_number)
 
 
 class URNValidatorTests(TestCase):

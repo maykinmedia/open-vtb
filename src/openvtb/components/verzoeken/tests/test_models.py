@@ -3,6 +3,7 @@ from django.test import TestCase
 
 from ..models import VerzoekTypeVersion
 from .factories import (
+    ADRES,
     JSON_SCHEMA,
     VerzoekFactory,
     VerzoekTypeFactory,
@@ -121,7 +122,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
 
 
 class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
-    def test_valid_authentieke_verwijzing_schema(self):
+    def test_valid_schemas(self):
         verzoek_type = VerzoekTypeFactory.create(create_version=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
@@ -142,8 +143,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
                 "geboortedatum": "1982-01-01",
                 "emailadres": "test@admin.com",
                 "telefoonnummer": "",
-                "postadres": {"key": "value"},
-                "verblijfsadres": {"key": "value"},
+                "postadres": ADRES,
+                "verblijfsadres": ADRES,
             }
         }
         verzoek.save()
@@ -153,8 +154,8 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
         verzoek.is_ingediend_door = {
             "nietAuthentiekeOrganisatiegegevens": {
                 "statutaireNaam": "ACME",
-                "bezoekadres": {"key": "value"},
-                "postadres": {"key": "value"},
+                "bezoekadres": ADRES,
+                "postadres": ADRES,
                 "emailadres": "test@admin.com",
                 "telefoonnummer": "",
             }
@@ -255,6 +256,29 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
                     "geboortedatum": "1982-01-01",
                     "emailadres": "test@admin.com",
                     "telefoonnummer": "",
+                    "postadres": ADRES,
+                    "verblijfsadres": ADRES,
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekePersoonsgegevens.voornaam': [\"1 is not of type 'string'\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": "Jan",
+                    "achternaam": "Puk",
+                    "geboortedatum": "1982-01-01",
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
                     "postadres": {"key": "value"},
                     "verblijfsadres": {"key": "value"},
                 },
@@ -265,7 +289,29 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
             error.exception.message_dict,
             {
                 "is_ingediend_door": [
-                    "{'is_ingediend_door.nietAuthentiekePersoonsgegevens.voornaam': [\"1 is not of type 'string'\"]}"
+                    "{'is_ingediend_door.nietAuthentiekePersoonsgegevens.postadres': [\"Additional properties are not allowed ('key' was unexpected)\"]}"
+                ]
+            },
+        )
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekePersoonsgegevens": {
+                    "voornaam": 1,
+                    "achternaam": "Puk",
+                    "geboortedatum": "1982-01-01",
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
+                    "postadres": {"woonplaats": 1},  # wrong type
+                    "verblijfsadres": ADRES,
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekePersoonsgegevens.postadres.woonplaats': [\"1 is not of type 'string'\"]}"
                 ]
             },
         )
@@ -306,6 +352,26 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
             verzoek.is_ingediend_door = {
                 "nietAuthentiekeOrganisatiegegevens": {
                     "statutaireNaam": 1,
+                    "bezoekadres": ADRES,
+                    "postadres": ADRES,
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekeOrganisatiegegevens.statutaireNaam': [\"1 is not of type 'string'\"]}"
+                ]
+            },
+        )
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "test",
                     "bezoekadres": {"key": "value"},
                     "postadres": {"key": "value"},
                     "emailadres": "test@admin.com",
@@ -318,7 +384,28 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
             error.exception.message_dict,
             {
                 "is_ingediend_door": [
-                    "{'is_ingediend_door.nietAuthentiekeOrganisatiegegevens.statutaireNaam': [\"1 is not of type 'string'\"]}"
+                    "{'is_ingediend_door.nietAuthentiekeOrganisatiegegevens.bezoekadres': [\"Additional properties are not allowed ('key' was unexpected)\"]}"
+                ]
+            },
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            verzoek.is_ingediend_door = {
+                "nietAuthentiekeOrganisatiegegevens": {
+                    "statutaireNaam": "test",
+                    "bezoekadres": {"woonplaats": 1},
+                    "postadres": ADRES,
+                    "emailadres": "test@admin.com",
+                    "telefoonnummer": "",
+                },
+            }
+            verzoek.save()
+            verzoek.full_clean()
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "is_ingediend_door": [
+                    "{'is_ingediend_door.nietAuthentiekeOrganisatiegegevens.bezoekadres.woonplaats': [\"1 is not of type 'string'\"]}"
                 ]
             },
         )

@@ -8,6 +8,8 @@ from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.schemas import SOORTTAAK_SCHEMA_MAPPING
+from openvtb.components.utils.serializers import IsIngediendDoorSerializer
+from openvtb.components.utils.validators import IsIngediendDoorValidator
 from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.constants import Valuta
@@ -128,6 +130,15 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
     )
     discriminator_field = "taak_soort"
 
+    is_toegewezen_aan = IsIngediendDoorSerializer(
+        required=False,
+        help_text=(
+            "Gegevens over de persoon aan wie de taak is toegewezen. "
+            "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
+            "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
+        ),
+    )
+
     class Meta:
         model = ExterneTaak
         fields = (
@@ -153,6 +164,7 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
             StartBeforeEndValidator(
                 "datum_herinnering", "einddatum_handelings_termijn"
             ),
+            IsIngediendDoorValidator("is_toegewezen_aan"),
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

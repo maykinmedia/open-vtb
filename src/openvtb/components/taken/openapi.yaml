@@ -802,6 +802,45 @@ paths:
           description: No response body
 components:
   schemas:
+    Adres:
+      type: object
+      properties:
+        woonplaats:
+          type: string
+          description: Plaats van het adres.
+          maxLength: 100
+        postcode:
+          type: string
+          description: Postcode van het adres.
+          pattern: ^[1-9][0-9]{3} [A-Z]{2}$
+          maxLength: 7
+        huisnummer:
+          type: string
+          description: Huisnummer van het adres.
+          maxLength: 10
+        huisletter:
+          type: string
+          description: Huisletter van het adres, indien aanwezig.
+          maxLength: 10
+        huisnummertoevoeging:
+          type: string
+          description: Toevoeging bij het huisnummer, indien aanwezig.
+          maxLength: 20
+        buitenland:
+          allOf:
+          - $ref: '#/components/schemas/Buitenland'
+          description: Dit veld kan alleen worden ingevuld als de velden voor het
+            lokale adres niet in de aanvraag zijn opgegeven.
+    AuthentiekeVerwijzing:
+      type: object
+      properties:
+        urn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: Authentieke Referentie URN
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+      required:
+      - urn
     Base_ExterneTaakPolymorphicSerializer:
       type: object
       properties:
@@ -859,14 +898,11 @@ components:
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
         isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -929,6 +965,12 @@ components:
     BetaalTaakCreateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -982,15 +1024,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1025,6 +1058,12 @@ components:
     BetaalTaakCreateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1078,15 +1117,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1126,6 +1156,12 @@ components:
     BetaalTaakListResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1179,15 +1215,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1227,6 +1254,12 @@ components:
     BetaalTaakPartialUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1280,15 +1313,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1328,6 +1352,12 @@ components:
     BetaalTaakRetrieveResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1381,15 +1411,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1429,6 +1450,12 @@ components:
     BetaalTaakUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1482,15 +1509,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1525,6 +1543,12 @@ components:
     BetaalTaakUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1578,15 +1602,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1623,6 +1638,29 @@ components:
       - url
       - urn
       - uuid
+    Buitenland:
+      type: object
+      properties:
+        landcode:
+          type: string
+          description: ISO 3166-1 alpha-2 landcode van het land.
+          maxLength: 2
+        landnaam:
+          type: string
+          description: Naam van het land.
+          maxLength: 100
+        adresregel1:
+          type: string
+          description: Eerste regel van het buitenlandse adres.
+          maxLength: 100
+        adresregel2:
+          type: string
+          description: Tweede regel van het buitenlandse adres.
+          maxLength: 100
+        adresregel3:
+          type: string
+          description: Derde regel van het buitenlandse adres.
+          maxLength: 100
     Doelrekening:
       type: object
       properties:
@@ -1678,6 +1716,12 @@ components:
     FormulierTaakCreateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1731,15 +1775,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1774,6 +1809,12 @@ components:
     FormulierTaakCreateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1827,15 +1868,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1875,6 +1907,12 @@ components:
     FormulierTaakListResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -1928,15 +1966,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1976,6 +2005,12 @@ components:
     FormulierTaakPartialUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2029,15 +2064,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2077,6 +2103,12 @@ components:
     FormulierTaakRetrieveResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2130,15 +2162,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2178,6 +2201,12 @@ components:
     FormulierTaakUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2231,15 +2260,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2274,6 +2294,12 @@ components:
     FormulierTaakUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2327,15 +2353,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2392,6 +2409,12 @@ components:
     GegevensUitvraagTaakCreateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2445,15 +2468,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2488,6 +2502,12 @@ components:
     GegevensUitvraagTaakCreateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2541,15 +2561,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2589,6 +2600,12 @@ components:
     GegevensUitvraagTaakListResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2642,15 +2659,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2690,6 +2698,12 @@ components:
     GegevensUitvraagTaakPartialUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2743,15 +2757,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2791,6 +2796,12 @@ components:
     GegevensUitvraagTaakRetrieveResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2844,15 +2855,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2892,6 +2894,12 @@ components:
     GegevensUitvraagTaakUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -2945,15 +2953,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2988,6 +2987,12 @@ components:
     GegevensUitvraagTaakUpdateResponse:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -3041,15 +3046,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3086,6 +3082,95 @@ components:
       - url
       - urn
       - uuid
+    IsIngediendDoor:
+      type: object
+      properties:
+        authentiekeVerwijzing:
+          allOf:
+          - $ref: '#/components/schemas/AuthentiekeVerwijzing'
+          nullable: true
+          description: 'Object dat een authentieke verwijzing vertegenwoordigt. URN
+            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp.bsn:111222333`,
+            `urn:nld.hr.kvknummer:444555666` of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
+        nietAuthentiekePersoonsgegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekePersoonsgegevens'
+          nullable: true
+          description: Object met niet-authentieke persoonsgegevens.
+        nietAuthentiekeOrganisatiegegevens:
+          allOf:
+          - $ref: '#/components/schemas/NietAuthentiekeOrganisatiegegevens'
+          nullable: true
+          description: Object met niet-authentieke organisatiegegevens.
+    NietAuthentiekeOrganisatiegegevens:
+      type: object
+      properties:
+        statutaireNaam:
+          type: string
+          description: De officiële statutaire naam van de organisatie.
+          maxLength: 200
+        bezoekadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
+          nullable: true
+          description: Het bezoekadres van de organisatie.
+        postadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
+          nullable: true
+          description: Het postadres van de organisatie.
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de organisatie.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de organisatie.
+          maxLength: 20
+      required:
+      - emailadres
+      - statutaireNaam
+      - telefoonnummer
+    NietAuthentiekePersoonsgegevens:
+      type: object
+      properties:
+        voornaam:
+          type: string
+          description: De voornaam van de persoon.
+          maxLength: 100
+        achternaam:
+          type: string
+          description: De achternaam van de persoon.
+          maxLength: 100
+        geboortedatum:
+          type: string
+          format: date
+          description: De geboortedatum van de persoon in het formaat YYYY-MM-DD.
+        emailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de persoon.
+        telefoonnummer:
+          type: string
+          description: Het telefoonnummer van de persoon.
+          pattern: ^(0[1-9][0-9]{8}|\+[0-9]{9,15}|00[0-9]{7,13})$
+          maxLength: 20
+        postadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
+          nullable: true
+          description: Het postadres van de persoon.
+        verblijfsadres:
+          allOf:
+          - $ref: '#/components/schemas/Adres'
+          nullable: true
+          description: Het huidige verblijfsadres van de persoon.
+      required:
+      - achternaam
+      - emailadres
+      - geboortedatum
+      - telefoonnummer
+      - voornaam
     PaginatedBetaalTaakListResponseList:
       type: object
       required:
@@ -3181,6 +3266,12 @@ components:
     PatchedBetaalTaakPartialUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -3234,15 +3325,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3281,6 +3363,12 @@ components:
     PatchedFormulierTaakPartialUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -3334,15 +3422,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3370,6 +3449,12 @@ components:
     PatchedGegevensUitvraagTaakPartialUpdateRequest:
       type: object
       properties:
+        isToegewezenAan:
+          allOf:
+          - $ref: '#/components/schemas/IsIngediendDoor'
+          description: 'Gegevens over de persoon aan wie de taak is toegewezen. Let
+            op: slechts ÉÉN van de drie mag aanwezig zijn! Keuzes: **authentiekeVerwijzing**,
+            **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**.'
         url:
           type: string
           format: uri
@@ -3423,15 +3508,6 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-        isToegewezenAan:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan partij
-          description: 'De persoon of partij aan wie deze taak is toegewezen. Kan
-            een van de volgende types zijn: PARTIJ, NATUURLIJK PERSOON of NIET NATUURLIJK
-            PERSOON.'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid

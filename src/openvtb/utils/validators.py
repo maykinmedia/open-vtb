@@ -25,6 +25,14 @@ from .typing import JSONObject
 logger = structlog.stdlib.get_logger(__name__)
 format_checker = FormatChecker()
 
+FORBIDDEN_PREFIXES = (
+    "0800",
+    "0900",
+    "088",
+    "1400",
+    "140",
+)
+
 
 @format_checker.checks("decimal")
 def is_decimal(value: str) -> bool:
@@ -107,30 +115,6 @@ def validate_charfield_entry(value: str, allow_apostrophe: bool = False) -> str:
     return value
 
 
-def validate_phone_number(value: str) -> str:
-    """
-    Validate a mobile phone number.
-
-    Strips spaces, hyphens, and leading zeros or plus signs, then checks if
-    the remaining value is numeric.
-
-    Args:
-        value (str): The phone number to validate.
-
-    Returns:
-        str: The original phone number if valid.
-
-    Raises:
-        ValidationError: If the value is not a valid numeric phone number.
-    """
-    try:
-        int(value.strip().lstrip("0+").replace("-", "").replace(" ", ""))
-    except (ValueError, TypeError) as exc:
-        raise ValidationError(_("Invalid mobile phonenumber.")) from exc
-
-    return value
-
-
 def validate_date(start_date: datetime | None, end_date: datetime | None) -> None:
     """
     Validate that `end_date` is after `start_date`.
@@ -190,6 +174,41 @@ class StartBeforeEndValidator:
             )
 
 
+@deconstructible
+class RegexWithDisallowedPrefixesValidator(RegexValidator):
+    def __init__(self, *args, **kwargs):
+        self.disallowed_prefixes = kwargs.pop("disallowed_prefixes")
+        self.message_disallowed_prefix = kwargs.pop("message_disallowed_prefix")
+
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, value):
+        for prefix in self.disallowed_prefixes:
+            if value.startswith(prefix):
+                raise ValidationError(self.message_disallowed_prefix)
+
+        super().__call__(value)
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__)
+            and self.regex.pattern == other.regex.pattern
+            and self.disallowed_prefixes == other.disallowed_prefixes
+        )
+
+
+phonenumber_regex = r"^(0[1-9][0-9]{8}|\+[0-9]{9,15}|00[0-9]{7,13})$"
+
+validate_phone_number = RegexWithDisallowedPrefixesValidator(
+    regex=phonenumber_regex,
+    disallowed_prefixes=FORBIDDEN_PREFIXES,
+    message=_("Het opgegeven telefoonnummer is ongeldig."),
+    message_disallowed_prefix=_(
+        "Het opgegeven telefoonnummer is ongeldig, telefoonnummers beginnend met 0800, 0900, 088, 1400 of 140xx zijn niet toegestaan."
+    ),
+)
+
+
 class CustomRegexValidator(RegexValidator):
     """
     Regex validator that appends the invalid value to the error message.
@@ -211,7 +230,8 @@ class CustomRegexValidator(RegexValidator):
 
 
 validate_postal_code = CustomRegexValidator(
-    regex="^[1-9][0-9]{3} ?[a-zA-Z]{2}$", message=_("Invalid postal code.")
+    regex="^[1-9][0-9]{3} [A-Z]{2}$",
+    message=_("Postcode moet aan het volgende formaat voldoen: `1234 AB` (met spatie)"),
 )
 
 

@@ -1,5 +1,28 @@
 from jsonschema import Draft202012Validator
 
+ADRES_SCHEMA = {
+    "type": ["object", "null"],
+    "additionalProperties": False,
+    "properties": {
+        "woonplaats": {"type": "string"},
+        "postcode": {"type": "string"},
+        "huisnummer": {"type": "string"},
+        "huisletter": {"type": "string"},
+        "huisnummertoevoeging": {"type": "string"},
+        "buitenland": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "landcode": {"type": "string"},
+                "landnaam": {"type": "string"},
+                "adresregel1": {"type": "string"},
+                "adresregel2": {"type": "string"},
+                "adresregel3": {"type": "string"},
+            },
+        },
+    },
+}
+
 AUTHENTIEKE_VERWIJZING = {
     "$schema": Draft202012Validator.META_SCHEMA["$id"],
     "title": "authentiekeVerwijzing",
@@ -16,7 +39,6 @@ AUTHENTIEKE_VERWIJZING = {
     ],
 }
 
-
 NIET_AUTHENTIEKE_PERSOONSGEGEVENS = {
     "$schema": Draft202012Validator.META_SCHEMA["$id"],
     "title": "nietAuthentiekePersoonsgegevens",
@@ -28,8 +50,8 @@ NIET_AUTHENTIEKE_PERSOONSGEGEVENS = {
         "geboortedatum": {"type": "string", "format": "date"},
         "emailadres": {"type": "string", "format": "email"},
         "telefoonnummer": {"type": "string"},
-        "postadres": {"type": "object", "keys": {}},
-        "verblijfsadres": {"type": "object", "keys": {}},
+        "postadres": ADRES_SCHEMA,
+        "verblijfsadres": ADRES_SCHEMA,
     },
     "required": [
         "voornaam",
@@ -48,8 +70,8 @@ NIET_AUTHENTIEKE_ORGANISATIEGEGEVENS = {
     "additionalProperties": False,
     "properties": {
         "statutaireNaam": {"type": "string"},
-        "bezoekadres": {"type": "object", "keys": {}},
-        "postadres": {"type": "object", "keys": {}},
+        "bezoekadres": ADRES_SCHEMA,
+        "postadres": ADRES_SCHEMA,
         "emailadres": {"type": "string", "format": "email"},
         "telefoonnummer": {"type": "string"},
     },
