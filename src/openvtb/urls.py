@@ -73,14 +73,19 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="main.html"), name="root"),
     # separate apps
     path(
+        "verzoeken/",
+        ComponentIndexView.as_view(component="verzoeken", api_version="1"),
+        name="index-verzoeken",
+    ),
+    path(
         "taken/",
         ComponentIndexView.as_view(component="taken", api_version="1"),
         name="index-taken",
     ),
     path(
-        "verzoeken/",
-        ComponentIndexView.as_view(component="verzoeken", api_version="1"),
-        name="index-verzoeken",
+        "berichten/",
+        ComponentIndexView.as_view(component="berichten", api_version="1"),
+        name="index-berichten",
     ),
 ]
 

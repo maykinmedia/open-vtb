@@ -55,13 +55,21 @@ main/latest       n/a                        n/a            | Verzoeken:
                                                                  `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
                                                                  `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
                                                                  (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+                                                            | Berichten:
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/berichten/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/berichten/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
 0.1.0               | Verzoeken: 0.1.0      YYYY-MM-DD      | Verzoeken:
                     | Taken: 0.1.0                               `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
-                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                    | Berichten: 0.1.0                           `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
                                                                  (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
                                                             | Taken:
                                                                  `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/taken/openapi.yaml>`_,
                                                                  `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
+                                                            | Berichten:
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/berichten/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/berichten/openapi.yaml>`_,
                                                                  (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
 ===============  =========================  =============   ================
 
