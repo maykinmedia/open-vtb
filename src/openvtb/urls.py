@@ -58,12 +58,16 @@ urlpatterns = [
     ),
     # Components API urls
     path(
+        "verzoeken/api/",
+        include("openvtb.components.verzoeken.api.urls"),
+    ),
+    path(
         "taken/api/",
         include("openvtb.components.taken.api.urls"),
     ),
     path(
-        "verzoeken/api/",
-        include("openvtb.components.verzoeken.api.urls"),
+        "berichten/api/",
+        include("openvtb.components.berichten.api.urls"),
     ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="main.html"), name="root"),
