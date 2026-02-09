@@ -208,44 +208,23 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
         }
         token = generate_token(self.oidc_client, payload)
 
-        with self.subTest("bericht"):
-            # get list
-            response = self.client.get(
-                self.list_url, headers={"Authorization": f"Bearer {token}"}
-            )
-            self.assertEqual(User.objects.all().count(), 1)
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["count"], 1)
+        # get list
+        response = self.client.get(
+            self.list_url, headers={"Authorization": f"Bearer {token}"}
+        )
+        self.assertEqual(User.objects.all().count(), 1)
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
 
-            # get detail
-            response = self.client.get(
-                reverse(
-                    "berichten:bericht-detail", kwargs={"uuid": str(self.bericht.uuid)}
-                ),
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(self.bericht.uuid))
-
-        with self.subTest("berichtontvanger"):
-            # get list
-            response = self.client.get(
-                reverse("berichten:berichtontvanger-list"),
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["count"], 1)
-
-            # get detail
-            response = self.client.get(
-                reverse(
-                    "berichten:berichtontvanger-detail",
-                    kwargs={"uuid": str(self.bericht.ontvanger.uuid)},
-                ),
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(self.bericht.ontvanger.uuid))
+        # get detail
+        response = self.client.get(
+            reverse(
+                "berichten:bericht-detail", kwargs={"uuid": str(self.bericht.uuid)}
+            ),
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.data["uuid"], str(self.bericht.uuid))
 
 
 class TestTokenAuthentication(TestCase):
@@ -290,41 +269,20 @@ class TestTokenAuthentication(TestCase):
     def test_get(self):
         token = TokenFactory.create()
 
-        with self.subTest("bericht"):
-            # get list
-            response = self.client.get(
-                self.list_url, headers={"Authorization": f"Token {token}"}
-            )
-            self.assertEqual(User.objects.all().count(), 1)
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["count"], 1)
+        # get list
+        response = self.client.get(
+            self.list_url, headers={"Authorization": f"Token {token}"}
+        )
+        self.assertEqual(User.objects.all().count(), 1)
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
 
-            # get detail
-            response = self.client.get(
-                reverse(
-                    "berichten:bericht-detail", kwargs={"uuid": str(self.bericht.uuid)}
-                ),
-                headers={"Authorization": f"Token {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(self.bericht.uuid))
-
-        with self.subTest("berichtontvanger"):
-            # get list
-            response = self.client.get(
-                reverse("berichten:berichtontvanger-list"),
-                headers={"Authorization": f"Token {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["count"], 1)
-
-            # get detail
-            response = self.client.get(
-                reverse(
-                    "berichten:berichtontvanger-detail",
-                    kwargs={"uuid": str(self.bericht.ontvanger.uuid)},
-                ),
-                headers={"Authorization": f"Token {token}"},
-            )
-            self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(self.bericht.ontvanger.uuid))
+        # get detail
+        response = self.client.get(
+            reverse(
+                "berichten:bericht-detail", kwargs={"uuid": str(self.bericht.uuid)}
+            ),
+            headers={"Authorization": f"Token {token}"},
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(response.data["uuid"], str(self.bericht.uuid))

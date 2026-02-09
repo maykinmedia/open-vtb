@@ -34,7 +34,8 @@ paths:
       - name: pageSize
         required: false
         in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100,
+          maximum: 500).'
         schema:
           type: integer
       tags:
@@ -114,198 +115,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bericht'
           description: ''
-  /berichtenontvangers:
-    get:
-      operationId: berichtenontvangersList
-      description: Vraag alle berichtenontvangers aan.
-      summary: Vraag alle berichtenontvangers aan.
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: pageSize
-        required: false
-        in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
-        schema:
-          type: integer
-      tags:
-      - berichtenontvangers
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedBerichtOntvangerList'
-          description: ''
-    post:
-      operationId: berichtenontvangersCreate
-      description: Maak een berichtontvanger aan.
-      summary: Maak een berichtontvanger aan.
-      tags:
-      - berichtenontvangers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BerichtOntvanger'
-        required: true
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '201':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BerichtOntvanger'
-          description: ''
-  /berichtenontvangers/{uuid}:
-    get:
-      operationId: berichtenontvangersRetrieve
-      description: Een specifiek berichtontvanger opvragen.
-      summary: Een specifiek berichtontvanger opvragen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        required: true
-      tags:
-      - berichtenontvangers
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BerichtOntvanger'
-          description: ''
-    put:
-      operationId: berichtenontvangersUpdate
-      description: Volledig berichtontvanger wijzigen.
-      summary: Volledig berichtontvanger wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        required: true
-      tags:
-      - berichtenontvangers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BerichtOntvanger'
-        required: true
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BerichtOntvanger'
-          description: ''
-    patch:
-      operationId: berichtenontvangersPartialUpdate
-      description: Een berichtontvanger gedeeltelijk wijzigen.
-      summary: Een berichtontvanger gedeeltelijk wijzigen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        required: true
-      tags:
-      - berichtenontvangers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedBerichtOntvanger'
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BerichtOntvanger'
-          description: ''
-    delete:
-      operationId: berichtenontvangersDestroy
-      description: Een berichtontvanger verwijderen
-      summary: Een berichtontvanger verwijderen
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        required: true
-      tags:
-      - berichtenontvangers
-      security:
-      - OpenID: []
-      - tokenAuth: []
-      responses:
-        '204':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          description: No response body
 components:
   schemas:
     Bericht:
@@ -334,33 +143,39 @@ components:
           maxLength: 50
         berichtTekst:
           type: string
-          description: |-
-            Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op alle portalen. Voor portalen van lokale overheden is de basic syntax van Markdown toegestaan, voor de Mijn Overheid berichtenbox enkel newlines (
-            ).
+          description: Tekst van het bericht. URLs worden altijd weergegeven als klikbare
+            URLs op alle portalen. Voor portalen van lokale overheden is de basic
+            syntax van Markdown toegestaan, voor de Mijn Overheid berichtenbox enkel
+            newlines (\r\n).
+          maxLength: 4000
         publicatiedatum:
           type: string
           format: date-time
-          description: Datum/tijd waarop bericht zichtbaar moet worden voor de geadresseerde.
+          description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
         referentie:
           type: string
           description: Zenderreferentie / interne referentie.
           maxLength: 25
         ontvanger:
           type: string
-          format: uri
-          description: Personen of bedrijven die het bericht moeten ontvangen.
-        ontvangerUrn:
-          type: string
           example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: Personen of bedrijven die het bericht moeten ontvangen.URN
-            field
+          description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON.
+            Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666`
+            of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        geopendOp:
+          type: string
+          format: date-time
+          nullable: true
+          description: Het bericht is door de geadresseerde geopend op dit tijdstip
+            in het portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn
+            Overheid.
         berichtType:
           type: string
-          description: MessageType must be an 8-character code and only relevant for
-            MOBB.
+          description: Een code die hoort bij het sjabloon zoals gebruikt in de Mijn
+            Overheid berichtenbox.
           maxLength: 8
-          minLength: 8
         handelingsPerspectief:
           type: string
           description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
@@ -381,52 +196,6 @@ components:
       - berichtTekst
       - onderwerp
       - ontvanger
-      - ontvangerUrn
-      - url
-      - urn
-      - uuid
-    BerichtOntvanger:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van het BerichtOntvanger binnen deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het BerichtOntvanger.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        geadresseerde:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON.
-            Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666`
-            of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        geopendOp:
-          type: string
-          format: date-time
-          nullable: true
-          description: Het bericht is door de geadresseerde geopend op dit tijdstip
-            in het portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn
-            Overheid.
-        geopend:
-          type: boolean
-          readOnly: true
-          description: Staat op true indien geopendOp een tijdstip heeft.
-      required:
-      - geadresseerde
-      - geopend
       - url
       - urn
       - uuid
@@ -444,6 +213,12 @@ components:
           description: Een korte omschrijving of de titel van de bijlage. Deze wordt
             typisch getoond in een portaal.
           maxLength: 40
+        isBerichtTypeBijlage:
+          type: boolean
+          description: Geeft aan of het een bijlage betreft die onderdeel is van het
+            sjabloon in de Mijn Overheid berichtenbox. Indien `true`, dan wordt deze
+            bijlage niet doorgestuurd naar de Mijn Overheid berichtenbox. De verwachting
+            is dat eenzelfde bericht reeds onderdeel is van het sjabloon.
       required:
       - informatieObject
     PaginatedBerichtList:
@@ -469,68 +244,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bericht'
-    PaginatedBerichtOntvangerList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BerichtOntvanger'
-    PatchedBerichtOntvanger:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van het BerichtOntvanger binnen deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van het BerichtOntvanger.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unieke identificatiecode (UUID4) voor het BerichtOntvanger.
-        geadresseerde:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON.
-            Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666`
-            of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        geopendOp:
-          type: string
-          format: date-time
-          nullable: true
-          description: Het bericht is door de geadresseerde geopend op dit tijdstip
-            in het portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn
-            Overheid.
-        geopend:
-          type: boolean
-          readOnly: true
-          description: Staat op true indien geopendOp een tijdstip heeft.
   securitySchemes:
     OpenID:
       type: openIdConnect

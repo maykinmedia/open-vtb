@@ -7,10 +7,12 @@ from django.utils import timezone
 import factory
 from factory.django import DjangoModelFactory
 
-from ..models import Bericht
+from ..models import Bericht, Bijlage
 
-def get_random_urn():
+
+def get_random_urn() -> str:
     return f"urn:maykin:{''.join(random.choices(string.ascii_lowercase + string.digits, k=10))}"
+
 
 class BerichtFactory(DjangoModelFactory):
     class Meta:

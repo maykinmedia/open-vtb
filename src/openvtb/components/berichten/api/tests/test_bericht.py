@@ -5,10 +5,7 @@ from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.berichten.models import Bericht
-from openvtb.components.berichten.tests.factories import (
-    BerichtFactory,
-    BerichtOntvangerFactory,
-)
+from openvtb.components.berichten.tests.factories import BerichtFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -50,8 +47,10 @@ class BerichtTests(APITestCase):
                             "+00:00", "Z"
                         ),
                         "referentie": bericht.referentie,
-                        "ontvanger": f"http://testserver{reverse('berichten:berichtontvanger-detail', kwargs={'uuid': str(bericht.ontvanger.uuid)})}",
-                        "ontvangerUrn": f"urn:maykin:berichten:berichtontvanger:{str(bericht.ontvanger.uuid)}",
+                        "ontvanger": bericht.ontvanger,
+                        "geopendOp": bericht.geopend_op.isoformat().replace(
+                            "+00:00", "Z"
+                        ),
                         "berichtType": bericht.bericht_type,
                         "handelingsPerspectief": bericht.handelings_perspectief,
                         "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
@@ -61,6 +60,7 @@ class BerichtTests(APITestCase):
                             {
                                 "informatieObject": bericht.bijlagen.first().informatie_object,
                                 "omschrijving": bericht.bijlagen.first().omschrijving,
+                                "isBerichtTypeBijlage": bericht.bijlagen.first().is_bericht_type_bijlage,
                             },
                         ],
                     },
@@ -109,8 +109,8 @@ class BerichtTests(APITestCase):
                     "+00:00", "Z"
                 ),
                 "referentie": bericht.referentie,
-                "ontvanger": f"http://testserver{reverse('berichten:berichtontvanger-detail', kwargs={'uuid': str(bericht.ontvanger.uuid)})}",
-                "ontvangerUrn": f"urn:maykin:berichten:berichtontvanger:{str(bericht.ontvanger.uuid)}",
+                "ontvanger": bericht.ontvanger,
+                "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
@@ -120,6 +120,7 @@ class BerichtTests(APITestCase):
                     {
                         "informatieObject": bericht.bijlagen.first().informatie_object,
                         "omschrijving": bericht.bijlagen.first().omschrijving,
+                        "isBerichtTypeBijlage": bericht.bijlagen.first().is_bericht_type_bijlage,
                     },
                 ],
             },
@@ -127,13 +128,13 @@ class BerichtTests(APITestCase):
 
     def test_valid_create(self):
         self.assertFalse(Bericht.objects.exists())
-        ontvanger = BerichtOntvangerFactory.create()
         data = {
             "onderwerp": "onderwerp",
             "berichtTekst": "berichtTekst berichtTekst",
             "publicatiedatum": datetime.datetime.now(),
             "referentie": "referentie",
-            "ontvanger": f"http://testserver{reverse('berichten:berichtontvanger-detail', kwargs={'uuid': str(ontvanger.uuid)})}",
+            "ontvanger": "urn:maykin:ontvanger1234",
+            "geopendOp": datetime.datetime.now(),
             "berichtType": "12345678",
             "handelingsPerspectief": "test",
             "einddatumHandelingsTermijn": datetime.datetime.now(),
@@ -141,10 +142,12 @@ class BerichtTests(APITestCase):
                 {
                     "informatieObject": "urn:maykin:test1",
                     "omschrijving": "test1",
+                    "isBerichtTypeBijlage": False,
                 },
                 {
                     "informatieObject": "urn:maykin:test2",
                     "omschrijving": "test2",
+                    "isBerichtTypeBijlage": False,
                 },
             ],
         }
@@ -168,8 +171,8 @@ class BerichtTests(APITestCase):
                     "+00:00", "Z"
                 ),
                 "referentie": bericht.referentie,
-                "ontvanger": f"http://testserver{reverse('berichten:berichtontvanger-detail', kwargs={'uuid': str(bericht.ontvanger.uuid)})}",
-                "ontvangerUrn": f"urn:maykin:berichten:berichtontvanger:{str(bericht.ontvanger.uuid)}",
+                "ontvanger": bericht.ontvanger,
+                "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
@@ -179,10 +182,12 @@ class BerichtTests(APITestCase):
                     {
                         "informatieObject": bijlage1.informatie_object,
                         "omschrijving": bijlage1.omschrijving,
+                        "isBerichtTypeBijlage": False,
                     },
                     {
                         "informatieObject": bijlage2.informatie_object,
                         "omschrijving": bijlage2.omschrijving,
+                        "isBerichtTypeBijlage": False,
                     },
                 ],
             },
@@ -194,7 +199,7 @@ class BerichtTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
-        self.assertEqual(response.data["title"], "Invalid input.")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
         self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "onderwerp"),

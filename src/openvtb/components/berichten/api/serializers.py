@@ -2,15 +2,12 @@ from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from vng_api_common.serializers import CachedHyperlinkedRelatedField
-from vng_api_common.utils import get_help_text
 
 from openvtb.utils.serializers import (
     URNModelSerializer,
-    URNRelatedField,
 )
 
-from ..models import Bericht, BerichtOntvanger, Bijlage
+from ..models import Bericht, Bijlage
 
 
 class BijlageSerializer(serializers.ModelSerializer):
@@ -19,24 +16,11 @@ class BijlageSerializer(serializers.ModelSerializer):
         fields = (
             "informatie_object",
             "omschrijving",
+            "is_bericht_type_bijlage",
         )
 
 
 class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
-    ontvanger = CachedHyperlinkedRelatedField(
-        view_name="berichten:berichtontvanger-detail",
-        lookup_field="uuid",
-        required=True,
-        queryset=BerichtOntvanger.objects.all(),
-        help_text=get_help_text("berichten.Bericht", "ontvanger"),
-    )
-    ontvanger_urn = URNRelatedField(
-        lookup_field="uuid",
-        source="ontvanger",
-        urn_resource="berichtontvanger",
-        read_only=True,
-        help_text=get_help_text("berichten.Bericht", "ontvanger") + _("URN field"),
-    )
     bijlagen = BijlageSerializer(
         required=False,
         many=True,
@@ -56,7 +40,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "publicatiedatum",
             "referentie",
             "ontvanger",
-            "ontvanger_urn",
+            "geopend_op",
             "bericht_type",
             "handelings_perspectief",
             "einddatum_handelings_termijn",
@@ -92,35 +76,3 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
                     code="unique",
                 )
         return instance
-
-
-class BerichtOntvangerSerializer(URNModelSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = BerichtOntvanger
-        fields = (
-            "url",
-            "urn",
-            "uuid",
-            "geadresseerde",
-            "geopend_op",
-            "geopend",
-        )
-        extra_kwargs = {
-            "uuid": {
-                "read_only": True,
-            },
-            "url": {
-                "view_name": "berichten:berichtontvanger-detail",
-                "lookup_field": "uuid",
-                "help_text": _(
-                    "De unieke URL van het BerichtOntvanger binnen deze API."
-                ),
-            },
-            "urn": {
-                "lookup_field": "uuid",
-                "help_text": _("De Uniform Resource Name van het BerichtOntvanger."),
-            },
-            "geopend": {
-                "read_only": True,
-            },
-        }

@@ -20,6 +20,7 @@ class Bericht(models.Model):
     )
     bericht_tekst = models.TextField(
         _("bericht tekst"),
+        max_length=4000,
         help_text=_(
             "Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op alle portalen. "
             "Voor portalen van lokale overheden is de basic syntax van Markdown toegestaan, "
