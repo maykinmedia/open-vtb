@@ -897,6 +897,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         isToegewezenAan:
           allOf:
           - $ref: '#/components/schemas/IsIngediendDoor'
@@ -915,14 +916,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -957,7 +960,8 @@ components:
         doelrekening:
           allOf:
           - $ref: '#/components/schemas/Doelrekening'
-          description: Gegevens van de ontvangende bankrekening.
+          description: 'Gegevens van de ontvangende bankrekening, ten minste één van
+            de volgende velden is verplicht: `IBAN`, `code` of `naam`.'
       required:
       - bedrag
       - doelrekening
@@ -1024,6 +1028,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1036,14 +1041,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1117,6 +1124,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1129,14 +1137,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1215,6 +1225,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1227,14 +1238,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1313,6 +1326,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1325,14 +1339,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1411,6 +1427,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1423,14 +1440,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1509,6 +1528,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1521,14 +1541,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1602,6 +1624,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1614,14 +1637,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1675,11 +1700,10 @@ components:
           maxLength: 100
         iban:
           type: string
+          example: NL12BANK34567890
           description: IBAN code van de ontvanger.
-      required:
-      - code
-      - iban
-      - naam
+          maxLength: 34
+          pattern: ^[A-Za-z]{2}[0-9]{2}[A-Za-z0-9]{1,30}$
     ExterneTaakPolymorphic:
       oneOf:
       - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
@@ -1775,6 +1799,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1787,14 +1812,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -1868,6 +1895,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1880,14 +1908,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -1966,6 +1996,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -1978,14 +2009,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2064,6 +2097,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2076,14 +2110,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2162,6 +2198,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2174,14 +2211,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2260,6 +2299,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2272,14 +2312,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -2353,6 +2395,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2365,14 +2408,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2468,6 +2513,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2480,14 +2526,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -2561,6 +2609,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2573,14 +2622,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2659,6 +2710,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2671,14 +2723,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2757,6 +2811,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2769,14 +2824,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2855,6 +2912,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2867,14 +2925,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -2953,6 +3013,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -2965,14 +3026,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -3046,6 +3109,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3058,14 +3122,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         taakSoort:
@@ -3325,6 +3391,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3337,14 +3404,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -3422,6 +3491,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3434,14 +3504,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
@@ -3508,6 +3580,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 4000
         wordtBehandeldDoor:
           type: string
           example: urn:namespace:component:resource:uuid
@@ -3520,14 +3593,16 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
-          description: 'URN naar de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
+            de ZAAK. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         heeftBetrekkingOp:
           type: string
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
-          description: 'URN naar het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+          description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
+            PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
