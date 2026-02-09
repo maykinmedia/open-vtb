@@ -30,6 +30,7 @@ class VerzoekType(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"),
+        max_length=4000,
         blank=True,
         help_text=_("Uitleg over het VerzoekType"),
     )
@@ -399,6 +400,7 @@ class Bijlage(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"),
+        max_length=4000,
         blank=True,
         help_text=_(
             "Toelichting van de bijlage, zoals die door eindgebruikers gezien kan worden in bijvoorbeeld een portaal. "
