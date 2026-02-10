@@ -17,7 +17,9 @@ jobs:
     strategy:
       matrix:
         component:
+          - verzoeken
           - taken
+          - berichten
 
     uses: maykinmedia/open-api-workflows/.github/workflows/oas.yml@v6
     with:
