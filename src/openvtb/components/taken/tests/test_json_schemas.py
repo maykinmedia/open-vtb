@@ -44,7 +44,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
             "doelrekening": {
                 "naam": "test",
                 "code": "123-ABC",
-                "iban": "NL18BANK23481326",
+                "iban": "NL12BANK34567890",
             },
         }
         validate_jsonschema(instance=instance, schema=self.json_schema)
@@ -58,7 +58,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -77,7 +77,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -95,7 +95,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 # "doelrekening": {
                 # "naam": "test",
                 # "code": "123-ABC",
-                # "iban": "NL18BANK23481326",
+                # "iban": "NL12BANK34567890",
                 # },
             }
             with self.assertRaises(ValidationError) as error:
@@ -103,42 +103,6 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
             self.assertEqual(
                 error.exception.message_dict,
                 {"instance": ["'doelrekening' is a required property"]},
-            )
-
-        with self.subTest("'doelrekening.naam' field required"):
-            instance = {
-                "bedrag": "10.12",
-                "valuta": "EUR",
-                "transactieomschrijving": "test",
-                "doelrekening": {
-                    # "naam": "test",
-                    "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
-                },
-            }
-            with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(instance=instance, schema=self.json_schema)
-            self.assertEqual(
-                error.exception.message_dict,
-                {"instance.doelrekening": ["'naam' is a required property"]},
-            )
-
-        with self.subTest("'doelrekening.iban' field required"):
-            instance = {
-                "bedrag": "10.12",
-                "valuta": "EUR",
-                "transactieomschrijving": "test",
-                "doelrekening": {
-                    "naam": "test",
-                    "code": "123-ABC",
-                    # "iban": "NL18BANK23481326",
-                },
-            }
-            with self.assertRaises(ValidationError) as error:
-                validate_jsonschema(instance=instance, schema=self.json_schema)
-            self.assertEqual(
-                error.exception.message_dict,
-                {"instance.doelrekening": ["'iban' is a required property"]},
             )
 
     def test_invalid_schema_check_type(self):
@@ -150,7 +114,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -167,7 +131,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -185,7 +149,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -203,7 +167,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:
@@ -249,7 +213,7 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
                 "doelrekening": {
                     "naam": True,
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             }
             with self.assertRaises(ValidationError) as error:

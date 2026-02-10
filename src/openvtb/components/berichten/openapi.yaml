@@ -2,15 +2,24 @@ openapi: 3.0.3
 info:
   title: Berichten API
   version: 0.1.0
-  description: 'De berichten-service bestaat uit een beschrijving van afspraken, standaarden
-    en referentiecomponenten aangevuld met interactiepatronen, ontwerpbesluiten en
-    aanbevelingen. Het Berichten-patroon biedt een gestandaardiseerde, flexibele oplossing
-    voor de communicatie tussen inwoners, ondernemers en gemeenten via digitale kanalen.
-    Met dit patroon kunnen berichten eenvoudig geregistreerd worden en door verschillende
-    applicaties worden opgehaald, weergegeven en verwerkt. In tegenstelling tot traditionele
-    berichtgevingen (zoals e-mail), zijn berichten centraal geregistreerd en kunnen
-    ze eenvoudig getoond en gerelateerd worden naast zaken, taken of producten binnen
-    het gemeentelijke landschap. '
+  description: "De berichten-service bestaat uit een beschrijving van afspraken, standaarden\
+    \ en referentiecomponenten aangevuld met interactiepatronen, ontwerpbesluiten\
+    \ en aanbevelingen. Het Berichten-patroon biedt een gestandaardiseerde, flexibele\
+    \ oplossing voor de communicatie tussen inwoners, ondernemers en gemeenten via\
+    \ digitale kanalen. Met dit patroon kunnen berichten eenvoudig geregistreerd worden\
+    \ en door verschillende applicaties worden opgehaald, weergegeven en verwerkt.\
+    \ In tegenstelling tot traditionele berichtgevingen (zoals e-mail), zijn berichten\
+    \ centraal geregistreerd en kunnen ze eenvoudig getoond en gerelateerd worden\
+    \ naast zaken, taken of producten binnen het gemeentelijke landschap. \n\n**URN\
+    \ Pattern**\n\nOpen VTB uses URNs (Uniform Resource Names) to link to other resources,\
+    \ below is a description of the pattern that should be used.\n\n**Syntax:**\n\n\
+    `urn:<NID>:<NSS>[#<f-component>]`\n\n**Parts:**\n\n- `urn:` (required): fixed\
+    \ prefix for all URNs, every URN must start with this prefix.\n- `NID` (required):\
+    \ Namespace Identifier: alphanumeric characters, e.g. `nld`.\n- `NSS` (required):\
+    \ Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.\n\
+    - `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.\n\
+    \n**Examples:**\n\n`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n\
+    \nFor more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141\n"
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -160,8 +169,8 @@ components:
           type: string
           example: urn:namespace:component:resource:uuid
           description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON.
-            Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666`
-            of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
+            Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`
+            of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         geopendOp:

@@ -47,10 +47,10 @@ BETAAL_SCHEMA = {
                     "format": "iban",
                 },
             },
-            "required": [
-                "naam",
-                "code",
-                "iban",
+            "anyOf": [
+                {"required": ["iban"]},
+                {"required": ["code"]},
+                {"required": ["naam"]},
             ],
         },
     },

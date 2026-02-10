@@ -30,6 +30,7 @@ class VerzoekType(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"),
+        max_length=4000,
         blank=True,
         help_text=_("Uitleg over het VerzoekType"),
     )
@@ -313,6 +314,7 @@ class Verzoek(models.Model):
         _("informatie object"),
         help_text=_(
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )
@@ -399,6 +401,7 @@ class Bijlage(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"),
+        max_length=4000,
         blank=True,
         help_text=_(
             "Toelichting van de bijlage, zoals die door eindgebruikers gezien kan worden in bijvoorbeeld een portaal. "

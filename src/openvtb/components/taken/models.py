@@ -70,6 +70,7 @@ class ExterneTaak(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"),
+        max_length=4000,
         blank=True,
         help_text=_(
             "Toelichting van de uit te voeren taak, zoals die door eindgebruikers "
@@ -88,7 +89,6 @@ class ExterneTaak(models.Model):
         help_text=_("De attributen die horen bij de `taakSoort`."),
         encoder=DjangoJSONEncoder,
     )
-    # partij relation
     is_toegewezen_aan = models.JSONField(
         _("is toegewezen aan subject"),
         help_text=_(
@@ -103,7 +103,6 @@ class ExterneTaak(models.Model):
         blank=True,
         encoder=DjangoJSONEncoder,
     )
-    # medewerker relation
     wordt_behandeld_door = URNField(
         _("wordt behandeld door medewerker"),
         help_text=_(
@@ -112,20 +111,18 @@ class ExterneTaak(models.Model):
         ),
         blank=True,
     )
-    # zaak relation
     hoort_bij = URNField(
         _("hoort bij zaak"),
         help_text=_(
-            "URN naar de ZAAK. "
+            "Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar de ZAAK. "
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
         ),
         blank=True,
     )
-    # product relation
     heeft_betrekking_op = URNField(
         _("heeft betrekking op product"),
         help_text=_(
-            "URN naar het PRODUCT. "
+            "Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het PRODUCT. "
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,

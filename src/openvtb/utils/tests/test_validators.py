@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from openvtb.utils.validators import (
     URNValidator,
     validate_charfield_entry,
+    validate_iban,
     validate_phone_number,
     validate_postal_code,
 )
@@ -106,6 +107,29 @@ class ValidatorsTestCase(TestCase):
         for valid_phone_number in valid_phone_numbers:
             with self.subTest(valid_phone_number):
                 validate_phone_number(valid_phone_number)
+
+    def test_validate_iban(self):
+        invalid_ibans = [
+            "1231md4832842834",
+            "jda42034nnndnd23923",
+            "AB123dasd#asdasda",
+            "AB12",
+            "AB1259345934953495934953495345345345",
+        ]
+
+        for invalid_iban in invalid_ibans:
+            self.assertRaisesMessage(
+                ValidationError,
+                "Ongeldige IBAN",
+                validate_iban,
+                invalid_iban,
+            )
+
+        self.assertIsNone(validate_iban("AB12TEST1253678"))
+        self.assertIsNone(validate_iban("AB12test1253678"))
+        self.assertIsNone(validate_iban("ab1299999999999"))
+        self.assertIsNone(validate_iban("ab129"))
+        self.assertIsNone(validate_iban("ab12aaaaaaaaaa"))
 
 
 class URNValidatorTests(TestCase):

@@ -14,7 +14,7 @@ from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.constants import Valuta
 from openvtb.utils.json_utils import get_json_schema
-from openvtb.utils.serializers import URNModelSerializer
+from openvtb.utils.serializers import IBANField, URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
 from ..models import ExterneTaak
@@ -23,20 +23,20 @@ from .validators import FormulierDefinitieValidator
 
 class DoelrekeningSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     naam = serializers.CharField(
-        required=True,
+        required=False,
         max_length=200,
         help_text=_("Naam van de ontvanger van de betaling."),
     )
     code = serializers.CharField(
-        required=True,
+        required=False,
         max_length=100,
         help_text=_(
             "Een arbitraire code die gebruikt kan worden om de juiste rekening "
             "en/of betaalprovider te kiezen in het systeem dat de taak afhandeld."
         ),
     )
-    iban = serializers.CharField(
-        required=True,
+    iban = IBANField(
+        required=False,
         help_text=_("IBAN code van de ontvanger."),
     )
 
@@ -57,15 +57,28 @@ class BetaalTaakSerializer(serializers.Serializer):
     )
     doelrekening = DoelrekeningSerializer(
         required=True,
-        help_text=_("Gegevens van de ontvangende bankrekening."),
+        help_text=_(
+            "Gegevens van de ontvangende bankrekening, ten minste één van de volgende "
+            "velden is verplicht: `IBAN`, `code` of `naam`."
+        ),
     )
+
+    def validate_doelrekening(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                _(
+                    "Ten minste één van de volgende velden is verplicht: IBAN, code of naam."
+                ),
+                code="required",
+            )
+        return value
 
     def validate_valuta(self, value):
         if value != Valuta.EUR.value:
             raise serializers.ValidationError(
-                "Het is niet toegestaan een andere waarde dan {valuta} door te geven.".format(
-                    valuta=Valuta.EUR
-                )
+                _(
+                    "Het is niet toegestaan een andere waarde dan {valuta} door te geven."
+                ).format(valuta=Valuta.EUR)
             )
         return value
 

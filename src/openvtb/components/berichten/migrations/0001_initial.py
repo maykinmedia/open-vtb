@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 (
                     "ontvanger",
                     openvtb.utils.fields.URNField(
-                        help_text="URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666` of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`",
+                        help_text="URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`",
                         max_length=255,
                         verbose_name="ontvanger",
                     ),

@@ -174,7 +174,7 @@ class BetaalTaakTests(APITestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             },
             "isToegewezenAan": {
@@ -249,7 +249,7 @@ class BetaalTaakTests(APITestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             },
         }
@@ -364,6 +364,7 @@ class BetaalTaakTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
+
         # details.doelrekening empty values
         data = {
             "titel": "test",
@@ -374,33 +375,43 @@ class BetaalTaakTests(APITestCase):
                 "doelrekening": {},
             },
         }
+
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
-            get_validation_errors(response, "details.doelrekening.naam"),
+            get_validation_errors(response, "details.doelrekening"),
             {
-                "name": "details.doelrekening.naam",
+                "name": "details.doelrekening",
                 "code": "required",
-                "reason": "Dit veld is vereist.",
+                "reason": "Ten minste één van de volgende velden is verplicht: IBAN, code of naam.",
             },
         )
+
+        # details.doelrekening.code required=False blank=False
+        data = {
+            "titel": "test",
+            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
+            "details": {
+                "bedrag": "12",
+                "transactieomschrijving": "12",
+                "doelrekening": {"code": ""},
+            },
+        }
+
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
             get_validation_errors(response, "details.doelrekening.code"),
             {
                 "name": "details.doelrekening.code",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "details.doelrekening.iban"),
-            {
-                "name": "details.doelrekening.iban",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
+                "code": "blank",
+                "reason": "Dit veld mag niet leeg zijn.",
             },
         )
 
@@ -478,7 +489,7 @@ class BetaalTaakTests(APITestCase):
             {
                 "naam": "test",
                 "code": "123-ABC",
-                "iban": "NL18BANK23481326",
+                "iban": "NL12BANK34567890",
             },
         )  # default factory value
         response = self.client.patch(
@@ -656,7 +667,7 @@ class BetaalTaakValidationTests(APITestCase):
                 "doelrekening": {
                     "naam": "test",
                     "code": "123-ABC",
-                    "iban": "NL18BANK23481326",
+                    "iban": "NL12BANK34567890",
                 },
             },
         }
@@ -724,7 +735,7 @@ class BetaalTaakValidationTests(APITestCase):
                     "doelrekening": {
                         "naam": "test",
                         "code": "123-ABC",
-                        "iban": "NL18BANK23481326",
+                        "iban": "NL12BANK34567890",
                     },
                 },
             }
@@ -761,7 +772,7 @@ class BetaalTaakValidationTests(APITestCase):
                 {
                     "name": "details.doelrekening.iban",
                     "code": "invalid",
-                    "reason": "'test' is not a valid IBAN",
+                    "reason": "Ongeldige IBAN: test",
                 },
             )
             self.assertFalse(ExterneTaak.objects.exists())
@@ -777,7 +788,7 @@ class BetaalTaakValidationTests(APITestCase):
                     "doelrekening": {
                         "naam": "test",
                         "code": "123-ABC",
-                        "iban": "NL18BANK23481326",
+                        "iban": "NL12BANK34567890",
                     },
                 },
             }

@@ -17,7 +17,7 @@ from rest_framework.utils.field_mapping import (
     get_url_kwargs,
 )
 
-from openvtb.utils.validators import URNValidator
+from openvtb.utils.validators import URNValidator, validate_iban
 
 
 class NoUrnMatch(Exception):
@@ -189,9 +189,6 @@ class URNRelatedField(RelatedField):
         return value
 
 
-@extend_schema_field(
-    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
-)
 class URNIdentityField(URNRelatedField):
     """
     A read-only field that exposes the object's URN identity.
@@ -263,3 +260,13 @@ class URNField(CharField):
         super().__init__(**kwargs)
         validator = URNValidator()
         self.validators.append(validator)
+
+
+@extend_schema_field({"type": "string", "example": "NL12BANK34567890"})
+class IBANField(CharField):
+    max_length = 34
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault("max_length", self.max_length)
+        super().__init__(**kwargs)
+        self.validators.append(validate_iban)

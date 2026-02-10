@@ -233,6 +233,9 @@ validate_postal_code = CustomRegexValidator(
     regex="^[1-9][0-9]{3} [A-Z]{2}$",
     message=_("Postcode moet aan het volgende formaat voldoen: `1234 AB` (met spatie)"),
 )
+validate_iban = CustomRegexValidator(
+    regex="^[A-Za-z]{2}[0-9]{2}[A-Za-z0-9]{1,30}$", message=_("Ongeldige IBAN")
+)
 
 
 @deconstructible

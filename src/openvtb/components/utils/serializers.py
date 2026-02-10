@@ -78,7 +78,8 @@ class AdresSerializer(serializers.Serializer):
     buitenland = BuitenlandSerializer(
         required=False,
         help_text=_(
-            "Dit veld kan alleen worden ingevuld als de velden voor het lokale adres niet in de aanvraag zijn opgegeven."
+            "Dit veld kan alleen worden ingevuld als de velden voor het "
+            "lokale adres niet in de aanvraag zijn opgegeven."
         ),
     )
 
@@ -182,7 +183,8 @@ class IsIngediendDoorSerializer(CamelToUnderscoreMixin, serializers.Serializer):
         help_text="Object dat een authentieke verwijzing vertegenwoordigt. "
         "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
         "Bijvoorbeeld: "
-        "`urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666` of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`",
+        "`urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of "
+        "`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`",
     )
     niet_authentieke_persoonsgegevens = NietAuthentiekePersoonsgegevensSerializer(
         required=False,
