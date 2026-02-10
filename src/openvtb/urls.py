@@ -21,8 +21,8 @@ monkeypatch_admin()
 handler500 = "maykin_common.views.server_error"
 
 admin.site.enable_nav_sidebar = False
-admin.site.site_header = "Openvtb admin"
-admin.site.site_title = "Openvtb admin"
+admin.site.site_header = "Open VTB admin"
+admin.site.site_title = "Open VTB admin"
 admin.site.index_title = "Welcome to the Open VTB admin"
 
 # URL routing

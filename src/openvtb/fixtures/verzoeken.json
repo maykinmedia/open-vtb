@@ -1,0 +1,119 @@
+[
+{
+    "model": "verzoeken.verzoektype",
+    "pk": 1,
+    "fields": {
+        "uuid": "5a43f3f3-4ec5-47ef-9f7f-25b3a5b01988",
+        "naam": "wide",
+        "toelichting": "Their consider company mind design.",
+        "aangemaakt_op": "2026-02-09",
+        "gewijzigd_op": "2026-02-09"
+    }
+},
+{
+    "model": "verzoeken.verzoektypeversion",
+    "pk": 1,
+    "fields": {
+        "verzoek_type": 1,
+        "version": 1,
+        "aangemaakt_op": "2026-02-09",
+        "gewijzigd_op": "2026-02-09",
+        "begin_geldigheid": "2026-02-09",
+        "einde_geldigheid": null,
+        "aanvraag_gegevens_schema": {
+            "type": "object",
+            "title": "Tree",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "required": [
+                "diameter"
+            ],
+            "properties": {
+                "extra": {
+                    "keys": {},
+                    "type": "object",
+                    "title": "extra",
+                    "additionalProperties": true
+                },
+                "diameter": {
+                    "type": "integer",
+                    "description": "size in cm."
+                }
+            },
+            "additionalProperties": false
+        },
+        "status": "published"
+    }
+},
+{
+    "model": "verzoeken.verzoektypeversion",
+    "pk": 2,
+    "fields": {
+        "verzoek_type": 1,
+        "version": 2,
+        "aangemaakt_op": "2026-02-09",
+        "gewijzigd_op": "2026-02-09",
+        "begin_geldigheid": "2026-02-09",
+        "einde_geldigheid": null,
+        "aanvraag_gegevens_schema": {
+            "type": "object",
+            "title": "Tree",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "required": [
+                "diameter"
+            ],
+            "properties": {
+                "extra": {
+                    "keys": {},
+                    "type": "object",
+                    "title": "extra",
+                    "additionalProperties": true
+                },
+                "diameter": {
+                    "type": "integer",
+                    "description": "size in cm."
+                }
+            },
+            "additionalProperties": false
+        },
+        "status": "draft"
+    }
+},
+{
+    "model": "verzoeken.verzoek",
+    "pk": 1,
+    "fields": {
+        "uuid": "7b361508-db3b-4e81-a4d0-d0b5de6133d0",
+        "verzoek_type": 1,
+        "version": 2,
+        "geometrie": null,
+        "aanvraag_gegevens": {
+            "extra": {
+                "extra": {
+                    "bool": false,
+                    "integer": "100"
+                }
+            },
+            "diameter": 10
+        },
+        "is_ingediend_door": {
+            "nietAuthentiekeOrganisatiegegevens": {
+                "postadres": {
+                    "postcode": "1000 AB",
+                    "huisletter": "A",
+                    "huisnummer": "12",
+                    "woonplaats": "Amsterdam",
+                    "huisnummertoevoeging": "bis"
+                },
+                "emailadres": "info@acme.nl",
+                "bezoekadres": null,
+                "statutaireNaam": "Acme BV",
+                "telefoonnummer": "+31201234567"
+            }
+        },
+        "is_gerelateerd_aan": "",
+        "kanaal": "",
+        "authenticatie_context": "",
+        "informatie_object": ""
+    }
+}
+]

@@ -1,0 +1,29 @@
+[
+{
+    "model": "berichten.bericht",
+    "pk": 1,
+    "fields": {
+        "uuid": "c3eff63c-6ed1-4613-b494-7ab0db92499e",
+        "onderwerp": "Sit per safe enjoy bag.",
+        "bericht_tekst": "Test Bericht tekst \r\nTest Bericht tekst\r\nTest Bericht tekst \r\nTest Bericht tekst",
+        "publicatiedatum": "2026-02-09T10:40:53Z",
+        "referentie": "suffer",
+        "ontvanger": "urn:nld:brp.bsn:111222333",
+        "geopend_op": "2026-02-09T10:40:53Z",
+        "bericht_type": "",
+        "handelings_perspectief": "",
+        "einddatum_handelings_termijn": "2026-02-16T10:41:16Z"
+    }
+},
+{
+    "model": "berichten.bijlage",
+    "pk": 1,
+    "fields": {
+        "uuid": "46872a4d-a3b6-4160-a538-5a26a9b4ca36",
+        "bericht": 1,
+        "informatie_object": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+        "omschrijving": "test",
+        "is_bericht_type_bijlage": false
+    }
+}
+]

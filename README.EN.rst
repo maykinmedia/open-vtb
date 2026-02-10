@@ -99,7 +99,7 @@ Quickstart
 
       wget https://raw.githubusercontent.com/maykinmedia/open-vtb/main/docker-compose.yml
       docker-compose up -d --no-build
-      docker-compose exec web src/manage.py loaddata demodata
+      docker-compose exec web src/manage.py loaddata verzoeken taken berichten
       docker-compose exec web src/manage.py createsuperuser
 
 2. In the browser, navigate to ``http://localhost:8000/`` to access the admin

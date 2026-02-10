@@ -1,0 +1,164 @@
+[
+{
+    "model": "taken.externetaak",
+    "pk": 1,
+    "fields": {
+        "uuid": "eb752cc3-0170-4e77-943b-c5ff3a252601",
+        "titel": "Betaallink titel",
+        "status": "open",
+        "startdatum": "2026-02-09",
+        "handelings_perspectief": "lezen",
+        "einddatum_handelings_termijn": "2026-02-16",
+        "datum_herinnering": "2026-02-09",
+        "toelichting": "",
+        "taak_soort": "betaaltaak",
+        "details": {
+            "bedrag": "10.12",
+            "valuta": "EUR",
+            "doelrekening": {
+                "code": "123-ABC",
+                "iban": "NL18BANK23481326",
+                "naam": "test"
+            },
+            "transactieomschrijving": "test"
+        },
+        "is_toegewezen_aan": {
+            "nietAuthentiekePersoonsgegevens": {
+                "voornaam": "Jan",
+                "postadres": {
+                    "postcode": "1000 AB",
+                    "huisletter": "A",
+                    "huisnummer": "12",
+                    "woonplaats": "Amsterdam",
+                    "huisnummertoevoeging": "bis"
+                },
+                "achternaam": "Jansen",
+                "emailadres": "jan.jansen@example.com",
+                "geboortedatum": "1980-05-15",
+                "telefoonnummer": "+31612345678",
+                "verblijfsadres": null
+            }
+        },
+        "wordt_behandeld_door": "",
+        "hoort_bij": "",
+        "heeft_betrekking_op": ""
+    }
+},
+{
+    "model": "taken.externetaak",
+    "pk": 2,
+    "fields": {
+        "uuid": "506f9a7f-ba81-4df1-849b-fdd313e9f9bb",
+        "titel": "Extern formulier Titel",
+        "status": "open",
+        "startdatum": "2026-02-09",
+        "handelings_perspectief": "lezen",
+        "einddatum_handelings_termijn": "2026-02-16",
+        "datum_herinnering": "2026-02-09",
+        "toelichting": "",
+        "taak_soort": "gegevensuitvraagtaak",
+        "details": {
+            "uitvraagLink": "http://example.com/",
+            "ontvangenGegevens": {
+                "key": "value"
+            },
+            "voorinvullenGegevens": {
+                "key": "value"
+            }
+        },
+        "is_toegewezen_aan": {
+            "nietAuthentiekePersoonsgegevens": {
+                "voornaam": "Jan",
+                "postadres": {
+                    "postcode": "1000 AB",
+                    "huisletter": "A",
+                    "huisnummer": "12",
+                    "woonplaats": "Amsterdam",
+                    "huisnummertoevoeging": "bis"
+                },
+                "achternaam": "Jansen",
+                "emailadres": "jan.jansen@example.com",
+                "geboortedatum": "1980-05-15",
+                "telefoonnummer": "+31612345678",
+                "verblijfsadres": null
+            }
+        },
+        "wordt_behandeld_door": "",
+        "hoort_bij": "",
+        "heeft_betrekking_op": ""
+    }
+},
+{
+    "model": "taken.externetaak",
+    "pk": 3,
+    "fields": {
+        "uuid": "0540aad9-8874-41dc-93c7-968eb1c21b90",
+        "titel": "Standaard formulier Titel",
+        "status": "open",
+        "startdatum": "2026-02-09",
+        "handelings_perspectief": "lezen",
+        "einddatum_handelings_termijn": "2026-02-16",
+        "datum_herinnering": "2026-02-09",
+        "toelichting": "",
+        "taak_soort": "formuliertaak",
+        "details": {
+            "ontvangenGegevens": {
+                "key": "value"
+            },
+            "formulierDefinitie": {
+                "display": "form",
+                "settings": {
+                    "pdf": {
+                        "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+                        "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+                    }
+                },
+                "components": [
+                    {
+                        "key": "submit",
+                        "type": "button",
+                        "input": true,
+                        "label": "Submit",
+                        "tableView": false,
+                        "disableOnInvalid": true
+                    },
+                    {
+                        "key": "textField",
+                        "type": "textfield",
+                        "input": true,
+                        "label": "Text Field",
+                        "prefix": "Test",
+                        "tooltip": "Tooltip",
+                        "tableView": true,
+                        "applyMaskOn": "change",
+                        "description": "Description ",
+                        "placeholder": "Add Test",
+                        "validateWhenHidden": false
+                    }
+                ]
+            },
+            "voorinvullenGegevens": {
+                "textField": "Test value"
+            }
+        },
+        "is_toegewezen_aan": {
+            "nietAuthentiekeOrganisatiegegevens": {
+                "postadres": {
+                    "postcode": "1000 AB",
+                    "huisletter": "A",
+                    "huisnummer": "12",
+                    "woonplaats": "Amsterdam",
+                    "huisnummertoevoeging": "bis"
+                },
+                "emailadres": "info@acme.nl",
+                "bezoekadres": null,
+                "statutaireNaam": "Acme BV",
+                "telefoonnummer": "+31201234567"
+            }
+        },
+        "wordt_behandeld_door": "",
+        "hoort_bij": "",
+        "heeft_betrekking_op": ""
+    }
+}
+]
