@@ -2,10 +2,29 @@ openapi: 3.0.3
 info:
   title: Taken API
   version: 0.1.0
-  description: De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse
-    overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren die
-    burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen verschillende
-    applicaties.
+  description: |
+    De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren die burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen verschillende applicaties.
+
+    **URN Pattern**
+
+    Open VTB uses URNs (Uniform Resource Names) to link to other resources, below is a description of the pattern that should be used.
+
+    **Syntax:**
+
+    `urn:<NID>:<NSS>[#<f-component>]`
+
+    **Parts:**
+
+    - `urn:` (required): fixed prefix for all URNs, every URN must start with this prefix.
+    - `NID` (required): Namespace Identifier: alphanumeric characters, e.g. `nld`.
+    - `NSS` (required): Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.
+    - `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.
+
+    **Examples:**
+
+    `urn:namespace:component:resource:uuid`, `urn:example:foo#bar`
+
+    For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -3156,8 +3175,8 @@ components:
           - $ref: '#/components/schemas/AuthentiekeVerwijzing'
           nullable: true
           description: 'Object dat een authentieke verwijzing vertegenwoordigt. URN
-            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp.bsn:111222333`,
-            `urn:nld.hr.kvknummer:444555666` of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`'
+            van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`,
+            `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`'
         nietAuthentiekePersoonsgegevens:
           allOf:
           - $ref: '#/components/schemas/NietAuthentiekePersoonsgegevens'

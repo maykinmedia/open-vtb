@@ -189,9 +189,6 @@ class URNRelatedField(RelatedField):
         return value
 
 
-@extend_schema_field(
-    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
-)
 class URNIdentityField(URNRelatedField):
     """
     A read-only field that exposes the object's URN identity.

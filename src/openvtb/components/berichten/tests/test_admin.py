@@ -34,7 +34,7 @@ class BerichtenAdminTests(WebTest):
         form["bericht_tekst"] = "Test"
         form["publicatiedatum_0"] = timezone.now().date()
         form["publicatiedatum_1"] = timezone.now().time()
-        form["ontvanger"] = "urn:nld:brp.bsn:111222333"
+        form["ontvanger"] = "urn:nld:brp:bsn:111222333"
         form["geopend_op_0"] = timezone.now().date()
         form["geopend_op_1"] = timezone.now().time()
         form["referentie"] = "12345678"

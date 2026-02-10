@@ -44,8 +44,8 @@ class Bericht(models.Model):
         _("ontvanger"),
         help_text=_(
             "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. "
-            "Bijvoorbeeld: `urn:nld:brp.bsn:111222333`, `urn:nld.hr.kvknummer:444555666` "
-            "of `urn:nld.hr.kvknummer:444555666:vestigingsnummer:777888999`"
+            "Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` "
+            "of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`"
         ),
     )
     geopend_op = models.DateTimeField(

@@ -314,6 +314,7 @@ class Verzoek(models.Model):
         _("informatie object"),
         help_text=_(
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )
