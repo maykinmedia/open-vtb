@@ -2,13 +2,15 @@
 {% load i18n %}
 
 {% block submit-row %}
-  {{ block.super }}
+    {{ block.super }}
 
-  {% if original.last_version.status == 'draft' %}
-      <input type="submit" value="{% trans 'Publish' %}" name="_publish">
-
-  {% elif original.last_version.status == 'published' %}
-      <input type="submit" value="{% trans 'New version' %}" name="_newversion">
-  {% endif %}
+    {% if original.last_version %}
+        <a href="{% url 'admin:verzoeken_bijlagetype_add' %}?verzoek_type_version={{original.last_version.pk}}" class="button">{% trans 'Add Bijlage Type ' %}</a>
+        {% if original.last_version.status == 'draft' %}
+            <input type="submit" value="{% trans 'Publish' %}" name="_publish">
+        {% elif original.last_version.status == 'published' %}
+            <input type="submit" value="{% trans 'New version' %}" name="_newversion">
+        {% endif %}
+    {% endif %}
 
 {% endblock %}

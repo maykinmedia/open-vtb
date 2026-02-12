@@ -6,6 +6,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from openvtb.components.utils.schemas import IS_INGEDIEND_DOOR_SCHEMA
@@ -119,7 +121,7 @@ class VerzoekTypeVersion(models.Model):
         ordering = ["-version", "-aangemaakt_op"]
 
     def __str__(self):
-        return f"Version {self.version} ({self.status})"
+        return f"{self.verzoek_type} v{self.version}"
 
     def save(self, *args, **kwargs):
         if not self.version:
@@ -149,6 +151,22 @@ class VerzoekTypeVersion(models.Model):
     @property
     def is_expired(self):
         return bool(self.einde_geldigheid and self.einde_geldigheid <= date.today())
+
+    def bijlage_typen_list(self):
+        bijlage_typen = self.bijlage_typen.all()
+        if not bijlage_typen:
+            return _("Geen bijlagentypen")
+
+        display_list = []
+        for bijlage_type in bijlage_typen:
+            url = reverse("admin:verzoeken_bijlagetype_change", args=[bijlage_type.id])
+            display_list.append(
+                '<a href="{url}">{text}</a>'.format(
+                    url=url, text=bijlage_type.informatie_objecttype
+                )
+            )
+
+        return format_html("<br><br>".join(display_list))
 
     def clean(self):
         super().clean()

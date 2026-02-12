@@ -1074,6 +1074,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bijlage'
+          description: Lijst met bijlagen die aan deze bron zijn gekoppeld.
         isIngediendDoor:
           allOf:
           - $ref: '#/components/schemas/IsIngediendDoor'
@@ -1106,7 +1107,9 @@ components:
         verzoekBron:
           $ref: '#/components/schemas/VerzoekBron'
         verzoekBetaling:
-          $ref: '#/components/schemas/VerzoekBetaling'
+          allOf:
+          - $ref: '#/components/schemas/VerzoekBetaling'
+          description: Verzoek tot betaling gekoppeld aan deze resource.
     PatchedVerzoekType:
       type: object
       properties:
@@ -1167,6 +1170,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
+          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1301,6 +1305,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bijlage'
+          description: Lijst met bijlagen die aan deze bron zijn gekoppeld.
         isIngediendDoor:
           allOf:
           - $ref: '#/components/schemas/IsIngediendDoor'
@@ -1333,7 +1338,9 @@ components:
         verzoekBron:
           $ref: '#/components/schemas/VerzoekBron'
         verzoekBetaling:
-          $ref: '#/components/schemas/VerzoekBetaling'
+          allOf:
+          - $ref: '#/components/schemas/VerzoekBetaling'
+          description: Verzoek tot betaling gekoppeld aan deze resource.
       required:
       - aanvraagGegevens
       - url
@@ -1449,6 +1456,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
+          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'

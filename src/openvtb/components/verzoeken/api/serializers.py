@@ -57,7 +57,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
-        help_text="",  # TODO
+        help_text=_("Lijst met bijlagen typen die aan deze bron zijn gekoppeld."),
     )
 
     class Meta:
@@ -281,12 +281,14 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_betaling = VerzoekBetalingSerializer(
         source="betaling",
         required=False,
-        help_text="",  # TODO
+        help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),  # TODO check
     )
     bijlagen = BijlageSerializer(
         required=False,
         many=True,
-        help_text="",  # TODO
+        help_text=_(
+            "Lijst met bijlagen die aan deze bron zijn gekoppeld."
+        ),  # TODO check
     )
     is_ingediend_door = IsIngediendDoorSerializer(
         required=False,
