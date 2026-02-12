@@ -102,6 +102,14 @@ class VerzoekFactory(DjangoModelFactory):
         model = Verzoek
 
     @factory.post_generation
+    def create_bijlage(obj, create, bijlage, **kwargs):
+        if not create:
+            return
+
+        if bijlage:
+            BijlageFactory(verzoek=obj)
+
+    @factory.post_generation
     def create_details(obj, create, details, **kwargs):
         if not create:
             return
@@ -109,7 +117,6 @@ class VerzoekFactory(DjangoModelFactory):
         if details:
             VerzoekBronFactory(verzoek=obj)
             VerzoekBetalingFactory(verzoek=obj)
-            BijlageFactory(verzoek=obj)
 
     class Params:
         authentieke_verwijzing = factory.Trait(

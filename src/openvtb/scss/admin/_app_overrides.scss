@@ -94,6 +94,7 @@
   flex-direction: row;
   align-items: center;
   padding-block-start: 1em;
+
   &:after,
   &:before {
     content: '';
@@ -101,7 +102,8 @@
     border-bottom: 1px solid var(--border-color);
     flex-grow: 1;
   }
-  > span {
+
+  >span {
     flex-shrink: 0;
     padding-inline: 10px;
   }
@@ -120,4 +122,8 @@
   &.login-form--enabled {
     display: block;
   }
+}
+
+a.button {
+  padding: 10px 15px;
 }

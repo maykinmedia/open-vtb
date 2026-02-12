@@ -12,12 +12,19 @@ from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm
 from .models import (
     Bijlage,
+    BijlageType,
     Verzoek,
     VerzoekBetaling,
     VerzoekBron,
     VerzoekType,
     VerzoekTypeVersion,
 )
+
+
+@admin.register(BijlageType)
+class BijlageTypeAdmin(admin.ModelAdmin):
+    model = BijlageType
+    readonly_fields = ("uuid",)
 
 
 class VerzoekTypeVersionInline(admin.StackedInline):
@@ -35,6 +42,7 @@ class VerzoekTypeVersionInline(admin.StackedInline):
         "aangemaakt_op",
         "gewijzigd_op",
         "einde_geldigheid",
+        "bijlage_typen_list",
     )
 
     def get_queryset(self, request):

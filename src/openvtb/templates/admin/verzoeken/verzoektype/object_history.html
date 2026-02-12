@@ -15,6 +15,7 @@
                     <th scope="col">{% trans 'Published at' %}</th>
                     <th scope="col">{% trans 'Expired on' %}</th>
                     <th scope="col">{% trans 'Aanvraag Gegevens Schema' %}</th>
+                    <th scope="col">{% trans 'Bijlage Typen List' %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,7 @@
                     <td>{{ version.begin_geldigheid }}</td>
                     <td>{{ version.einde_geldigheid }}</td>
                     <td>{{ version.aanvraag_gegevens_schema }}</td>
+                    <td>{{ version.bijlage_typen_list }}</td>
                 </tr>
             {% endfor %}
             </tbody>
