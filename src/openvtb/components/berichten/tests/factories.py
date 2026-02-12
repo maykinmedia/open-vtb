@@ -34,10 +34,10 @@ class BerichtFactory(DjangoModelFactory):
             return
 
         if bijlage:
-            BijlagenFactory(bericht=obj)
+            BijlageFactory(bericht=obj)
 
 
-class BijlagenFactory(DjangoModelFactory):
+class BijlageFactory(DjangoModelFactory):
     class Meta:
         model = Bijlage
 

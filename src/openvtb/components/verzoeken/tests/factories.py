@@ -1,9 +1,14 @@
+import random
+import string
+
 from django.utils import timezone
 
 import factory
 from factory.django import DjangoModelFactory
 
 from ..models import (
+    Bijlage,
+    BijlageType,
     Verzoek,
     VerzoekBetaling,
     VerzoekBron,
@@ -40,6 +45,10 @@ JSON_SCHEMA = {
 }
 
 
+def get_random_urn() -> str:
+    return f"urn:maykin:{''.join(random.choices(string.ascii_lowercase + string.digits, k=10))}"
+
+
 class VerzoekTypeFactory(DjangoModelFactory):
     naam = factory.Faker("word")
     toelichting = factory.Faker("sentence", nb_words=8)
@@ -62,6 +71,14 @@ class VerzoekTypeVersionFactory(DjangoModelFactory):
 
     class Meta:
         model = VerzoekTypeVersion
+
+    @factory.post_generation
+    def create_bijlagetype(obj, create, bijlagetype, **kwargs):
+        if not create:
+            return
+
+        if bijlagetype:
+            BijlageTypeFactory(verzoek_type_version=obj)
 
 
 class DataFactory(factory.DictFactory):
@@ -92,6 +109,7 @@ class VerzoekFactory(DjangoModelFactory):
         if details:
             VerzoekBronFactory(verzoek=obj)
             VerzoekBetalingFactory(verzoek=obj)
+            BijlageFactory(verzoek=obj)
 
     class Params:
         authentieke_verwijzing = factory.Trait(
@@ -125,6 +143,24 @@ class VerzoekFactory(DjangoModelFactory):
                 }
             }
         )
+
+
+class BijlageTypeFactory(DjangoModelFactory):
+    class Meta:
+        model = BijlageType
+
+    verzoek_type_version = factory.SubFactory(VerzoekTypeVersionFactory)
+    informatie_objecttype = factory.LazyFunction(get_random_urn)
+    omschrijving = factory.Faker("sentence", nb_words=4)
+
+
+class BijlageFactory(DjangoModelFactory):
+    class Meta:
+        model = Bijlage
+
+    verzoek = factory.SubFactory(VerzoekFactory)
+    informatie_object = factory.LazyFunction(get_random_urn)
+    toelichting = factory.Faker("sentence", nb_words=4)
 
 
 class VerzoekBronFactory(DjangoModelFactory):
