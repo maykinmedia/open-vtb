@@ -166,10 +166,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
 class BijlageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bijlage
-        fields = (
-            "informatie_object",
-            "toelichting",
-        )
+        fields = ("informatie_object",)
         extra_kwargs = {
             "informatie_object": {"required": True, "validators": []},
         }

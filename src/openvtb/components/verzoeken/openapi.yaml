@@ -709,12 +709,6 @@ components:
           description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           maxLength: 255
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-        toelichting:
-          type: string
-          description: Toelichting van de bijlage, zoals die door eindgebruikers gezien
-            kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving
-            als die van het INFORMATIEOBJECT.
-          maxLength: 4000
       required:
       - informatieObject
     BijlageType:
@@ -1063,8 +1057,8 @@ components:
           type: integer
           maximum: 32767
           minimum: 0
-          description: Versie van VerzoekType om het gegevensschema van het verzoek
-            te valideren
+          description: Indien geen waarde is opgegeven wordt de laatste versie van
+            het VERZOEKTYPE gebruikt.
         bijlagen:
           type: array
           items:
@@ -1292,8 +1286,8 @@ components:
           type: integer
           maximum: 32767
           minimum: 0
-          description: Versie van VerzoekType om het gegevensschema van het verzoek
-            te valideren
+          description: Indien geen waarde is opgegeven wordt de laatste versie van
+            het VERZOEKTYPE gebruikt.
         bijlagen:
           type: array
           items:
@@ -1339,7 +1333,6 @@ components:
       - url
       - urn
       - uuid
-      - versie
       - verzoekType
       - verzoekTypeUrn
     VerzoekBetaling:

@@ -163,7 +163,6 @@ class VerzoekTests(APITestCase):
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
                 },
             ],
             "verzoekBron": {
@@ -206,7 +205,6 @@ class VerzoekTests(APITestCase):
                 "bijlagen": [
                     {
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                        "toelichting": "test1",
                     }
                 ],
                 "isIngediendDoor": {
@@ -253,7 +251,6 @@ class VerzoekTests(APITestCase):
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
                 },
             ],
             "isIngediendDoor": {},
@@ -288,7 +285,6 @@ class VerzoekTests(APITestCase):
                 "bijlagen": [
                     {
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                        "toelichting": "test1",
                     }
                 ],
                 "isIngediendDoor": {
@@ -329,11 +325,9 @@ class VerzoekTests(APITestCase):
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
                 },
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:7bf3ab4a-3458-400f-80ad-8a2c85b12a8d",
-                    "toelichting": "test2",
                 },
             ],
         }
@@ -459,7 +453,6 @@ class VerzoekTests(APITestCase):
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-                    "toelichting": "test1",
                 },
             ],
             "isIngediendDoor": {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
@@ -478,7 +471,6 @@ class VerzoekTests(APITestCase):
             verzoek.bijlagen.first().informatie_object,
             "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
         )
-        self.assertEqual(verzoek.bijlagen.first().toelichting, "test1")
         self.assertEqual(
             verzoek.is_ingediend_door,
             {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
@@ -494,12 +486,10 @@ class VerzoekTests(APITestCase):
         Bijlage.objects.create(
             verzoek=verzoek,
             informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-            toelichting="description1",
         )
         Bijlage.objects.create(
             verzoek=verzoek,
             informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:2f985cf7-e9f0-45fb-8c52-05688e06705d",
-            toelichting="description2",
         )
 
         # create in this case, because doesn't exist with this informatie_object
@@ -507,7 +497,6 @@ class VerzoekTests(APITestCase):
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
-                    "toelichting": "test3",
                 },
             ],
         }
@@ -515,47 +504,6 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verzoek.refresh_from_db()
         self.assertEqual(verzoek.bijlagen.count(), 3)
-
-        # update in this case, because it exist with this informatie_object
-        data = {
-            "bijlagen": [
-                {
-                    "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
-                    "toelichting": "new_test3",
-                },
-            ],
-        }
-        response = self.client.patch(detail_url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        verzoek.refresh_from_db()
-        self.assertEqual(verzoek.bijlagen.count(), 3)
-        self.assertEqual(
-            verzoek.bijlagen.get(
-                informatie_object="urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6"
-            ).toelichting,
-            "new_test3",
-        )
-
-        # invalid informatie_object required
-        data = {
-            "bijlagen": [
-                {
-                    # "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:32af74f4-a7a2-4414-a9de-b50e35325cc6",
-                    "toelichting": "new_test3",
-                },
-            ],
-        }
-        response = self.client.patch(detail_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(len(response.data["invalid_params"]), 1)
-        self.assertEqual(
-            get_validation_errors(response, "bijlagen"),
-            {
-                "name": "bijlagen",
-                "code": "required",
-                "reason": "bijlage must have a informatieObject.",
-            },
-        )
 
     def test_update_is_ingediend_door_json_schema(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)

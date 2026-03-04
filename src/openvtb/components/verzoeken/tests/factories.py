@@ -167,7 +167,6 @@ class BijlageFactory(DjangoModelFactory):
 
     verzoek = factory.SubFactory(VerzoekFactory)
     informatie_object = factory.LazyFunction(get_random_urn)
-    toelichting = factory.Faker("sentence", nb_words=4)
 
 
 class VerzoekBronFactory(DjangoModelFactory):

@@ -275,7 +275,7 @@ class Verzoek(models.Model):
     versie = models.PositiveSmallIntegerField(
         _("versie"),
         help_text=_(
-            "Versie van VerzoekType om het gegevensschema van het verzoek te valideren"
+            "Indien geen waarde is opgegeven wordt de laatste versie van het VERZOEKTYPE gebruikt."
         ),
         blank=True,
     )
@@ -420,15 +420,6 @@ class Bijlage(models.Model):
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
-    )
-    toelichting = models.TextField(
-        _("toelichting"),
-        max_length=4000,
-        blank=True,
-        help_text=_(
-            "Toelichting van de bijlage, zoals die door eindgebruikers gezien kan worden in bijvoorbeeld een portaal. "
-            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECT."
-        ),
     )
 
     class Meta:
