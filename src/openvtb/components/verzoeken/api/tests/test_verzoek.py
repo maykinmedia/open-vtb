@@ -160,7 +160,6 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -251,7 +250,6 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -328,7 +326,6 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -352,7 +349,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 2)
         self.assertEqual(
             get_validation_errors(response, "verzoekType"),
             {
@@ -369,15 +366,29 @@ class VerzoekTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(
-            get_validation_errors(response, "versie"),
-            {
-                "name": "versie",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
         self.assertFalse(VerzoekType.objects.exists())
+
+    def test_create_with_empty_versie(self):
+        # if versie not provide should take the last_versie.versie
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        last_versie = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
+
+        self.assertEqual(verzoektype.versies.count(), 2)
+        self.assertEqual(verzoektype.last_versie, last_versie)
+        self.assertEqual(verzoektype.last_versie.versie, 2)  # second versie
+
+        data = {
+            "geometrie": {"type": "Point", "coordinates": [0, 0]},
+            "verzoekType": reverse(
+                "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+            ),
+            "aanvraagGegevens": {"diameter": 10},
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        verzoek = Verzoek.objects.get()
+        self.assertEqual(verzoek.versie, 2)  # last_versie.versie
 
     def test_valid_update_partial(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
@@ -625,7 +636,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 2)
         self.assertEqual(
             get_validation_errors(response, "verzoekType"),
             {
@@ -638,14 +649,6 @@ class VerzoekTests(APITestCase):
             get_validation_errors(response, "aanvraagGegevens"),
             {
                 "name": "aanvraagGegevens",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "versie"),
-            {
-                "name": "versie",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },

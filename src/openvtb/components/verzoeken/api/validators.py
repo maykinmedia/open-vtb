@@ -110,7 +110,10 @@ class AanvraagGegevensValidator:
         aanvraag_gegevens = get_from_serializer_data_or_instance(
             "aanvraag_gegevens", attrs, serializer
         )
+
         versie = get_from_serializer_data_or_instance("versie", attrs, serializer)
+        if not versie and verzoek_type.last_versie:
+            versie = verzoek_type.last_versie.versie
 
         if not verzoek_type.versies.filter(versie=versie).exists():
             raise serializers.ValidationError(

@@ -277,6 +277,7 @@ class Verzoek(models.Model):
         help_text=_(
             "Versie van VerzoekType om het gegevensschema van het verzoek te valideren"
         ),
+        blank=True,
     )
     geometrie = GeometryField(
         _("geometrie"),
@@ -340,6 +341,12 @@ class Verzoek(models.Model):
 
     def __str__(self):
         return f"{self.uuid}"
+
+    def save(self, *args, **kwargs):
+        if not self.versie and self.verzoek_type.last_versie:
+            self.versie = self.verzoek_type.last_versie.versie
+
+        super().save(*args, **kwargs)
 
     def clean_is_ingediend_door(self):
         if not self.is_ingediend_door:
