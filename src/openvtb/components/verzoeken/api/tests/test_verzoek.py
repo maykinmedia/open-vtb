@@ -57,7 +57,6 @@ class VerzoekTests(APITestCase):
                         "bijlagen": [],
                         "isGerelateerdAan": "",
                         "kanaal": "",
-                        "authenticatieContext": "",
                         "verzoekInformatieObject": "",
                         "verzoekTaal": "nld",
                         "isIngediendDoor": {
@@ -133,7 +132,6 @@ class VerzoekTests(APITestCase):
                 },
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": "nld",
                 "verzoekBron": {
@@ -222,7 +220,6 @@ class VerzoekTests(APITestCase):
                 },
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": verzoek.verzoek_taal,
                 "verzoekBron": {
@@ -258,7 +255,6 @@ class VerzoekTests(APITestCase):
             ],
             "isIngediendDoor": {},
             "isGerelateerdAan": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "authenticatieContext": "",
             "verzoekBron": {
                 "naam": "string",
                 "kenmerk": "string",
@@ -297,7 +293,6 @@ class VerzoekTests(APITestCase):
                 },
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": verzoek.verzoek_taal,
                 "verzoekBron": {

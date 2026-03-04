@@ -309,7 +309,6 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "is_ingediend_door",
             "is_gerelateerd_aan",
             "kanaal",
-            "authenticatie_context",
             "verzoek_taal",
             "verzoek_informatie_object",
             "verzoek_bron",

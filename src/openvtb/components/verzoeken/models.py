@@ -329,12 +329,6 @@ class Verzoek(models.Model):
         max_length=200,
         help_text=_("Geeft aan via welk kanaal dit verzoek is binnengekomen."),
     )
-    # authenticatie_context relation
-    authenticatie_context = URNField(
-        _("authenticatie context"),
-        help_text=_("authentication context urn"),  # TODO check help_text
-        blank=True,
-    )
     verzoek_informatie_object = URNField(
         _("verzoek informatie object"),
         help_text=_(
