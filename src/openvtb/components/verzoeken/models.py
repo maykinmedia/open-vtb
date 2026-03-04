@@ -189,13 +189,16 @@ class VerzoekBron(models.Model):
         _("bron naam"),
         max_length=100,
         blank=True,
-        help_text=_("Naam van de bron."),
+        help_text=_("De naam van de bron applicatie die dit verzoek heeft aangemaakt."),
     )
     kenmerk = models.CharField(
         _("bron kenmerk"),
         max_length=255,
         blank=True,
-        help_text=_("Kenmerk van de bron."),
+        help_text=_(
+            "Een kenmerk of identificatie van de specifieke instantie die in de bron applicatie "
+            "heeft geleid tot dit verzoek. Bijvoorbeeld een inzendingsnummer."
+        ),
     )
 
     class Meta:
@@ -206,7 +209,6 @@ class VerzoekBron(models.Model):
         return self.naam
 
 
-# TODO check optional fields
 class VerzoekBetaling(models.Model):
     verzoek = models.OneToOneField(
         "Verzoek",
@@ -249,7 +251,11 @@ class VerzoekBetaling(models.Model):
         _("transactie referentie"),
         blank=True,
         max_length=100,
-        help_text=_("Referentie van de transactie."),
+        help_text=_(
+            "Een nummer of code die volgt vanuit de"
+            "betaalprovider na het voltooien van de transactie. Hiermee wordt de transactie "
+            "administratief gekoppeld aan het verzoek."
+        ),
     )
 
     class Meta:
@@ -326,8 +332,8 @@ class Verzoek(models.Model):
         help_text=_("authentication context urn"),  # TODO check help_text
         blank=True,
     )
-    informatie_object = URNField(
-        _("informatie object"),
+    verzoek_informatie_object = URNField(
+        _("verzoek informatie object"),
         help_text=_(
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"

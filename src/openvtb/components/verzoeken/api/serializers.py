@@ -273,19 +273,17 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_bron = VerzoekBronSerializer(
         source="bron",
         required=False,
-        help_text="",  # TODO
+        help_text=_("Een verwijzing naar de bron waar dit verzoek vandaan komt."),
     )
     verzoek_betaling = VerzoekBetalingSerializer(
         source="betaling",
         required=False,
-        help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),  # TODO check
+        help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),
     )
     bijlagen = BijlageSerializer(
         required=False,
         many=True,
-        help_text=_(
-            "Lijst met bijlagen die aan deze bron zijn gekoppeld."
-        ),  # TODO check
+        help_text=_("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
     )
     is_ingediend_door = IsIngediendDoorSerializer(
         required=False,
@@ -312,7 +310,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "is_gerelateerd_aan",
             "kanaal",
             "authenticatie_context",
-            "informatie_object",
+            "verzoek_informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
         )

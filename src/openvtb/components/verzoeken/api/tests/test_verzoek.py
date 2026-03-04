@@ -58,7 +58,7 @@ class VerzoekTests(APITestCase):
                         "isGerelateerdAan": "",
                         "kanaal": "",
                         "authenticatieContext": "",
-                        "informatieObject": "",
+                        "verzoekInformatieObject": "",
                         "isIngediendDoor": {
                             "authentiekeVerwijzing": None,
                             "nietAuthentiekePersoonsgegevens": {
@@ -133,7 +133,7 @@ class VerzoekTests(APITestCase):
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
-                "informatieObject": verzoek.informatie_object,
+                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -170,7 +170,7 @@ class VerzoekTests(APITestCase):
                 "kenmerk": "string",
             },
             "kanaal": "test",
-            "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+            "verzoekInformatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
             "verzoekBetaling": {
                 "kenmerken": ["string"],
                 "bedrag": "10",
@@ -221,7 +221,7 @@ class VerzoekTests(APITestCase):
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
-                "informatieObject": verzoek.informatie_object,
+                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -295,7 +295,7 @@ class VerzoekTests(APITestCase):
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
-                "informatieObject": verzoek.informatie_object,
+                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
