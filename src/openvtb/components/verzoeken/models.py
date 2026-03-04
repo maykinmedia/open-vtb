@@ -31,11 +31,13 @@ class VerzoekType(models.Model):
         max_length=100,
         help_text=_("Naam voor het VerzoekType"),
     )
-    toelichting = models.TextField(
-        _("toelichting"),
+    omschrijving = models.TextField(
+        _("omschrijving"),
         max_length=4000,
         blank=True,
-        help_text=_("Uitleg over het VerzoekType"),
+        help_text=_(
+            "Interne omschrijving van het type verzoek. Bijvoorbeeld om de relatie naar het zaaktype te schetsen."
+        ),
     )
     aangemaakt_op = models.DateField(
         _("aangemaakt op"),

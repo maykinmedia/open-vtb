@@ -1139,9 +1139,10 @@ components:
           type: string
           description: Naam voor het VerzoekType
           maxLength: 100
-        toelichting:
+        omschrijving:
           type: string
-          description: Uitleg over het VerzoekType
+          description: Interne omschrijving van het type verzoek. Bijvoorbeeld om
+            de relatie naar het zaaktype te schetsen.
           maxLength: 4000
     PatchedVerzoekTypeVersion:
       type: object
@@ -1430,9 +1431,10 @@ components:
           type: string
           description: Naam voor het VerzoekType
           maxLength: 100
-        toelichting:
+        omschrijving:
           type: string
-          description: Uitleg over het VerzoekType
+          description: Interne omschrijving van het type verzoek. Bijvoorbeeld om
+            de relatie naar het zaaktype te schetsen.
           maxLength: 4000
       required:
       - naam

@@ -48,7 +48,7 @@ class VerzoekTypeTests(APITestCase):
                             },
                         ],
                         "naam": verzoektype.naam,
-                        "toelichting": verzoektype.toelichting,
+                        "omschrijving": verzoektype.omschrijving,
                     }
                 ],
             },
@@ -89,14 +89,14 @@ class VerzoekTypeTests(APITestCase):
                     },
                 ],
                 "naam": verzoektype.naam,
-                "toelichting": verzoektype.toelichting,
+                "omschrijving": verzoektype.omschrijving,
             },
         )
 
     def test_valid_create(self):
         data = {
             "naam": "string",
-            "toelichting": "string",
+            "omschrijving": "string",
         }
 
         response = self.client.post(self.list_url, data)
@@ -113,12 +113,12 @@ class VerzoekTypeTests(APITestCase):
                 "uuid": str(verzoektype.uuid),
                 "versies": [],
                 "naam": "string",
-                "toelichting": "string",
+                "omschrijving": "string",
             },
         )
 
         self.assertEqual(verzoektype.naam, "string")
-        self.assertEqual(verzoektype.toelichting, "string")
+        self.assertEqual(verzoektype.omschrijving, "string")
         self.assertEqual(verzoektype.last_versie, None)
 
     def test_invalid_create(self):
@@ -153,7 +153,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # PATCH
-        data = {"naam": "new_naam", "toelichting": "new_toelichting"}
+        data = {"naam": "new_naam", "omschrijving": "new_omschrijving"}
         response = self.client.patch(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verzoektype = VerzoekType.objects.get()
@@ -171,7 +171,7 @@ class VerzoekTypeTests(APITestCase):
                     },
                 ],
                 "naam": "new_naam",
-                "toelichting": "new_toelichting",
+                "omschrijving": "new_omschrijving",
             },
         )
 
@@ -196,7 +196,7 @@ class VerzoekTypeTests(APITestCase):
                     },
                 ],
                 "naam": "new_naam_2",
-                "toelichting": "new_toelichting",
+                "omschrijving": "new_omschrijving",
             },
         )
 

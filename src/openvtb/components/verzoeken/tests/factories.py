@@ -51,7 +51,7 @@ def get_random_urn() -> str:
 
 class VerzoekTypeFactory(DjangoModelFactory):
     naam = factory.Faker("word")
-    toelichting = factory.Faker("sentence", nb_words=8)
+    omschrijving = factory.Faker("sentence", nb_words=8)
 
     class Meta:
         model = VerzoekType

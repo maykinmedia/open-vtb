@@ -233,7 +233,7 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "uuid",
             "versies",
             "naam",
-            "toelichting",
+            "omschrijving",
         )
 
         extra_kwargs = {
