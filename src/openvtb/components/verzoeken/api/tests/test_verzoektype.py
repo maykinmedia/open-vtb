@@ -21,7 +21,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(len(response.json()["results"]), 0)
         self.assertFalse(VerzoekType.objects.exists())
 
-        VerzoekTypeFactory.create(create_version=True)
+        VerzoekTypeFactory.create(create_versie=True)
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -40,11 +40,11 @@ class VerzoekTypeTests(APITestCase):
                         "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                         "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "uuid": str(verzoektype.uuid),
-                        "versions": [
+                        "versies": [
                             {
-                                "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
-                                "version": verzoektype.last_version.version,
-                                "status": verzoektype.last_version.status,
+                                "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': verzoektype.last_versie.versie}))}",
+                                "versie": verzoektype.last_versie.versie,
+                                "status": verzoektype.last_versie.status,
                             },
                         ],
                         "naam": verzoektype.naam,
@@ -54,8 +54,8 @@ class VerzoekTypeTests(APITestCase):
             },
         )
 
-        VerzoekTypeFactory.create(create_version=True)
-        VerzoekTypeFactory.create(create_version=True)
+        VerzoekTypeFactory.create(create_versie=True)
+        VerzoekTypeFactory.create(create_versie=True)
 
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -63,7 +63,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertEqual(VerzoekType.objects.all().count(), 3)
 
     def test_detail(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
@@ -76,15 +76,15 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "versions": [
+                "versies": [
                     {
-                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': 2}))}",
-                        "version": 2,
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': 2}))}",
+                        "versie": 2,
                         "status": VerzoekTypeVersionStatus.DRAFT,
                     },
                     {
-                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': 1}))}",
-                        "version": 1,
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': 1}))}",
+                        "versie": 1,
                         "status": VerzoekTypeVersionStatus.DRAFT,
                     },
                 ],
@@ -111,7 +111,7 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "versions": [],
+                "versies": [],
                 "naam": "string",
                 "toelichting": "string",
             },
@@ -119,7 +119,7 @@ class VerzoekTypeTests(APITestCase):
 
         self.assertEqual(verzoektype.naam, "string")
         self.assertEqual(verzoektype.toelichting, "string")
-        self.assertEqual(verzoektype.last_version, None)
+        self.assertEqual(verzoektype.last_versie, None)
 
     def test_invalid_create(self):
         self.assertFalse(VerzoekType.objects.exists())
@@ -141,7 +141,7 @@ class VerzoekTypeTests(APITestCase):
         self.assertFalse(VerzoekType.objects.exists())
 
     def test_valid_update(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         detail_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )
@@ -163,11 +163,11 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "versions": [
+                "versies": [
                     {
-                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
-                        "version": verzoektype.last_version.version,
-                        "status": verzoektype.last_version.status,
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': verzoektype.last_versie.versie}))}",
+                        "versie": verzoektype.last_versie.versie,
+                        "status": verzoektype.last_versie.status,
                     },
                 ],
                 "naam": "new_naam",
@@ -188,11 +188,11 @@ class VerzoekTypeTests(APITestCase):
                 "url": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "urn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "uuid": str(verzoektype.uuid),
-                "versions": [
+                "versies": [
                     {
-                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}",
-                        "version": verzoektype.last_version.version,
-                        "status": verzoektype.last_version.status,
+                        "url": f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': verzoektype.last_versie.versie}))}",
+                        "versie": verzoektype.last_versie.versie,
+                        "status": verzoektype.last_versie.status,
                     },
                 ],
                 "naam": "new_naam_2",
@@ -201,7 +201,7 @@ class VerzoekTypeTests(APITestCase):
         )
 
     def test_invalid_update(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         detail_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )
@@ -226,7 +226,7 @@ class VerzoekTypeTests(APITestCase):
         )
 
     def test_destroy(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         detail_url = reverse(
             "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
         )

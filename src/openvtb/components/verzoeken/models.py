@@ -55,25 +55,23 @@ class VerzoekType(models.Model):
         return self.naam
 
     @property
-    def last_version(self):
-        if self.versions:
-            return self.versions.order_by("-version").first()
-        return None
+    def last_versie(self):
+        return self.versies.order_by("-versie").first()
 
     @property
-    def ordered_versions(self):
-        return self.versions.order_by("-version")
+    def ordered_versies(self):
+        return self.versies.order_by("-versie")
 
 
 class VerzoekTypeVersion(models.Model):
     verzoek_type = models.ForeignKey(
         VerzoekType,
         on_delete=models.CASCADE,
-        related_name="versions",
+        related_name="versies",
         help_text=_("Het VerzoekType waartoe deze versie behoort."),
     )
-    version = models.PositiveSmallIntegerField(
-        _("version"),
+    versie = models.PositiveSmallIntegerField(
+        _("versie"),
         help_text=_("Integer-versie van het VerzoekType."),
     )
     aangemaakt_op = models.DateField(
@@ -101,7 +99,6 @@ class VerzoekTypeVersion(models.Model):
             "Als de waarde wordt ingesteld voordat de versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum."
         ),
     )
-
     aanvraag_gegevens_schema = models.JSONField(
         _("aanvraag gegevens schema"),
         default=dict,
@@ -117,15 +114,15 @@ class VerzoekTypeVersion(models.Model):
     )
 
     class Meta:
-        unique_together = ("verzoek_type", "version")
-        ordering = ["-version", "-aangemaakt_op"]
+        unique_together = ("verzoek_type", "versie")
+        ordering = ["-versie", "-aangemaakt_op"]
 
     def __str__(self):
-        return f"{self.verzoek_type} v{self.version}"
+        return f"{self.verzoek_type} v{self.versie}"
 
     def save(self, *args, **kwargs):
-        if not self.version:
-            self.version = self.generate_version_number()
+        if not self.versie:
+            self.versie = self.generate_versie_number()
 
         # save published_at and set previouos version as expired
         previous_status = (
@@ -137,14 +134,14 @@ class VerzoekTypeVersion(models.Model):
         ):
             self.begin_geldigheid = date.today()
             if (
-                previous_version := VerzoekTypeVersion.objects.filter(
+                previous_versie := VerzoekTypeVersion.objects.filter(
                     verzoek_type=self.verzoek_type
                 )
                 .exclude(id=self.id)
                 .first()
             ):
-                previous_version.einde_geldigheid = date.today()
-                previous_version.save()
+                previous_versie.einde_geldigheid = date.today()
+                previous_versie.save()
 
         super().save(*args, **kwargs)
 
@@ -175,11 +172,11 @@ class VerzoekTypeVersion(models.Model):
         except ValidationError as error:
             raise ValidationError({"aanvraag_gegevens_schema": str(error)})
 
-    def generate_version_number(self):
-        last_version = VerzoekTypeVersion.objects.filter(
+    def generate_versie_number(self):
+        last_versie = VerzoekTypeVersion.objects.filter(
             verzoek_type=self.verzoek_type
-        ).aggregate(max_version=models.Max("version"))["max_version"]
-        return (last_version or 0) + 1
+        ).aggregate(max_versie=models.Max("versie"))["max_versie"]
+        return (last_versie or 0) + 1
 
 
 class VerzoekBron(models.Model):
@@ -275,8 +272,8 @@ class Verzoek(models.Model):
         on_delete=models.PROTECT,
         help_text=_("Type van het Verzoek."),
     )
-    version = models.PositiveSmallIntegerField(
-        _("version"),
+    versie = models.PositiveSmallIntegerField(
+        _("versie"),
         help_text=_(
             "Versie van VerzoekType om het gegevensschema van het verzoek te valideren"
         ),
@@ -370,10 +367,10 @@ class Verzoek(models.Model):
     def clean_verzoek_type(self):
         if not self.verzoek_type_id:
             return
-        if not self.verzoek_type.versions.filter(version=self.version).exists():
+        if not self.verzoek_type.versies.filter(versie=self.versie).exists():
             raise ValidationError(
                 {
-                    "version": _(
+                    "versie": _(
                         "Onbekend VerzoekType schema versie: geen schema beschikbaar."
                     )
                 },
@@ -384,8 +381,8 @@ class Verzoek(models.Model):
             validate_jsonschema(
                 instance=self.aanvraag_gegevens,
                 label="aanvraag_gegevens",
-                schema=self.verzoek_type.versions.get(
-                    version=self.version
+                schema=self.verzoek_type.versies.get(
+                    versie=self.versie
                 ).aanvraag_gegevens_schema,
             )
         except ValidationError as error:
@@ -442,7 +439,7 @@ class BijlageType(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke identificatiecode (UUID4) voor het BijlageType."),
     )
-    verzoek_type_version = models.ForeignKey(
+    verzoek_type_versie = models.ForeignKey(
         VerzoekTypeVersion,
         on_delete=models.CASCADE,
         related_name="bijlage_typen",
@@ -469,7 +466,7 @@ class BijlageType(models.Model):
         verbose_name = _("BijlageType")
         verbose_name_plural = _("BijlageTypen")
 
-        unique_together = ("verzoek_type_version", "informatie_objecttype")
+        unique_together = ("verzoek_type_versie", "informatie_objecttype")
 
     def __str__(self):
         return self.informatie_objecttype

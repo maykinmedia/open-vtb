@@ -57,11 +57,11 @@ class VerzoekTypeFactory(DjangoModelFactory):
         model = VerzoekType
 
     @factory.post_generation
-    def create_version(obj, create, version, **kwargs):
+    def create_versie(obj, create, versie, **kwargs):
         if not create:
             return
 
-        if version:
+        if versie:
             VerzoekTypeVersionFactory(verzoek_type=obj)
 
 
@@ -78,7 +78,7 @@ class VerzoekTypeVersionFactory(DjangoModelFactory):
             return
 
         if bijlagetype:
-            BijlageTypeFactory(verzoek_type_version=obj)
+            BijlageTypeFactory(verzoek_type_versie=obj)
 
 
 class DataFactory(factory.DictFactory):
@@ -96,7 +96,7 @@ class DataFactory(factory.DictFactory):
 class VerzoekFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
     aanvraag_gegevens = factory.SubFactory(DataFactory)
-    version = 1
+    versie = 1
 
     class Meta:
         model = Verzoek
@@ -156,7 +156,7 @@ class BijlageTypeFactory(DjangoModelFactory):
     class Meta:
         model = BijlageType
 
-    verzoek_type_version = factory.SubFactory(VerzoekTypeVersionFactory)
+    verzoek_type_versie = factory.SubFactory(VerzoekTypeVersionFactory)
     informatie_objecttype = factory.LazyFunction(get_random_urn)
     omschrijving = factory.Faker("sentence", nb_words=4)
 

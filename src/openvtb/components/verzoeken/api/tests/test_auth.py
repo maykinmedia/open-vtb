@@ -34,7 +34,7 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
 
     def setUp(self):
         super().setUp()
-        self.verzoektype = VerzoekTypeFactory.create(create_version=True)
+        self.verzoektype = VerzoekTypeFactory.create(create_versie=True)
         self.verzoek = VerzoekFactory.create(
             create_details=True, verzoek_type=self.verzoektype
         )
@@ -256,7 +256,7 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(response.data["uuid"], str(self.verzoektype.uuid))
 
-        with self.subTest("verzoek-version"):
+        with self.subTest("verzoek-versie"):
             VerzoekTypeVersionFactory.create_batch(4, verzoek_type=self.verzoektype)
             # get list
             response = self.client.get(
@@ -268,12 +268,12 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
 
             # get detail
             response = self.client.get(
-                f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(self.verzoektype.uuid), 'verzoektype_version': self.verzoektype.last_version.version}))}",
+                f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(self.verzoektype.uuid), 'verzoektype_versie': self.verzoektype.last_versie.versie}))}",
                 headers={"Authorization": f"Bearer {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(
-                response.data["version"], self.verzoektype.last_version.version
+                response.data["versie"], self.verzoektype.last_versie.versie
             )
 
 
@@ -282,7 +282,7 @@ class TestTokenAuthentication(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.verzoektype = VerzoekTypeFactory.create(create_version=True)
+        self.verzoektype = VerzoekTypeFactory.create(create_versie=True)
         self.verzoek = VerzoekFactory.create(
             create_details=True, verzoek_type=self.verzoektype
         )
@@ -362,7 +362,7 @@ class TestTokenAuthentication(TestCase):
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(response.data["uuid"], str(self.verzoektype.uuid))
 
-        with self.subTest("verzoek-version"):
+        with self.subTest("verzoek-versie"):
             VerzoekTypeVersionFactory.create_batch(4, verzoek_type=self.verzoektype)
             # get list
             response = self.client.get(
@@ -374,10 +374,10 @@ class TestTokenAuthentication(TestCase):
 
             # get detail
             response = self.client.get(
-                f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(self.verzoektype.uuid), 'verzoektype_version': self.verzoektype.last_version.version}))}",
+                f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(self.verzoektype.uuid), 'verzoektype_versie': self.verzoektype.last_versie.versie}))}",
                 headers={"Authorization": f"Token {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(
-                response.data["version"], self.verzoektype.last_version.version
+                response.data["versie"], self.verzoektype.last_versie.versie
             )

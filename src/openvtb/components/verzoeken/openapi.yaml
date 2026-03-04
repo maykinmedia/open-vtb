@@ -419,9 +419,9 @@ paths:
               description: 'Geeft een specifieke API-versie aan in de context van
                 een specifieke aanroep. Voorbeeld: 1.2.1.'
           description: No response body
-  /verzoektypen/{verzoektypeUuid}/versions:
+  /verzoektypen/{verzoektypeUuid}/versies:
     get:
-      operationId: verzoektypenVersionsList
+      operationId: verzoektypenVersiesList
       description: Vraag alle verzoektypen versies aan.
       summary: Vraag alle verzoektypen versies aan.
       parameters:
@@ -464,7 +464,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedVerzoekTypeVersionList'
           description: ''
     post:
-      operationId: verzoektypenVersionsCreate
+      operationId: verzoektypenVersiesCreate
       description: Maak een verzoektype versie aan.
       summary: Maak een verzoektype versie aan.
       parameters:
@@ -499,9 +499,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
-  /verzoektypen/{verzoektypeUuid}/versions/{verzoektypeVersion}:
+  /verzoektypen/{verzoektypeUuid}/versies/{verzoektypeVersie}:
     get:
-      operationId: verzoektypenVersionsRetrieve
+      operationId: verzoektypenVersiesRetrieve
       description: Een specifiek verzoektype versie opvragen.
       summary: Een specifiek verzoektype versie opvragen.
       parameters:
@@ -513,12 +513,11 @@ paths:
         description: UUID van het VerzoekType
         required: true
       - in: path
-        name: verzoektypeVersion
+        name: verzoektypeVersie
         schema:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
@@ -540,7 +539,7 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     put:
-      operationId: verzoektypenVersionsUpdate
+      operationId: verzoektypenVersiesUpdate
       description: Volledig verzoektype versie wijzigen.
       summary: Volledig verzoektype versie wijzigen.
       parameters:
@@ -552,12 +551,11 @@ paths:
         description: UUID van het VerzoekType
         required: true
       - in: path
-        name: verzoektypeVersion
+        name: verzoektypeVersie
         schema:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
@@ -585,7 +583,7 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     patch:
-      operationId: verzoektypenVersionsPartialUpdate
+      operationId: verzoektypenVersiesPartialUpdate
       description: Een verzoektype versie gedeeltelijk wijzigen.
       summary: Een verzoektype versie gedeeltelijk wijzigen.
       parameters:
@@ -597,12 +595,11 @@ paths:
         description: UUID van het VerzoekType
         required: true
       - in: path
-        name: verzoektypeVersion
+        name: verzoektypeVersie
         schema:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
@@ -629,7 +626,7 @@ paths:
                 $ref: '#/components/schemas/VerzoekTypeVersion'
           description: ''
     delete:
-      operationId: verzoektypenVersionsDestroy
+      operationId: verzoektypenVersiesDestroy
       description: Een verzoektype versie verwijderen
       summary: Een verzoektype versie verwijderen
       parameters:
@@ -641,12 +638,11 @@ paths:
         description: UUID van het VerzoekType
         required: true
       - in: path
-        name: verzoektypeVersion
+        name: verzoektypeVersie
         schema:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Integer-versie van het VerzoekType.
         required: true
       tags:
@@ -1063,11 +1059,10 @@ components:
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
           type: object
-        version:
+        versie:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Versie van VerzoekType om het gegevensschema van het verzoek
             te valideren
         bijlagen:
@@ -1130,7 +1125,7 @@ components:
           format: uuid
           readOnly: true
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
-        versions:
+        versies:
           type: array
           items:
             $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
@@ -1156,10 +1151,9 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van deze VerzoekType versie binnen deze API.
-        version:
+        versie:
           type: integer
           readOnly: true
-          title: Versie
           description: Integer-versie van het VerzoekType.
         verzoekType:
           type: string
@@ -1294,11 +1288,10 @@ components:
         aanvraagGegevens:
           description: JSON data voor validatie van het VerzoekType.
           type: object
-        version:
+        versie:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Versie van VerzoekType om het gegevensschema van het verzoek
             te valideren
         bijlagen:
@@ -1346,7 +1339,7 @@ components:
       - url
       - urn
       - uuid
-      - version
+      - versie
       - verzoekType
       - verzoekTypeUrn
     VerzoekBetaling:
@@ -1410,7 +1403,7 @@ components:
           format: uuid
           readOnly: true
           description: Unieke identificatiecode (UUID4) voor het VerzoekType
-        versions:
+        versies:
           type: array
           items:
             $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
@@ -1428,7 +1421,7 @@ components:
       - url
       - urn
       - uuid
-      - versions
+      - versies
     VerzoekTypeVersion:
       type: object
       description: |-
@@ -1442,10 +1435,9 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van deze VerzoekType versie binnen deze API.
-        version:
+        versie:
           type: integer
           readOnly: true
-          title: Versie
           description: Integer-versie van het VerzoekType.
         verzoekType:
           type: string
@@ -1493,7 +1485,7 @@ components:
       - beginGeldigheid
       - gewijzigdOp
       - url
-      - version
+      - versie
       - verzoekType
     VerzoekTypeVersionReadOnly:
       type: object
@@ -1507,11 +1499,10 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van deze VerzoekType versie binnen deze API.
-        version:
+        versie:
           type: integer
           maximum: 32767
           minimum: 0
-          title: Versie
           description: Integer-versie van het VerzoekType.
         status:
           allOf:
@@ -1519,7 +1510,7 @@ components:
           description: Status van het VerzoekTypeVersion
       required:
       - url
-      - version
+      - versie
   securitySchemes:
     OpenID:
       type: openIdConnect

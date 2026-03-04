@@ -20,7 +20,7 @@ class VersionStatusValidator:
     """
 
     message = _("Alleen `draft` kunnen worden gewijzigd.")
-    code = "non-draft-version-update"
+    code = "non-draft-versie-update"
     requires_context = True
 
     def __call__(self, attrs, serializer):
@@ -56,14 +56,14 @@ class CheckVerzoekTypeVersion:
     """
     Ensures that the given instance has a last version available.
 
-    Raises a ValidationError if `instance.versions.exists()` is None.
+    Raises a ValidationError if `instance.versies.exists()` is None.
     """
 
     message = _("Onbekend VerzoekType schema: geen schema beschikbaar.")
     code = "unknown-schema"
 
     def __call__(self, instance):
-        if not instance.versions.exists():
+        if not instance.versies.exists():
             raise serializers.ValidationError(self.message, code=self.code)
 
 
@@ -93,7 +93,7 @@ class IsImmutableValidator:
 class AanvraagGegevensValidator:
     """
     Validates `aanvraag_gegevens` against the JSON Schema for the selected
-    `VerzoekType` and `Version`.
+    `VerzoekType` and `versie`.
 
     Raises a `ValidationError` if the schema version is unknown or if
     JSON Schema validation fails.
@@ -110,12 +110,12 @@ class AanvraagGegevensValidator:
         aanvraag_gegevens = get_from_serializer_data_or_instance(
             "aanvraag_gegevens", attrs, serializer
         )
-        version = get_from_serializer_data_or_instance("version", attrs, serializer)
+        versie = get_from_serializer_data_or_instance("versie", attrs, serializer)
 
-        if not verzoek_type.versions.filter(version=version).exists():
+        if not verzoek_type.versies.filter(versie=versie).exists():
             raise serializers.ValidationError(
                 {
-                    "version": _(
+                    "versie": _(
                         "Onbekend VerzoekType schema versie: geen schema beschikbaar."
                     )
                 },
@@ -125,9 +125,7 @@ class AanvraagGegevensValidator:
         try:
             validate_jsonschema(
                 instance=aanvraag_gegevens,
-                schema=verzoek_type.versions.get(
-                    version=version
-                ).aanvraag_gegevens_schema,
+                schema=verzoek_type.versies.get(versie=versie).aanvraag_gegevens_schema,
                 label=self.label,
             )
         except ValidationError as error:

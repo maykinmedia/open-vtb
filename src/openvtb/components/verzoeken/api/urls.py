@@ -19,7 +19,7 @@ router.register("verzoeken", VerzoekViewSet)
 router.register(
     "verzoektypen",
     VerzoekTypeViewSet,
-    [routers.Nested("versions", VerzoekTypeVersionViewSet)],
+    [routers.Nested("versies", VerzoekTypeVersionViewSet)],
 )
 
 

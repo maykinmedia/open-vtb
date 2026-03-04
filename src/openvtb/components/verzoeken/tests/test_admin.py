@@ -33,7 +33,7 @@ class VerzoekTypeAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = json.dumps(JSON_SCHEMA)
+        form["versies-0-aanvraag_gegevens_schema"] = json.dumps(JSON_SCHEMA)
         response = form.submit()
 
         self.assertEqual(response.status_code, 302)
@@ -44,11 +44,11 @@ class VerzoekTypeAdminTests(WebTest):
 
         self.assertEqual(verzoek_type.naam, "test")
 
-        verzoek_type_version = verzoek_type.last_version
+        verzoek_type_versie = verzoek_type.last_versie
 
-        self.assertEqual(verzoek_type_version.version, 1)
-        self.assertEqual(verzoek_type_version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        self.assertEqual(verzoek_type_version.status, VerzoekTypeVersionStatus.DRAFT)
+        self.assertEqual(verzoek_type_versie.versie, 1)
+        self.assertEqual(verzoek_type_versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertEqual(verzoek_type_versie.status, VerzoekTypeVersionStatus.DRAFT)
 
     def test_create_verzoektype_required_fields(self):
         self.assertEqual(VerzoekType.objects.count(), 0)
@@ -74,7 +74,7 @@ class VerzoekTypeAdminTests(WebTest):
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = "test"
+        form["versies-0-aanvraag_gegevens_schema"] = "test"
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
@@ -83,7 +83,7 @@ class VerzoekTypeAdminTests(WebTest):
         )
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = {}
+        form["versies-0-aanvraag_gegevens_schema"] = {}
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
@@ -91,7 +91,7 @@ class VerzoekTypeAdminTests(WebTest):
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = None
+        form["versies-0-aanvraag_gegevens_schema"] = None
         response = form.submit()
         self.assertEqual(response.status_code, 200)
         error_list = response.html.find_all("ul", {"class": "errorlist"})
@@ -99,7 +99,7 @@ class VerzoekTypeAdminTests(WebTest):
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = json.dumps(
+        form["versies-0-aanvraag_gegevens_schema"] = json.dumps(
             {
                 "title": "Tree",
                 "$schema": "http://json-schema.org/draft-07/schema#",
@@ -116,7 +116,7 @@ class VerzoekTypeAdminTests(WebTest):
 
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = json.dumps(
+        form["versies-0-aanvraag_gegevens_schema"] = json.dumps(
             {
                 "title": False,
                 "$schema": "http://json-schema.org/draft-07/schema#",
@@ -132,7 +132,7 @@ class VerzoekTypeAdminTests(WebTest):
         )
         form = response.forms.get("verzoektype_form")
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = json.dumps(
+        form["versies-0-aanvraag_gegevens_schema"] = json.dumps(
             {
                 "title": "title",
                 "$schema": "test",
@@ -147,7 +147,7 @@ class VerzoekTypeAdminTests(WebTest):
         self.assertEqual(VerzoekType.objects.count(), 0)
         self.assertEqual(VerzoekTypeVersion.objects.count(), 0)
 
-    def test_display_only_last_version(self):
+    def test_display_only_last_versie(self):
         verzoek_type = VerzoekTypeFactory.create()
         VerzoekTypeVersionFactory.create_batch(3, verzoek_type=verzoek_type)
         url = reverse("admin:verzoeken_verzoektype_change", args=[verzoek_type.id])
@@ -155,10 +155,10 @@ class VerzoekTypeAdminTests(WebTest):
         response = self.app.get(url)
         form = response.forms.get("verzoektype_form")
 
-        self.assertEqual(int(form["versions-TOTAL_FORMS"].value), 1)
-        self.assertEqual(int(form["versions-0-id"].value), verzoek_type.last_version.id)
+        self.assertEqual(int(form["versies-TOTAL_FORMS"].value), 1)
+        self.assertEqual(int(form["versies-0-id"].value), verzoek_type.last_versie.id)
 
-    def test_update_version_schema(self):
+    def test_update_versie_schema(self):
         verzoek_type = VerzoekTypeFactory.create()
         VerzoekTypeVersionFactory.create(verzoek_type=verzoek_type)
         url = reverse("admin:verzoeken_verzoektype_change", args=[verzoek_type.id])
@@ -166,20 +166,20 @@ class VerzoekTypeAdminTests(WebTest):
         response = self.app.get(url)
         form = response.forms.get("verzoektype_form")
 
-        self.assertEqual(int(form["versions-TOTAL_FORMS"].value), 1)
-        self.assertEqual(int(form["versions-0-id"].value), verzoek_type.last_version.id)
+        self.assertEqual(int(form["versies-TOTAL_FORMS"].value), 1)
+        self.assertEqual(int(form["versies-0-id"].value), verzoek_type.last_versie.id)
 
         self.assertEqual(
-            verzoek_type.last_version.status, VerzoekTypeVersionStatus.DRAFT
+            verzoek_type.last_versie.status, VerzoekTypeVersionStatus.DRAFT
         )
         # default value from factory
         self.assertEqual(
-            form["versions-0-aanvraag_gegevens_schema"].value,
-            json.dumps(verzoek_type.last_version.aanvraag_gegevens_schema),
+            form["versies-0-aanvraag_gegevens_schema"].value,
+            json.dumps(verzoek_type.last_versie.aanvraag_gegevens_schema),
         )
 
         form["naam"] = "test"
-        form["versions-0-aanvraag_gegevens_schema"] = json.dumps(JSON_SCHEMA)
+        form["versies-0-aanvraag_gegevens_schema"] = json.dumps(JSON_SCHEMA)
         response = form.submit()
 
         self.assertEqual(response.status_code, 302)
@@ -187,31 +187,31 @@ class VerzoekTypeAdminTests(WebTest):
         self.assertEqual(VerzoekTypeVersion.objects.count(), 1)
 
         self.assertEqual(
-            verzoek_type.last_version.status, VerzoekTypeVersionStatus.DRAFT
+            verzoek_type.last_versie.status, VerzoekTypeVersionStatus.DRAFT
         )
         # new json_schema
         self.assertEqual(
-            form["versions-0-aanvraag_gegevens_schema"].value,
+            form["versies-0-aanvraag_gegevens_schema"].value,
             json.dumps(JSON_SCHEMA),
         )
 
-    def test_update_publishd_version_schema(self):
+    def test_update_publishd_versie_schema(self):
         verzoek_type = VerzoekTypeFactory.create()
         VerzoekTypeVersionFactory.create(verzoek_type=verzoek_type)
         url = reverse("admin:verzoeken_verzoektype_change", args=[verzoek_type.id])
 
-        VerzoekTypeVersion.objects.filter(pk=verzoek_type.last_version.id).update(
+        VerzoekTypeVersion.objects.filter(pk=verzoek_type.last_versie.id).update(
             status=VerzoekTypeVersionStatus.PUBLISHED
         )
 
         self.assertEqual(
-            verzoek_type.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+            verzoek_type.last_versie.status, VerzoekTypeVersionStatus.PUBLISHED
         )
 
         response = self.app.get(url)
         form = response.forms.get("verzoektype_form")
         # aanvraag_gegevens_schema readonly field
-        self.assertNotIn("versions-0-aanvraag_gegevens_schema", form.fields)
+        self.assertNotIn("versies-0-aanvraag_gegevens_schema", form.fields)
 
 
 @disable_admin_mfa()
@@ -238,7 +238,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
-        form["version"] = 1
+        form["versie"] = 1
         form["aanvraag_gegevens"] = json.dumps(
             {"diameter": 10, "extra": {"key": "value"}}
         )
@@ -266,7 +266,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
-        form["version"] = 1
+        form["versie"] = 1
 
         response = form.submit()
 
@@ -292,7 +292,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
-        form["version"] = 1
+        form["versie"] = 1
         form["aanvraag_gegevens"] = json.dumps({"random_key": 10})
         response = form.submit()
 
@@ -310,7 +310,7 @@ class VerzoekAdminTests(WebTest):
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
-        form["version"] = 1
+        form["versie"] = 1
         form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
         response = form.submit()
 
@@ -324,11 +324,11 @@ class VerzoekAdminTests(WebTest):
             """{'aanvraag_gegevens.diameter': ["'test' is not of type 'integer'"]}""",
         )
 
-        # invalid version
+        # invalid versie
         response = self.app.get(self.url)
         form = response.forms.get("verzoek_form")
         form["verzoek_type"] = verzoek_type.id
-        form["version"] = 2
+        form["versie"] = 2
         form["aanvraag_gegevens"] = json.dumps({"diameter": "test"})
         response = form.submit()
 

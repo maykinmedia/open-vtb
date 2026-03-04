@@ -25,7 +25,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(len(response.json()["results"]), 0)
         self.assertFalse(VerzoekType.objects.exists())
 
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(
             create_details=True,
             verzoek_type=verzoektype,
@@ -52,7 +52,7 @@ class VerzoekTests(APITestCase):
                         "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                         "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                         "geometrie": None,
-                        "version": 1,
+                        "versie": 1,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
                         "isGerelateerdAan": "",
@@ -99,7 +99,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(Verzoek.objects.all().count(), 3)
 
     def test_detail(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(
             create_details=True,
             verzoek_type=verzoektype,
@@ -121,7 +121,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": None,
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
-                "version": 1,
+                "versie": 1,
                 "bijlagen": [],
                 "isIngediendDoor": {
                     "authentiekeVerwijzing": verzoek.is_ingediend_door[
@@ -151,7 +151,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_valid_create(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         data = {
             "geometrie": {"type": "Point", "coordinates": [0, 0]},
             "verzoekType": reverse(
@@ -160,7 +160,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "version": 1,
+            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -203,7 +203,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
-                "version": 1,
+                "versie": 1,
                 "bijlagen": [
                     {
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -242,7 +242,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_valid_create_with_external_relations(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         data = {
             "geometrie": {"type": "Point", "coordinates": [0, 0]},
             "verzoekType": reverse(
@@ -251,7 +251,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "version": 1,
+            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -286,7 +286,7 @@ class VerzoekTests(APITestCase):
                 "verzoekTypeUrn": f"urn:maykin:verzoeken:verzoektype:{str(verzoektype.uuid)}",
                 "geometrie": json.loads(verzoek.geometrie.geojson),
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
-                "version": 1,
+                "versie": 1,
                 "bijlagen": [
                     {
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -319,7 +319,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_create_bijlagen(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         data = {
             "geometrie": {"type": "Point", "coordinates": [0, 0]},
             "verzoekType": reverse(
@@ -328,7 +328,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 10,
             },
-            "version": 1,
+            "versie": 1,
             "bijlagen": [
                 {
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -370,9 +370,9 @@ class VerzoekTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "version"),
+            get_validation_errors(response, "versie"),
             {
-                "name": "version",
+                "name": "versie",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -380,7 +380,7 @@ class VerzoekTests(APITestCase):
         self.assertFalse(VerzoekType.objects.exists())
 
     def test_valid_update_partial(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
@@ -419,7 +419,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.betaling.bedrag, Decimal(55))
 
     def test_valid_update(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         verzoek = VerzoekFactory.create(
             create_details=True,
@@ -436,7 +436,7 @@ class VerzoekTests(APITestCase):
             "aanvraagGegevens": {
                 "diameter": 20,
             },
-            "version": 2,
+            "versie": 2,
             "verzoekBron": {
                 "naam": "new_naam",
                 "kenmerk": "new_kenmerk",
@@ -462,7 +462,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.betaling.bedrag, Decimal(10))
         self.assertEqual(verzoek.betaling.transactie_referentie, "new_ref")
         self.assertEqual(verzoek.aanvraag_gegevens["diameter"], 20)
-        self.assertEqual(verzoek.version, 2)
+        self.assertEqual(verzoek.versie, 2)
         self.assertEqual(
             verzoek.bijlagen.first().informatie_object,
             "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
@@ -474,7 +474,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_update_with_bijlagen(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
@@ -547,7 +547,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_update_is_ingediend_door_json_schema(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(
             create_details=True,
             verzoek_type=verzoektype,
@@ -615,7 +615,7 @@ class VerzoekTests(APITestCase):
         )
 
     def test_invalid_update_required(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
@@ -643,16 +643,16 @@ class VerzoekTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "version"),
+            get_validation_errors(response, "versie"),
             {
-                "name": "version",
+                "name": "versie",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
         )
 
     def test_update_partial_bron_betaling(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
@@ -677,7 +677,7 @@ class VerzoekTests(APITestCase):
         self.assertEqual(verzoek.betaling.bedrag, Decimal(55))
 
     def test_destroy(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}

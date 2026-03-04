@@ -64,7 +64,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         model = VerzoekTypeVersion
         fields = (
             "url",
-            "version",
+            "versie",
             "verzoek_type",
             "bijlage_typen",
             "status",
@@ -76,14 +76,14 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         )
         extra_kwargs = {
             "url": {
-                "lookup_field": "version",
-                "lookup_url_kwarg": "verzoektype_version",
+                "lookup_field": "versie",
+                "lookup_url_kwarg": "verzoektype_versie",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
                     "De unieke URL van deze VerzoekType versie binnen deze API."
                 ),
             },
-            "version": {"read_only": True},
+            "versie": {"read_only": True},
             "verzoek_type": {
                 "lookup_field": "uuid",
                 "view_name": "verzoeken:verzoektype-detail",
@@ -135,7 +135,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         if bijlage_typen:
             try:
                 objs = [
-                    BijlageType(verzoek_type_version=instance, **data)
+                    BijlageType(verzoek_type_versie=instance, **data)
                     for data in bijlage_typen
                 ]
                 BijlageType.objects.bulk_create(objs)
@@ -156,7 +156,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         if bijlage_typen:
             for bijlage_type in bijlage_typen:
                 BijlageType.objects.update_or_create(
-                    verzoek_type_version=instance,
+                    verzoek_type_versie=instance,
                     informatie_objecttype=bijlage_type["informatie_objecttype"],
                     defaults={**bijlage_type},
                 )
@@ -206,13 +206,13 @@ class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
         model = VerzoekTypeVersion
         fields = (
             "url",
-            "version",
+            "versie",
             "status",
         )
         extra_kwargs = {
             "url": {
-                "lookup_field": "version",
-                "lookup_url_kwarg": "verzoektype_version",
+                "lookup_field": "versie",
+                "lookup_url_kwarg": "verzoektype_versie",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
                     "De unieke URL van deze VerzoekType versie binnen deze API."
@@ -222,7 +222,7 @@ class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
 
 
 class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    versions = VerzoekTypeVersionReadOnlySerializer(
+    versies = VerzoekTypeVersionReadOnlySerializer(
         read_only=True,
         many=True,
         help_text="",  # TODO
@@ -234,7 +234,7 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "url",
             "urn",
             "uuid",
-            "versions",
+            "versies",
             "naam",
             "toelichting",
         )
@@ -309,7 +309,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoek_type_urn",
             "geometrie",
             "aanvraag_gegevens",
-            "version",
+            "versie",
             "bijlagen",
             "is_ingediend_door",
             "is_gerelateerd_aan",

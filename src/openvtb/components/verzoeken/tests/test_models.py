@@ -12,10 +12,10 @@ from .factories import (
 
 class ValidateVerzoekTypeSchemaTestCase(TestCase):
     def test_valid_schema(self):
-        verzoek_type = VerzoekTypeFactory.create(create_version=True)
-        self.assertEqual(verzoek_type.last_version.version, 1)
+        verzoek_type = VerzoekTypeFactory.create(create_versie=True)
+        self.assertEqual(verzoek_type.last_versie.versie, 1)
         self.assertEqual(
-            verzoek_type.last_version.aanvraag_gegevens_schema,
+            verzoek_type.last_versie.aanvraag_gegevens_schema,
             JSON_SCHEMA,  # default from factories
         )
 
@@ -56,13 +56,13 @@ class ValidateVerzoekTypeSchemaTestCase(TestCase):
 class ValidateVerzoekSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        self.verzoek_type = VerzoekTypeFactory.create(create_versie=True)
 
     def test_valid_schema(self):
         # default schema from factory
-        self.assertEqual(self.verzoek_type.last_version.version, 1)
+        self.assertEqual(self.verzoek_type.last_versie.versie, 1)
         self.assertEqual(
-            self.verzoek_type.last_version.aanvraag_gegevens_schema,
+            self.verzoek_type.last_versie.aanvraag_gegevens_schema,
             JSON_SCHEMA,
         )
         self.verzoek = VerzoekFactory.create(
@@ -75,20 +75,20 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             self.verzoek = VerzoekFactory.create(aanvraag_gegevens={"diameter": 1})
             self.verzoek.full_clean()
 
-        self.assertFalse(self.verzoek.verzoek_type.versions.exists())
+        self.assertFalse(self.verzoek.verzoek_type.versies.exists())
         self.assertEqual(
             error.exception.message_dict,
             {
-                "version": [
+                "versie": [
                     "Onbekend VerzoekType schema versie: geen schema beschikbaar."
                 ]
             },
         )
 
     def test_invalid_schema(self):
-        self.assertEqual(self.verzoek_type.last_version.version, 1)
+        self.assertEqual(self.verzoek_type.last_versie.versie, 1)
         self.assertEqual(
-            self.verzoek_type.last_version.aanvraag_gegevens_schema,
+            self.verzoek_type.last_versie.aanvraag_gegevens_schema,
             JSON_SCHEMA,
         )
         with self.assertRaises(ValidationError) as error:
@@ -123,7 +123,7 @@ class ValidateVerzoekSchemaTestCase(TestCase):
 
 class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
     def test_valid_schemas(self):
-        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek_type = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
         # authentiekeVerwijzing
@@ -164,7 +164,7 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
         verzoek.full_clean()
 
     def test_invalid_authentieke_verwijzing_schema(self):
-        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek_type = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
         with self.assertRaises(ValidationError) as error:
@@ -215,7 +215,7 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
         )
 
     def test_invalid_niet_authentieke_persoonsgegevens_schema(self):
-        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek_type = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
         with self.assertRaises(ValidationError) as error:
@@ -317,7 +317,7 @@ class ValidateVerzoekisIngediendDoorJsonSchemaTestCase(TestCase):
         )
 
     def test_invalid_niet_authentieke_organisatiegegevens_schema(self):
-        verzoek_type = VerzoekTypeFactory.create(create_version=True)
+        verzoek_type = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(verzoek_type=verzoek_type)
 
         with self.assertRaises(ValidationError) as error:

@@ -15,7 +15,7 @@
     "pk": 1,
     "fields": {
         "verzoek_type": 1,
-        "version": 1,
+        "versie": 1,
         "aangemaakt_op": "2026-02-09",
         "gewijzigd_op": "2026-02-09",
         "begin_geldigheid": "2026-02-09",
@@ -49,7 +49,7 @@
     "pk": 2,
     "fields": {
         "verzoek_type": 1,
-        "version": 2,
+        "versie": 2,
         "aangemaakt_op": "2026-02-09",
         "gewijzigd_op": "2026-02-09",
         "begin_geldigheid": "2026-02-09",
@@ -84,7 +84,7 @@
     "fields": {
         "uuid": "7b361508-db3b-4e81-a4d0-d0b5de6133d0",
         "verzoek_type": 1,
-        "version": 2,
+        "versie": 2,
         "geometrie": null,
         "aanvraag_gegevens": {
             "extra": {
