@@ -59,6 +59,7 @@ class VerzoekTests(APITestCase):
                         "kanaal": "",
                         "authenticatieContext": "",
                         "verzoekInformatieObject": "",
+                        "verzoekTaal": "nld",
                         "isIngediendDoor": {
                             "authentiekeVerwijzing": None,
                             "nietAuthentiekePersoonsgegevens": {
@@ -134,6 +135,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
+                "verzoekTaal": "nld",
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -222,6 +224,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
+                "verzoekTaal": verzoek.verzoek_taal,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -296,6 +299,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "authenticatieContext": verzoek.authenticatie_context,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
+                "verzoekTaal": verzoek.verzoek_taal,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -456,6 +460,7 @@ class VerzoekTests(APITestCase):
                 },
             ],
             "isIngediendDoor": {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
+            "verzoekTaal": "eng",
         }
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -475,6 +480,7 @@ class VerzoekTests(APITestCase):
             verzoek.is_ingediend_door,
             {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
         )
+        self.assertEqual(verzoek.verzoek_taal, "eng")
 
     def test_update_with_bijlagen(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)

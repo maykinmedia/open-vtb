@@ -310,6 +310,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "is_gerelateerd_aan",
             "kanaal",
             "authenticatie_context",
+            "verzoek_taal",
             "verzoek_informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
@@ -331,6 +332,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens": {
                 "required": True,
             },
+            "verzoek_taal": {"default": "nld"},
         }
 
     validators = [

@@ -5,6 +5,7 @@ from django.contrib.gis.db.models import GeometryField
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html
@@ -338,6 +339,18 @@ class Verzoek(models.Model):
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
+        blank=True,
+    )
+    verzoek_taal = models.CharField(
+        _("verzoek taal"),
+        help_text=_(
+            "De ISO 639-3 taal waarin waarin het verzoek is gedaan. In de meest praktische vorm is dit de taal"
+            " van de vragen maar het is mogelijk dat de antwoorden in een andere taal zijn gedaan."
+            " Bijvoorbeeld door iemand die wel Nederlands kan lezen maar niet kan schrijven."
+        ),
+        max_length=3,
+        validators=[MinLengthValidator(limit_value=3)],
+        default="nld",
         blank=True,
     )
 
