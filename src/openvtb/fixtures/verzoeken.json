@@ -5,7 +5,7 @@
     "fields": {
         "uuid": "5a43f3f3-4ec5-47ef-9f7f-25b3a5b01988",
         "naam": "wide",
-        "toelichting": "Their consider company mind design.",
+        "omschrijving": "Their consider company mind design.",
         "aangemaakt_op": "2026-02-09",
         "gewijzigd_op": "2026-02-09"
     }
@@ -110,9 +110,14 @@
                 "telefoonnummer": "+31201234567"
             }
         },
-        "is_gerelateerd_aan": "",
+        "is_gerelateerd_aan": [
+            {
+                "urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            }
+        ],
         "kanaal": "",
-        "informatie_object": ""
+        "verzoek_informatie_object": "",
+        "verzoek_taal": "nld"
     }
 }
 ]

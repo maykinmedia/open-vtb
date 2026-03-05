@@ -289,6 +289,95 @@ class VerzoekValidatorsTests(APITestCase):
                 },
             )
 
+    def test_is_gerelateerd_aan_json_schema(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+        )
+
+        with self.subTest("empty list"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "versie": 1,
+                "isGerelateerdAan": [],
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(response.data["is_gerelateerd_aan"], [])
+
+        with self.subTest("object instead list"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "versie": 1,
+                "isGerelateerdAan": {},
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isGerelateerdAan.nonFieldErrors"),
+                {
+                    "name": "isGerelateerdAan.nonFieldErrors",
+                    "code": "not_a_list",
+                    "reason": 'Verwachtte een lijst met items, maar kreeg type "dict".',
+                },
+            )
+
+        with self.subTest("empty object"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "versie": 1,
+                "isGerelateerdAan": [{}],
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isGerelateerdAan.0.urn"),
+                {
+                    "name": "isGerelateerdAan.0.urn",
+                    "code": "required",
+                    "reason": "Dit veld is vereist.",
+                },
+            )
+
+        with self.subTest("invalid key"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "versie": 1,
+                "isGerelateerdAan": [{}],
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isGerelateerdAan.0.urn"),
+                {
+                    "name": "isGerelateerdAan.0.urn",
+                    "code": "required",
+                    "reason": "Dit veld is vereist.",
+                },
+            )
+
+        with self.subTest("invalid urn"):
+            data = {
+                "verzoekType": verzoektype_url,
+                "aanvraagGegevens": {"diameter": 10},
+                "versie": 1,
+                "isGerelateerdAan": [{"urn": "1"}],
+            }
+            response = self.client.post(self.list_url, data)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "isGerelateerdAan.0.urn"),
+                {
+                    "name": "isGerelateerdAan.0.urn",
+                    "code": "invalid_urn",
+                    "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
+                },
+            )
+
     def test_invalid_is_ingediend_door_json_schema(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoektype_url = reverse(

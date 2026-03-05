@@ -11,7 +11,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.schemas import IS_INGEDIEND_DOOR_SCHEMA
+from openvtb.components.utils.schemas import (
+    IS_GERELATEERD_AAN_SCHEMA,
+    IS_INGEDIEND_DOOR_SCHEMA,
+)
 from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import check_json_schema
@@ -316,12 +319,13 @@ class Verzoek(models.Model):
         ),
         encoder=DjangoJSONEncoder,
     )
-    is_gerelateerd_aan = URNField(
+    is_gerelateerd_aan = models.JSONField(
         _("is gerelateerd aan"),
-        help_text=_(
-            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
-        ),
+        default=list,
         blank=True,
+        null=True,
+        help_text=_("Lijst van URN's naar ZAAK of PRODUCT."),
+        encoder=DjangoJSONEncoder,
     )
     kanaal = models.CharField(
         _("kanaal"),
@@ -386,6 +390,19 @@ class Verzoek(models.Model):
         except ValidationError as error:
             raise ValidationError({"is_ingediend_door": str(error)})
 
+    def clean_is_gerelateerd_aan(self):
+        if not self.is_gerelateerd_aan:
+            return
+
+        try:
+            validate_jsonschema(
+                instance=self.is_gerelateerd_aan,
+                label="is_gerelateerd_aan",
+                schema=IS_GERELATEERD_AAN_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_gerelateerd_aan": str(error)})
+
     def clean_verzoek_type(self):
         if not self.verzoek_type_id:
             return
@@ -414,6 +431,7 @@ class Verzoek(models.Model):
         super().clean()
         self.clean_verzoek_type()
         self.clean_is_ingediend_door()
+        self.clean_is_gerelateerd_aan()
 
 
 class Bijlage(models.Model):

@@ -10,6 +10,7 @@ from vng_api_common.utils import get_help_text
 from openvtb.components.utils.serializers import IsIngediendDoorSerializer
 from openvtb.components.utils.validators import IsIngediendDoorValidator
 from openvtb.utils.serializers import (
+    URNField,
     URNModelSerializer,
     URNRelatedField,
 )
@@ -250,6 +251,15 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         }
 
 
+class isGerelateerdAanSerializer(serializers.Serializer):
+    urn = URNField(
+        required=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+        ),
+    )
+
+
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_type = CachedHyperlinkedRelatedField(
         view_name="verzoeken:verzoektype-detail",
@@ -292,6 +302,11 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
             "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
         ),
+    )
+    is_gerelateerd_aan = serializers.ListSerializer(
+        child=isGerelateerdAanSerializer(),
+        required=False,
+        help_text=get_help_text("verzoeken.Verzoek", "is_gerelateerd_aan"),
     )
 
     class Meta:

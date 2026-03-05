@@ -31,7 +31,6 @@ class VerzoekTests(APITestCase):
             verzoek_type=verzoektype,
             niet_authentieke_persoonsgegevens=True,
         )
-
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -55,7 +54,7 @@ class VerzoekTests(APITestCase):
                         "versie": 1,
                         "aanvraagGegevens": verzoek.aanvraag_gegevens,
                         "bijlagen": [],
-                        "isGerelateerdAan": "",
+                        "isGerelateerdAan": [],
                         "kanaal": "",
                         "verzoekInformatieObject": "",
                         "verzoekTaal": "nld",
@@ -187,6 +186,10 @@ class VerzoekTests(APITestCase):
                     "telefoonnummer": "+31201234567",
                 }
             },
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -254,7 +257,10 @@ class VerzoekTests(APITestCase):
                 },
             ],
             "isIngediendDoor": {},
-            "isGerelateerdAan": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
             "verzoekBron": {
                 "naam": "string",
                 "kenmerk": "string",
