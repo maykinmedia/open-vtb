@@ -96,6 +96,7 @@ class DataFactory(factory.DictFactory):
 class VerzoekFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
     aanvraag_gegevens = factory.SubFactory(DataFactory)
+    initiator = factory.LazyFunction(get_random_urn)
     versie = 1
 
     class Meta:
@@ -117,39 +118,6 @@ class VerzoekFactory(DjangoModelFactory):
         if details:
             VerzoekBronFactory(verzoek=obj)
             VerzoekBetalingFactory(verzoek=obj)
-
-    class Params:
-        authentieke_verwijzing = factory.Trait(
-            is_ingediend_door={
-                "authentiekeVerwijzing": {
-                    "urn": "urn:nld:brp:bsn:111222333",
-                }
-            }
-        )
-        niet_authentieke_persoonsgegevens = factory.Trait(
-            is_ingediend_door={
-                "nietAuthentiekePersoonsgegevens": {
-                    "voornaam": "Jan",
-                    "achternaam": "Jansen",
-                    "geboortedatum": "1980-05-15",
-                    "emailadres": "jan.jansen@example.com",
-                    "telefoonnummer": "+31612345678",
-                    "postadres": ADRES,
-                    "verblijfsadres": None,
-                }
-            }
-        )
-        niet_authentieke_organisatiegegevens = factory.Trait(
-            is_ingediend_door={
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            }
-        )
 
 
 class BijlageTypeFactory(DjangoModelFactory):

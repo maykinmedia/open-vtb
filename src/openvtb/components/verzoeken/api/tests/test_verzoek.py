@@ -6,7 +6,6 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.verzoeken.models import Bijlage, Verzoek, VerzoekType
 from openvtb.components.verzoeken.tests.factories import (
-    ADRES,
     VerzoekFactory,
     VerzoekTypeFactory,
     VerzoekTypeVersionFactory,
@@ -26,11 +25,8 @@ class VerzoekTests(APITestCase):
         self.assertFalse(VerzoekType.objects.exists())
 
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
-        verzoek = VerzoekFactory.create(
-            create_details=True,
-            verzoek_type=verzoektype,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
+
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -58,19 +54,7 @@ class VerzoekTests(APITestCase):
                         "kanaal": "",
                         "verzoekInformatieObject": "",
                         "verzoekTaal": "nld",
-                        "isIngediendDoor": {
-                            "authentiekeVerwijzing": None,
-                            "nietAuthentiekePersoonsgegevens": {
-                                "voornaam": "Jan",
-                                "achternaam": "Jansen",
-                                "geboortedatum": "1980-05-15",
-                                "emailadres": "jan.jansen@example.com",
-                                "telefoonnummer": "+31612345678",
-                                "postadres": ADRES,
-                                "verblijfsadres": None,
-                            },
-                            "nietAuthentiekeOrganisatiegegevens": None,
-                        },
+                        "initiator": verzoek.initiator,
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
@@ -99,11 +83,7 @@ class VerzoekTests(APITestCase):
 
     def test_detail(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
-        verzoek = VerzoekFactory.create(
-            create_details=True,
-            verzoek_type=verzoektype,
-            authentieke_verwijzing=True,
-        )
+        verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
         )
@@ -122,13 +102,7 @@ class VerzoekTests(APITestCase):
                 "aanvraagGegevens": verzoek.aanvraag_gegevens,
                 "versie": 1,
                 "bijlagen": [],
-                "isIngediendDoor": {
-                    "authentiekeVerwijzing": verzoek.is_ingediend_door[
-                        "authentiekeVerwijzing"
-                    ],
-                    "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                },
+                "initiator": verzoek.initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -177,15 +151,7 @@ class VerzoekTests(APITestCase):
                 "transactieDatum": "2026-01-01T14:15:22Z",
                 "transactieReferentie": "string",
             },
-            "isIngediendDoor": {
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            },
+            "initiator": "urn:nld:brp:bsn:111222333",
             "isGerelateerdAan": [
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
@@ -210,17 +176,7 @@ class VerzoekTests(APITestCase):
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
                     }
                 ],
-                "isIngediendDoor": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": {
-                        "statutaireNaam": "Acme BV",
-                        "bezoekadres": None,
-                        "postadres": ADRES,
-                        "emailadres": "info@acme.nl",
-                        "telefoonnummer": "+31201234567",
-                    },
-                },
+                "initiator": verzoek.initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -256,7 +212,6 @@ class VerzoekTests(APITestCase):
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
                 },
             ],
-            "isIngediendDoor": {},
             "isGerelateerdAan": [
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
@@ -292,11 +247,7 @@ class VerzoekTests(APITestCase):
                         "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
                     }
                 ],
-                "isIngediendDoor": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "initiator": verzoek.initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -431,11 +382,7 @@ class VerzoekTests(APITestCase):
     def test_valid_update(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
         VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
-        verzoek = VerzoekFactory.create(
-            create_details=True,
-            verzoek_type=verzoektype,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)
         detail_url = reverse(
             "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
         )
@@ -460,7 +407,7 @@ class VerzoekTests(APITestCase):
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
                 },
             ],
-            "isIngediendDoor": {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
+            "initiator": "urn:example:12345",
             "verzoekTaal": "eng",
         }
         response = self.client.put(detail_url, data)
@@ -477,10 +424,7 @@ class VerzoekTests(APITestCase):
             verzoek.bijlagen.first().informatie_object,
             "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
         )
-        self.assertEqual(
-            verzoek.is_ingediend_door,
-            {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
-        )
+        self.assertEqual(verzoek.initiator, "urn:example:12345")
         self.assertEqual(verzoek.verzoek_taal, "eng")
 
     def test_update_with_bijlagen(self):
@@ -511,74 +455,6 @@ class VerzoekTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verzoek.refresh_from_db()
         self.assertEqual(verzoek.bijlagen.count(), 3)
-
-    def test_update_is_ingediend_door_json_schema(self):
-        verzoektype = VerzoekTypeFactory.create(create_versie=True)
-        verzoek = VerzoekFactory.create(
-            create_details=True,
-            verzoek_type=verzoektype,
-            niet_authentieke_persoonsgegevens=True,
-        )
-        self.assertEqual(
-            verzoek.is_ingediend_door,
-            {
-                "nietAuthentiekePersoonsgegevens": {
-                    "voornaam": "Jan",
-                    "achternaam": "Jansen",
-                    "geboortedatum": "1980-05-15",
-                    "emailadres": "jan.jansen@example.com",
-                    "telefoonnummer": "+31612345678",
-                    "postadres": ADRES,
-                    "verblijfsadres": None,
-                }
-            },
-        )
-        detail_url = reverse(
-            "verzoeken:verzoek-detail", kwargs={"uuid": str(verzoek.uuid)}
-        )
-        response = self.client.patch(
-            detail_url,
-            {
-                "isIngediendDoor": {
-                    "authentiekeVerwijzing": {"urn": "urn:example:12345"}
-                },
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        verzoek = Verzoek.objects.get()
-        self.assertEqual(
-            verzoek.is_ingediend_door,
-            {"authentiekeVerwijzing": {"urn": "urn:example:12345"}},
-        )
-
-        # set empty
-        response = self.client.patch(detail_url, {"isIngediendDoor": {}})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        verzoek = Verzoek.objects.get()
-        self.assertEqual(verzoek.is_ingediend_door, {})
-
-        # check
-        response = self.client.patch(detail_url, {})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        verzoek = Verzoek.objects.get()
-        self.assertEqual(verzoek.is_ingediend_door, {})
-
-        # invalid options
-        response = self.client.patch(
-            detail_url,
-            {
-                "isIngediendDoor": {"authentiekeVerwijzing": {}},
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            get_validation_errors(response, "isIngediendDoor.authentiekeVerwijzing"),
-            {
-                "name": "isIngediendDoor.authentiekeVerwijzing",
-                "code": "invalid-json-schema",
-                "reason": "'urn' is a required property",
-            },
-        )
 
     def test_invalid_update_required(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)

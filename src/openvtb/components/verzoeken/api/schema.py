@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.drf_spectacular import URN_DESCRIPTION
+from openvtb.components.drf_spectacular import URN_DESCRIPTION
 
 custom_settings = {
     "TITLE": "Verzoeken API",

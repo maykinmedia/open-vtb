@@ -2,7 +2,7 @@ from django import forms
 
 from jsonsuit.widgets import ReadonlyJSONSuit
 
-from openvtb.components.utils.widgets import JSONSuit
+from openvtb.components.widgets import JSONSuit
 
 from .constants import VerzoekTypeVersionStatus
 from .models import VerzoekTypeVersion

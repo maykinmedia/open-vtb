@@ -11,10 +11,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.schemas import (
-    IS_GERELATEERD_AAN_SCHEMA,
-    IS_INGEDIEND_DOOR_SCHEMA,
-)
+from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.constants import Valuta
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import check_json_schema
@@ -305,19 +302,16 @@ class Verzoek(models.Model):
         help_text=_("JSON data voor validatie van het VerzoekType."),
         encoder=DjangoJSONEncoder,
     )
-    is_ingediend_door = models.JSONField(
-        _("Is ingediend door"),
-        default=dict,
-        blank=True,
+    initiator = URNField(
+        _("initiator"),
         help_text=_(
-            "JSON-object dat aangeeft door wie het verzoek is ingediend. "
-            "Kan één van de volgende vormen hebben:\n"
-            "- authentiekeVerwijzing: object met een 'urn' string (bijv. 'urn:...')\n"
-            "- nietAuthentiekePersoonsgegevens: object met persoonsgegevens zoals voornaam, achternaam, geboortedatum, emailadres, telefoonnummer, postadres en verblijfsadres\n"
-            "- nietAuthentiekeOrganisatiegegevens: object met organisatiegegevens zoals statutaireNaam, bezoekadres, postadres, emailadres en telefoonnummer\n"
-            "Dit JSON-object wordt gebruikt voor validatie van het VerzoekType."
+            "Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. "
+            "Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. "
+            "Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, "
+            "`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of "
+            "`urn:nld:klant:klantnummer:610541501`"
         ),
-        encoder=DjangoJSONEncoder,
+        blank=True,
     )
     is_gerelateerd_aan = models.JSONField(
         _("is gerelateerd aan"),
@@ -367,29 +361,6 @@ class Verzoek(models.Model):
 
         super().save(*args, **kwargs)
 
-    def clean_is_ingediend_door(self):
-        if not self.is_ingediend_door:
-            return
-
-        if len(self.is_ingediend_door.keys()) > 1:
-            raise ValidationError(
-                {
-                    "is_ingediend_door": _(
-                        "It must have only one of the three permitted keys: "
-                        "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
-                    )
-                },
-                code="invalid",
-            )
-        try:
-            validate_jsonschema(
-                instance=self.is_ingediend_door,
-                label="is_ingediend_door",
-                schema=IS_INGEDIEND_DOOR_SCHEMA,
-            )
-        except ValidationError as error:
-            raise ValidationError({"is_ingediend_door": str(error)})
-
     def clean_is_gerelateerd_aan(self):
         if not self.is_gerelateerd_aan:
             return
@@ -430,7 +401,6 @@ class Verzoek(models.Model):
     def clean(self):
         super().clean()
         self.clean_verzoek_type()
-        self.clean_is_ingediend_door()
         self.clean_is_gerelateerd_aan()
 
 

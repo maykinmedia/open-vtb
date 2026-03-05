@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.widgets import JSONSuit
+from openvtb.components.widgets import JSONSuit
 
 from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm

@@ -7,8 +7,6 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
-from openvtb.components.utils.serializers import IsIngediendDoorSerializer
-from openvtb.components.utils.validators import IsIngediendDoorValidator
 from openvtb.utils.serializers import (
     URNField,
     URNModelSerializer,
@@ -295,14 +293,6 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         many=True,
         help_text=_("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
     )
-    is_ingediend_door = IsIngediendDoorSerializer(
-        required=False,
-        help_text=(
-            "Gegevens over wie het verzoek heeft ingediend. "
-            "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
-            "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
-        ),
-    )
     is_gerelateerd_aan = serializers.ListSerializer(
         child=isGerelateerdAanSerializer(),
         required=False,
@@ -321,7 +311,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens",
             "versie",
             "bijlagen",
-            "is_ingediend_door",
+            "initiator",
             "is_gerelateerd_aan",
             "kanaal",
             "verzoek_taal",
@@ -349,10 +339,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoek_taal": {"default": "nld"},
         }
 
-    validators = [
-        AanvraagGegevensValidator(),
-        IsIngediendDoorValidator("is_ingediend_door"),
-    ]
+    validators = [AanvraagGegevensValidator()]
 
     def validate_bijlagen(self, value):
         """

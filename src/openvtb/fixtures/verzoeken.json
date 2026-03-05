@@ -95,21 +95,7 @@
             },
             "diameter": 10
         },
-        "is_ingediend_door": {
-            "nietAuthentiekeOrganisatiegegevens": {
-                "postadres": {
-                    "postcode": "1000 AB",
-                    "huisletter": "A",
-                    "huisnummer": "12",
-                    "woonplaats": "Amsterdam",
-                    "huisnummertoevoeging": "bis"
-                },
-                "emailadres": "info@acme.nl",
-                "bezoekadres": null,
-                "statutaireNaam": "Acme BV",
-                "telefoonnummer": "+31201234567"
-            }
-        },
+        "initiator": "urn:nld:brp:bsn:111222333",
         "is_gerelateerd_aan": [
             {
                 "urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
