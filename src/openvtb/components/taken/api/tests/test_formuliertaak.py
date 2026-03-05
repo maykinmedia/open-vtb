@@ -7,7 +7,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ADRES, FORM_IO, ExterneTaakFactory
+from openvtb.components.taken.tests.factories import FORM_IO, ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -23,10 +23,7 @@ class FormulierTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
         # create 1 formuliertaak
-        ExterneTaakFactory.create(
-            formuliertaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        ExterneTaakFactory.create(formuliertaak=True)
 
         response = self.client.get(self.list_url)
 
@@ -53,19 +50,7 @@ class FormulierTaakTests(APITestCase):
                         "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                         "toelichting": formuliertaak.toelichting,
-                        "isToegewezenAan": {
-                            "authentiekeVerwijzing": None,
-                            "nietAuthentiekePersoonsgegevens": {
-                                "voornaam": "Jan",
-                                "achternaam": "Jansen",
-                                "geboortedatum": "1980-05-15",
-                                "emailadres": "jan.jansen@example.com",
-                                "telefoonnummer": "+31612345678",
-                                "postadres": ADRES,
-                                "verblijfsadres": None,
-                            },
-                            "nietAuthentiekeOrganisatiegegevens": None,
-                        },
+                        "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                         "wordtBehandeldDoor": "",
                         "hoortBij": "",
                         "heeftBetrekkingOp": "",
@@ -102,10 +87,7 @@ class FormulierTaakTests(APITestCase):
         self.assertEqual(ExterneTaak.objects.all().count(), 2)
 
     def test_detail(self):
-        formuliertaak = ExterneTaakFactory.create(
-            formuliertaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
         detail_url = reverse(
             "taken:formuliertaak-detail",
             kwargs={"uuid": str(formuliertaak.uuid)},
@@ -125,13 +107,7 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": formuliertaak.is_toegewezen_aan[
-                        "nietAuthentiekePersoonsgegevens"
-                    ],
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                },
+                "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
                 "hoortBij": formuliertaak.hoort_bij,
                 "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
@@ -202,15 +178,7 @@ class FormulierTaakTests(APITestCase):
                     },
                 },
             },
-            "isToegewezenAan": {
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            },
+            "isToegewezenAan": "urn:example:123456",
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -229,13 +197,7 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": formuliertaak.is_toegewezen_aan[
-                        "nietAuthentiekeOrganisatiegegevens"
-                    ],
-                },
+                "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
                 "hoortBij": formuliertaak.hoort_bij,
                 "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
@@ -397,11 +359,7 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
                 "hoortBij": formuliertaak.hoort_bij,
                 "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
@@ -494,11 +452,7 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
                 "hoortBij": formuliertaak.hoort_bij,
                 "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
@@ -596,21 +550,11 @@ class FormulierTaakTests(APITestCase):
 
         # patch isToegewezenAan with the new details
         response = self.client.patch(
-            detail_url,
-            {
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": {"urn": "urn:example:12345"}
-                },
-            },
+            detail_url, {"isToegewezenAan": "urn:example:12345"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         formuliertaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            formuliertaak.is_toegewezen_aan,
-            {
-                "authentiekeVerwijzing": {"urn": "urn:example:12345"},
-            },
-        )
+        self.assertEqual(formuliertaak.is_toegewezen_aan, "urn:example:12345")
 
     def test_valid_update(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
@@ -665,11 +609,7 @@ class FormulierTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": formuliertaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
                 "hoortBij": formuliertaak.hoort_bij,
                 "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,

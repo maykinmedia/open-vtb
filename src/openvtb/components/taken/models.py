@@ -7,7 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.schemas import IS_INGEDIEND_DOOR_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
@@ -89,19 +88,16 @@ class ExterneTaak(models.Model):
         help_text=_("De attributen die horen bij de `taakSoort`."),
         encoder=DjangoJSONEncoder,
     )
-    is_toegewezen_aan = models.JSONField(
+    is_toegewezen_aan = URNField(
         _("is toegewezen aan subject"),
         help_text=_(
-            "JSON-object dat aangeeft aan wie deze taak is toegewezen. "
-            "Kan één van de volgende vormen hebben:\n"
-            "- authentiekeVerwijzing: object met een 'urn' string (bijv. 'urn:...')\n"
-            "- nietAuthentiekePersoonsgegevens: object met persoonsgegevens zoals voornaam, achternaam, geboortedatum, emailadres, telefoonnummer, postadres en verblijfsadres\n"
-            "- nietAuthentiekeOrganisatiegegevens: object met organisatiegegevens zoals statutaireNaam, bezoekadres, postadres, emailadres en telefoonnummer\n"
+            "Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. "
+            "Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. "
+            "Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, "
+            "`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of "
+            "`urn:nld:klant:klantnummer:610541501`"
         ),
-        default=dict,
-        null=True,
         blank=True,
-        encoder=DjangoJSONEncoder,
     )
     wordt_behandeld_door = URNField(
         _("wordt behandeld door medewerker"),
@@ -146,29 +142,6 @@ class ExterneTaak(models.Model):
                 )
         super().save(*args, **kwargs)
 
-    def clean_is_toegewezen_aan(self):
-        if not self.is_toegewezen_aan:
-            return
-
-        if len(self.is_toegewezen_aan.keys()) > 1:
-            raise ValidationError(
-                {
-                    "is_toegewezen_aan": _(
-                        "It must have only one of the three permitted keys: "
-                        "one of `authentiekeVerwijzing`, `nietAuthentiekePersoonsgegevens` or `nietAuthentiekeOrganisatiegegevens`."
-                    )
-                },
-                code="invalid",
-            )
-        try:
-            validate_jsonschema(
-                instance=self.is_toegewezen_aan,
-                label="is_toegewezen_aan",
-                schema=IS_INGEDIEND_DOOR_SCHEMA,
-            )
-        except ValidationError as error:
-            raise ValidationError({"is_toegewezen_aan": str(error)})
-
     def clean_details(self):
         try:
             validate_jsonschema(
@@ -198,6 +171,5 @@ class ExterneTaak(models.Model):
     def clean(self):
         super().clean()
 
-        self.clean_is_toegewezen_aan()
         self.clean_details()
         self.clean_dates()

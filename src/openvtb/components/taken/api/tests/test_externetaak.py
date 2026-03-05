@@ -6,7 +6,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ADRES, ExterneTaakFactory
+from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -22,10 +22,7 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
         # create taak
-        ExterneTaakFactory.create(
-            betaaltaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        ExterneTaakFactory.create(betaaltaak=True)
         response = self.client.get(self.list_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -51,19 +48,7 @@ class ExterneTaakTests(APITestCase):
                         "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                         "toelichting": externetaak.toelichting,
-                        "isToegewezenAan": {
-                            "authentiekeVerwijzing": None,
-                            "nietAuthentiekePersoonsgegevens": {
-                                "voornaam": "Jan",
-                                "achternaam": "Jansen",
-                                "geboortedatum": "1980-05-15",
-                                "emailadres": "jan.jansen@example.com",
-                                "telefoonnummer": "+31612345678",
-                                "postadres": ADRES,
-                                "verblijfsadres": None,
-                            },
-                            "nietAuthentiekeOrganisatiegegevens": None,
-                        },
+                        "isToegewezenAan": externetaak.is_toegewezen_aan,
                         "wordtBehandeldDoor": "",
                         "hoortBij": "",
                         "heeftBetrekkingOp": "",
@@ -98,10 +83,7 @@ class ExterneTaakTests(APITestCase):
         )
 
     def test_detail(self):
-        externetaak = ExterneTaakFactory.create(
-            betaaltaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        externetaak = ExterneTaakFactory.create(betaaltaak=True)
         detail_url = reverse(
             "taken:externetaak-detail", kwargs={"uuid": str(externetaak.uuid)}
         )
@@ -120,13 +102,7 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                 "toelichting": externetaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": externetaak.is_toegewezen_aan[
-                        "nietAuthentiekePersoonsgegevens"
-                    ],
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                },
+                "isToegewezenAan": externetaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": externetaak.wordt_behandeld_door,
                 "hoortBij": externetaak.hoort_bij,
                 "heeftBetrekkingOp": externetaak.heeft_betrekking_op,
@@ -150,15 +126,7 @@ class ExterneTaakTests(APITestCase):
                     "iban": "NL12BANK34567890",
                 },
             },
-            "isToegewezenAan": {
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            },
+            "isToegewezenAan": "urn:example:12345",
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -178,13 +146,7 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": betaaltaak.is_toegewezen_aan[
-                        "nietAuthentiekeOrganisatiegegevens"
-                    ],
-                },
+                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -249,11 +211,7 @@ class ExterneTaakTests(APITestCase):
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
                     "valuta": betaaltaak.details["valuta"],
@@ -422,11 +380,7 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -487,20 +441,11 @@ class ExterneTaakTests(APITestCase):
         # patch isToegewezenAan with the new details
         response = self.client.patch(
             detail_url,
-            {
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": {"urn": "urn:example:12345"}
-                },
-            },
+            {"isToegewezenAan": "urn:example:12345"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            gegevensuitvraagtaak.is_toegewezen_aan,
-            {
-                "authentiekeVerwijzing": {"urn": "urn:example:12345"},
-            },
-        )
+        self.assertEqual(gegevensuitvraagtaak.is_toegewezen_aan, "urn:example:12345")
 
     def test_update(self):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
@@ -543,11 +488,7 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
@@ -621,11 +562,7 @@ class ExterneTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": betaaltaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
                 "hoortBij": betaaltaak.hoort_bij,
                 "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,

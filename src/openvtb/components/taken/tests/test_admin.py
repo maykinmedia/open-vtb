@@ -52,13 +52,7 @@ class ExterneTaakAdminTests(WebTest):
                 },
             }
         )
-        form["is_toegewezen_aan"] = json.dumps(
-            {
-                "authentiekeVerwijzing": {
-                    "urn": "urn:nld:brp:bsn:111222333",
-                }
-            }
-        )
+        form["is_toegewezen_aan"] = "urn:nld:brp:bsn:111222333"
 
         response = form.submit()
 

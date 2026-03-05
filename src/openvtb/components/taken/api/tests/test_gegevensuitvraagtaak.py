@@ -7,7 +7,7 @@ from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.models import ExterneTaak
-from openvtb.components.taken.tests.factories import ADRES, ExterneTaakFactory
+from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -23,10 +23,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
         # create 1 gegevensuitvraagtaak
-        ExterneTaakFactory.create(
-            gegevensuitvraagtaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
         response = self.client.get(self.list_url)
 
@@ -53,19 +50,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                         "toelichting": gegevensuitvraagtaak.toelichting,
-                        "isToegewezenAan": {
-                            "authentiekeVerwijzing": None,
-                            "nietAuthentiekePersoonsgegevens": {
-                                "voornaam": "Jan",
-                                "achternaam": "Jansen",
-                                "geboortedatum": "1980-05-15",
-                                "emailadres": "jan.jansen@example.com",
-                                "telefoonnummer": "+31612345678",
-                                "postadres": ADRES,
-                                "verblijfsadres": None,
-                            },
-                            "nietAuthentiekeOrganisatiegegevens": None,
-                        },
+                        "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                         "wordtBehandeldDoor": "",
                         "hoortBij": "",
                         "heeftBetrekkingOp": "",
@@ -102,10 +87,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(ExterneTaak.objects.all().count(), 2)
 
     def test_detail(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(
-            gegevensuitvraagtaak=True,
-            niet_authentieke_persoonsgegevens=True,
-        )
+        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
         detail_url = reverse(
             "taken:gegevensuitvraagtaak-detail",
             kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
@@ -125,13 +107,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": gegevensuitvraagtaak.is_toegewezen_aan[
-                        "nietAuthentiekePersoonsgegevens"
-                    ],
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                },
+                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
                 "hoortBij": gegevensuitvraagtaak.hoort_bij,
                 "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
@@ -186,15 +162,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                     },
                 },
             },
-            "isToegewezenAan": {
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            },
+            "isToegewezenAan": "urn:example:12345",
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -213,13 +181,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                    "nietAuthentiekeOrganisatiegegevens": gegevensuitvraagtaak.is_toegewezen_aan[
-                        "nietAuthentiekeOrganisatiegegevens"
-                    ],
-                },
+                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
                 "hoortBij": gegevensuitvraagtaak.hoort_bij,
                 "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
@@ -318,11 +280,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
                 "hoortBij": gegevensuitvraagtaak.hoort_bij,
                 "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
@@ -417,11 +375,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
                 "hoortBij": gegevensuitvraagtaak.hoort_bij,
                 "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
@@ -495,21 +449,11 @@ class GegevensuitvraagTaakTests(APITestCase):
 
         # patch isToegewezenAan with the new details
         response = self.client.patch(
-            detail_url,
-            {
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": {"urn": "urn:example:12345"}
-                },
-            },
+            detail_url, {"isToegewezenAan": "urn:example:12345"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            gegevensuitvraagtaak.is_toegewezen_aan,
-            {
-                "authentiekeVerwijzing": {"urn": "urn:example:12345"},
-            },
-        )
+        self.assertEqual(gegevensuitvraagtaak.is_toegewezen_aan, "urn:example:12345")
 
     def test_valid_update(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
@@ -545,11 +489,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": {
-                    "authentiekeVerwijzing": None,
-                    "nietAuthentiekeOrganisatiegegevens": None,
-                    "nietAuthentiekePersoonsgegevens": None,
-                },
+                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
                 "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
                 "hoortBij": gegevensuitvraagtaak.hoort_bij,
                 "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
