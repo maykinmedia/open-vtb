@@ -19,14 +19,18 @@ from rest_framework.utils.field_mapping import (
 
 from openvtb.utils.validators import URNValidator, validate_iban
 
+URNSchema = {
+    "type": "string",
+    "format": "urn",
+    "example": "urn:namespace:component:resource:uuid",
+}
+
 
 class NoUrnMatch(Exception):
     pass
 
 
-@extend_schema_field(
-    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
-)
+@extend_schema_field(URNSchema)
 class URNRelatedField(RelatedField):
     """
     A DRF field for representing related objects as URNs.
@@ -252,9 +256,7 @@ class URNModelSerializer(serializers.ModelSerializer):
         return field_class, field_kwargs
 
 
-@extend_schema_field(
-    {"type": "string", "example": "urn:namespace:component:resource:uuid"}
-)
+@extend_schema_field(URNSchema)
 class URNField(CharField):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

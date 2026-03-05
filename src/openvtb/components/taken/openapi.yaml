@@ -833,6 +833,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -880,6 +881,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -890,6 +892,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -898,6 +901,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -906,6 +910,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -962,6 +967,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1009,6 +1015,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1019,6 +1026,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1027,6 +1035,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1035,6 +1044,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1062,6 +1072,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1109,6 +1120,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1119,6 +1131,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1127,6 +1140,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1135,6 +1149,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1167,6 +1182,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1214,6 +1230,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1224,6 +1241,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1232,6 +1250,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1240,6 +1259,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1272,6 +1292,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1319,6 +1340,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1329,6 +1351,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1337,6 +1360,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1345,6 +1369,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1377,6 +1402,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1424,6 +1450,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1434,6 +1461,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1442,6 +1470,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1450,6 +1479,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1482,6 +1512,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1529,6 +1560,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1539,6 +1571,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1547,6 +1580,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1555,6 +1589,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1582,6 +1617,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1629,6 +1665,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1639,6 +1676,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1647,6 +1685,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1655,6 +1694,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1738,6 +1778,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1785,6 +1826,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1795,6 +1837,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1803,6 +1846,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1811,6 +1855,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1838,6 +1883,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1885,6 +1931,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -1895,6 +1942,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -1903,6 +1951,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -1911,6 +1960,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -1943,6 +1993,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -1990,6 +2041,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2000,6 +2052,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2008,6 +2061,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2016,6 +2070,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2048,6 +2103,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2095,6 +2151,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2105,6 +2162,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2113,6 +2171,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2121,6 +2180,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2153,6 +2213,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2200,6 +2261,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2210,6 +2272,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2218,6 +2281,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2226,6 +2290,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2258,6 +2323,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2305,6 +2371,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2315,6 +2382,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2323,6 +2391,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2331,6 +2400,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2358,6 +2428,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2405,6 +2476,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2415,6 +2487,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2423,6 +2496,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2431,6 +2505,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2480,6 +2555,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2527,6 +2603,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2537,6 +2614,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2545,6 +2623,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2553,6 +2632,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2580,6 +2660,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2627,6 +2708,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2637,6 +2719,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2645,6 +2728,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2653,6 +2737,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2685,6 +2770,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2732,6 +2818,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2742,6 +2829,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2750,6 +2838,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2758,6 +2847,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2790,6 +2880,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2837,6 +2928,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2847,6 +2939,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2855,6 +2948,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2863,6 +2957,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -2895,6 +2990,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -2942,6 +3038,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -2952,6 +3049,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -2960,6 +3058,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -2968,6 +3067,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -3000,6 +3100,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -3047,6 +3148,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -3057,6 +3159,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -3065,6 +3168,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -3073,6 +3177,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -3100,6 +3205,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -3147,6 +3253,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -3157,6 +3264,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -3165,6 +3273,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -3173,6 +3282,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -3297,6 +3407,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -3344,6 +3455,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -3354,6 +3466,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -3362,6 +3475,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -3370,6 +3484,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -3401,6 +3516,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -3448,6 +3564,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -3458,6 +3575,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -3466,6 +3584,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -3474,6 +3593,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
@@ -3494,6 +3614,7 @@ components:
           maxLength: 1000
         urn:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
           description: De Uniform Resource Name van de externe taak.
@@ -3541,6 +3662,7 @@ components:
           maxLength: 4000
         isToegewezenAan:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Is toegewezen aan subject
           description: 'Verwijzing naar een authentieke of niet-authentieke persoon
@@ -3551,6 +3673,7 @@ components:
           maxLength: 255
         wordtBehandeldDoor:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Wordt behandeld door medewerker
           description: De medewerker die verantwoordelijk is voor de uitvoering van
@@ -3559,6 +3682,7 @@ components:
           maxLength: 255
         hoortBij:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Hoort bij zaak
           description: 'Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar
@@ -3567,6 +3691,7 @@ components:
           maxLength: 255
         heeftBetrekkingOp:
           type: string
+          format: urn
           example: urn:namespace:component:resource:uuid
           title: Heeft betrekking op product
           description: 'Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het
