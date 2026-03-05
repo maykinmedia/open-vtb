@@ -729,6 +729,16 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Geometry'
+    IsGerelateerdAan:
+      type: object
+      properties:
+        urn:
+          type: string
+          example: urn:namespace:component:resource:uuid
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+      required:
+      - urn
     LineString:
       type: object
       description: GeoJSON line-string geometry
@@ -925,7 +935,7 @@ components:
         isGerelateerdAan:
           type: array
           items:
-            $ref: '#/components/schemas/isGerelateerdAan'
+            $ref: '#/components/schemas/IsGerelateerdAan'
           description: Lijst van URN's naar ZAAK of PRODUCT.
         kanaal:
           type: string
@@ -980,6 +990,7 @@ components:
           items:
             $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
           readOnly: true
+          description: Lijst van beschikbare versies voor dit type verzoek.
         naam:
           type: string
           description: Naam voor het VerzoekType
@@ -1162,7 +1173,7 @@ components:
         isGerelateerdAan:
           type: array
           items:
-            $ref: '#/components/schemas/isGerelateerdAan'
+            $ref: '#/components/schemas/IsGerelateerdAan'
           description: Lijst van URN's naar ZAAK of PRODUCT.
         kanaal:
           type: string
@@ -1268,6 +1279,7 @@ components:
           items:
             $ref: '#/components/schemas/VerzoekTypeVersionReadOnly'
           readOnly: true
+          description: Lijst van beschikbare versies voor dit type verzoek.
         naam:
           type: string
           description: Naam voor het VerzoekType
@@ -1372,16 +1384,6 @@ components:
       required:
       - url
       - versie
-    isGerelateerdAan:
-      type: object
-      properties:
-        urn:
-          type: string
-          example: urn:namespace:component:resource:uuid
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-      required:
-      - urn
   securitySchemes:
     OpenID:
       type: openIdConnect

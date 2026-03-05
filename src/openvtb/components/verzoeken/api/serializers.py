@@ -221,7 +221,7 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
     versies = VerzoekTypeVersionReadOnlySerializer(
         read_only=True,
         many=True,
-        help_text="",  # TODO
+        help_text=_("Lijst van beschikbare versies voor dit type verzoek."),
     )
 
     class Meta:
@@ -249,7 +249,7 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         }
 
 
-class isGerelateerdAanSerializer(serializers.Serializer):
+class IsGerelateerdAanSerializer(serializers.Serializer):
     urn = URNField(
         required=True,
         help_text=_(
@@ -294,7 +294,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         help_text=_("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
     )
     is_gerelateerd_aan = serializers.ListSerializer(
-        child=isGerelateerdAanSerializer(),
+        child=IsGerelateerdAanSerializer(),
         required=False,
         help_text=get_help_text("verzoeken.Verzoek", "is_gerelateerd_aan"),
     )
