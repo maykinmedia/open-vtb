@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for versie in object.ordered_versies %}
+            {% for versie in object.versies.all %}
                 <tr>
                     <td>{{ versie.versie }}</td>
                     <td>{{ versie.get_status_display }}</td>

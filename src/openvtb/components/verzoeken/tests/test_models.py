@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from ..models import VerzoekTypeVersion
+from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
 from .factories import (
     JSON_SCHEMA,
     VerzoekFactory,
@@ -16,6 +16,30 @@ class ValidateVerzoekTypeSchemaTestCase(TestCase):
         self.assertEqual(
             verzoek_type.last_versie.aanvraag_gegevens_schema,
             JSON_SCHEMA,  # default from factories
+        )
+
+    def test_required_fields(self):
+        with self.assertRaises(ValidationError) as error:
+            instance = VerzoekType()
+            instance.full_clean()
+
+        self.assertEqual(
+            error.exception.message_dict,
+            {"naam": ["Dit veld kan niet leeg zijn"]},
+        )
+
+        with self.assertRaises(ValidationError) as error:
+            instance = VerzoekTypeVersion()
+            instance.full_clean()
+
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "verzoek_type": ["Dit veld mag niet leeg zijn."],
+                "versie": ["Dit veld mag niet leeg zijn."],
+                "einde_geldigheid": ["Dit veld kan niet leeg zijn"],
+                "aanvraag_gegevens_schema": ["Dit veld kan niet leeg zijn"],
+            },
         )
 
     def test_invalid_schema(self):
@@ -68,6 +92,19 @@ class ValidateVerzoekSchemaTestCase(TestCase):
             verzoek_type=self.verzoek_type, aanvraag_gegevens={"diameter": 1}
         )
         self.verzoek.full_clean()
+
+    def test_required_fields(self):
+        with self.assertRaises(ValidationError) as error:
+            instance = Verzoek()
+            instance.full_clean()
+
+        self.assertEqual(
+            error.exception.message_dict,
+            {
+                "verzoek_type": ["Dit veld mag niet leeg zijn."],
+                "aanvraag_gegevens": ["Dit veld kan niet leeg zijn"],
+            },
+        )
 
     def test_without_verzoek_type_schema(self):
         with self.assertRaises(ValidationError) as error:

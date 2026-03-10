@@ -43,4 +43,4 @@ class BijlageFactory(DjangoModelFactory):
 
     bericht = factory.SubFactory(BerichtFactory)
     informatie_object = factory.LazyFunction(get_random_urn)
-    omschrijving = factory.Faker("sentence", nb_words=4)
+    omschrijving = factory.Faker("word")

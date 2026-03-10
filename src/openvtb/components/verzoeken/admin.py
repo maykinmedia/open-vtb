@@ -54,7 +54,7 @@ class VerzoekTypeVersionInline(admin.StackedInline):
             queryset.filter(verzoek_type_id=parent_id).order_by("-versie").first()
         )
         if not last_versie:
-            return queryset.none()
+            return queryset
         return queryset.filter(id=last_versie.id)
 
     def has_delete_permission(self, request, obj=None):

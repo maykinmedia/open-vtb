@@ -61,10 +61,6 @@ class VerzoekType(models.Model):
     def last_versie(self):
         return self.versies.order_by("-versie").first()
 
-    @property
-    def ordered_versies(self):
-        return self.versies.order_by("-versie")
-
 
 class VerzoekTypeVersion(models.Model):
     verzoek_type = models.ForeignKey(
@@ -377,6 +373,7 @@ class Verzoek(models.Model):
     def clean_verzoek_type(self):
         if not self.verzoek_type_id:
             return
+
         if not self.verzoek_type.versies.filter(versie=self.versie).exists():
             raise ValidationError(
                 {
