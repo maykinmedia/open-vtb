@@ -30,8 +30,11 @@ class Bericht(models.Model):
     publicatiedatum = models.DateTimeField(
         _("publicatiedatum"),
         default=timezone.now,
+        null=True,
         help_text=_(
-            "Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger."
+            "Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger. "
+            "Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de lokale overheid. "
+            "De standaardwaarde is de huidige datum/tijd."
         ),
     )
     referentie = models.CharField(
@@ -61,7 +64,9 @@ class Bericht(models.Model):
         max_length=8,
         blank=True,
         help_text=_(
-            "Een code die hoort bij het sjabloon zoals gebruikt in de Mijn Overheid berichtenbox."
+            "Een code die hoort bij het sjabloon zoals gebruikt in de Mijn Overheid berichtenbox. "
+            "Indien dit een geldige waarde bevat, wordt het bericht doorgezet naar Mijn Overheid berichtenbox. "
+            "In de andere gevallen is het bericht enkel op het portaal van de lokale overheid te zien."
         ),
     )
     handelings_perspectief = models.CharField(
@@ -75,7 +80,6 @@ class Bericht(models.Model):
     )
     einddatum_handelings_termijn = models.DateTimeField(
         _("einddatum handelings termijn"),
-        default=None,
         null=True,
         help_text=_("Datum/tijd waarop handeling afgerond moet zijn."),
     )
