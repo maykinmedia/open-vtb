@@ -99,30 +99,6 @@ class ExterneTaak(models.Model):
         ),
         blank=True,
     )
-    wordt_behandeld_door = URNField(
-        _("wordt behandeld door medewerker"),
-        help_text=_(
-            "De medewerker die verantwoordelijk is voor de uitvoering van deze taak. "
-            "Kan een entiteit van het type MEDEWERKER zijn."
-        ),
-        blank=True,
-    )
-    hoort_bij = URNField(
-        _("hoort bij zaak"),
-        help_text=_(
-            "Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar de ZAAK. "
-            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
-        ),
-        blank=True,
-    )
-    heeft_betrekking_op = URNField(
-        _("heeft betrekking op product"),
-        help_text=_(
-            "Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het PRODUCT. "
-            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
-        ),
-        blank=True,
-    )
 
     class Meta:
         verbose_name = _("Externe taak")

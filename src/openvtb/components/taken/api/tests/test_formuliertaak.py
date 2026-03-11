@@ -51,9 +51,6 @@ class FormulierTaakTests(APITestCase):
                         "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                         "toelichting": formuliertaak.toelichting,
                         "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                        "wordtBehandeldDoor": "",
-                        "hoortBij": "",
-                        "heeftBetrekkingOp": "",
                         "taakSoort": formuliertaak.taak_soort,
                         "details": {
                             "formulierDefinitie": formuliertaak.details[
@@ -108,9 +105,6 @@ class FormulierTaakTests(APITestCase):
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -198,9 +192,6 @@ class FormulierTaakTests(APITestCase):
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -307,9 +298,6 @@ class FormulierTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
-            "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
-            "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "heeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -360,9 +348,6 @@ class FormulierTaakTests(APITestCase):
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -453,9 +438,6 @@ class FormulierTaakTests(APITestCase):
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -610,9 +592,6 @@ class FormulierTaakTests(APITestCase):
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],

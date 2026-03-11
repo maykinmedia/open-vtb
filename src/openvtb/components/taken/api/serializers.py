@@ -155,9 +155,6 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
             "datum_herinnering",
             "toelichting",
             "is_toegewezen_aan",
-            "wordt_behandeld_door",
-            "hoort_bij",
-            "heeft_betrekking_op",
             "taak_soort",
             "details",
         )

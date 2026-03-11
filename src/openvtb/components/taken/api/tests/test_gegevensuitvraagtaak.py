@@ -51,9 +51,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                         "toelichting": gegevensuitvraagtaak.toelichting,
                         "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                        "wordtBehandeldDoor": "",
-                        "hoortBij": "",
-                        "heeftBetrekkingOp": "",
                         "taakSoort": gegevensuitvraagtaak.taak_soort,
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
@@ -108,9 +105,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
-                "hoortBij": gegevensuitvraagtaak.hoort_bij,
-                "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -182,9 +176,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
-                "hoortBij": gegevensuitvraagtaak.hoort_bij,
-                "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -281,9 +272,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
-                "hoortBij": gegevensuitvraagtaak.hoort_bij,
-                "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -376,9 +364,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
-                "hoortBij": gegevensuitvraagtaak.hoort_bij,
-                "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -490,9 +475,6 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": gegevensuitvraagtaak.wordt_behandeld_door,
-                "hoortBij": gegevensuitvraagtaak.hoort_bij,
-                "heeftBetrekkingOp": gegevensuitvraagtaak.heeft_betrekking_op,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],

@@ -22,10 +22,7 @@
             },
             "transactieomschrijving": "test"
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
-        "wordt_behandeld_door": "",
-        "hoort_bij": "",
-        "heeft_betrekking_op": ""
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
     }
 },
 {
@@ -50,10 +47,7 @@
                 "key": "value"
             }
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
-        "wordt_behandeld_door": "",
-        "hoort_bij": "",
-        "heeft_betrekking_op": ""
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
     }
 },
 {
@@ -109,10 +103,7 @@
                 "textField": "Test value"
             }
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
-        "wordt_behandeld_door": "",
-        "hoort_bij": "",
-        "heeft_betrekking_op": ""
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
     }
 }
 ]

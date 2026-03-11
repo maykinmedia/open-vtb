@@ -51,9 +51,6 @@ class BetaalTaakTests(APITestCase):
                         "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                         "toelichting": betaaltaak.toelichting,
                         "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                        "wordtBehandeldDoor": "",
-                        "hoortBij": "",
-                        "heeftBetrekkingOp": "",
                         "taakSoort": betaaltaak.taak_soort,
                         "details": {
                             "bedrag": betaaltaak.details["bedrag"],
@@ -105,9 +102,6 @@ class BetaalTaakTests(APITestCase):
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -174,9 +168,6 @@ class BetaalTaakTests(APITestCase):
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -202,9 +193,6 @@ class BetaalTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
-            "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
-            "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "heeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
@@ -234,9 +222,6 @@ class BetaalTaakTests(APITestCase):
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -398,9 +383,6 @@ class BetaalTaakTests(APITestCase):
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -518,9 +500,6 @@ class BetaalTaakTests(APITestCase):
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
