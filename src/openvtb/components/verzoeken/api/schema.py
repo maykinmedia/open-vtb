@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.drf_spectacular import URN_DESCRIPTION
+from openvtb.components.drf_spectacular import URN_DESCRIPTION
 
 custom_settings = {
     "TITLE": "Verzoeken API",
@@ -11,7 +11,7 @@ custom_settings = {
         "Inkomende gegevens worden getoetst aan dit schema en opgeslagen in een consistent, gestructureerd formaat."
     )
     + URN_DESCRIPTION,
-    "VERSION": settings.VERZOEK_API_VERSION,
+    "VERSION": settings.VERZOEKEN_API_VERSION,
     "SERVERS": [{"url": "/verzoeken/api/v1"}],
     "TAGS": [
         {"name": "verzoeken"},

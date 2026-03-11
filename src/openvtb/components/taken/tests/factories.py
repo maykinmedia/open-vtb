@@ -95,36 +95,3 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                 },
             },
         )
-
-        # is_toegewezen_aan type
-        authentieke_verwijzing = factory.Trait(
-            is_toegewezen_aan={
-                "authentiekeVerwijzing": {
-                    "urn": "urn:nld:brp:bsn:111222333",
-                }
-            }
-        )
-        niet_authentieke_persoonsgegevens = factory.Trait(
-            is_toegewezen_aan={
-                "nietAuthentiekePersoonsgegevens": {
-                    "voornaam": "Jan",
-                    "achternaam": "Jansen",
-                    "geboortedatum": "1980-05-15",
-                    "emailadres": "jan.jansen@example.com",
-                    "telefoonnummer": "+31612345678",
-                    "postadres": ADRES,
-                    "verblijfsadres": None,
-                }
-            }
-        )
-        niet_authentieke_organisatiegegevens = factory.Trait(
-            is_toegewezen_aan={
-                "nietAuthentiekeOrganisatiegegevens": {
-                    "statutaireNaam": "Acme BV",
-                    "bezoekadres": None,
-                    "postadres": ADRES,
-                    "emailadres": "info@acme.nl",
-                    "telefoonnummer": "+31201234567",
-                }
-            }
-        )

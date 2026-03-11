@@ -7,9 +7,8 @@ from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
-from openvtb.components.utils.serializers import IsIngediendDoorSerializer
-from openvtb.components.utils.validators import IsIngediendDoorValidator
 from openvtb.utils.serializers import (
+    URNField,
     URNModelSerializer,
     URNRelatedField,
 )
@@ -64,7 +63,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         model = VerzoekTypeVersion
         fields = (
             "url",
-            "version",
+            "versie",
             "verzoek_type",
             "bijlage_typen",
             "status",
@@ -76,14 +75,14 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         )
         extra_kwargs = {
             "url": {
-                "lookup_field": "version",
-                "lookup_url_kwarg": "verzoektype_version",
+                "lookup_field": "versie",
+                "lookup_url_kwarg": "verzoektype_versie",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
                     "De unieke URL van deze VerzoekType versie binnen deze API."
                 ),
             },
-            "version": {"read_only": True},
+            "versie": {"read_only": True},
             "verzoek_type": {
                 "lookup_field": "uuid",
                 "view_name": "verzoeken:verzoektype-detail",
@@ -135,7 +134,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         if bijlage_typen:
             try:
                 objs = [
-                    BijlageType(verzoek_type_version=instance, **data)
+                    BijlageType(verzoek_type_versie=instance, **data)
                     for data in bijlage_typen
                 ]
                 BijlageType.objects.bulk_create(objs)
@@ -156,7 +155,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         if bijlage_typen:
             for bijlage_type in bijlage_typen:
                 BijlageType.objects.update_or_create(
-                    verzoek_type_version=instance,
+                    verzoek_type_versie=instance,
                     informatie_objecttype=bijlage_type["informatie_objecttype"],
                     defaults={**bijlage_type},
                 )
@@ -166,10 +165,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
 class BijlageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bijlage
-        fields = (
-            "informatie_object",
-            "toelichting",
-        )
+        fields = ("informatie_object",)
         extra_kwargs = {
             "informatie_object": {"required": True, "validators": []},
         }
@@ -185,7 +181,7 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerzoekBetaling
         fields = (
-            "kenmerken",
+            "provider_kenmerk",
             "bedrag",
             "voltooid",
             "transactie_datum",
@@ -206,13 +202,13 @@ class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
         model = VerzoekTypeVersion
         fields = (
             "url",
-            "version",
+            "versie",
             "status",
         )
         extra_kwargs = {
             "url": {
-                "lookup_field": "version",
-                "lookup_url_kwarg": "verzoektype_version",
+                "lookup_field": "versie",
+                "lookup_url_kwarg": "verzoektype_versie",
                 "view_name": "verzoeken:verzoektypeversion-detail",
                 "help_text": _(
                     "De unieke URL van deze VerzoekType versie binnen deze API."
@@ -222,10 +218,10 @@ class VerzoekTypeVersionReadOnlySerializer(NestedHyperlinkedModelSerializer):
 
 
 class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
-    versions = VerzoekTypeVersionReadOnlySerializer(
+    versies = VerzoekTypeVersionReadOnlySerializer(
         read_only=True,
         many=True,
-        help_text="",  # TODO
+        help_text=_("Lijst van beschikbare versies voor dit type verzoek."),
     )
 
     class Meta:
@@ -234,9 +230,9 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             "url",
             "urn",
             "uuid",
-            "versions",
+            "versies",
             "naam",
-            "toelichting",
+            "omschrijving",
         )
 
         extra_kwargs = {
@@ -251,6 +247,15 @@ class VerzoekTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
                 "help_text": _("De Uniform Resource Name van het VerzoekType."),
             },
         }
+
+
+class IsGerelateerdAanSerializer(serializers.Serializer):
+    urn = URNField(
+        required=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+        ),
+    )
 
 
 class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
@@ -276,27 +281,22 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
     verzoek_bron = VerzoekBronSerializer(
         source="bron",
         required=False,
-        help_text="",  # TODO
+        help_text=_("Een verwijzing naar de bron waar dit verzoek vandaan komt."),
     )
     verzoek_betaling = VerzoekBetalingSerializer(
         source="betaling",
         required=False,
-        help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),  # TODO check
+        help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),
     )
     bijlagen = BijlageSerializer(
         required=False,
         many=True,
-        help_text=_(
-            "Lijst met bijlagen die aan deze bron zijn gekoppeld."
-        ),  # TODO check
+        help_text=_("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
     )
-    is_ingediend_door = IsIngediendDoorSerializer(
+    is_gerelateerd_aan = serializers.ListSerializer(
+        child=IsGerelateerdAanSerializer(),
         required=False,
-        help_text=(
-            "Gegevens over wie het verzoek heeft ingediend. "
-            "Let op: slechts ÉÉN van de drie mag aanwezig zijn! "
-            "Keuzes: **authentiekeVerwijzing**, **nietAuthentiekePersoonsgegevens** of **nietAuthentiekeOrganisatiegegevens**."
-        ),
+        help_text=get_help_text("verzoeken.Verzoek", "is_gerelateerd_aan"),
     )
 
     class Meta:
@@ -309,13 +309,13 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "verzoek_type_urn",
             "geometrie",
             "aanvraag_gegevens",
-            "version",
+            "versie",
             "bijlagen",
-            "is_ingediend_door",
+            "initiator",
             "is_gerelateerd_aan",
             "kanaal",
-            "authenticatie_context",
-            "informatie_object",
+            "verzoek_taal",
+            "verzoek_informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
         )
@@ -336,12 +336,10 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens": {
                 "required": True,
             },
+            "verzoek_taal": {"default": "nl"},
         }
 
-    validators = [
-        AanvraagGegevensValidator(),
-        IsIngediendDoorValidator("is_ingediend_door"),
-    ]
+    validators = [AanvraagGegevensValidator()]
 
     def validate_bijlagen(self, value):
         """

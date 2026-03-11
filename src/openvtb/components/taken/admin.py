@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.widgets import JSONSuit
+from openvtb.components.widgets import JSONSuit
 
 from .models import ExterneTaak
 

@@ -4,12 +4,12 @@
 {% block submit-row %}
     {{ block.super }}
 
-    {% if original.last_version %}
-        <a href="{% url 'admin:verzoeken_bijlagetype_add' %}?verzoek_type_version={{original.last_version.pk}}" class="button">{% trans 'Add Bijlage Type ' %}</a>
-        {% if original.last_version.status == 'draft' %}
+    {% if original.last_versie %}
+        <a href="{% url 'admin:verzoeken_bijlagetype_add' %}?verzoek_type_versie={{original.last_versie.pk}}" class="button">{% trans 'Add Bijlage Type ' %}</a>
+        {% if original.last_versie.status == 'draft' %}
             <input type="submit" value="{% trans 'Publish' %}" name="_publish">
-        {% elif original.last_version.status == 'published' %}
-            <input type="submit" value="{% trans 'New version' %}" name="_newversion">
+        {% elif original.last_versie.status == 'published' %}
+            <input type="submit" value="{% trans 'New version' %}" name="_newversie">
         {% endif %}
     {% endif %}
 

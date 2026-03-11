@@ -3,7 +3,7 @@ from vng_api_common.conf.api import *  # noqa - imports white-listed
 # Remove the reference - we don't have a single API version.
 del API_VERSION  # noqa
 
-VERZOEK_API_VERSION = "0.1.0"
+VERZOEKEN_API_VERSION = "0.1.0"
 TAKEN_API_VERSION = "0.1.0"
 BERICHTEN_API_VERSION = "0.1.0"
 

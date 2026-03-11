@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from openvtb.components.utils.widgets import JSONSuit
+from openvtb.components.widgets import JSONSuit
 
 from .constants import VerzoekTypeVersionStatus
 from .forms import VerzoekTypeVersionForm
@@ -30,13 +30,13 @@ class BijlageTypeAdmin(admin.ModelAdmin):
 class VerzoekTypeVersionInline(admin.StackedInline):
     model = VerzoekTypeVersion
     form = VerzoekTypeVersionForm
-    verbose_name_plural = _("last version")
+    verbose_name_plural = _("last versie")
     extra = 0
     max_num = 1
     min_num = 1
 
     readonly_fields = (
-        "version",
+        "versie",
         "status",
         "begin_geldigheid",
         "aangemaakt_op",
@@ -50,12 +50,12 @@ class VerzoekTypeVersionInline(admin.StackedInline):
         parent_id = request.resolver_match.kwargs.get("object_id")
         if not parent_id:
             return queryset
-        last_version = (
-            queryset.filter(verzoek_type_id=parent_id).order_by("-version").first()
+        last_versie = (
+            queryset.filter(verzoek_type_id=parent_id).order_by("-versie").first()
         )
-        if not last_version:
-            return queryset.none()
-        return queryset.filter(id=last_version.id)
+        if not last_versie:
+            return queryset
+        return queryset.filter(id=last_versie.id)
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -68,7 +68,7 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
         "uuid",
         "aangemaakt_op",
         "gewijzigd_op",
-        "last_version",
+        "last_versie",
     )
     search_fields = (
         "naam",
@@ -78,33 +78,33 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
     readonly_fields = ("uuid",)
 
     def publish(self, request, obj):
-        last_version = obj.last_version
-        last_version.status = VerzoekTypeVersionStatus.PUBLISHED
-        last_version.save()
+        last_versie = obj.last_versie
+        last_versie.status = VerzoekTypeVersionStatus.PUBLISHED
+        last_versie.save()
 
         self.message_user(
             request,
             format_html(
-                _("The VerzoekType {version} has been published successfully!"),
-                version=obj.last_version,
+                _("The VerzoekType {versie} has been published successfully!"),
+                versie=obj.last_versie,
             ),
             level=messages.SUCCESS,
         )
 
         return HttpResponseRedirect(request.path)
 
-    def add_new_version(self, request, obj):
-        new_version = obj.last_version
-        new_version.pk = None
-        new_version.version = new_version.version + 1
-        new_version.status = VerzoekTypeVersionStatus.DRAFT
-        new_version.save()
+    def add_new_versie(self, request, obj):
+        new_versie = obj.last_versie
+        new_versie.pk = None
+        new_versie.versie = new_versie.versie + 1
+        new_versie.status = VerzoekTypeVersionStatus.DRAFT
+        new_versie.save()
 
         self.message_user(
             request,
             format_html(
-                _("The new version {version} has been created successfully!"),
-                version=new_version,
+                _("The new versie {versie} has been created successfully!"),
+                versie=new_versie,
             ),
             level=messages.SUCCESS,
         )
@@ -115,8 +115,8 @@ class VerzoekTypeAdmin(admin.ModelAdmin):
         if "_publish" in request.POST:
             return self.publish(request, obj)
 
-        if "_newversion" in request.POST:
-            return self.add_new_version(request, obj)
+        if "_newversie" in request.POST:
+            return self.add_new_versie(request, obj)
 
         return super().response_change(request, obj)
 

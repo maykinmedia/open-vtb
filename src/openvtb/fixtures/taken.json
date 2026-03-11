@@ -22,23 +22,7 @@
             },
             "transactieomschrijving": "test"
         },
-        "is_toegewezen_aan": {
-            "nietAuthentiekePersoonsgegevens": {
-                "voornaam": "Jan",
-                "postadres": {
-                    "postcode": "1000 AB",
-                    "huisletter": "A",
-                    "huisnummer": "12",
-                    "woonplaats": "Amsterdam",
-                    "huisnummertoevoeging": "bis"
-                },
-                "achternaam": "Jansen",
-                "emailadres": "jan.jansen@example.com",
-                "geboortedatum": "1980-05-15",
-                "telefoonnummer": "+31612345678",
-                "verblijfsadres": null
-            }
-        },
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
         "wordt_behandeld_door": "",
         "hoort_bij": "",
         "heeft_betrekking_op": ""
@@ -66,23 +50,7 @@
                 "key": "value"
             }
         },
-        "is_toegewezen_aan": {
-            "nietAuthentiekePersoonsgegevens": {
-                "voornaam": "Jan",
-                "postadres": {
-                    "postcode": "1000 AB",
-                    "huisletter": "A",
-                    "huisnummer": "12",
-                    "woonplaats": "Amsterdam",
-                    "huisnummertoevoeging": "bis"
-                },
-                "achternaam": "Jansen",
-                "emailadres": "jan.jansen@example.com",
-                "geboortedatum": "1980-05-15",
-                "telefoonnummer": "+31612345678",
-                "verblijfsadres": null
-            }
-        },
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
         "wordt_behandeld_door": "",
         "hoort_bij": "",
         "heeft_betrekking_op": ""
@@ -141,21 +109,7 @@
                 "textField": "Test value"
             }
         },
-        "is_toegewezen_aan": {
-            "nietAuthentiekeOrganisatiegegevens": {
-                "postadres": {
-                    "postcode": "1000 AB",
-                    "huisletter": "A",
-                    "huisnummer": "12",
-                    "woonplaats": "Amsterdam",
-                    "huisnummertoevoeging": "bis"
-                },
-                "emailadres": "info@acme.nl",
-                "bezoekadres": null,
-                "statutaireNaam": "Acme BV",
-                "telefoonnummer": "+31201234567"
-            }
-        },
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
         "wordt_behandeld_door": "",
         "hoort_bij": "",
         "heeft_betrekking_op": ""

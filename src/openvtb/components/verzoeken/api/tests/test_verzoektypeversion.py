@@ -16,36 +16,36 @@ from openvtb.utils.api_testcase import APITestCase
 
 
 @freeze_time("2026-01-01")
-class VerzoekTypeVersionTests(APITestCase):
+class VerzoekTypeversieTests(APITestCase):
     list_url = reverse("verzoeken:verzoektype-list")
     maxDiff = None
 
-    def test_detail_versions(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+    def test_detail_versies(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
         VerzoekTypeVersionFactory.create_batch(4, verzoek_type=verzoektype)
 
-        version_url = f"http://testserver{(reverse('verzoeken:verzoektypeversion-list', kwargs={'verzoektype_uuid': str(verzoektype.uuid)}))}"
-        response = self.client.get(version_url)
+        versie_url = f"http://testserver{(reverse('verzoeken:verzoektypeversion-list', kwargs={'verzoektype_uuid': str(verzoektype.uuid)}))}"
+        response = self.client.get(versie_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # total = 1 + 4
         self.assertEqual(len(response.json()["results"]), 5)
         self.assertEqual(response.json()["count"], 5)
-        self.assertEqual(verzoektype.versions.count(), 5)
+        self.assertEqual(verzoektype.versies.count(), 5)
 
-        # check last version
-        self.assertEqual(verzoektype.last_version.version, 5)
-        version_url = f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_version': verzoektype.last_version.version}))}"
-        response = self.client.get(version_url)
+        # check last versie
+        self.assertEqual(verzoektype.last_versie.versie, 5)
+        versie_url = f"http://testserver{(reverse('verzoeken:verzoektypeversion-detail', kwargs={'verzoektype_uuid': str(verzoektype.uuid), 'verzoektype_versie': verzoektype.last_versie.versie}))}"
+        response = self.client.get(versie_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json(),
             {
-                "url": version_url,
-                "version": 5,
+                "url": versie_url,
+                "versie": 5,
                 "verzoekType": f"http://testserver{reverse('verzoeken:verzoektype-detail', kwargs={'uuid': str(verzoektype.uuid)})}",
                 "status": "draft",
-                "aanvraagGegevensSchema": verzoektype.last_version.aanvraag_gegevens_schema,
+                "aanvraagGegevensSchema": verzoektype.last_versie.aanvraag_gegevens_schema,
                 "bijlageTypen": [],
                 "aangemaaktOp": "2026-01-01",
                 "gewijzigdOp": "2026-01-01",
@@ -54,45 +54,45 @@ class VerzoekTypeVersionTests(APITestCase):
             },
         )
 
-    def test_invalid_detail_versions(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
+    def test_invalid_detail_versies(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
 
-        # not available version
-        version_number = 100
-        version_url = reverse(
+        # not available versie
+        versie_number = 100
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": version_number,
+                "verzoektype_versie": versie_number,
             },
         )
-        response = self.client.get(version_url)
+        response = self.client.get(versie_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         # not available verzoektype
         verzoektype_uuid = str(uuid.uuid4())
-        version_url = reverse(
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": verzoektype_uuid,
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
-        response = self.client.get(version_url)
+        response = self.client.get(versie_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         # invalid verzoektype uuid
         verzoektype_uuid = str(uuid.uuid4())
-        version_url = reverse(
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-list",
             kwargs={"verzoektype_uuid": "invalid-uuid-1234"},
         )
-        response = self.client.get(version_url)
+        response = self.client.get(versie_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_create_version(self):
+    def test_create_versie(self):
         verzoektype = VerzoekTypeFactory.create()
-        self.assertEqual(verzoektype.versions.count(), 0)
+        self.assertEqual(verzoektype.versies.count(), 0)
 
         url = reverse(
             "verzoeken:verzoektypeversion-list",
@@ -106,15 +106,15 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoektype = VerzoekType.objects.get()
 
-        self.assertEqual(verzoektype.versions.count(), 1)
-        version = verzoektype.last_version
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        self.assertEqual(version.version, 1)
-        self.assertEqual(version.status, VerzoekTypeVersionStatus.DRAFT)
-        self.assertEqual(version.aangemaakt_op, date(2026, 1, 1))
-        self.assertEqual(version.gewijzigd_op, date(2026, 1, 1))
-        self.assertEqual(version.begin_geldigheid, None)
-        self.assertEqual(version.einde_geldigheid, None)
+        self.assertEqual(verzoektype.versies.count(), 1)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertEqual(versie.versie, 1)
+        self.assertEqual(versie.status, VerzoekTypeVersionStatus.DRAFT)
+        self.assertEqual(versie.aangemaakt_op, date(2026, 1, 1))
+        self.assertEqual(versie.gewijzigd_op, date(2026, 1, 1))
+        self.assertEqual(versie.begin_geldigheid, None)
+        self.assertEqual(versie.einde_geldigheid, None)
 
         # verzoekType is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
@@ -126,30 +126,30 @@ class VerzoekTypeVersionTests(APITestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(verzoektype.versions.count(), 2)
-        version = verzoektype.last_version
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        self.assertEqual(version.version, 2)
-        self.assertEqual(version.verzoek_type, verzoektype)
+        self.assertEqual(verzoektype.versies.count(), 2)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertEqual(versie.versie, 2)
+        self.assertEqual(versie.verzoek_type, verzoektype)
 
-        # version is read_only, so is not used
+        # versie is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
         response = self.client.post(
             url,
             {
-                "version": 100,
+                "versie": 100,
                 "aanvraagGegevensSchema": JSON_SCHEMA,
             },
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(verzoektype.versions.count(), 3)
-        version = verzoektype.last_version
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        # version auto generated
-        self.assertEqual(version.version, 3)
-        self.assertEqual(version.verzoek_type, verzoektype)
+        self.assertEqual(verzoektype.versies.count(), 3)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        # versie auto generated
+        self.assertEqual(versie.versie, 3)
+        self.assertEqual(versie.verzoek_type, verzoektype)
 
-    def test_create_version_with_bijlage_typen(self):
+    def test_create_versie_with_bijlage_typen(self):
         data = {
             "aanvraagGegevensSchema": JSON_SCHEMA,
             "bijlageTypen": [
@@ -164,7 +164,7 @@ class VerzoekTypeVersionTests(APITestCase):
             ],
         }
         verzoektype = VerzoekTypeFactory.create()
-        self.assertEqual(verzoektype.versions.count(), 0)
+        self.assertEqual(verzoektype.versies.count(), 0)
 
         url = reverse(
             "verzoeken:verzoektypeversion-list",
@@ -175,13 +175,13 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         verzoektype = VerzoekType.objects.get()
 
-        self.assertEqual(verzoektype.versions.count(), 1)
-        version = verzoektype.last_version
-        self.assertEqual(version.bijlage_typen.count(), 2)
+        self.assertEqual(verzoektype.versies.count(), 1)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.bijlage_typen.count(), 2)
 
-    def test_invalid_create_version(self):
+    def test_invalid_create_versie(self):
         verzoektype = VerzoekTypeFactory.create()
-        self.assertEqual(verzoektype.versions.count(), 0)
+        self.assertEqual(verzoektype.versies.count(), 0)
 
         url = reverse(
             "verzoeken:verzoektypeversion-list",
@@ -202,7 +202,7 @@ class VerzoekTypeVersionTests(APITestCase):
                 "reason": "Dit veld is vereist.",
             },
         )
-        self.assertEqual(verzoektype.versions.count(), 0)
+        self.assertEqual(verzoektype.versies.count(), 0)
 
         # invalid schema
         response = self.client.post(
@@ -225,18 +225,18 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(error["name"], "aanvraagGegevensSchema")
         self.assertEqual(error["code"], "invalid-json-schema")
 
-    def test_update_version(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
+    def test_update_versie(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
 
         # empty PATCH
-        response = self.client.patch(version_url, {})
+        response = self.client.patch(versie_url, {})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # PATCH new_json_schema
@@ -248,18 +248,18 @@ class VerzoekTypeVersionTests(APITestCase):
             "properties": {"new_field": {"type": "string"}},
         }
         response = self.client.patch(
-            version_url, {"aanvraagGegevensSchema": new_json_schema}
+            versie_url, {"aanvraagGegevensSchema": new_json_schema}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         verzoektype.refresh_from_db()
-        version = verzoektype.last_version
+        versie = verzoektype.last_versie
 
-        self.assertNotEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        self.assertEqual(version.aanvraag_gegevens_schema, new_json_schema)
+        self.assertNotEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertEqual(versie.aanvraag_gegevens_schema, new_json_schema)
 
         # empty PUT
-        response = self.client.put(version_url, {})
+        response = self.client.put(versie_url, {})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
@@ -272,76 +272,74 @@ class VerzoekTypeVersionTests(APITestCase):
         )
 
         # PUT JSON_SCHEMA
-        response = self.client.put(version_url, {"aanvraagGegevensSchema": JSON_SCHEMA})
+        response = self.client.put(versie_url, {"aanvraagGegevensSchema": JSON_SCHEMA})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         verzoektype.refresh_from_db()
-        version = verzoektype.last_version
+        versie = verzoektype.last_versie
 
-        self.assertNotEqual(version.aanvraag_gegevens_schema, new_json_schema)
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertNotEqual(versie.aanvraag_gegevens_schema, new_json_schema)
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
 
-    def test_update_read_only_fields_version(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
+    def test_update_read_only_fields_versie(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
         # verzoekType is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
         response = self.client.patch(
-            version_url, {"verzoekType": str(new_verzoektype.uuid)}
+            versie_url, {"verzoekType": str(new_verzoektype.uuid)}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(verzoektype.versions.count(), 1)
-        version = verzoektype.last_version
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        self.assertEqual(version.version, 1)
-        self.assertEqual(version.verzoek_type, verzoektype)
+        self.assertEqual(verzoektype.versies.count(), 1)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        self.assertEqual(versie.versie, 1)
+        self.assertEqual(versie.verzoek_type, verzoektype)
 
-        # version is read_only, so is not used
+        # versie is read_only, so is not used
         new_verzoektype = VerzoekTypeFactory.create()
-        response = self.client.patch(version_url, {"version": 100})
+        response = self.client.patch(versie_url, {"versie": 100})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(verzoektype.versions.count(), 1)
-        version = verzoektype.last_version
-        self.assertEqual(version.aanvraag_gegevens_schema, JSON_SCHEMA)
-        # version auto generated
-        self.assertEqual(version.version, 1)
-        self.assertEqual(version.verzoek_type, verzoektype)
+        self.assertEqual(verzoektype.versies.count(), 1)
+        versie = verzoektype.last_versie
+        self.assertEqual(versie.aanvraag_gegevens_schema, JSON_SCHEMA)
+        # versie auto generated
+        self.assertEqual(versie.versie, 1)
+        self.assertEqual(versie.verzoek_type, verzoektype)
 
-    def test_update_status_version(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
+    def test_update_status_versie(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
 
         # DRAFT -> PUBLISHED
-        self.assertEqual(
-            verzoektype.last_version.status, VerzoekTypeVersionStatus.DRAFT
-        )
+        self.assertEqual(verzoektype.last_versie.status, VerzoekTypeVersionStatus.DRAFT)
         response = self.client.patch(
-            version_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
+            versie_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verzoektype.refresh_from_db()
         self.assertEqual(
-            verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+            verzoektype.last_versie.status, VerzoekTypeVersionStatus.PUBLISHED
         )
 
         # PUBLISHED -> DRAFT
         self.assertEqual(
-            verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+            verzoektype.last_versie.status, VerzoekTypeVersionStatus.PUBLISHED
         )
         response = self.client.patch(
-            version_url, {"status": VerzoekTypeVersionStatus.DRAFT}
+            versie_url, {"status": VerzoekTypeVersionStatus.DRAFT}
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -350,34 +348,34 @@ class VerzoekTypeVersionTests(APITestCase):
             get_validation_errors(response, "status"),
             {
                 "name": "status",
-                "code": "non-draft-version-update",
+                "code": "non-draft-versie-update",
                 "reason": "Alleen `draft` kunnen worden gewijzigd.",
             },
         )
         verzoektype.refresh_from_db()
         self.assertEqual(
-            verzoektype.last_version.status, VerzoekTypeVersionStatus.PUBLISHED
+            verzoektype.last_versie.status, VerzoekTypeVersionStatus.PUBLISHED
         )
 
     def test_automatically_update_expired_date(self):
         verzoektype = VerzoekTypeFactory.create()
         v1 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
-        self.assertEqual(v1.version, 1)
+        self.assertEqual(v1.versie, 1)
         v2 = VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
-        self.assertEqual(v2.version, 2)
+        self.assertEqual(v2.versie, 2)
 
-        version_url = reverse(
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
 
         # V2 DRAFT -> PUBLISHED
         self.assertEqual(v2.status, VerzoekTypeVersionStatus.DRAFT)
         response = self.client.patch(
-            version_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
+            versie_url, {"status": VerzoekTypeVersionStatus.PUBLISHED}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -391,8 +389,8 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertTrue(v1.is_expired)
 
     def test_manually_update_expired_date(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        self.assertFalse(verzoektype.last_version.is_expired)
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        self.assertFalse(verzoektype.last_versie.is_expired)
 
         # today
         response = self.client.patch(
@@ -400,7 +398,7 @@ class VerzoekTypeVersionTests(APITestCase):
                 "verzoeken:verzoektypeversion-detail",
                 kwargs={
                     "verzoektype_uuid": str(verzoektype.uuid),
-                    "verzoektype_version": verzoektype.last_version.version,
+                    "verzoektype_versie": verzoektype.last_versie.versie,
                 },
             ),
             {"eindeGeldigheid": date.today()},
@@ -408,7 +406,7 @@ class VerzoekTypeVersionTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         verzoektype.refresh_from_db()
-        self.assertTrue(verzoektype.last_version.is_expired)
+        self.assertTrue(verzoektype.last_versie.is_expired)
 
         # future
         response = self.client.patch(
@@ -416,7 +414,7 @@ class VerzoekTypeVersionTests(APITestCase):
                 "verzoeken:verzoektypeversion-detail",
                 kwargs={
                     "verzoektype_uuid": str(verzoektype.uuid),
-                    "verzoektype_version": verzoektype.last_version.version,
+                    "verzoektype_versie": verzoektype.last_versie.versie,
                 },
             ),
             {"eindeGeldigheid": date.today() + timedelta(1)},
@@ -426,33 +424,33 @@ class VerzoekTypeVersionTests(APITestCase):
         verzoektype.refresh_from_db()
 
         # expire tomorrow
-        self.assertFalse(verzoektype.last_version.is_expired)
+        self.assertFalse(verzoektype.last_versie.is_expired)
 
     def test_update_with_bijlage_typen(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
         BijlageType.objects.create(
-            verzoek_type_version=verzoektype.last_version,
+            verzoek_type_versie=verzoektype.last_versie,
             informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
             omschrijving="description1",
         )
         BijlageType.objects.create(
-            verzoek_type_version=verzoektype.last_version,
+            verzoek_type_versie=verzoektype.last_versie,
             informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:3c30bea0-cbf2-4fae-8d12-13b16395af1c",
             omschrijving="description2",
         )
 
-        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 2)
+        self.assertEqual(verzoektype.last_versie.bijlage_typen.count(), 2)
 
         # create in this case, because doesn't exist with this informatieObjecttype
         response = self.client.patch(
-            version_url,
+            versie_url,
             {
                 "bijlageTypen": [
                     {
@@ -466,18 +464,18 @@ class VerzoekTypeVersionTests(APITestCase):
 
         verzoektype.refresh_from_db()
 
-        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(verzoektype.last_versie.bijlage_typen.count(), 3)
 
         # check before and later `omschrijving`
         self.assertEqual(
-            verzoektype.last_version.bijlage_typen.get(
+            verzoektype.last_versie.bijlage_typen.get(
                 informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
             ).omschrijving,
             "description3",
         )
         # update in this case, because it exist with this informatie_objecttype
         response = self.client.patch(
-            version_url,
+            versie_url,
             {
                 "bijlageTypen": [
                     {
@@ -491,9 +489,9 @@ class VerzoekTypeVersionTests(APITestCase):
 
         verzoektype.refresh_from_db()
 
-        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(verzoektype.last_versie.bijlage_typen.count(), 3)
         self.assertEqual(
-            verzoektype.last_version.bijlage_typen.get(
+            verzoektype.last_versie.bijlage_typen.get(
                 informatie_objecttype="urn:nld:gemeenteutrecht:informatieobjecttype:uuid:dc367113-5a7b-4418-8d4e-14ae78720b70"
             ).omschrijving,
             "new_description_3",
@@ -501,7 +499,7 @@ class VerzoekTypeVersionTests(APITestCase):
 
         # invalid informatie_objecttype required
         response = self.client.patch(
-            version_url,
+            versie_url,
             {
                 "bijlageTypen": [
                     {
@@ -515,7 +513,7 @@ class VerzoekTypeVersionTests(APITestCase):
 
         verzoektype.refresh_from_db()
 
-        self.assertEqual(verzoektype.last_version.bijlage_typen.count(), 3)
+        self.assertEqual(verzoektype.last_versie.bijlage_typen.count(), 3)
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
             get_validation_errors(response, "bijlageTypen"),
@@ -526,50 +524,50 @@ class VerzoekTypeVersionTests(APITestCase):
             },
         )
 
-    def test_destroy_version(self):
-        verzoektype = VerzoekTypeFactory.create(create_version=True)
-        version_url = reverse(
+    def test_destroy_versie(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
-        response = self.client.get(version_url)
+        response = self.client.get(versie_url)
 
-        self.assertEqual(verzoektype.versions.count(), 1)
-        response = self.client.delete(version_url)
+        self.assertEqual(verzoektype.versies.count(), 1)
+        response = self.client.delete(versie_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        response = self.client.get(version_url)
+        response = self.client.get(versie_url)
         verzoektype.refresh_from_db()
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(verzoektype.versions.count(), 0)
+        self.assertEqual(verzoektype.versies.count(), 0)
 
         VerzoekTypeVersionFactory.create(verzoek_type=verzoektype)
         verzoektype.refresh_from_db()
-        self.assertEqual(verzoektype.versions.count(), 1)
+        self.assertEqual(verzoektype.versies.count(), 1)
 
         # DRAFT -> PUBLISHED
-        version = verzoektype.versions.first()
-        version.status = VerzoekTypeVersionStatus.PUBLISHED
-        version.save()
+        versie = verzoektype.versies.first()
+        versie.status = VerzoekTypeVersionStatus.PUBLISHED
+        versie.save()
 
-        version_url = reverse(
+        versie_url = reverse(
             "verzoeken:verzoektypeversion-detail",
             kwargs={
                 "verzoektype_uuid": str(verzoektype.uuid),
-                "verzoektype_version": verzoektype.last_version.version,
+                "verzoektype_versie": verzoektype.last_versie.versie,
             },
         )
-        response = self.client.delete(version_url)
+        response = self.client.delete(versie_url)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(len(response.data["invalid_params"]), 1)
         self.assertEqual(
             get_validation_errors(response, "nonFieldErrors"),
             {
                 "name": "nonFieldErrors",
-                "code": "non-draft-version-destroy",
-                "reason": "Only draft versions can be destroyed",
+                "code": "non-draft-versie-destroy",
+                "reason": "Only draft versies can be destroyed",
             },
         )

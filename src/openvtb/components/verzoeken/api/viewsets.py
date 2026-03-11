@@ -80,7 +80,7 @@ class VerzoekViewSet(viewsets.ModelViewSet):
     ),
 )
 class VerzoekTypeViewSet(viewsets.ModelViewSet):
-    queryset = VerzoekType.objects.prefetch_related("versions").order_by("-pk")
+    queryset = VerzoekType.objects.prefetch_related("versies").order_by("-pk")
     serializer_class = VerzoekTypeSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
@@ -120,10 +120,10 @@ class VerzoekTypeViewSet(viewsets.ModelViewSet):
     ),
 )
 class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
-    queryset = VerzoekTypeVersion.objects.order_by("verzoek_type", "-version")
+    queryset = VerzoekTypeVersion.objects.order_by("verzoek_type", "-versie")
     serializer_class = VerzoekTypeVersionSerializer
-    lookup_field = "version"
-    lookup_url_kwarg = "verzoektype_version"
+    lookup_field = "versie"
+    lookup_url_kwarg = "verzoektype_versie"
     permission_classes = (IsAuthenticated,)
     pagination_class = DynamicPageSizePagination
 
@@ -132,10 +132,10 @@ class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {
                     api_settings.NON_FIELD_ERRORS_KEY: [
-                        _("Only draft versions can be destroyed")
+                        _("Only draft versies can be destroyed")
                     ]
                 },
-                code="non-draft-version-destroy",
+                code="non-draft-versie-destroy",
             )
 
         super().perform_destroy(instance)
