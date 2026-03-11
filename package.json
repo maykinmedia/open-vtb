@@ -22,10 +22,13 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.0.0",
         "microscope-sass": "^2.0.0",
+        "minimatch": "^10.2.4",
         "prop-types": "latest",
+        "qs": "^6.15.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
-        "react-use": "^17.4.0"
+        "react-use": "^17.4.0",
+        "serialize-javascript": "^7.0.4"
     },
     "devDependencies": {
         "@babel/core": "^7.28.4",
@@ -52,7 +55,7 @@
         "simulant": "^0.2.2",
         "sinon": "^21.0.0",
         "url-loader": "^4.1.1",
-        "webpack": "^5.102.1",
+        "webpack": "^5.105.4",
         "webpack-cli": "^6.0.1",
         "webpack-dev-server": "^5.2.2",
         "webpack-stream": "^7.0.0",
