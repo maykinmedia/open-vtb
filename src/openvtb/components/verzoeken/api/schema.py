@@ -11,7 +11,7 @@ custom_settings = {
         "Inkomende gegevens worden getoetst aan dit schema en opgeslagen in een consistent, gestructureerd formaat."
     )
     + URN_DESCRIPTION,
-    "VERSION": settings.VERZOEK_API_VERSION,
+    "VERSION": settings.VERZOEKEN_API_VERSION,
     "SERVERS": [{"url": "/verzoeken/api/v1"}],
     "TAGS": [
         {"name": "verzoeken"},

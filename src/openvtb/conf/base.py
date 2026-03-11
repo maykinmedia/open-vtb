@@ -27,6 +27,7 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "localflavor",
 ]
 
+MIDDLEWARE += ["openvtb.utils.middleware.APIVersionHeaderMiddleware"]
 
 #
 # SECURITY settings
