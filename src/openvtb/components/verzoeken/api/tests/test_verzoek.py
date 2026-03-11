@@ -53,14 +53,14 @@ class VerzoekTests(APITestCase):
                         "isGerelateerdAan": [],
                         "kanaal": "",
                         "verzoekInformatieObject": "",
-                        "verzoekTaal": "nld",
+                        "verzoekTaal": "nl",
                         "initiator": verzoek.initiator,
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
                         },
                         "verzoekBetaling": {
-                            "kenmerken": verzoek.betaling.kenmerken,
+                            "providerKenmerk": verzoek.betaling.provider_kenmerk,
                             "bedrag": str(verzoek.betaling.bedrag),
                             "voltooid": verzoek.betaling.voltooid,
                             "transactieDatum": verzoek.betaling.transactie_datum.isoformat().replace(
@@ -106,13 +106,13 @@ class VerzoekTests(APITestCase):
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
-                "verzoekTaal": "nld",
+                "verzoekTaal": "nl",
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
                 },
                 "verzoekBetaling": {
-                    "kenmerken": verzoek.betaling.kenmerken,
+                    "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
                     "transactieDatum": verzoek.betaling.transactie_datum.isoformat().replace(
@@ -145,7 +145,7 @@ class VerzoekTests(APITestCase):
             "kanaal": "test",
             "verzoekInformatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
             "verzoekBetaling": {
-                "kenmerken": ["string"],
+                "providerKenmerk": "string",
                 "bedrag": "10",
                 "voltooid": True,
                 "transactieDatum": "2026-01-01T14:15:22Z",
@@ -186,7 +186,7 @@ class VerzoekTests(APITestCase):
                     "kenmerk": verzoek.bron.kenmerk,
                 },
                 "verzoekBetaling": {
-                    "kenmerken": verzoek.betaling.kenmerken,
+                    "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
                     "transactieDatum": verzoek.betaling.transactie_datum.isoformat().replace(
@@ -221,7 +221,7 @@ class VerzoekTests(APITestCase):
                 "kenmerk": "string",
             },
             "verzoekBetaling": {
-                "kenmerken": ["string"],
+                "providerKenmerk": "string",
                 "bedrag": "10",
                 "voltooid": True,
                 "transactieDatum": "2026-01-01T14:15:22Z",
@@ -257,7 +257,7 @@ class VerzoekTests(APITestCase):
                     "kenmerk": verzoek.bron.kenmerk,
                 },
                 "verzoekBetaling": {
-                    "kenmerken": verzoek.betaling.kenmerken,
+                    "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
                     "transactieDatum": verzoek.betaling.transactie_datum.isoformat().replace(
@@ -408,7 +408,7 @@ class VerzoekTests(APITestCase):
                 },
             ],
             "initiator": "urn:example:12345",
-            "verzoekTaal": "eng",
+            "verzoekTaal": "en",
         }
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -425,7 +425,7 @@ class VerzoekTests(APITestCase):
             "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
         )
         self.assertEqual(verzoek.initiator, "urn:example:12345")
-        self.assertEqual(verzoek.verzoek_taal, "eng")
+        self.assertEqual(verzoek.verzoek_taal, "en")
 
     def test_update_with_bijlagen(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)

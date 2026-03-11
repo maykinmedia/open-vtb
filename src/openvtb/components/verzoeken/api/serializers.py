@@ -181,7 +181,7 @@ class VerzoekBetalingSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerzoekBetaling
         fields = (
-            "kenmerken",
+            "provider_kenmerk",
             "bedrag",
             "voltooid",
             "transactie_datum",
@@ -336,7 +336,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens": {
                 "required": True,
             },
-            "verzoek_taal": {"default": "nld"},
+            "verzoek_taal": {"default": "nl"},
         }
 
     validators = [AanvraagGegevensValidator()]

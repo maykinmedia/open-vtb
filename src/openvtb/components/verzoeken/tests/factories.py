@@ -148,7 +148,7 @@ class VerzoekBronFactory(DjangoModelFactory):
 
 class VerzoekBetalingFactory(DjangoModelFactory):
     verzoek = factory.SubFactory(VerzoekFactory)
-    kenmerken = factory.ListFactory()
+    provider_kenmerk = factory.Faker("word")
     bedrag = factory.Faker("pydecimal", left_digits=8, right_digits=2, positive=True)
     voltooid = factory.Faker("pybool")
     transactie_datum = factory.LazyAttribute(lambda _: timezone.now())

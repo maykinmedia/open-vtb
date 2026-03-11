@@ -949,13 +949,14 @@ components:
           maxLength: 200
         verzoekTaal:
           type: string
-          default: nld
-          description: De ISO 639-3 taal waarin waarin het verzoek is gedaan. In de
-            meest praktische vorm is dit de taal van de vragen maar het is mogelijk
-            dat de antwoorden in een andere taal zijn gedaan. Bijvoorbeeld door iemand
-            die wel Nederlands kan lezen maar niet kan schrijven.
-          maxLength: 3
-          minLength: 3
+          default: nl
+          description: De taal, volgens het IANA Language Subtag Registry, waarin
+            het verzoek is gedaan. In de meest praktische vorm is dit de taal van
+            de vragen maar het is mogelijk dat de antwoorden in een andere taal zijn
+            gedaan. Bijvoorbeeld door iemand die wel Nederlands kan lezen maar niet
+            kan schrijven.
+          maxLength: 2
+          minLength: 2
         verzoekInformatieObject:
           type: string
           format: urn
@@ -1192,13 +1193,14 @@ components:
           maxLength: 200
         verzoekTaal:
           type: string
-          default: nld
-          description: De ISO 639-3 taal waarin waarin het verzoek is gedaan. In de
-            meest praktische vorm is dit de taal van de vragen maar het is mogelijk
-            dat de antwoorden in een andere taal zijn gedaan. Bijvoorbeeld door iemand
-            die wel Nederlands kan lezen maar niet kan schrijven.
-          maxLength: 3
-          minLength: 3
+          default: nl
+          description: De taal, volgens het IANA Language Subtag Registry, waarin
+            het verzoek is gedaan. In de meest praktische vorm is dit de taal van
+            de vragen maar het is mogelijk dat de antwoorden in een andere taal zijn
+            gedaan. Bijvoorbeeld door iemand die wel Nederlands kan lezen maar niet
+            kan schrijven.
+          maxLength: 2
+          minLength: 2
         verzoekInformatieObject:
           type: string
           format: urn
@@ -1225,13 +1227,11 @@ components:
     VerzoekBetaling:
       type: object
       properties:
-        kenmerken:
-          type: array
-          items:
-            type: string
-            maxLength: 100
-          nullable: true
-          description: Eventuele kenmerken van de betaling.
+        providerKenmerk:
+          type: string
+          description: Een kenmerk (bijv. het PSP ID van Worldline) dat aangeeft welke
+            provider de betaling moet afhandelen.
+          maxLength: 100
         bedrag:
           type: string
           format: decimal

@@ -2,7 +2,6 @@ import uuid
 from datetime import date
 
 from django.contrib.gis.db.models import GeometryField
-from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import MinLengthValidator
@@ -214,12 +213,13 @@ class VerzoekBetaling(models.Model):
         on_delete=models.CASCADE,
         related_name="betaling",
     )
-    kenmerken = ArrayField(
-        models.CharField(_("kenmerken"), max_length=100),
+    provider_kenmerk = models.CharField(
+        _("provider kenmerk"),
+        max_length=100,
         blank=True,
-        null=True,
-        default=list,
-        help_text=_("Eventuele kenmerken van de betaling."),
+        help_text=_(
+            "Een kenmerk (bijv. het PSP ID van Worldline) dat aangeeft welke provider de betaling moet afhandelen."
+        ),
     )
     bedrag = models.DecimalField(
         _("bedrag"),
@@ -334,13 +334,14 @@ class Verzoek(models.Model):
     verzoek_taal = models.CharField(
         _("verzoek taal"),
         help_text=_(
-            "De ISO 639-3 taal waarin waarin het verzoek is gedaan. In de meest praktische vorm is dit de taal"
-            " van de vragen maar het is mogelijk dat de antwoorden in een andere taal zijn gedaan."
-            " Bijvoorbeeld door iemand die wel Nederlands kan lezen maar niet kan schrijven."
+            "De taal, volgens het IANA Language Subtag Registry, waarin het verzoek is gedaan. "
+            "In de meest praktische vorm is dit de taal van de vragen maar het is mogelijk dat de "
+            "antwoorden in een andere taal zijn gedaan. Bijvoorbeeld door iemand die wel Nederlands "
+            "kan lezen maar niet kan schrijven."
         ),
-        max_length=3,
-        validators=[MinLengthValidator(limit_value=3)],
-        default="nld",
+        max_length=2,
+        validators=[MinLengthValidator(limit_value=2)],
+        default="nl",
         blank=True,
     )
 
