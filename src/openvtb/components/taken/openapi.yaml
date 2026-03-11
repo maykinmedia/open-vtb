@@ -878,7 +878,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1012,7 +1012,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1117,7 +1117,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1227,7 +1227,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1337,7 +1337,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1447,7 +1447,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1557,7 +1557,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1662,7 +1662,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1823,7 +1823,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -1928,7 +1928,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2038,7 +2038,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2148,7 +2148,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2258,7 +2258,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2368,7 +2368,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2473,7 +2473,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2600,7 +2600,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2705,7 +2705,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2815,7 +2815,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -2925,7 +2925,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3035,7 +3035,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3145,7 +3145,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3250,7 +3250,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3452,7 +3452,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3561,7 +3561,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn
@@ -3659,7 +3659,7 @@ components:
           type: string
           description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 4000
+          maxLength: 80
         isToegewezenAan:
           type: string
           format: urn

@@ -67,9 +67,9 @@ class ExterneTaak(models.Model):
             "ingesteld op een systeem-ingesteld aantal dagen voor de 'einddatumHandelingsTermijn'."
         ),
     )
-    toelichting = models.TextField(
+    toelichting = models.CharField(
         _("toelichting"),
-        max_length=4000,
+        max_length=80,
         blank=True,
         help_text=_(
             "Toelichting van de uit te voeren taak, zoals die door eindgebruikers "
