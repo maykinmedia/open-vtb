@@ -42,7 +42,7 @@
         "einddatum_handelings_termijn": "2026-02-16",
         "datum_herinnering": "2026-02-09",
         "toelichting": "",
-        "taak_soort": "gegevensuitvraagtaak",
+        "taak_soort": "urltaak",
         "details": {
             "uitvraagLink": "http://example.com/",
             "ontvangenGegevens": {

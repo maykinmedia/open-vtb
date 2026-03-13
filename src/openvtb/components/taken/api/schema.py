@@ -27,7 +27,7 @@ custom_settings = {
     "TAGS": [
         {"name": "externetaken"},
         {"name": "betaaltaken"},
-        {"name": "gegevensuitvraagtaken"},
+        {"name": "urltaken"},
         {
             "name": "formuliertaken",
             "description": FORMULIERTAKEN_DESCRIPTION,

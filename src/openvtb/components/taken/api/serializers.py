@@ -91,7 +91,7 @@ class BetaalTaakSerializer(serializers.Serializer):
         return value
 
 
-class GegevensUitvraagTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
+class URLTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     uitvraag_link = serializers.URLField(
         required=True,
         help_text=_("Link naar de externe gegevensaanvraag."),
@@ -143,7 +143,7 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
         discriminator_field="taak_soort",
         mapping={
             SoortTaak.BETAALTAAK: BetaalTaakSerializer(),
-            SoortTaak.GEGEVENSUITVRAAGTAAK: GegevensUitvraagTaakSerializer(),
+            SoortTaak.URLTAAK: URLTaakSerializer(),
             SoortTaak.FORMULIERTAAK: FormulierTaakSerializer(),
         },
         group_field="details",

@@ -115,7 +115,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         choices=[
                             ("betaaltaak", "Betaallink"),
-                            ("gegevensuitvraagtaak", "Extern formulier"),
+                            ("urltaak", "URL taak"),
                             ("formuliertaak", "Standaard formulier"),
                         ],
                         help_text="Het soort taak.",

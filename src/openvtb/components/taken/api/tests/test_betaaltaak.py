@@ -71,8 +71,8 @@ class BetaalTaakTests(APITestCase):
             },
         )
 
-        # create 1 gegevensuitvraagtaak
-        ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        # create 1 urltaak
+        ExterneTaakFactory.create(urltaak=True)
 
         # assert only 1 betaaltaak
         response = self.client.get(self.list_url)
@@ -131,9 +131,9 @@ class BetaalTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         # different taak_soort
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
         detail_url = reverse(
-            "taken:betaaltaak-detail", kwargs={"uuid": str(gegevensuitvraagtaak.uuid)}
+            "taken:betaaltaak-detail", kwargs={"uuid": str(urltaak.uuid)}
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

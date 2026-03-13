@@ -259,10 +259,10 @@ class ValidateBetaalTaakSchemaTestCase(TestCase):
             )
 
 
-class ValidateGegevensUitvraagTaakSchemaTestCase(TestCase):
+class ValidateURLTaakSchemaTestCase(TestCase):
     def setUp(self):
         super().setUp()
-        self.taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK.value
+        self.taak_soort = SoortTaak.URLTAAK.value
         self.json_schema = get_json_schema(self.taak_soort, SOORTTAAK_SCHEMA_MAPPING)
 
     def test_valid_schema(self):

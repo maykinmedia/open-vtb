@@ -12,8 +12,8 @@ from openvtb.utils.api_testcase import APITestCase
 
 
 @freeze_time("2026-01-01")
-class GegevensuitvraagTaakTests(APITestCase):
-    list_url = reverse("taken:gegevensuitvraagtaak-list")
+class URLTaakTests(APITestCase):
+    list_url = reverse("taken:urltaak-list")
 
     def test_list(self):
         response = self.client.get(self.list_url)
@@ -22,8 +22,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(len(response.json()["results"]), 0)
         self.assertFalse(ExterneTaak.objects.exists())
 
-        # create 1 gegevensuitvraagtaak
-        ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        # create 1 urltaak
+        ExterneTaakFactory.create(urltaak=True)
 
         response = self.client.get(self.list_url)
 
@@ -31,7 +31,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(len(response.json()["results"]), 1)
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
 
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(
             response.json(),
             {
@@ -40,30 +40,26 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "previous": None,
                 "results": [
                     {
-                        "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                        "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                        "uuid": str(gegevensuitvraagtaak.uuid),
-                        "titel": gegevensuitvraagtaak.titel,
-                        "status": gegevensuitvraagtaak.status,
-                        "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                        "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                        "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                        "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                        "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                        "toelichting": gegevensuitvraagtaak.toelichting,
-                        "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                        "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                        "taakSoort": gegevensuitvraagtaak.taak_soort,
+                        "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                        "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                        "uuid": str(urltaak.uuid),
+                        "titel": urltaak.titel,
+                        "status": urltaak.status,
+                        "verwerkerTaakId": urltaak.verwerker_taak_id,
+                        "startdatum": urltaak.startdatum.isoformat(),
+                        "handelingsPerspectief": urltaak.handelings_perspectief,
+                        "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                        "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                        "toelichting": urltaak.toelichting,
+                        "isToegewezenAan": urltaak.is_toegewezen_aan,
+                        "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                        "taakSoort": urltaak.taak_soort,
                         "details": {
-                            "uitvraagLink": gegevensuitvraagtaak.details[
-                                "uitvraagLink"
-                            ],
-                            "voorinvullenGegevens": gegevensuitvraagtaak.details[
+                            "uitvraagLink": urltaak.details["uitvraagLink"],
+                            "voorinvullenGegevens": urltaak.details[
                                 "voorinvullenGegevens"
                             ],
-                            "ontvangenGegevens": gegevensuitvraagtaak.details[
-                                "ontvangenGegevens"
-                            ],
+                            "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                         },
                     },
                 ],
@@ -73,51 +69,47 @@ class GegevensuitvraagTaakTests(APITestCase):
         # create 1 betaaltaak
         ExterneTaakFactory.create(betaaltaak=True)
 
-        # assert only 1 gegevensuitvraagtaak
+        # assert only 1 urltaak
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 1)
         self.assertEqual(
             response.json()["results"][0]["uuid"],
-            str(gegevensuitvraagtaak.uuid),
+            str(urltaak.uuid),
         )
 
         # assert 2 total externeTaak
         self.assertEqual(ExterneTaak.objects.all().count(), 2)
 
     def test_detail(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+            "taken:urltaak-detail",
+            kwargs={"uuid": str(urltaak.uuid)},
         )
         response = self.client.get(detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": urltaak.status,
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
+                "isToegewezenAan": urltaak.is_toegewezen_aan,
+                "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                "taakSoort": urltaak.taak_soort,
                 "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
-                        "voorinvullenGegevens"
-                    ],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
+                    "uitvraagLink": urltaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
+                    "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                 },
             },
         )
@@ -133,7 +125,7 @@ class GegevensuitvraagTaakTests(APITestCase):
         # different taak_soort
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
+            "taken:urltaak-detail",
             kwargs={"uuid": str(betaaltaak.uuid)},
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -169,32 +161,28 @@ class GegevensuitvraagTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": urltaak.status,
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
+                "isToegewezenAan": urltaak.is_toegewezen_aan,
+                "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                "taakSoort": urltaak.taak_soort,
                 "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
-                        "voorinvullenGegevens"
-                    ],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
+                    "uitvraagLink": urltaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
+                    "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                 },
             },
         )
@@ -210,8 +198,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 2)
-        gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
-        self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
+        urltaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
+        self.assertEqual(urltaak.details["ontvangenGegevens"], {})
 
         # empty value ontvangenGegevens
         data = {
@@ -232,14 +220,12 @@ class GegevensuitvraagTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 3)
-        gegevensuitvraagtaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
-        self.assertEqual(gegevensuitvraagtaak.details["ontvangenGegevens"], {})
+        urltaak = ExterneTaak.objects.get(uuid=response.json()["uuid"])
+        self.assertEqual(urltaak.details["ontvangenGegevens"], {})
 
         # test datumHerinnering auto filled
         # einddatumHandelingsTermijn - TAKEN_DEFAULT_REMINDER_IN_DAYS(7 days)
-        self.assertEqual(
-            gegevensuitvraagtaak.datum_herinnering, datetime.date(2026, 1, 3)
-        )
+        self.assertEqual(urltaak.datum_herinnering, datetime.date(2026, 1, 3))
 
     def test_valid_create_with_external_relations(self):
         self.assertFalse(ExterneTaak.objects.exists())
@@ -267,32 +253,28 @@ class GegevensuitvraagTaakTests(APITestCase):
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": urltaak.status,
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
+                "isToegewezenAan": urltaak.is_toegewezen_aan,
+                "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                "taakSoort": urltaak.taak_soort,
                 "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
-                        "voorinvullenGegevens"
-                    ],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
+                    "uitvraagLink": urltaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
+                    "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                 },
             },
         )
@@ -353,11 +335,11 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
     def test_valid_update_partial(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+            "taken:urltaak-detail",
+            kwargs={"uuid": str(urltaak.uuid)},
         )
         # empty PATCH
         response = self.client.patch(detail_url, {})
@@ -365,28 +347,24 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": urltaak.status,
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
+                "isToegewezenAan": urltaak.is_toegewezen_aan,
+                "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                "taakSoort": urltaak.taak_soort,
                 "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
-                        "voorinvullenGegevens"
-                    ],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
+                    "uitvraagLink": urltaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
+                    "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                 },
             },
         )
@@ -394,65 +372,57 @@ class GegevensuitvraagTaakTests(APITestCase):
         # patch externe_taak field
         response = self.client.patch(detail_url, {"titel": "new_title"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(gegevensuitvraagtaak.titel, "new_title")
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.titel, "new_title")
 
         # patch one field from json_data
         self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example.com/"
+            urltaak.details["uitvraagLink"], "http://example.com/"
         )  # default factory value
         response = self.client.patch(
             detail_url, {"details": {"uitvraagLink": "http://example-new-url.com/"}}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
-        )
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.details["uitvraagLink"], "http://example-new-url.com/")
 
         # update ontvangenGegevens
         self.assertEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
+            urltaak.details["ontvangenGegevens"], {"key": "value"}
         )  # default
         response = self.client.patch(
             detail_url, {"details": {"ontvangenGegevens": {"new_key": "new_value"}}}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         # new value
-        self.assertEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"new_key": "new_value"}
-        )
-        self.assertNotEqual(
-            gegevensuitvraagtaak.details["ontvangenGegevens"], {"key": "value"}
-        )
+        self.assertEqual(urltaak.details["ontvangenGegevens"], {"new_key": "new_value"})
+        self.assertNotEqual(urltaak.details["ontvangenGegevens"], {"key": "value"})
 
         # update voorinvullenGegevens
         self.assertEqual(
-            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
+            urltaak.details["voorinvullenGegevens"], {"key": "value"}
         )  # default
         response = self.client.patch(
             detail_url, {"details": {"voorinvullenGegevens": {"new_key": "new_value"}}}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
 
         # new value
         self.assertEqual(
-            gegevensuitvraagtaak.details["voorinvullenGegevens"],
+            urltaak.details["voorinvullenGegevens"],
             {"new_key": "new_value"},
         )
-        self.assertNotEqual(
-            gegevensuitvraagtaak.details["voorinvullenGegevens"], {"key": "value"}
-        )
+        self.assertNotEqual(urltaak.details["voorinvullenGegevens"], {"key": "value"})
 
         # patch isToegewezenAan with the new details
         response = self.client.patch(
             detail_url, {"isToegewezenAan": "urn:example:12345"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(gegevensuitvraagtaak.is_toegewezen_aan, "urn:example:12345")
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.is_toegewezen_aan, "urn:example:12345")
 
         # patch isGerelateerdAan with the new details
         response = self.client.patch(
@@ -465,18 +435,18 @@ class GegevensuitvraagTaakTests(APITestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(
-            gegevensuitvraagtaak.is_gerelateerd_aan,
+            urltaak.is_gerelateerd_aan,
             [{"urn": "urn:nld:test1:12345"}, {"urn": "urn:nld:test2:67890"}],
         )
 
     def test_valid_update(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+            "taken:urltaak-detail",
+            kwargs={"uuid": str(urltaak.uuid)},
         )
 
         # all required PUT fields
@@ -490,46 +460,40 @@ class GegevensuitvraagTaakTests(APITestCase):
                 },
             },
         )
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
-                "urn": f"urn:maykin:taken:externetaak:{str(gegevensuitvraagtaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": gegevensuitvraagtaak.status,
-                "verwerkerTaakId": gegevensuitvraagtaak.verwerker_taak_id,
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
-                "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
-                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
-                "taakSoort": gegevensuitvraagtaak.taak_soort,
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
+                "urn": f"urn:maykin:taken:externetaak:{str(urltaak.uuid)}",
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": urltaak.status,
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
+                "isToegewezenAan": urltaak.is_toegewezen_aan,
+                "isGerelateerdAan": urltaak.is_gerelateerd_aan,
+                "taakSoort": urltaak.taak_soort,
                 "details": {
-                    "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
-                    "voorinvullenGegevens": gegevensuitvraagtaak.details[
-                        "voorinvullenGegevens"
-                    ],
-                    "ontvangenGegevens": gegevensuitvraagtaak.details[
-                        "ontvangenGegevens"
-                    ],
+                    "uitvraagLink": urltaak.details["uitvraagLink"],
+                    "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
+                    "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
                 },
             },
         )
-        self.assertEqual(
-            gegevensuitvraagtaak.details["uitvraagLink"], "http://example-new-url.com/"
-        )
+        self.assertEqual(urltaak.details["uitvraagLink"], "http://example-new-url.com/")
 
     def test_destroy(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+            "taken:urltaak-detail",
+            kwargs={"uuid": str(urltaak.uuid)},
         )
 
         self.assertEqual(ExterneTaak.objects.all().count(), 1)
@@ -541,8 +505,8 @@ class GegevensuitvraagTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
 
-class GegevensuitvraagTaakValidationTests(APITestCase):
-    list_url = reverse("taken:gegevensuitvraagtaak-list")
+class urltaakValidationTests(APITestCase):
+    list_url = reverse("taken:urltaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
         self.assertFalse(ExterneTaak.objects.exists())
@@ -670,11 +634,11 @@ class GegevensuitvraagTaakValidationTests(APITestCase):
             self.assertFalse(ExterneTaak.objects.exists())
 
     def test_invalid_update_partial(self):
-        gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        urltaak = ExterneTaakFactory.create(urltaak=True)
 
         detail_url = reverse(
-            "taken:gegevensuitvraagtaak-detail",
-            kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+            "taken:urltaak-detail",
+            kwargs={"uuid": str(urltaak.uuid)},
         )
         # pass taak_soort
         response = self.client.patch(

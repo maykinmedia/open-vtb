@@ -622,11 +622,11 @@ paths:
               description: 'Geeft een specifieke API-versie aan in de context van
                 een specifieke aanroep. Voorbeeld: 1.2.1.'
           description: No response body
-  /gegevensuitvraagtaken:
+  /urltaken:
     get:
-      operationId: gegevensuitvraagtakenList
-      description: Vraag alle gegevensuitvraag taken aan.
-      summary: Vraag alle gegevensuitvraag taken aan.
+      operationId: urltakenList
+      description: Vraag alle url taken aan.
+      summary: Vraag alle url taken aan.
       parameters:
       - name: page
         required: false
@@ -642,7 +642,7 @@ paths:
         schema:
           type: integer
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       security:
       - OpenID: []
       - tokenAuth: []
@@ -657,19 +657,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedGegevensUitvraagTaakListResponseList'
+                $ref: '#/components/schemas/PaginatedURLTaakListResponseList'
           description: ''
     post:
-      operationId: gegevensuitvraagtakenCreate
-      description: Maak een gegevensuitvraag taak aan.
-      summary: Maak een gegevensuitvraag taak aan.
+      operationId: urltakenCreate
+      description: Maak een url taak aan.
+      summary: Maak een url taak aan.
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GegevensUitvraagTaakCreateRequest'
+              $ref: '#/components/schemas/URLTaakCreateRequest'
         required: true
       security:
       - OpenID: []
@@ -685,13 +685,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaakCreateResponse'
+                $ref: '#/components/schemas/URLTaakCreateResponse'
           description: ''
-  /gegevensuitvraagtaken/{uuid}:
+  /urltaken/{uuid}:
     get:
-      operationId: gegevensuitvraagtakenRetrieve
-      description: Een specifieke gegevensuitvraag taak opvragen.
-      summary: Een specifieke gegevensuitvraag taak opvragen.
+      operationId: urltakenRetrieve
+      description: Een specifieke url taak opvragen.
+      summary: Een specifieke url taak opvragen.
       parameters:
       - in: path
         name: uuid
@@ -702,7 +702,7 @@ paths:
             en zijn eigen administratie.
         required: true
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       security:
       - OpenID: []
       - tokenAuth: []
@@ -717,12 +717,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaakRetrieveResponse'
+                $ref: '#/components/schemas/URLTaakRetrieveResponse'
           description: ''
     put:
-      operationId: gegevensuitvraagtakenUpdate
-      description: Volledig gegevensuitvraag taak wijzigen.
-      summary: Volledig gegevensuitvraag taak wijzigen.
+      operationId: urltakenUpdate
+      description: Volledig url taak wijzigen.
+      summary: Volledig url taak wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -733,12 +733,12 @@ paths:
             en zijn eigen administratie.
         required: true
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GegevensUitvraagTaakUpdateRequest'
+              $ref: '#/components/schemas/URLTaakUpdateRequest'
         required: true
       security:
       - OpenID: []
@@ -754,12 +754,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaakUpdateResponse'
+                $ref: '#/components/schemas/URLTaakUpdateResponse'
           description: ''
     patch:
-      operationId: gegevensuitvraagtakenPartialUpdate
-      description: Een gegevensuitvraag taak gedeeltelijk wijzigen.
-      summary: Een gegevensuitvraag taak gedeeltelijk wijzigen.
+      operationId: urltakenPartialUpdate
+      description: Een url taak gedeeltelijk wijzigen.
+      summary: Een url taak gedeeltelijk wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -770,12 +770,12 @@ paths:
             en zijn eigen administratie.
         required: true
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedGegevensUitvraagTaakPartialUpdateRequest'
+              $ref: '#/components/schemas/PatchedURLTaakPartialUpdateRequest'
       security:
       - OpenID: []
       - tokenAuth: []
@@ -790,12 +790,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GegevensUitvraagTaakPartialUpdateResponse'
+                $ref: '#/components/schemas/URLTaakPartialUpdateResponse'
           description: ''
     delete:
-      operationId: gegevensuitvraagtakenDestroy
-      description: Een gegevensuitvraag taak verwijderen
-      summary: Een gegevensuitvraag taak verwijderen
+      operationId: urltakenDestroy
+      description: Een url taak verwijderen
+      summary: Een url taak verwijderen
       parameters:
       - in: path
         name: uuid
@@ -806,7 +806,7 @@ paths:
             en zijn eigen administratie.
         required: true
       tags:
-      - gegevensuitvraagtaken
+      - urltaken
       security:
       - OpenID: []
       - tokenAuth: []
@@ -1608,13 +1608,13 @@ components:
     ExterneTaakPolymorphic:
       oneOf:
       - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/urltaak_ExterneTaakPolymorphicSerializer'
       - $ref: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
       discriminator:
         propertyName: taakSoort
         mapping:
           betaaltaak: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
-          gegevensuitvraagtaak: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+          urltaak: '#/components/schemas/urltaak_ExterneTaakPolymorphicSerializer'
           formuliertaak: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
     FormulierTaak:
       type: object
@@ -2286,671 +2286,6 @@ components:
       - url
       - urn
       - uuid
-    GegevensUitvraagTaak:
-      type: object
-      properties:
-        uitvraagLink:
-          type: string
-          format: uri
-          description: Link naar de externe gegevensaanvraag.
-        voorinvullenGegevens:
-          description: Arbitraire sleutel-waarde gegevens die ingevuld moeten worden
-            in de uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier,
-            of een veld in een sjabloon.
-          type: object
-        ontvangenGegevens:
-          description: Ontvangen gegevens als key-value object.
-          type: object
-      required:
-      - uitvraagLink
-    GegevensUitvraagTaakCreateRequest:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakCreateResponse:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        taakSoort:
-          allOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          description: Het soort taak.
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - taakSoort
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakListResponse:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        taakSoort:
-          allOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          description: Het soort taak.
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - taakSoort
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakPartialUpdateResponse:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        taakSoort:
-          allOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          description: Het soort taak.
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - taakSoort
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakRetrieveResponse:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        taakSoort:
-          allOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          description: Het soort taak.
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - taakSoort
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakUpdateRequest:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - titel
-      - url
-      - urn
-      - uuid
-    GegevensUitvraagTaakUpdateResponse:
-      type: object
-      properties:
-        isGerelateerdAan:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van de externe taak deze API.
-          minLength: 1
-          maxLength: 1000
-        urn:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          readOnly: true
-          description: De Uniform Resource Name van de externe taak.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
-            en zijn eigen administratie.
-        titel:
-          type: string
-          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 100
-        verwerkerTaakId:
-          type: string
-          title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
-          maxLength: 36
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          description: Status van de taak.
-        startdatum:
-          type: string
-          format: date
-          title: Start datum
-          description: Startdatum van de taak.
-        handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
-        einddatumHandelingsTermijn:
-          type: string
-          format: date
-          description: Einddatum handelings termijn.
-        datumHerinnering:
-          type: string
-          format: date
-          nullable: true
-          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
-            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
-            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
-            voor de 'einddatumHandelingsTermijn'.
-        toelichting:
-          type: string
-          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
-            gezien kan worden in bijvoorbeeld een portaal.
-          maxLength: 80
-        isToegewezenAan:
-          type: string
-          format: urn
-          example: urn:namespace:component:resource:uuid
-          title: Is toegewezen aan subject
-          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
-          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
-          maxLength: 255
-        taakSoort:
-          allOf:
-          - $ref: '#/components/schemas/TaakSoortEnum'
-          description: Het soort taak.
-        details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
-      required:
-      - details
-      - einddatumHandelingsTermijn
-      - taakSoort
-      - titel
-      - url
-      - urn
-      - uuid
     IsGerelateerdAan:
       type: object
       properties:
@@ -3031,7 +2366,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FormulierTaakListResponse'
-    PaginatedGegevensUitvraagTaakListResponseList:
+    PaginatedURLTaakListResponseList:
       type: object
       required:
       - count
@@ -3053,7 +2388,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/GegevensUitvraagTaakListResponse'
+            $ref: '#/components/schemas/URLTaakListResponse'
     PatchedBetaalTaakPartialUpdateRequest:
       type: object
       properties:
@@ -3139,13 +2474,13 @@ components:
     PatchedExterneTaakPolymorphic:
       oneOf:
       - $ref: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+      - $ref: '#/components/schemas/urltaak_ExterneTaakPolymorphicSerializer'
       - $ref: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
       discriminator:
         propertyName: taakSoort
         mapping:
           betaaltaak: '#/components/schemas/betaaltaak_ExterneTaakPolymorphicSerializer'
-          gegevensuitvraagtaak: '#/components/schemas/gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer'
+          urltaak: '#/components/schemas/urltaak_ExterneTaakPolymorphicSerializer'
           formuliertaak: '#/components/schemas/formuliertaak_ExterneTaakPolymorphicSerializer'
     PatchedFormulierTaakPartialUpdateRequest:
       type: object
@@ -3229,7 +2564,7 @@ components:
           maxLength: 255
         details:
           $ref: '#/components/schemas/FormulierTaak'
-    PatchedGegevensUitvraagTaakPartialUpdateRequest:
+    PatchedURLTaakPartialUpdateRequest:
       type: object
       properties:
         isGerelateerdAan:
@@ -3310,7 +2645,7 @@ components:
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
         details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
+          $ref: '#/components/schemas/URLTaak'
     StatusEnum:
       enum:
       - open
@@ -3322,9 +2657,674 @@ components:
     TaakSoortEnum:
       enum:
       - betaaltaak
-      - gegevensuitvraagtaak
+      - urltaak
       - formuliertaak
       type: string
+    URLTaak:
+      type: object
+      properties:
+        uitvraagLink:
+          type: string
+          format: uri
+          description: Link naar de externe gegevensaanvraag.
+        voorinvullenGegevens:
+          description: Arbitraire sleutel-waarde gegevens die ingevuld moeten worden
+            in de uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier,
+            of een veld in een sjabloon.
+          type: object
+        ontvangenGegevens:
+          description: Ontvangen gegevens als key-value object.
+          type: object
+      required:
+      - uitvraagLink
+    URLTaakCreateRequest:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakCreateResponse:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak.
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - taakSoort
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakListResponse:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak.
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - taakSoort
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakPartialUpdateResponse:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak.
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - taakSoort
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakRetrieveResponse:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak.
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - taakSoort
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakUpdateRequest:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - titel
+      - url
+      - urn
+      - uuid
+    URLTaakUpdateResponse:
+      type: object
+      properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van de externe taak deze API.
+          minLength: 1
+          maxLength: 1000
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          readOnly: true
+          description: De Uniform Resource Name van de externe taak.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de taak
+            en zijn eigen administratie.
+        titel:
+          type: string
+          description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          description: Status van de taak.
+        startdatum:
+          type: string
+          format: date
+          title: Start datum
+          description: Startdatum van de taak.
+        handelingsPerspectief:
+          type: string
+          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
+            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
+          maxLength: 100
+        einddatumHandelingsTermijn:
+          type: string
+          format: date
+          description: Einddatum handelings termijn.
+        datumHerinnering:
+          type: string
+          format: date
+          nullable: true
+          description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+            tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+            deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+            voor de 'einddatumHandelingsTermijn'.
+        toelichting:
+          type: string
+          description: Toelichting van de uit te voeren taak, zoals die door eindgebruikers
+            gezien kan worden in bijvoorbeeld een portaal.
+          maxLength: 80
+        isToegewezenAan:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          title: Is toegewezen aan subject
+          description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+            of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+            PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+            `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+          maxLength: 255
+        taakSoort:
+          allOf:
+          - $ref: '#/components/schemas/TaakSoortEnum'
+          description: Het soort taak.
+        details:
+          $ref: '#/components/schemas/URLTaak'
+      required:
+      - details
+      - einddatumHandelingsTermijn
+      - taakSoort
+      - titel
+      - url
+      - urn
+      - uuid
     betaaltaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
@@ -3339,19 +3339,19 @@ components:
       properties:
         details:
           $ref: '#/components/schemas/FormulierTaak'
-    details_GegevensUitvraagTaak:
+    details_URLTaak:
       type: object
       properties:
         details:
-          $ref: '#/components/schemas/GegevensUitvraagTaak'
+          $ref: '#/components/schemas/URLTaak'
     formuliertaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
       - $ref: '#/components/schemas/details_FormulierTaak'
-    gegevensuitvraagtaak_ExterneTaakPolymorphicSerializer:
+    urltaak_ExterneTaakPolymorphicSerializer:
       allOf:
       - $ref: '#/components/schemas/Base_ExterneTaakPolymorphicSerializer'
-      - $ref: '#/components/schemas/details_GegevensUitvraagTaak'
+      - $ref: '#/components/schemas/details_URLTaak'
   securitySchemes:
     OpenID:
       type: openIdConnect
@@ -3366,7 +3366,7 @@ servers:
 tags:
 - name: externetaken
 - name: betaaltaken
-- name: gegevensuitvraagtaken
+- name: urltaken
 - name: formuliertaken
   description: |-
     Het veld `formDefinition` bevat het JSON-schema dat de structuur van het formulier definieert dat bij de taak hoort. Het specificeert de beschikbare velden, hun gegevenstypen, validatieregels en welke eigenschappen verplicht zijn. Een JSON-schema om te valideren:
