@@ -13,6 +13,7 @@ from openvtb.utils.serializers import (
     URNRelatedField,
 )
 
+from ..constants import VerwerkStatus
 from ..models import (
     Bijlage,
     BijlageType,
@@ -315,6 +316,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "is_gerelateerd_aan",
             "kanaal",
             "verzoek_taal",
+            "verwerk_status",
             "verzoek_informatie_object",
             "verzoek_bron",
             "verzoek_betaling",
@@ -337,6 +339,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
                 "required": True,
             },
             "verzoek_taal": {"default": "nl"},
+            "verwerk_status": {"default": VerwerkStatus.GEREGISTREERD},
         }
 
     validators = [AanvraagGegevensValidator()]
