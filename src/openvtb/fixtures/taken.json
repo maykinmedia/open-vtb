@@ -22,7 +22,12 @@
             },
             "transactieomschrijving": "test"
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
+        "is_gerelateerd_aan": [
+            {
+                "urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            }
+        ]
     }
 },
 {
@@ -47,7 +52,12 @@
                 "key": "value"
             }
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
+        "is_gerelateerd_aan": [
+            {
+                "urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            }
+        ]
     }
 },
 {
@@ -103,7 +113,12 @@
                 "textField": "Test value"
             }
         },
-        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333"
+        "is_toegewezen_aan": "urn:nld:brp:bsn:111222333",
+        "is_gerelateerd_aan": [
+            {
+                "urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+            }
+        ]
     }
 }
 ]

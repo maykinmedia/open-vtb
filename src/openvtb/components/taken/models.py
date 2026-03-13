@@ -7,6 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
@@ -99,6 +100,18 @@ class ExterneTaak(models.Model):
         ),
         blank=True,
     )
+    is_gerelateerd_aan = models.JSONField(
+        _("is gerelateerd aan"),
+        default=list,
+        blank=True,
+        null=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. "
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165` "
+            "of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
+        ),
+        encoder=DjangoJSONEncoder,
+    )
 
     class Meta:
         verbose_name = _("Externe taak")
@@ -117,6 +130,19 @@ class ExterneTaak(models.Model):
                     days=settings.TAKEN_DEFAULT_REMINDER_IN_DAYS
                 )
         super().save(*args, **kwargs)
+
+    def clean_is_gerelateerd_aan(self):
+        if not self.is_gerelateerd_aan:
+            return
+
+        try:
+            validate_jsonschema(
+                instance=self.is_gerelateerd_aan,
+                label="is_gerelateerd_aan",
+                schema=IS_GERELATEERD_AAN_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_gerelateerd_aan": str(error)})
 
     def clean_details(self):
         try:
@@ -149,3 +175,4 @@ class ExterneTaak(models.Model):
 
         self.clean_details()
         self.clean_dates()
+        self.clean_is_gerelateerd_aan()

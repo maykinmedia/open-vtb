@@ -51,6 +51,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                         "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                         "toelichting": gegevensuitvraagtaak.toelichting,
                         "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                        "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                         "taakSoort": gegevensuitvraagtaak.taak_soort,
                         "details": {
                             "uitvraagLink": gegevensuitvraagtaak.details[
@@ -105,6 +106,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -157,6 +159,10 @@ class GegevensuitvraagTaakTests(APITestCase):
                 },
             },
             "isToegewezenAan": "urn:example:12345",
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -176,6 +182,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -272,6 +279,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -364,6 +372,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],
@@ -440,6 +449,23 @@ class GegevensuitvraagTaakTests(APITestCase):
         gegevensuitvraagtaak = ExterneTaak.objects.get()
         self.assertEqual(gegevensuitvraagtaak.is_toegewezen_aan, "urn:example:12345")
 
+        # patch isGerelateerdAan with the new details
+        response = self.client.patch(
+            detail_url,
+            {
+                "isGerelateerdAan": [
+                    {"urn": "urn:nld:test1:12345"},
+                    {"urn": "urn:nld:test2:67890"},
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            gegevensuitvraagtaak.is_gerelateerd_aan,
+            [{"urn": "urn:nld:test1:12345"}, {"urn": "urn:nld:test2:67890"}],
+        )
+
     def test_valid_update(self):
         gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
 
@@ -475,6 +501,7 @@ class GegevensuitvraagTaakTests(APITestCase):
                 "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
                 "toelichting": gegevensuitvraagtaak.toelichting,
                 "isToegewezenAan": gegevensuitvraagtaak.is_toegewezen_aan,
+                "isGerelateerdAan": gegevensuitvraagtaak.is_gerelateerd_aan,
                 "taakSoort": gegevensuitvraagtaak.taak_soort,
                 "details": {
                     "uitvraagLink": gegevensuitvraagtaak.details["uitvraagLink"],

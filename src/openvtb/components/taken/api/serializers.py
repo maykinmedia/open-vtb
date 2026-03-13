@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import serializers
 from vng_api_common.polymorphism import Discriminator, PolymorphicSerializer
+from vng_api_common.utils import get_help_text
 
 from openvtb.components.taken.constants import SoortTaak
 from openvtb.components.taken.schemas import SOORTTAAK_SCHEMA_MAPPING
@@ -12,11 +13,20 @@ from openvtb.utils.api_mixins import CamelToUnderscoreMixin
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.constants import Valuta
 from openvtb.utils.json_utils import get_json_schema
-from openvtb.utils.serializers import IBANField, URNModelSerializer
+from openvtb.utils.serializers import IBANField, URNField, URNModelSerializer
 from openvtb.utils.validators import StartBeforeEndValidator, validate_jsonschema
 
 from ..models import ExterneTaak
 from .validators import FormulierDefinitieValidator
+
+
+class IsGerelateerdAanSerializer(serializers.Serializer):
+    urn = URNField(
+        required=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+        ),
+    )
 
 
 class DoelrekeningSerializer(CamelToUnderscoreMixin, serializers.Serializer):
@@ -141,6 +151,12 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
     )
     discriminator_field = "taak_soort"
 
+    is_gerelateerd_aan = serializers.ListSerializer(
+        child=IsGerelateerdAanSerializer(),
+        required=False,
+        help_text=get_help_text("taken.ExterneTaak", "is_gerelateerd_aan"),
+    )
+
     class Meta:
         model = ExterneTaak
         fields = (
@@ -155,6 +171,7 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
             "datum_herinnering",
             "toelichting",
             "is_toegewezen_aan",
+            "is_gerelateerd_aan",
             "taak_soort",
             "details",
         )
