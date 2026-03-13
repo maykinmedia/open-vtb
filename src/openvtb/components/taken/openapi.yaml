@@ -848,6 +848,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -890,6 +895,12 @@ components:
             `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         taakSoort:
           allOf:
           - $ref: '#/components/schemas/TaakSoortEnum'
@@ -931,6 +942,12 @@ components:
     BetaalTaakCreateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -955,6 +972,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1009,6 +1031,12 @@ components:
     BetaalTaakCreateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1033,6 +1061,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1092,6 +1125,12 @@ components:
     BetaalTaakListResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1116,6 +1155,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1175,6 +1219,12 @@ components:
     BetaalTaakPartialUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1199,6 +1249,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1258,6 +1313,12 @@ components:
     BetaalTaakRetrieveResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1282,6 +1343,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1341,6 +1407,12 @@ components:
     BetaalTaakUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1365,6 +1437,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1419,6 +1496,12 @@ components:
     BetaalTaakUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1443,6 +1526,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1533,11 +1621,11 @@ components:
       properties:
         formulierDefinitie:
           description: "Definitie van het formulier in JSON. Het formulier moet minimaal\
-            \ het veld 'components' bevatten. Elke component moet de volgende verplichte\
-            \ velden hebben:\n- 'label': de naam die weergegeven wordt voor het veld\n\
-            - 'key': de unieke identifier voor het veld\n- 'type': het type van het\
-            \ veld, bijvoorbeeld 'text', 'number' of 'date'\n \n Andere velden, zoals\
-            \ 'values', 'format', 'enableTime' of 'fileTypes', zijn optioneel en kunnen\
+            \ het veld `components` bevatten. Elke component moet de volgende verplichte\
+            \ velden hebben:\n- `label`: de naam die weergegeven wordt voor het veld\n\
+            - `key`: de unieke identifier voor het veld\n- `type`: het type van het\
+            \ veld, bijvoorbeeld `text`, `number` of `date`\n \n Andere velden, zoals\
+            \ `values`, `format`, `enableTime` of `fileTypes`, zijn optioneel en kunnen\
             \ gebruikt worden om het gedrag of de weergave van het veld aan te passen."
           type: object
         voorinvullenGegevens:
@@ -1553,6 +1641,12 @@ components:
     FormulierTaakCreateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1577,6 +1671,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1631,6 +1730,12 @@ components:
     FormulierTaakCreateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1655,6 +1760,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1714,6 +1824,12 @@ components:
     FormulierTaakListResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1738,6 +1854,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1797,6 +1918,12 @@ components:
     FormulierTaakPartialUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1821,6 +1948,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1880,6 +2012,12 @@ components:
     FormulierTaakRetrieveResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1904,6 +2042,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1963,6 +2106,12 @@ components:
     FormulierTaakUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -1987,6 +2136,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2041,6 +2195,12 @@ components:
     FormulierTaakUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2065,6 +2225,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2141,6 +2306,12 @@ components:
     GegevensUitvraagTaakCreateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2165,6 +2336,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2219,6 +2395,12 @@ components:
     GegevensUitvraagTaakCreateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2243,6 +2425,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2302,6 +2489,12 @@ components:
     GegevensUitvraagTaakListResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2326,6 +2519,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2385,6 +2583,12 @@ components:
     GegevensUitvraagTaakPartialUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2409,6 +2613,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2468,6 +2677,12 @@ components:
     GegevensUitvraagTaakRetrieveResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2492,6 +2707,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2551,6 +2771,12 @@ components:
     GegevensUitvraagTaakUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2575,6 +2801,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2629,6 +2860,12 @@ components:
     GegevensUitvraagTaakUpdateResponse:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2653,6 +2890,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2709,6 +2951,17 @@ components:
       - url
       - urn
       - uuid
+    IsGerelateerdAan:
+      type: object
+      properties:
+        urn:
+          type: string
+          format: urn
+          example: urn:namespace:component:resource:uuid
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
+      required:
+      - urn
     PaginatedBetaalTaakListResponseList:
       type: object
       required:
@@ -2804,6 +3057,12 @@ components:
     PatchedBetaalTaakPartialUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2828,6 +3087,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2886,6 +3150,12 @@ components:
     PatchedFormulierTaakPartialUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2910,6 +3180,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -2957,6 +3232,12 @@ components:
     PatchedGegevensUitvraagTaakPartialUpdateRequest:
       type: object
       properties:
+        isGerelateerdAan:
+          type: array
+          items:
+            $ref: '#/components/schemas/IsGerelateerdAan'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         url:
           type: string
           format: uri
@@ -2981,6 +3262,11 @@ components:
           description: Titel van de uit te voeren taak, zoals die door eindgebruikers
             gezien kan worden in bijvoorbeeld een portaal.
           maxLength: 100
+        verwerkerTaakId:
+          type: string
+          title: Titel
+          description: Een identifier van het process dat deze taak verwerkt.
+          maxLength: 36
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -3082,3 +3368,111 @@ tags:
 - name: betaaltaken
 - name: gegevensuitvraagtaken
 - name: formuliertaken
+  description: |-
+    Het veld `formDefinition` bevat het JSON-schema dat de structuur van het formulier definieert dat bij de taak hoort. Het specificeert de beschikbare velden, hun gegevenstypen, validatieregels en welke eigenschappen verplicht zijn. Een JSON-schema om te valideren:
+
+    ```json
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "Formulier Schema",
+        "type": "object",
+        "properties": {
+            "components": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "label": {
+                            "type": "string"
+                        },
+                        "key": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "fileTypes": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "label",
+                                    "value"
+                                ]
+                            }
+                        },
+                        "values": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "label",
+                                    "value"
+                                ]
+                            }
+                        },
+                        "format": {
+                            "type": "string"
+                        },
+                        "enableTime": {
+                            "type": "boolean"
+                        },
+                        "decimalLimit": {
+                            "type": "number"
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                                "values": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "label": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "label",
+                                            "value"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "values"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "label",
+                        "key",
+                        "type"
+                    ]
+                }
+            }
+        },
+        "required": [
+            "components"
+        ]
+    }
+    ```
