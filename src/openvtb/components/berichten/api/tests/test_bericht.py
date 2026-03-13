@@ -131,7 +131,7 @@ class BerichtTests(APITestCase):
         data = {
             "onderwerp": "onderwerp",
             "berichtTekst": "berichtTekst berichtTekst",
-            "publicatiedatum": datetime.datetime.now(),
+            # "publicatiedatum": datetime.datetime.now(), test default
             "referentie": "referentie",
             "ontvanger": "urn:maykin:ontvanger1234",
             "geopendOp": datetime.datetime.now(),

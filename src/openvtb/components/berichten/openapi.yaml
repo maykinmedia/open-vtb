@@ -161,7 +161,10 @@ components:
         publicatiedatum:
           type: string
           format: date-time
+          nullable: true
           description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+            Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van
+            de lokale overheid. De standaardwaarde is de huidige datum/tijd.
         referentie:
           type: string
           description: Zenderreferentie / interne referentie.
@@ -185,7 +188,9 @@ components:
         berichtType:
           type: string
           description: Een code die hoort bij het sjabloon zoals gebruikt in de Mijn
-            Overheid berichtenbox.
+            Overheid berichtenbox. Indien dit een geldige waarde bevat, wordt het
+            bericht doorgezet naar Mijn Overheid berichtenbox. In de andere gevallen
+            is het bericht enkel op het portaal van de lokale overheid te zien.
           maxLength: 8
         handelingsPerspectief:
           type: string
