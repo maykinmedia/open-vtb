@@ -40,6 +40,9 @@ class ExterneTaakAdminTests(WebTest):
         form["einddatum_handelings_termijn"] = timezone.now().date()
         form["toelichting"] = "TEST TEST"
         form["taak_soort"] = SoortTaak.BETAALTAAK
+        form["is_gerelateerd_aan"] = json.dumps(
+            [{"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"}]
+        )
         form["details"] = json.dumps(
             {
                 "bedrag": "10.12",
@@ -91,3 +94,42 @@ class ExterneTaakAdminTests(WebTest):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(ExterneTaak.objects.count(), 1)
         self.assertEqual(ExterneTaak.objects.get().details, details)
+
+    def test_create_verzoek_invalid_is_gerelateerd_aan_field(self):
+        self.assertEqual(ExterneTaak.objects.count(), 0)
+
+        response = self.app.get(self.url)
+        form = response.forms.get("externetaak_form")
+
+        form["titel"] = "test"
+        form["status"] = StatusTaak.OPEN
+        form["startdatum"] = timezone.now().date()
+        form["handelings_perspectief"] = "test"
+        form["einddatum_handelings_termijn"] = timezone.now().date()
+        form["toelichting"] = "TEST TEST"
+        form["taak_soort"] = SoortTaak.BETAALTAAK
+        form["details"] = json.dumps(
+            {
+                "bedrag": "10.12",
+                "valuta": "EUR",
+                "transactieomschrijving": "test",
+                "doelrekening": {
+                    "naam": "test",
+                    "code": "123-ABC",
+                    "iban": "NL18BANK23481326",
+                },
+            }
+        )
+        # missing urn
+        form["is_gerelateerd_aan"] = json.dumps([{"test": ""}])
+        response = form.submit()
+
+        self.assertEqual(response.status_code, 200)
+
+        error_list = response.html.find_all("ul", {"class": "errorlist"})
+        self.assertEqual(
+            error_list[0].get_text(strip=True),
+            """{'is_gerelateerd_aan.0': ["Additional properties are not allowed ('test' was unexpected)"]}""",
+        )
+
+        self.assertEqual(ExterneTaak.objects.count(), 0)
