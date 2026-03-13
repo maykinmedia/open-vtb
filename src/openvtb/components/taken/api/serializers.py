@@ -164,6 +164,7 @@ class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer
             "urn",
             "uuid",
             "titel",
+            "verwerker_taak_id",
             "status",
             "startdatum",
             "handelings_perspectief",

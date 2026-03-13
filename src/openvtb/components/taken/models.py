@@ -33,6 +33,14 @@ class ExterneTaak(models.Model):
             "gezien kan worden in bijvoorbeeld een portaal."
         ),
     )
+    verwerker_taak_id = models.CharField(
+        _("titel"),
+        max_length=36,
+        blank=True,
+        help_text=_(
+            "Een identifier van het process dat deze taak verwerkt.",
+        ),
+    )
     status = models.CharField(
         _("status"),
         max_length=20,
