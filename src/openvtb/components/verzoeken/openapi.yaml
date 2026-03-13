@@ -958,6 +958,13 @@ components:
             kan schrijven.
           maxLength: 2
           minLength: 2
+        verwerkStatus:
+          allOf:
+          - $ref: '#/components/schemas/VerwerkStatusEnum'
+          default: geregistreerd
+          description: De initiële status is altijd `geregistreerd`. De status `verwerkt`
+            moet gezet worden door het component dat verantwoordelijk is voor de afhandeling
+            danwel opvolging.
         verzoekInformatieObject:
           type: string
           format: urn
@@ -1123,6 +1130,11 @@ components:
       - Feature
       - FeatureCollection
       - GeometryCollection
+    VerwerkStatusEnum:
+      enum:
+      - geregistreerd
+      - verwerkt
+      type: string
     Verzoek:
       type: object
       properties:
@@ -1203,6 +1215,13 @@ components:
             kan schrijven.
           maxLength: 2
           minLength: 2
+        verwerkStatus:
+          allOf:
+          - $ref: '#/components/schemas/VerwerkStatusEnum'
+          default: geregistreerd
+          description: De initiële status is altijd `geregistreerd`. De status `verwerkt`
+            moet gezet worden door het component dat verantwoordelijk is voor de afhandeling
+            danwel opvolging.
         verzoekInformatieObject:
           type: string
           format: urn

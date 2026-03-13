@@ -54,6 +54,7 @@ class VerzoekTests(APITestCase):
                         "kanaal": "",
                         "verzoekInformatieObject": "",
                         "verzoekTaal": "nl",
+                        "verwerkStatus": verzoek.verwerk_status,
                         "initiator": verzoek.initiator,
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
@@ -107,6 +108,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": "nl",
+                "verwerkStatus": verzoek.verwerk_status,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -181,6 +183,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": verzoek.verzoek_taal,
+                "verwerkStatus": verzoek.verwerk_status,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
@@ -252,6 +255,7 @@ class VerzoekTests(APITestCase):
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
                 "verzoekTaal": verzoek.verzoek_taal,
+                "verwerkStatus": verzoek.verwerk_status,
                 "verzoekBron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
