@@ -62,11 +62,11 @@ BETAAL_SCHEMA = {
     ],
 }
 
-GEGEVENS_SCHEMA = {
+URL_SCHEMA = {
     "$schema": Draft202012Validator.META_SCHEMA["$id"],
-    "title": "GegevensUitvraagTaak",
+    "title": "URLTaak",
     "description": _(
-        "Schema voor de GegevensUitvraagTaak, inclusief links voor gegevensaanvragen en ontvangen gegevens."
+        "Schema voor de URLTaak, inclusief links voor gegevensaanvragen en ontvangen gegevens."
     ),
     "type": "object",
     "additionalProperties": False,
@@ -140,7 +140,7 @@ FORMULIER_SCHEMA = {
 
 SOORTTAAK_SCHEMA_MAPPING = {
     SoortTaak.BETAALTAAK: BETAAL_SCHEMA,
-    SoortTaak.GEGEVENSUITVRAAGTAAK: GEGEVENS_SCHEMA,
+    SoortTaak.URLTAAK: URL_SCHEMA,
     SoortTaak.FORMULIERTAAK: FORMULIER_SCHEMA,
 }
 

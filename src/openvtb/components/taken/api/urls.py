@@ -7,7 +7,7 @@ from openvtb.components.taken.api.viewsets import (
     BetaalTaakViewSet,
     ExterneTaakViewSet,
     FormulierTaakViewSet,
-    GegevensUitvraagTaakViewSet,
+    URLTaakViewSet,
 )
 from openvtb.utils.views import SpectacularJSONAPIView, SpectacularYAMLAPIView
 
@@ -23,9 +23,9 @@ router.register(
     basename="betaaltaak",
 )
 router.register(
-    "gegevensuitvraagtaken",
-    GegevensUitvraagTaakViewSet,
-    basename="gegevensuitvraagtaak",
+    "urltaken",
+    URLTaakViewSet,
+    basename="urltaak",
 )
 router.register(
     "formuliertaken",

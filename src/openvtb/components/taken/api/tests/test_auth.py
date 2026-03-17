@@ -229,11 +229,11 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(response.data["uuid"], str(betaaltaak.uuid))
 
-        with self.subTest("gegevensuitvraagtaken"):
-            gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        with self.subTest("urltaken"):
+            urltaak = ExterneTaakFactory.create(urltaak=True)
             # get list
             response = self.client.get(
-                reverse("taken:gegevensuitvraagtaak-list"),
+                reverse("taken:urltaak-list"),
                 headers={"Authorization": f"Bearer {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
@@ -242,13 +242,13 @@ class TestApiOidcAuthentication(OIDCMixin, VCRMixin, TestCase):
             # get detail
             response = self.client.get(
                 reverse(
-                    "taken:gegevensuitvraagtaak-detail",
-                    kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+                    "taken:urltaak-detail",
+                    kwargs={"uuid": str(urltaak.uuid)},
                 ),
                 headers={"Authorization": f"Bearer {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(gegevensuitvraagtaak.uuid))
+            self.assertEqual(response.data["uuid"], str(urltaak.uuid))
         with self.subTest("formuliertaken"):
             formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
             # get list
@@ -354,11 +354,11 @@ class TestTokenAuthentication(TestCase):
             self.assertEqual(response.status_code, HTTP_200_OK)
             self.assertEqual(response.data["uuid"], str(betaaltaak.uuid))
 
-        with self.subTest("gegevensuitvraagtaken"):
-            gegevensuitvraagtaak = ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        with self.subTest("urltaken"):
+            urltaak = ExterneTaakFactory.create(urltaak=True)
             # get list
             response = self.client.get(
-                reverse("taken:gegevensuitvraagtaak-list"),
+                reverse("taken:urltaak-list"),
                 headers={"Authorization": f"Token {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
@@ -367,13 +367,13 @@ class TestTokenAuthentication(TestCase):
             # get detail
             response = self.client.get(
                 reverse(
-                    "taken:gegevensuitvraagtaak-detail",
-                    kwargs={"uuid": str(gegevensuitvraagtaak.uuid)},
+                    "taken:urltaak-detail",
+                    kwargs={"uuid": str(urltaak.uuid)},
                 ),
                 headers={"Authorization": f"Token {token}"},
             )
             self.assertEqual(response.status_code, HTTP_200_OK)
-            self.assertEqual(response.data["uuid"], str(gegevensuitvraagtaak.uuid))
+            self.assertEqual(response.data["uuid"], str(urltaak.uuid))
         with self.subTest("formuliertaken"):
             formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
             # get list

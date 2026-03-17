@@ -7,6 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
@@ -30,6 +31,14 @@ class ExterneTaak(models.Model):
         help_text=_(
             "Titel van de uit te voeren taak, zoals die door eindgebruikers "
             "gezien kan worden in bijvoorbeeld een portaal."
+        ),
+    )
+    verwerker_taak_id = models.CharField(
+        _("titel"),
+        max_length=36,
+        blank=True,
+        help_text=_(
+            "Een identifier van het process dat deze taak verwerkt.",
         ),
     )
     status = models.CharField(
@@ -67,9 +76,9 @@ class ExterneTaak(models.Model):
             "ingesteld op een systeem-ingesteld aantal dagen voor de 'einddatumHandelingsTermijn'."
         ),
     )
-    toelichting = models.TextField(
+    toelichting = models.CharField(
         _("toelichting"),
-        max_length=4000,
+        max_length=80,
         blank=True,
         help_text=_(
             "Toelichting van de uit te voeren taak, zoals die door eindgebruikers "
@@ -99,29 +108,17 @@ class ExterneTaak(models.Model):
         ),
         blank=True,
     )
-    wordt_behandeld_door = URNField(
-        _("wordt behandeld door medewerker"),
-        help_text=_(
-            "De medewerker die verantwoordelijk is voor de uitvoering van deze taak. "
-            "Kan een entiteit van het type MEDEWERKER zijn."
-        ),
+    is_gerelateerd_aan = models.JSONField(
+        _("is gerelateerd aan"),
+        default=list,
         blank=True,
-    )
-    hoort_bij = URNField(
-        _("hoort bij zaak"),
+        null=True,
         help_text=_(
-            "Het hoofdproces (ZAAK) waar deze TAAK bij hoort. URN naar de ZAAK. "
-            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+            "URN naar de ZAAK of het PRODUCT. "
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165` "
+            "of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
         ),
-        blank=True,
-    )
-    heeft_betrekking_op = URNField(
-        _("heeft betrekking op product"),
-        help_text=_(
-            "Het PRODUCT waar deze TAAK betrekking op heeft. URN naar het PRODUCT. "
-            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
-        ),
-        blank=True,
+        encoder=DjangoJSONEncoder,
     )
 
     class Meta:
@@ -141,6 +138,19 @@ class ExterneTaak(models.Model):
                     days=settings.TAKEN_DEFAULT_REMINDER_IN_DAYS
                 )
         super().save(*args, **kwargs)
+
+    def clean_is_gerelateerd_aan(self):
+        if not self.is_gerelateerd_aan:
+            return
+
+        try:
+            validate_jsonschema(
+                instance=self.is_gerelateerd_aan,
+                label="is_gerelateerd_aan",
+                schema=IS_GERELATEERD_AAN_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_gerelateerd_aan": str(error)})
 
     def clean_details(self):
         try:
@@ -173,3 +183,4 @@ class ExterneTaak(models.Model):
 
         self.clean_details()
         self.clean_dates()
+        self.clean_is_gerelateerd_aan()
