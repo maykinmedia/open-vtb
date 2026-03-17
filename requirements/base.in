@@ -11,7 +11,8 @@ maykin-common[axes,mfa,otel,vcr]
 
 # Extra
 pytz
-jsonschema[format]
+jsonschema[format-nongpl]
 
 # Framework libraries
 django-jsonsuit
+
