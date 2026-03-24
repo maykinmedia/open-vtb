@@ -349,7 +349,7 @@ pydantic-core==2.41.4
     # via pydantic
 pydantic-settings==2.11.0
     # via django-setup-configuration
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via
     #   commonground-api-common
     #   mozilla-django-oidc
