@@ -32,7 +32,7 @@ boltons==25.0.0
     # via
     #   face
     #   glom
-cbor2==5.8.0
+cbor2==5.9.0
     # via webauthn
 celery==5.5.3
     # via notifications-api-common
@@ -59,13 +59,13 @@ click-repl==0.3.0
     # via celery
 commonground-api-common==2.10.7
     # via open-api-framework
-cryptography==46.0.3
+cryptography==46.0.5
     # via
     #   django-simple-certmanager
     #   mozilla-django-oidc
     #   pyopenssl
     #   webauthn
-django==5.2.11
+django==5.2.12
     # via
     #   commonground-api-common
     #   django-admin-index
@@ -349,7 +349,7 @@ pydantic-core==2.41.4
     # via pydantic
 pydantic-settings==2.11.0
     # via django-setup-configuration
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via
     #   commonground-api-common
     #   mozilla-django-oidc
@@ -423,7 +423,7 @@ six==1.17.0
     #   orderedmultidict
     #   python-dateutil
     #   rfc3339-validator
-sqlparse==0.5.3
+sqlparse==0.5.5
     # via django
 structlog==25.5.0
     # via
