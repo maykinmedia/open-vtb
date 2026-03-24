@@ -63,7 +63,7 @@ boltons==25.0.0
     #   -r requirements/base.txt
     #   face
     #   glom
-cbor2==5.8.0
+cbor2==5.9.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

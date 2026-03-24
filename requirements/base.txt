@@ -32,7 +32,7 @@ boltons==25.0.0
     # via
     #   face
     #   glom
-cbor2==5.8.0
+cbor2==5.9.0
     # via webauthn
 celery==5.5.3
     # via notifications-api-common
