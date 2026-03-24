@@ -528,11 +528,6 @@ lxml==6.0.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   pyquery
-markdown==3.9
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   sphinx-markdown-tables
 markdown-it-py==4.0.0
     # via rich
 markupsafe==3.0.3
@@ -842,7 +837,7 @@ rich==14.2.0
     #   rich-click
 rich-click==1.9.3
     # via bump-my-version
-roman-numerals-py==3.1.0
+roman-numerals==4.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -900,7 +895,7 @@ soupsieve==2.8
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   beautifulsoup4
-sphinx==8.2.3
+sphinx==9.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -908,11 +903,7 @@ sphinx==8.2.3
     #   sphinx-rtd-theme
     #   sphinx-tabs
     #   sphinxcontrib-jquery
-sphinx-markdown-tables==0.0.17
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-sphinx-rtd-theme==3.0.2
+sphinx-rtd-theme==3.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
