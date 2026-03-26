@@ -138,3 +138,37 @@ replace = ":Version: {new_version}"
 filename = "package.json"
 search = "    \"version\": \"{current_version}\""
 replace = "    \"version\": \"{new_version}\""
+
+
+[tool.coverage.run]
+parallel = true
+branch = true
+source = ["src"]
+omit =[
+    # files processed at entrypoint time
+    "src/manage.py",
+    "src/openvtb/wsgi.py",
+    # migrations run while django initializes the test db
+    "*/migrations/*",
+    # settings
+    "src/openvtb/conf/dev.py",
+    "src/openvtb/conf/docker.py",
+    "src/openvtb/conf/jenkins.py",
+    "src/openvtb/conf/test.py",
+
+]
+
+[tool.coverage.report]
+skip_covered = true
+exclude_also = [
+    "if (typing\\.)?TYPE_CHECKING:",
+    "@(typing\\.)?overload",
+    "class .*\\(.*Protocol.*\\):",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "raise RuntimeError",
+    "\\.\\.\\.",
+    "pass$",
+    "if settings.DEBUG:",
+    "assert_never\\(.*\\)"
+]
