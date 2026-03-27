@@ -16,7 +16,7 @@ from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import check_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
-from .constants import VerzoekTypeVersionStatus
+from .constants import VerwerkStatus, VerzoekTypeVersionStatus
 
 
 class VerzoekType(models.Model):
@@ -347,6 +347,16 @@ class Verzoek(models.Model):
         validators=[MinLengthValidator(limit_value=2)],
         default="nl",
         blank=True,
+    )
+    verwerk_status = models.CharField(
+        _("verwerk status"),
+        max_length=20,
+        choices=VerwerkStatus.choices,
+        default=VerwerkStatus.GEREGISTREERD,
+        help_text=_(
+            "De initiële status is altijd `geregistreerd`. De status `verwerkt` moet gezet worden door "
+            "het component dat verantwoordelijk is voor de afhandeling danwel opvolging."
+        ),
     )
 
     class Meta:

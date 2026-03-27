@@ -6,3 +6,8 @@ class VerzoekTypeVersionStatus(models.TextChoices):
     PUBLISHED = "published", _("Published")
     DRAFT = "draft", _("Draft")
     DEPRECATED = "deprecated", _("Deprecated")
+
+
+class VerwerkStatus(models.TextChoices):
+    GEREGISTREERD = "geregistreerd", _("Geregistreerd")
+    VERWERKT = "verwerkt", _("Verwerkt")
