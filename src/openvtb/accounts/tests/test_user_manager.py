@@ -28,6 +28,27 @@ class UserManagerTests(TestCase):
         with self.assertRaises(IntegrityError):
             User.objects.create(username="BBB", email="aaa@aaa.aaa", password="bbb!")
 
+    def test_create_users_missing_parameters(self):
+        with self.assertRaises(ValueError):
+            User.objects.create_user(username=None)
+
+    def test_create_superusers_checks(self):
+        with self.assertRaises(ValueError):
+            User.objects.create_superuser(
+                username="AAA",
+                password="aaa!",
+                email="aaa@aaa.aaa",
+                is_staff=False,
+            )
+
+        with self.assertRaises(ValueError):
+            User.objects.create_superuser(
+                username="AAA",
+                password="aaa!",
+                email="aaa@aaa.aaa",
+                is_superuser=False,
+            )
+
     def test_create_user_with_blank_emails(self):
         User.objects.create(username="AAA", email="", password="aaa!")
         User.objects.create(username="BBB", email="", password="bbb!")
