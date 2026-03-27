@@ -155,3 +155,75 @@ class ValidateVerzoekSchemaTestCase(TestCase):
                 ]
             },
         )
+
+    def test_schema_format_checker(self):
+        versie = self.verzoek_type.last_versie
+        versie.aanvraag_gegevens_schema = {
+            "type": "object",
+            "properties": {
+                "status": {"type": "string", "enum": ["open", "closed"]},
+                "description": {"type": "string"},
+                "tags": {"type": "array", "items": {"type": "string"}},
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "created_by": {"type": "string"},
+                        "priority": {"type": "integer", "minimum": 1, "maximum": 5},
+                    },
+                    "required": ["created_by"],
+                    "additionalProperties": False,
+                },
+                "color": {"type": "string", "format": "color"},
+                "date": {"type": "string", "format": "date"},
+                "date-time": {"type": "string", "format": "date-time"},
+                "duration": {"type": "string", "format": "duration"},
+                "time": {"type": "string", "format": "time"},
+                "email": {"type": "string", "format": "email"},
+                "hostname": {"type": "string", "format": "hostname"},
+                "idn-hostname": {"type": "string", "format": "idn-hostname"},
+                "ipv4": {"type": "string", "format": "ipv4"},
+                "ipv6": {"type": "string", "format": "ipv6"},
+                "iri": {"type": "string", "format": "iri"},
+                "iri-reference": {"type": "string", "format": "iri-reference"},
+                "json-pointer": {"type": "string", "format": "json-pointer"},
+                "relative-json-pointer": {
+                    "type": "string",
+                    "format": "relative-json-pointer",
+                },
+                "regex": {"type": "string", "format": "regex"},
+                "uri": {"type": "string", "format": "uri"},
+                "uri-reference": {"type": "string", "format": "uri-reference"},
+                "uri-template": {"type": "string", "format": "uri-template"},
+                "uuid": {"type": "string", "format": "uuid"},
+            },
+            "additionalProperties": False,
+        }
+        versie.save()
+
+        self.verzoek = VerzoekFactory.create(
+            verzoek_type=self.verzoek_type,
+            aanvraag_gegevens={
+                "status": "open",
+                "description": "Valid request",
+                "tags": ["test", "example"],
+                "metadata": {"created_by": "user1", "priority": 3},
+                "color": "#ff0000",
+                "date": "2026-03-16",
+                "date-time": "2026-03-16T12:34:56Z",
+                "duration": "P3Y6M4DT12H30M5S",
+                "time": "12:34:56Z",
+                "email": "test@example.com",
+                "hostname": "example.com",
+                "idn-hostname": "xn--exmple-cua.com",
+                "ipv4": "192.168.1.1",
+                "ipv6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+                "json-pointer": "/foo/bar",
+                "relative-json-pointer": "0/foo",
+                "regex": "^[a-z]+$",
+                "uri": "https://example.com/path",
+                "uri-reference": "/relative/path",
+                "uri-template": "/users/{id}",
+                "uuid": "123e4567-e89b-12d3-a456-426614174000",
+            },
+        )
+        self.verzoek.full_clean()

@@ -375,3 +375,60 @@ class VerzoekValidatorsTests(APITestCase):
                     "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
                 },
             )
+
+    def test_format_checker(self):
+        verzoektype = VerzoekTypeFactory.create(create_versie=True)
+        versie = verzoektype.last_versie
+        versie.aanvraag_gegevens_schema = {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": ["open", "closed"],
+                },
+                "color": {"type": "string", "format": "color"},
+                "email": {"type": "string", "format": "email"},
+                "duration": {"type": "string", "format": "duration"},
+            },
+            "additionalProperties": False,
+        }
+        versie.save()
+        verzoektype_url = reverse(
+            "verzoeken:verzoektype-detail", kwargs={"uuid": str(verzoektype.uuid)}
+        )
+        data = {
+            "verzoekType": verzoektype_url,
+            "aanvraagGegevens": {
+                "status": "open",
+                "color": "not-a-color",
+                "email": "invalid-email",
+            },
+            "versie": 1,
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "aanvraagGegevens.color"),
+            {
+                "name": "aanvraagGegevens.color",
+                "code": "invalid-json-schema",
+                "reason": "'not-a-color' is not a valid hexadecimal color and not defined as a named color in CSS3 color",
+            },
+        )
+        # fix color
+        data["aanvraagGegevens"]["color"] = "red"
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "aanvraagGegevens.email"),
+            {
+                "name": "aanvraagGegevens.email",
+                "code": "invalid-json-schema",
+                "reason": "'invalid-email' is not a 'email'",
+            },
+        )
+
+        # fix email
+        data["aanvraagGegevens"]["email"] = "example@admin.com"
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

@@ -10,11 +10,12 @@ from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 import structlog
+import webcolors
 from jsonschema import (
-    FormatChecker,
+    Draft202012Validator,
     FormatError,
     ValidationError as JSONValidationError,
-    validate,
+    draft202012_format_checker,
 )
 from rest_framework import serializers
 
@@ -23,7 +24,6 @@ from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from .typing import JSONObject
 
 logger = structlog.stdlib.get_logger(__name__)
-format_checker = FormatChecker()
 
 FORBIDDEN_PREFIXES = (
     "0800",
@@ -34,11 +34,49 @@ FORBIDDEN_PREFIXES = (
 )
 
 
-@format_checker.checks("decimal")
-def is_decimal(value: str) -> bool:
+@draft202012_format_checker.checks("color")
+def is_valid_color(value: str) -> bool:
+    """
+    Checks if the value is a valid CSS3 color:
+        - named CSS3 color
+        - hexadecimal color
+
+    Raises FormatError if invalid.
+    """
+    try:
+        webcolors.name_to_hex(value)
+    except ValueError:
+        try:
+            webcolors.hex_to_name(value)
+        except ValueError:
+            raise FormatError(
+                _(
+                    "'{value}' is not a valid hexadecimal color and not defined as a named color in CSS3 color".format(
+                        value=value
+                    )
+                )
+            )
+    return True
+
+
+@draft202012_format_checker.checks("email")
+def is_valid_email(value: str) -> bool:
+    """
+    Check that 'value' is a reasonably valid email address.
+
+    - Returns False if the value is not a string.
+    - Performs a simplified validation.
+
+    """
+    pattern = r"^[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}$"
+    return bool(re.match(pattern, str(value)))
+
+
+@draft202012_format_checker.checks("decimal")
+def is_valid_decimal(value: str) -> bool:
     """
     Checks that 'value' is a valid decimal with at most 2 decimal places.
-    Raises ValidationError if invalid.
+    Raises FormatError if invalid.
     """
     try:
         d = Decimal(value)
@@ -53,13 +91,12 @@ def is_decimal(value: str) -> bool:
     return True
 
 
-@format_checker.checks("iban")
+@draft202012_format_checker.checks("iban")
 def is_valid_iban(value: str) -> bool:
     """
     JSONSchema format checker for IBAN values.
 
-    Raises:
-        ValidationError: if the IBAN does not match the expected pattern.
+    Raises FormatError: if the IBAN does not match the expected pattern.
     """
     iban_regex = r"^[A-Za-z]{2}[0-9]{2}[A-Za-z0-9]{1,30}$"
     if not re.compile(iban_regex).fullmatch(force_str(value)):
@@ -82,10 +119,12 @@ def validate_jsonschema(
         ValueError: Raises a dictionary mapping the error path to the validation message.
     """
     try:
-        validate(instance=instance, schema=schema, format_checker=format_checker)
+        validator = Draft202012Validator(
+            schema, format_checker=draft202012_format_checker
+        )
+        validator.validate(instance)
     except JSONValidationError as json_error:
         logger.exception("validate_jsonschema failed: JSON not valid")
-
         path_list = [str(err) for err in getattr(json_error, "absolute_path", [])]
         if label not in path_list:
             path_list.insert(0, label)

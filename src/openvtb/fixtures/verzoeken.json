@@ -103,7 +103,8 @@
         ],
         "kanaal": "",
         "verzoek_informatie_object": "",
-        "verzoek_taal": "nl"
+        "verzoek_taal": "nl",
+        "verwerk_status": "geregistreerd"
     }
 }
 ]
