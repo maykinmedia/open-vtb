@@ -43,15 +43,14 @@ class ExterneTaakTests(APITestCase):
                         "uuid": str(externetaak.uuid),
                         "titel": externetaak.titel,
                         "status": externetaak.status,
+                        "verwerkerTaakId": externetaak.verwerker_taak_id,
                         "startdatum": externetaak.startdatum.isoformat(),
                         "handelingsPerspectief": externetaak.handelings_perspectief,
                         "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                         "toelichting": externetaak.toelichting,
                         "isToegewezenAan": externetaak.is_toegewezen_aan,
-                        "wordtBehandeldDoor": "",
-                        "hoortBij": "",
-                        "heeftBetrekkingOp": "",
+                        "isGerelateerdAan": externetaak.is_gerelateerd_aan,
                         "taakSoort": externetaak.taak_soort,
                         "details": externetaak.details,
                     }
@@ -61,7 +60,7 @@ class ExterneTaakTests(APITestCase):
 
         # list all sorts of tasks
         ExterneTaakFactory.create(betaaltaak=True)
-        ExterneTaakFactory.create(gegevensuitvraagtaak=True)
+        ExterneTaakFactory.create(urltaak=True)
         ExterneTaakFactory.create(formuliertaak=True)
         response = self.client.get(self.list_url)
 
@@ -97,15 +96,14 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(externetaak.uuid),
                 "titel": externetaak.titel,
                 "status": externetaak.status,
+                "verwerkerTaakId": externetaak.verwerker_taak_id,
                 "startdatum": externetaak.startdatum.isoformat(),
                 "handelingsPerspectief": externetaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": externetaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": externetaak.datum_herinnering.isoformat(),
                 "toelichting": externetaak.toelichting,
                 "isToegewezenAan": externetaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": externetaak.wordt_behandeld_door,
-                "hoortBij": externetaak.hoort_bij,
-                "heeftBetrekkingOp": externetaak.heeft_betrekking_op,
+                "isGerelateerdAan": externetaak.is_gerelateerd_aan,
                 "taakSoort": externetaak.taak_soort,
                 "details": externetaak.details,
             },
@@ -115,6 +113,7 @@ class ExterneTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
         data = {
             "titel": "titel",
+            "verwerkerTaakId": "123456",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
             "details": {
@@ -127,6 +126,10 @@ class ExterneTaakTests(APITestCase):
                 },
             },
             "isToegewezenAan": "urn:example:12345",
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -141,15 +144,14 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
+                "verwerkerTaakId": betaaltaak.verwerker_taak_id,
                 "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
+                "isGerelateerdAan": betaaltaak.is_gerelateerd_aan,
                 "taakSoort": betaaltaak.taak_soort,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -176,9 +178,6 @@ class ExterneTaakTests(APITestCase):
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
             "taakSoort": SoortTaak.BETAALTAAK.value,
-            "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
-            "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "heeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
             "details": {
                 "bedrag": "11",
                 "transactieomschrijving": "test",
@@ -202,16 +201,15 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": betaaltaak.status,
+                "verwerkerTaakId": betaaltaak.verwerker_taak_id,
                 "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
                 "taakSoort": betaaltaak.taak_soort,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
+                "isGerelateerdAan": betaaltaak.is_gerelateerd_aan,
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
                     "valuta": betaaltaak.details["valuta"],
@@ -375,15 +373,14 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
+                "verwerkerTaakId": betaaltaak.verwerker_taak_id,
                 "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
+                "isGerelateerdAan": betaaltaak.is_gerelateerd_aan,
                 "taakSoort": str(betaaltaak.taak_soort),
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -408,7 +405,7 @@ class ExterneTaakTests(APITestCase):
 
         # patch taakSoort with wrong details
         response = self.client.patch(
-            detail_url, {"taak_soort": SoortTaak.GEGEVENSUITVRAAGTAAK.value}
+            detail_url, {"taak_soort": SoortTaak.URLTAAK.value}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -424,17 +421,15 @@ class ExterneTaakTests(APITestCase):
         response = self.client.patch(
             detail_url,
             {
-                "taak_soort": SoortTaak.GEGEVENSUITVRAAGTAAK.value,
+                "taak_soort": SoortTaak.URLTAAK.value,
                 "details": {"uitvraagLink": "http://example.com/"},
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.taak_soort, SoortTaak.URLTAAK.value)
         self.assertEqual(
-            gegevensuitvraagtaak.taak_soort, SoortTaak.GEGEVENSUITVRAAGTAAK.value
-        )
-        self.assertEqual(
-            gegevensuitvraagtaak.details,
+            urltaak.details,
             {"uitvraagLink": "http://example.com/"},
         )
 
@@ -444,8 +439,25 @@ class ExterneTaakTests(APITestCase):
             {"isToegewezenAan": "urn:example:12345"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
-        self.assertEqual(gegevensuitvraagtaak.is_toegewezen_aan, "urn:example:12345")
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.is_toegewezen_aan, "urn:example:12345")
+
+        # patch isGerelateerdAan with the new details
+        response = self.client.patch(
+            detail_url,
+            {
+                "isGerelateerdAan": [
+                    {"urn": "urn:nld:test1:12345"},
+                    {"urn": "urn:nld:test2:67890"},
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            urltaak.is_gerelateerd_aan,
+            [{"urn": "urn:nld:test1:12345"}, {"urn": "urn:nld:test2:67890"}],
+        )
 
     def test_update(self):
         betaaltaak = ExterneTaakFactory.create(betaaltaak=True)
@@ -483,15 +495,14 @@ class ExterneTaakTests(APITestCase):
                 "uuid": str(betaaltaak.uuid),
                 "titel": betaaltaak.titel,
                 "status": str(betaaltaak.status),
+                "verwerkerTaakId": betaaltaak.verwerker_taak_id,
                 "startdatum": betaaltaak.startdatum.isoformat(),
                 "handelingsPerspectief": betaaltaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": betaaltaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": betaaltaak.datum_herinnering.isoformat(),
                 "toelichting": betaaltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
+                "isGerelateerdAan": betaaltaak.is_gerelateerd_aan,
                 "taakSoort": str(betaaltaak.taak_soort),
                 "details": {
                     "bedrag": betaaltaak.details["bedrag"],
@@ -543,31 +554,30 @@ class ExterneTaakTests(APITestCase):
             {
                 "titel": "new_titel",
                 "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
-                "taakSoort": SoortTaak.GEGEVENSUITVRAAGTAAK.value,
+                "taakSoort": SoortTaak.URLTAAK.value,
                 "details": {"uitvraagLink": "http://example.com/"},
             },
         )
-        gegevensuitvraagtaak = ExterneTaak.objects.get()
+        urltaak = ExterneTaak.objects.get()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json(),
             {
-                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(gegevensuitvraagtaak.uuid)})}",
+                "url": f"http://testserver{reverse('taken:externetaak-detail', kwargs={'uuid': str(urltaak.uuid)})}",
                 "urn": f"urn:maykin:taken:externetaak:{str(betaaltaak.uuid)}",
-                "uuid": str(gegevensuitvraagtaak.uuid),
-                "titel": gegevensuitvraagtaak.titel,
-                "status": str(gegevensuitvraagtaak.status),
-                "startdatum": gegevensuitvraagtaak.startdatum.isoformat(),
-                "handelingsPerspectief": gegevensuitvraagtaak.handelings_perspectief,
-                "einddatumHandelingsTermijn": gegevensuitvraagtaak.einddatum_handelings_termijn.isoformat(),
-                "datumHerinnering": gegevensuitvraagtaak.datum_herinnering.isoformat(),
-                "toelichting": gegevensuitvraagtaak.toelichting,
+                "uuid": str(urltaak.uuid),
+                "titel": urltaak.titel,
+                "status": str(urltaak.status),
+                "verwerkerTaakId": urltaak.verwerker_taak_id,
+                "startdatum": urltaak.startdatum.isoformat(),
+                "handelingsPerspectief": urltaak.handelings_perspectief,
+                "einddatumHandelingsTermijn": urltaak.einddatum_handelings_termijn.isoformat(),
+                "datumHerinnering": urltaak.datum_herinnering.isoformat(),
+                "toelichting": urltaak.toelichting,
                 "isToegewezenAan": betaaltaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": betaaltaak.wordt_behandeld_door,
-                "hoortBij": betaaltaak.hoort_bij,
-                "heeftBetrekkingOp": betaaltaak.heeft_betrekking_op,
-                "taakSoort": str(gegevensuitvraagtaak.taak_soort),
-                "details": gegevensuitvraagtaak.details,
+                "isGerelateerdAan": betaaltaak.is_gerelateerd_aan,
+                "taakSoort": str(urltaak.taak_soort),
+                "details": urltaak.details,
             },
         )
 

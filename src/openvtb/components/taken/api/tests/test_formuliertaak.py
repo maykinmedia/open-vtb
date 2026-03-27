@@ -45,15 +45,14 @@ class FormulierTaakTests(APITestCase):
                         "uuid": str(formuliertaak.uuid),
                         "titel": formuliertaak.titel,
                         "status": formuliertaak.status,
+                        "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                         "startdatum": formuliertaak.startdatum.isoformat(),
                         "handelingsPerspectief": formuliertaak.handelings_perspectief,
                         "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                         "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                         "toelichting": formuliertaak.toelichting,
                         "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                        "wordtBehandeldDoor": "",
-                        "hoortBij": "",
-                        "heeftBetrekkingOp": "",
+                        "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                         "taakSoort": formuliertaak.taak_soort,
                         "details": {
                             "formulierDefinitie": formuliertaak.details[
@@ -102,15 +101,14 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
+                "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                 "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
+                "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -179,6 +177,10 @@ class FormulierTaakTests(APITestCase):
                 },
             },
             "isToegewezenAan": "urn:example:123456",
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
         }
         response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -192,15 +194,14 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
+                "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                 "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
+                "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -307,9 +308,6 @@ class FormulierTaakTests(APITestCase):
         data = {
             "titel": "titel",
             "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
-            "wordtBehandeldDoor": "urn:maykin:medewerker:brp:nnp:bsn:1234567892",
-            "hoortBij": "urn:maykin:ztc:zaak:d42613cd-ee22-4455-808c-c19c7b8442a1",
-            "heeftBetrekkingOp": "urn:maykin:product:cec996f4-2efa-4307-a035-32c2c9032e89",
             "details": {
                 "formulierDefinitie": {
                     "key1": "value1",
@@ -354,15 +352,14 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
+                "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                 "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
+                "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -447,15 +444,14 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
+                "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                 "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
+                "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],
@@ -556,6 +552,23 @@ class FormulierTaakTests(APITestCase):
         formuliertaak = ExterneTaak.objects.get()
         self.assertEqual(formuliertaak.is_toegewezen_aan, "urn:example:12345")
 
+        # patch isGerelateerdAan with the new details
+        response = self.client.patch(
+            detail_url,
+            {
+                "isGerelateerdAan": [
+                    {"urn": "urn:nld:test1:12345"},
+                    {"urn": "urn:nld:test2:67890"},
+                ],
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        formuliertaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            formuliertaak.is_gerelateerd_aan,
+            [{"urn": "urn:nld:test1:12345"}, {"urn": "urn:nld:test2:67890"}],
+        )
+
     def test_valid_update(self):
         formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
 
@@ -604,15 +617,14 @@ class FormulierTaakTests(APITestCase):
                 "uuid": str(formuliertaak.uuid),
                 "titel": formuliertaak.titel,
                 "status": formuliertaak.status,
+                "verwerkerTaakId": formuliertaak.verwerker_taak_id,
                 "startdatum": formuliertaak.startdatum.isoformat(),
                 "handelingsPerspectief": formuliertaak.handelings_perspectief,
                 "einddatumHandelingsTermijn": formuliertaak.einddatum_handelings_termijn.isoformat(),
                 "datumHerinnering": formuliertaak.datum_herinnering.isoformat(),
                 "toelichting": formuliertaak.toelichting,
                 "isToegewezenAan": formuliertaak.is_toegewezen_aan,
-                "wordtBehandeldDoor": formuliertaak.wordt_behandeld_door,
-                "hoortBij": formuliertaak.hoort_bij,
-                "heeftBetrekkingOp": formuliertaak.heeft_betrekking_op,
+                "isGerelateerdAan": formuliertaak.is_gerelateerd_aan,
                 "taakSoort": formuliertaak.taak_soort,
                 "details": {
                     "formulierDefinitie": formuliertaak.details["formulierDefinitie"],

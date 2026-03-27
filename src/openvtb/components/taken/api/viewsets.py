@@ -9,7 +9,7 @@ from .serializers import (
     BetaalTaakSerializer,
     ExterneTaakPolymorphicSerializer,
     FormulierTaakSerializer,
-    GegevensUitvraagTaakSerializer,
+    URLTaakSerializer,
 )
 from .utils import SoortTaakMixin, make_inline_response
 
@@ -141,93 +141,93 @@ class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
 
 @extend_schema_view(
     list=extend_schema(
-        summary="Vraag alle gegevensuitvraag taken aan.",
-        description="Vraag alle gegevensuitvraag taken aan.",
+        summary="Vraag alle url taken aan.",
+        description="Vraag alle url taken aan.",
         responses={
             200: make_inline_response(
-                name_suffix="GegevensUitvraagTaakListResponse",
+                name_suffix="URLTaakListResponse",
                 parent_serializer_class=ExterneTaakPolymorphicSerializer,
-                inner_serializer_class=GegevensUitvraagTaakSerializer,
+                inner_serializer_class=URLTaakSerializer,
             )
         },
     ),
     retrieve=extend_schema(
-        summary="Een specifieke gegevensuitvraag taak opvragen.",
-        description="Een specifieke gegevensuitvraag taak opvragen.",
+        summary="Een specifieke url taak opvragen.",
+        description="Een specifieke url taak opvragen.",
         responses={
             200: make_inline_response(
-                name_suffix="GegevensUitvraagTaakRetrieveResponse",
+                name_suffix="URLTaakRetrieveResponse",
                 parent_serializer_class=ExterneTaakPolymorphicSerializer,
-                inner_serializer_class=GegevensUitvraagTaakSerializer,
+                inner_serializer_class=URLTaakSerializer,
             )
         },
     ),
     create=extend_schema(
-        summary="Maak een gegevensuitvraag taak aan.",
-        description="Maak een gegevensuitvraag taak aan.",
+        summary="Maak een url taak aan.",
+        description="Maak een url taak aan.",
         request=make_inline_response(
-            name_suffix="GegevensUitvraagTaakCreateRequest",
+            name_suffix="URLTaakCreateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
-            inner_serializer_class=GegevensUitvraagTaakSerializer,
+            inner_serializer_class=URLTaakSerializer,
             write=True,
         ),
         responses={
             201: make_inline_response(
-                name_suffix="GegevensUitvraagTaakCreateResponse",
+                name_suffix="URLTaakCreateResponse",
                 parent_serializer_class=ExterneTaakPolymorphicSerializer,
-                inner_serializer_class=GegevensUitvraagTaakSerializer,
+                inner_serializer_class=URLTaakSerializer,
             )
         },
     ),
     update=extend_schema(
-        summary="Volledig gegevensuitvraag taak wijzigen.",
-        description="Volledig gegevensuitvraag taak wijzigen.",
+        summary="Volledig url taak wijzigen.",
+        description="Volledig url taak wijzigen.",
         request=make_inline_response(
-            name_suffix="GegevensUitvraagTaakUpdateRequest",
+            name_suffix="URLTaakUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
-            inner_serializer_class=GegevensUitvraagTaakSerializer,
+            inner_serializer_class=URLTaakSerializer,
             write=True,
         ),
         responses={
             200: make_inline_response(
-                name_suffix="GegevensUitvraagTaakUpdateResponse",
+                name_suffix="URLTaakUpdateResponse",
                 parent_serializer_class=ExterneTaakPolymorphicSerializer,
-                inner_serializer_class=GegevensUitvraagTaakSerializer,
+                inner_serializer_class=URLTaakSerializer,
             )
         },
     ),
     partial_update=extend_schema(
-        summary="Een gegevensuitvraag taak gedeeltelijk wijzigen.",
-        description="Een gegevensuitvraag taak gedeeltelijk wijzigen.",
+        summary="Een url taak gedeeltelijk wijzigen.",
+        description="Een url taak gedeeltelijk wijzigen.",
         request=make_inline_response(
-            name_suffix="GegevensUitvraagTaakPartialUpdateRequest",
+            name_suffix="URLTaakPartialUpdateRequest",
             parent_serializer_class=ExterneTaakPolymorphicSerializer,
-            inner_serializer_class=GegevensUitvraagTaakSerializer,
+            inner_serializer_class=URLTaakSerializer,
             write=True,
         ),
         responses={
             200: make_inline_response(
-                name_suffix="GegevensUitvraagTaakPartialUpdateResponse",
+                name_suffix="URLTaakPartialUpdateResponse",
                 parent_serializer_class=ExterneTaakPolymorphicSerializer,
-                inner_serializer_class=GegevensUitvraagTaakSerializer,
+                inner_serializer_class=URLTaakSerializer,
             )
         },
     ),
     destroy=extend_schema(
-        summary="Een gegevensuitvraag taak verwijderen",
-        description="Een gegevensuitvraag taak verwijderen",
+        summary="Een url taak verwijderen",
+        description="Een url taak verwijderen",
         responses={
             204: None,
         },
     ),
 )
-class GegevensUitvraagTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class URLTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
-    taak_soort = SoortTaak.GEGEVENSUITVRAAGTAAK
+    taak_soort = SoortTaak.URLTAAK
 
 
 @extend_schema_view(

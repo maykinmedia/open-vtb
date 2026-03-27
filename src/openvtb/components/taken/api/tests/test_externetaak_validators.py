@@ -40,32 +40,3 @@ class ExterneTaakValidationTests(APITestCase):
             },
         )
         self.assertFalse(ExterneTaak.objects.exists())
-
-    def test_invalid_create_urn_fields(self):
-        self.assertFalse(ExterneTaak.objects.exists())
-        data = {
-            "titel": "titel",
-            "einddatumHandelingsTermijn": datetime.date(2026, 1, 10),
-            "taakSoort": SoortTaak.BETAALTAAK.value,
-            "wordtBehandeldDoor": "test:maykin:medewerker:brp:nnp:bsn:1234567892",  # doesn't start with urn
-            "hoortBij": "urn:maykinmaykinmaykinmaykinmaykinmaykinmaykinmaykinmaykin:1",  # long NID
-            "details": self.details,
-        }
-        response = self.client.post(self.list_url, data)
-        self.assertEqual(
-            get_validation_errors(response, "wordtBehandeldDoor"),
-            {
-                "name": "wordtBehandeldDoor",
-                "code": "invalid_urn",
-                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "hoortBij"),
-            {
-                "name": "hoortBij",
-                "code": "invalid_urn",
-                "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
-            },
-        )
-        self.assertFalse(ExterneTaak.objects.exists())

@@ -12,5 +12,5 @@ class StatusTaak(models.TextChoices):
 
 class SoortTaak(models.TextChoices):
     BETAALTAAK = "betaaltaak", _("Betaallink")
-    GEGEVENSUITVRAAGTAAK = "gegevensuitvraagtaak", _("Extern formulier")
+    URLTAAK = "urltaak", _("URL taak")
     FORMULIERTAAK = "formuliertaak", _("Standaard formulier")

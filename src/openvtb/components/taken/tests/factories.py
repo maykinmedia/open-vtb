@@ -71,8 +71,8 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                 },
             },
         )
-        gegevensuitvraagtaak = factory.Trait(
-            taak_soort=SoortTaak.GEGEVENSUITVRAAGTAAK,
+        urltaak = factory.Trait(
+            taak_soort=SoortTaak.URLTAAK,
             details={
                 "uitvraagLink": "http://example.com/",
                 "voorinvullenGegevens": {
