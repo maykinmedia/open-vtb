@@ -183,6 +183,8 @@ class ValidateVerzoekSchemaTestCase(TestCase):
                 "idn-hostname": {"type": "string", "format": "idn-hostname"},
                 "ipv4": {"type": "string", "format": "ipv4"},
                 "ipv6": {"type": "string", "format": "ipv6"},
+                "iri": {"type": "string", "format": "iri"},
+                "iri-reference": {"type": "string", "format": "iri-reference"},
                 "json-pointer": {"type": "string", "format": "json-pointer"},
                 "relative-json-pointer": {
                     "type": "string",

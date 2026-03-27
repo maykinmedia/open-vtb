@@ -2,8 +2,14 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext as _
 
+from jsonschema import FormatError
+
 from openvtb.utils.validators import (
     URNValidator,
+    is_valid_color,
+    is_valid_decimal,
+    is_valid_email,
+    is_valid_iban,
     validate_charfield_entry,
     validate_iban,
     validate_jsonschema,
@@ -23,6 +29,8 @@ SCHEMA_ALL_FORMATS = {
         "idn-hostname": {"type": "string", "format": "idn-hostname"},
         "ipv4": {"type": "string", "format": "ipv4"},
         "ipv6": {"type": "string", "format": "ipv6"},
+        "iri": {"type": "string", "format": "iri"},
+        "iri-reference": {"type": "string", "format": "iri-reference"},
         "json-pointer": {"type": "string", "format": "json-pointer"},
         "regex": {"type": "string", "format": "regex"},
         "relative-json-pointer": {"type": "string", "format": "relative-json-pointer"},
@@ -140,20 +148,74 @@ class ValidatorsTestCase(TestCase):
             "AB12",
             "AB1259345934953495934953495345345345",
         ]
-
-        for invalid_iban in invalid_ibans:
+        for iban in invalid_ibans:
             self.assertRaisesMessage(
                 ValidationError,
                 "Ongeldige IBAN",
                 validate_iban,
-                invalid_iban,
+                iban,
             )
+            with self.assertRaises(FormatError):
+                is_valid_iban(iban)  # format checker function
 
-        self.assertIsNone(validate_iban("AB12TEST1253678"))
-        self.assertIsNone(validate_iban("AB12test1253678"))
-        self.assertIsNone(validate_iban("ab1299999999999"))
-        self.assertIsNone(validate_iban("ab129"))
-        self.assertIsNone(validate_iban("ab12aaaaaaaaaa"))
+        valid_ibans = [
+            "NL91ABNA0417164300",
+            "DE89370400440532013000",
+            "FR1420041010050500013M02606",
+            "GB82WEST12345698765432",
+            "AB12TEST1253678",
+            "AB12test1253678",
+            "ab1299999999999",
+            "ab129",
+            "ab12aaaaaaaaaa",
+        ]
+        for iban in valid_ibans:
+            self.assertIsNone(validate_iban(iban))
+            self.assertTrue(is_valid_iban(iban))  # format checker function
+
+    def test_decimal(self):
+        invalid_decimals = ["test", "123test", "123,15", "###", None]
+        for decimal in invalid_decimals:
+            with self.assertRaises(FormatError):
+                is_valid_decimal(decimal)
+
+        valid_decimals = ["123", "123.15", 123]
+        for decimal in valid_decimals:
+            self.assertTrue(is_valid_decimal(decimal))
+
+    def test_email(self):
+        invalid_emails = [
+            "test",
+            "@missingusername.com",
+            "username@.com",
+            "user@site..com",
+            "user@com",
+            "user@site,com",
+            None,
+            123,
+        ]
+        for email in invalid_emails:
+            self.assertFalse(is_valid_email(email))
+
+        valid_emails = [
+            "user@example.com",
+            "user.name+tag@example.co.uk",
+            "user_name-test@example.com",
+            "user!?name@example.io",
+            "user123@example123.com",
+        ]
+        for email in valid_emails:
+            self.assertTrue(is_valid_email(email))
+
+    def test_color(self):
+        invalid_colors = ["notacolor", "123456", "#12345G"]
+        for color in invalid_colors:
+            with self.assertRaises(FormatError):
+                is_valid_color(color)
+
+        valid_colors = ["red", "#fff", "#FFFFFF"]
+        for color in valid_colors:
+            self.assertTrue(is_valid_color(color))
 
 
 class URNValidatorTests(TestCase):
@@ -276,12 +338,16 @@ class JSONSchemaFormatTests(TestCase):
 
     def test_idn_hostname(self):
         data = {}
-        invalid_values = ["-invalid-host", None, 123]
+        invalid_values = ["-invalid.com", "invalid-.com", "inv@lid.com", None, 123]
         for val in invalid_values:
             with self.assertRaises(ValidationError):
                 data["idn-hostname"] = val
                 validate_jsonschema(data, SCHEMA_ALL_FORMATS)
-        validate_jsonschema({"idn-hostname": "example.com"}, SCHEMA_ALL_FORMATS)
+
+        valid_values = ["münchen.com", "tęst.com", "crème.fr"]
+        for val in valid_values:
+            data["idn-hostname"] = val
+            validate_jsonschema(data, SCHEMA_ALL_FORMATS)
 
     def test_ipv4(self):
         data = {}
@@ -302,6 +368,32 @@ class JSONSchemaFormatTests(TestCase):
         validate_jsonschema(
             {"ipv6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334"}, SCHEMA_ALL_FORMATS
         )
+
+    def test_iri(self):
+        data = {}
+        invalid_values = ["http://exa mple.com", None, 123]
+        for val in invalid_values:
+            with self.assertRaises(ValidationError):
+                data["iri"] = val
+                validate_jsonschema(data, SCHEMA_ALL_FORMATS)
+
+        valid_values = ["https://example.com", "https://münchen.com/über"]
+        for val in valid_values:
+            data["iri"] = val
+            validate_jsonschema(data, SCHEMA_ALL_FORMATS)
+
+    def test_iri_reference(self):
+        data = {}
+        invalid_refs = ["ht tp://example.com", "://missing.scheme.com", None, 123]
+        for val in invalid_refs:
+            with self.assertRaises(ValidationError):
+                data["iri-reference"] = val
+                validate_jsonschema(data, SCHEMA_ALL_FORMATS)
+
+        valid_refs = ["/relative/path", "crème/cheese", "münchen/über"]
+        for val in valid_refs:
+            data["iri-reference"] = val
+            validate_jsonschema(data, SCHEMA_ALL_FORMATS)
 
     def test_json_pointer(self):
         data = {}

@@ -35,7 +35,7 @@ FORBIDDEN_PREFIXES = (
 
 
 @draft202012_format_checker.checks("color")
-def is_css21_color(value: str) -> bool | None:
+def is_valid_color(value: str) -> bool:
     """
     Checks if the value is a valid CSS3 color:
         - named CSS3 color
@@ -43,9 +43,6 @@ def is_css21_color(value: str) -> bool | None:
 
     Raises FormatError if invalid.
     """
-    if not isinstance(value, str):
-        return False
-
     try:
         webcolors.name_to_hex(value)
     except ValueError:
@@ -54,7 +51,7 @@ def is_css21_color(value: str) -> bool | None:
         except ValueError:
             raise FormatError(
                 _(
-                    "'{value}' is not defined as a named color in CSS3 color ".format(
+                    "'{value}' is not a valid hexadecimal color and not defined as a named color in CSS3 color".format(
                         value=value
                     )
                 )
@@ -63,20 +60,20 @@ def is_css21_color(value: str) -> bool | None:
 
 
 @draft202012_format_checker.checks("email")
-def is_valid_email(value: str) -> bool | None:
+def is_valid_email(value: str) -> bool:
     """
-    Check that 'value` is a valid email address according to the RFC 5322 standard
-    Raises ValidationError if invalid.
-    """
-    if not isinstance(value, str):
-        return False
+    Check that 'value' is a reasonably valid email address.
 
-    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    return bool(re.match(pattern, value))
+    - Returns False if the value is not a string.
+    - Performs a simplified validation.
+
+    """
+    pattern = r"^[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}$"
+    return bool(re.match(pattern, str(value)))
 
 
 @draft202012_format_checker.checks("decimal")
-def is_decimal(value: str) -> bool | None:
+def is_valid_decimal(value: str) -> bool:
     """
     Checks that 'value' is a valid decimal with at most 2 decimal places.
     Raises FormatError if invalid.
@@ -95,7 +92,7 @@ def is_decimal(value: str) -> bool | None:
 
 
 @draft202012_format_checker.checks("iban")
-def is_valid_iban(value: str) -> bool | None:
+def is_valid_iban(value: str) -> bool:
     """
     JSONSchema format checker for IBAN values.
 
