@@ -69,6 +69,7 @@ urlpatterns = [
         "berichten/api/",
         include("openvtb.components.berichten.api.urls"),
     ),
+    path("", include("maykin_common.health_checks.urls")),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="main.html"), name="root"),
     # separate apps
