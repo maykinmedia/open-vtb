@@ -5,6 +5,7 @@ os.environ["_USE_STRUCTLOG"] = "True"
 from open_api_framework.conf.base import *  # noqa
 from open_api_framework.conf.utils import config  # noqa
 
+from maykin_common.health_checks import default_health_check_apps
 from .api import *  # noqa
 
 #
@@ -17,6 +18,8 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "django.contrib.gis",
     # External applications.
     "jsonsuit.apps.JSONSuitConfig",
+    # health check + plugins
+    *default_health_check_apps,
     # Project applications.
     "openvtb.accounts",
     "openvtb.utils",

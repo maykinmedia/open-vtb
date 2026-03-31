@@ -32,7 +32,7 @@ and::
 Jenkins
 -------
 
-Run ``./bin/jenkins_django.sh`` to execute the tests for ``develop`` and ``master``.
+Run ``./bin/jenkins_django.sh`` to execute the tests for ``develop`` and ``main``.
 This script runs the tests with ``--keepdb``.
 
 To run PR tests, run ``./bin/jenkins_django_pr.sh``. This script drops the test
@@ -84,7 +84,7 @@ Jenkins jobs
 
 It is recommended to set up the following Jenkins jobs for a project:
 
-**master** branch
+**main** branch
 -----------------
 
 1. ``openvtb-django``: backend tests, runs ``./bin/jenkins_django.sh``.
