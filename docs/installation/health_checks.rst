@@ -5,7 +5,7 @@ Container health checks
 =======================
 
 Open VTB is deployed as a collection of containers.
-Containers can be checked if they're running as expected, and actions can be taken by0
+Containers can be checked if they're running as expected, and actions can be taken by
 the container runtime or container orchestration (like Kubernetes and Docker) when that's not the case,
 like restarting the container or removing it from the pool that serves traffic.
 
@@ -24,7 +24,7 @@ your infrastructure code (like Helm charts).
 
 You can find code examples of these health checks in our `docker-compose.yml`_ on Github.
 
-.. _docker-compose.yml: https://github.com/maykinmedia/open-vtb/blob/master/docker-compose.yml
+.. _docker-compose.yml: https://github.com/maykinmedia/open-vtb/blob/main/docker-compose.yml
 
 .. contents:: Jump to
     :local:

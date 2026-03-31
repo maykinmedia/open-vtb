@@ -46,17 +46,17 @@ API specification
 Open VTB Version  API Version                Release date    API specification
 ================  =========================  =============   =================
 main/latest        n/a                        n/a             | Verzoeken:
-                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/verzoeken/openapi.yaml>`_,
-                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/verzoeken/openapi.yaml>`_,
-                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/verzoeken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..main>`_)
                                                               | Taken:
-                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
-                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/taken/openapi.yaml>`_,
-                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/taken/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..main>`_)
                                                               | Berichten:
-                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/berichten/openapi.yaml>`_,
-                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/master/src/openvtb/components/berichten/openapi.yaml>`_,
-                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..master>`_)
+                                                                 `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/berichten/openapi.yaml>`_,
+                                                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/berichten/openapi.yaml>`_,
+                                                                 (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..main>`_)
 
 0.1.0              | Verzoeken: 0.1.0        YYYY-MM-DD        | Verzoeken:
                    | Taken: 0.1.0                               `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
