@@ -77,6 +77,7 @@ celery==5.5.3
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   flower
     #   notifications-api-common
 certifi==2025.10.5
     # via
@@ -405,6 +406,10 @@ factory-boy==3.3.3
     # via -r requirements/test-tools.in
 faker==37.11.0
     # via factory-boy
+flower==2.0.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 fqdn==1.5.1
     # via
     #   -c requirements/base.txt
@@ -432,6 +437,11 @@ grpcio==1.75.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   opentelemetry-exporter-otlp-proto-grpc
+humanize==4.15.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 idna==3.11
     # via
     #   -c requirements/base.txt
@@ -663,6 +673,11 @@ phonenumberslite==8.13.55
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-two-factor-auth
+prometheus-client==0.25.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 prompt-toolkit==3.0.52
     # via
     #   -c requirements/base.txt
@@ -769,6 +784,7 @@ pytz==2025.2
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   flower
 pyyaml==6.0.3
     # via
     #   -c requirements/base.txt
@@ -912,6 +928,11 @@ structlog==25.5.0
     #   django-structlog
 tblib==3.1.0
     # via -r requirements/test-tools.in
+tornado==6.5.5
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 typer==0.24.1
     # via
     #   -c requirements/base.txt

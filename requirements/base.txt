@@ -37,7 +37,11 @@ boltons==25.0.0
 cbor2==5.9.0
     # via webauthn
 celery==5.5.3
-    # via notifications-api-common
+    # via
+    #   django-structlog
+    #   flower
+    #   notifications-api-common
+    #   open-api-framework
 certifi==2025.10.5
     # via
     #   elastic-apm
@@ -221,6 +225,8 @@ elastic-apm==6.24.0
     # via open-api-framework
 face==24.0.0
     # via glom
+flower==2.0.1
+    # via open-api-framework
 fqdn==1.5.1
     # via jsonschema
 furl==2.1.4
@@ -233,6 +239,8 @@ googleapis-common-protos==1.70.0
     #   opentelemetry-exporter-otlp-proto-http
 grpcio==1.75.1
     # via opentelemetry-exporter-otlp-proto-grpc
+humanize==4.15.0
+    # via flower
 idna==3.11
     # via
     #   jsonschema
@@ -364,6 +372,8 @@ packaging==25.0
     #   opentelemetry-instrumentation
 phonenumberslite==8.13.55
     # via django-two-factor-auth
+prometheus-client==0.25.0
+    # via flower
 prompt-toolkit==3.0.52
     # via click-repl
 protobuf==6.33.5
@@ -417,7 +427,9 @@ python-ipware==3.0.0
 python-stdnum==2.1
     # via django-localflavor
 pytz==2025.2
-    # via -r requirements/base.in
+    # via
+    #   -r requirements/base.in
+    #   flower
 pyyaml==6.0.3
     # via
     #   drf-spectacular
@@ -478,6 +490,8 @@ structlog==25.5.0
     # via
     #   django-structlog
     #   open-api-framework
+tornado==6.5.5
+    # via flower
 typer==0.24.1
     # via maykin-common
 types-requests==2.33.0.20260327

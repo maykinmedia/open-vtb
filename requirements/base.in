@@ -1,4 +1,4 @@
-open-api-framework[cors,markup,geo,csp,commonground,inclusions,sanitization,server,redis,structlog]
+open-api-framework[celery,cors,markup,geo,csp,commonground,inclusions,sanitization,server,redis, structlog-celery]
 
 psycopg[pool]
 
