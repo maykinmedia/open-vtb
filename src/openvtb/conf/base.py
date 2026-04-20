@@ -118,3 +118,16 @@ TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
         "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
     ),
 )
+
+ENABLE_CLOUD_EVENTS = config(
+    "ENABLE_CLOUD_EVENTS",
+    default=False,
+    cast=bool,
+    help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
+)
+
+NOTIFICATIONS_SOURCE = config(
+    "NOTIFICATIONS_SOURCE",
+    default="",
+    help_text="The identifier of this application to use as the source in notifications and cloudevents",
+)

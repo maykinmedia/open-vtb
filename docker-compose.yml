@@ -54,6 +54,10 @@ services:
       # OTEL_EXPORTER_OTLP_HEADERS: Authorization=Basic b3RlbDpzdXBlcnNlY3JldA==
       OTEL_EXPORTER_OTLP_METRICS_INSECURE: ${OTEL_EXPORTER_OTLP_METRICS_INSECURE:-true}
       _OTEL_ENABLE_CONTAINER_RESOURCE_DETECTOR: true
+      # cloudevents
+      ENABLE_CLOUD_EVENTS: ${ENABLE_CLOUD_EVENTS:-False}
+      NOTIFICATIONS_SOURCE: ${NOTIFICATIONS_SOURCE:-openvtb}
+
     healthcheck:
       test: ["CMD", "maykin-common", "health-check"]
       interval: 30s
