@@ -1,11 +1,11 @@
 import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
-
+from celery.schedules import crontab
+from maykin_common.health_checks import default_health_check_apps
 from open_api_framework.conf.base import *  # noqa
 from open_api_framework.conf.utils import config  # noqa
 
-from maykin_common.health_checks import default_health_check_apps
 from .api import *  # noqa
 
 #
@@ -153,7 +153,24 @@ CELERY_ONCE = {
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
-CELERY_BEAT_SCHEDULE = {}
+PUBLISHED_BERICHTEN_JOB_MINUTE = config(
+    "PUBLISHED_BERICHTEN_JOB_MINUTE",
+    default=0,  # every hour
+)
+PUBLISHED_BERICHTEN_JOB_HOUR = config(
+    "PUBLISHED_BERICHTEN_JOB_HOUR",
+    default=1,  # every hour
+)
+
+CELERY_BEAT_SCHEDULE = {
+    "send-published-berichten": {
+        "task": "openvtb.components.berichten.tasks.send_published_berichten",
+        "schedule": crontab(
+            minute=PUBLISHED_BERICHTEN_JOB_MINUTE,
+            hour=f"*/{PUBLISHED_BERICHTEN_JOB_HOUR}",
+        ),
+    },
+}
 
 
 #

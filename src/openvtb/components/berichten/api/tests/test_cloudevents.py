@@ -62,8 +62,6 @@ class BerichtenCloudEventTest(APITestCase):
                 "dataref": None,
                 "datacontenttype": "application/json",
                 "data": {
-                    "url": response.data["url"],
-                    "urn": response.data["urn"],
                     "onderwerp": response.data["onderwerp"],
                     "publicatiedatum": timezone.make_aware(
                         datetime.datetime.strptime(

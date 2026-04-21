@@ -8,12 +8,11 @@ from vng_api_common.pagination import DynamicPageSizePagination
 
 from openvtb.utils.cloudevents import process_cloudevent
 
+from ..constants import BERICHT_GEREGISTREERD
 from ..models import Bericht
 from .serializers import BerichtSerializer
 
 logger = structlog.stdlib.get_logger(__name__)
-
-BERICHT_GEREGISTREERD = "nl.overheid.berichten.bericht-geregistreerd"
 
 
 @extend_schema_view(
@@ -47,8 +46,6 @@ class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             type_event=BERICHT_GEREGISTREERD,
             subject=str(instance.uuid),
             data={
-                "url": serializer.data["url"],
-                "urn": serializer.data["urn"],
                 "onderwerp": instance.onderwerp,
                 "publicatiedatum": instance.publicatiedatum,
                 "ontvanger": instance.ontvanger,
