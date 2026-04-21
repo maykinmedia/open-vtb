@@ -4,13 +4,12 @@ set -e
 
 LOGLEVEL=${CELERY_LOGLEVEL:-INFO}
 
+# Set defaults for OTEL
 export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-openvtb-scheduler}"
 
 mkdir -p celerybeat
 
 echo "Starting celery beat"
-exec celery beat \
-    --app openvtb \
+exec celery --app openvtb.celery --workdir src beat \
     -l $LOGLEVEL \
-    --workdir src \
     -s ../celerybeat/beat

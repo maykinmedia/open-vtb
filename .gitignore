@@ -44,3 +44,6 @@ local.py
 # Static files
 src/openvtb/static/bundles/
 src/openvtb/fonts/
+
+# Celerybeat
+/celerybeat

@@ -6,6 +6,7 @@ psycopg[pool]
 django-capture-tag
 django-localflavor
 mozilla-django-oidc-db[setup-configuration]
+django-celery-beat
 
 maykin-common[axes,mfa,otel,vcr,cli,health-checks]
 

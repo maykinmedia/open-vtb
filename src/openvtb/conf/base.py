@@ -18,8 +18,10 @@ INSTALLED_APPS = INSTALLED_APPS + [
     "django.contrib.gis",
     # External applications.
     "jsonsuit.apps.JSONSuitConfig",
+    "django_celery_beat",
     # health check + plugins
     *default_health_check_apps,
+    "maykin_common.health_checks.celery",
     # Project applications.
     "openvtb.accounts",
     "openvtb.utils",
@@ -131,3 +133,34 @@ NOTIFICATIONS_SOURCE = config(
     default="",
     help_text="The identifier of this application to use as the source in notifications and cloudevents",
 )
+
+
+#
+# CELERY-ONCE
+#
+CELERY_ONCE_REDIS_URL = config(
+    "CELERY_ONCE_REDIS_URL",
+    default=CELERY_BROKER_URL,
+    group="Celery",
+)
+CELERY_ONCE = {
+    "backend": "celery_once.backends.Redis",
+    "settings": {
+        "url": CELERY_ONCE_REDIS_URL,
+        "default_timeout": 60 * 60,  # one hour
+    },
+}
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+# https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
+CELERY_BEAT_SCHEDULE = {}
+
+
+#
+# MAYKIN-COMMON health checks
+#
+MKN_HEALTH_CHECKS_BEAT_LIVENESS_FILE = BASE_DIR / "tmp" / "celery_beat.live"
+MKN_HEALTH_CHECKS_WORKER_EVENT_LOOP_LIVENESS_FILE = (
+    BASE_DIR / "tmp" / "celery_worker_event_loop.live"
+)
+MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.ready"

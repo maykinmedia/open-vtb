@@ -39,6 +39,7 @@ services:
       SECRET_KEY: ${SECRET_KEY:-django-insecure-##q31k@oa@my@(twhvqsvv#+-9x0h0@94^f9=vmxe(zzkg^mot}
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/0
+      CELERY_WORKER_NAME: celery@docker
       DISABLE_2FA: true
       LOG_NOTIFICATIONS_IN_DB: ${LOG_NOTIFICATIONS_IN_DB:-yes}
       DB_CONN_MAX_AGE: "0"
@@ -103,6 +104,71 @@ services:
     depends_on:
       - db
       - redis
+    networks:
+      - open-vtb-dev
+
+  celery:
+    image: maykinmedia/open-vtb:${TAG:-latest}
+    environment: *web_env
+    command: /celery_worker.sh
+    healthcheck:
+      test: [
+        "CMD",
+        "maykin-common",
+        "worker-health-check",
+        "--liveness-file=/app/tmp/celery_worker_event_loop.live",
+        "--max-age=70",
+        "--broker=redis://redis:6379/0",
+        "--worker-name=celery@docker",
+      ]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      web:
+        condition: service_healthy
+    volumes: *web_volumes
+    networks:
+      - open-vtb-dev
+
+  celery-beat:
+    image: maykinmedia/open-vtb:${TAG:-latest}
+    environment: *web_env
+    command: /celery_beat.sh
+    depends_on:
+      - db
+      - redis
+    healthcheck:
+      test: [
+        "CMD",
+        "maykin-common",
+        "beat-health-check",
+        "--file=/app/tmp/celery_beat.live",
+        "--max-age=120"
+      ]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+    networks:
+      - open-vtb-dev
+
+  celery-flower:
+    image: maykinmedia/open-vtb:${TAG:-latest}
+    environment: *web_env
+    command: /celery_flower.sh
+    ports:
+      - 5555:5555
+    depends_on:
+      - redis
+      - celery
+    healthcheck:
+      test: [
+        "CMD",
+        "maykin-common",
+        "health-check",
+        "--endpoint=http://localhost:5555/"
+      ]
     networks:
       - open-vtb-dev
 
