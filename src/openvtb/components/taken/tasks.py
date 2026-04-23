@@ -3,16 +3,16 @@ from datetime import date
 import structlog
 
 from openvtb.celery import app
-from openvtb.utils.cloudevents import process_cloudevent
 
-from .constants import EXTERNETAAK_HERINNERD, StatusTaak
+from .cloudevents import EXTERNETAAK_HERINNERD, send_taak_cloudevent
+from .constants import StatusTaak
 from .models import ExterneTaak
 
 logger = structlog.stdlib.get_logger(__name__)
 
 
 @app.task(ignore_result=True)
-def send_taak_reminder() -> None:
+def send_taak_event() -> None:
     """
     Sends reminder CloudEvents for OPEN external tasks whose reminder date has been reached.
 
@@ -25,18 +25,7 @@ def send_taak_reminder() -> None:
     ):
         logger.info("taak_herinnerd", uuid=str(taak.uuid))
 
-        process_cloudevent(
-            type_event=EXTERNETAAK_HERINNERD,
-            subject=str(taak.uuid),
-            data={
-                "taak_soort": taak.taak_soort,
-                "titel": taak.titel,
-                "status": taak.status,
-                "einddatumHandelingsTermijn": taak.einddatum_handelings_termijn.isoformat()
-                if taak.einddatum_handelings_termijn
-                else "",
-            },
-        )
+        send_taak_cloudevent(EXTERNETAAK_HERINNERD, taak)
 
         taak.is_herinnering_verzonden = True
         taak.save()

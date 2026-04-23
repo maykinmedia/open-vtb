@@ -4,9 +4,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
-from openvtb.utils.cloudevents import process_cloudevent
-
-from ..constants import EXTERNETAAK_GEREGISTREERD, SoortTaak
+from ..cloudevents import EXTERNETAAK_GEREGISTREERD, send_taak_cloudevent
+from ..constants import SoortTaak
 from ..models import ExterneTaak
 from .serializers import (
     BetaalTaakSerializer,
@@ -57,19 +56,27 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         instance = serializer.instance
 
         logger.info("externetaak_created", uuid=str(instance.uuid))
+        send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
 
-        process_cloudevent(
-            type_event=EXTERNETAAK_GEREGISTREERD,
-            subject=str(instance.uuid),
-            data={
-                "taak_soort": instance.taak_soort,
-                "titel": instance.titel,
-                "status": instance.status,
-                "einddatumHandelingsTermijn": instance.einddatum_handelings_termijn.isoformat()
-                if instance.einddatum_handelings_termijn
-                else "",
-            },
-        )
+    def perform_update(self, serializer):
+        old_instance = self.get_object()
+        super().perform_update(serializer)
+        updated_instance = serializer.instance
+        logger.info("externetaak_created", uuid=str(updated_instance.uuid))
+
+        old_status = old_instance.status
+        new_status = updated_instance.status
+
+        if old_status == new_status:
+            return
+
+        match new_status:
+            case StatusTaak.UITGEVOERD:
+                send_taak_cloudevent(EXTERNETAAK_UITGEVOERD, updated_instance)
+            case StatusTaak.VERWERKT:
+                send_taak_cloudevent(EXTERNETAAK_VERWERKT, updated_instance)
+            case StatusTaak.AFGEBROKEN:
+                send_taak_cloudevent(EXTERNETAAK_AFGEBROKEN, updated_instance)
 
 
 @extend_schema_view(

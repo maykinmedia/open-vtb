@@ -1,9 +1,14 @@
 import structlog
 from drf_spectacular.utils import inline_serializer
 
-from openvtb.utils.cloudevents import process_cloudevent
-
-from ..constants import EXTERNETAAK_GEREGISTREERD
+from ..cloudevents import (
+    EXTERNETAAK_AFGEBROKEN,
+    EXTERNETAAK_GEREGISTREERD,
+    EXTERNETAAK_UITGEVOERD,
+    EXTERNETAAK_VERWERKT,
+    send_taak_cloudevent,
+)
+from ..constants import StatusTaak
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -31,18 +36,27 @@ class SoortTaakMixin:
         else:
             logger.info(f"{self.taak_soort}_created", uuid=str(instance.uuid))  # noqa
 
-        process_cloudevent(
-            type_event=EXTERNETAAK_GEREGISTREERD,
-            subject=str(instance.uuid),
-            data={
-                "taak_soort": instance.taak_soort,
-                "titel": instance.titel,
-                "status": instance.status,
-                "einddatumHandelingsTermijn": instance.einddatum_handelings_termijn.isoformat()
-                if instance.einddatum_handelings_termijn
-                else "",
-            },
-        )
+        send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
+
+    def perform_update(self, serializer):
+        old_instance = self.get_object()
+        super().perform_update(serializer)
+        updated_instance = serializer.instance
+        logger.info("externetaak_created", uuid=str(updated_instance.uuid))
+
+        old_status = old_instance.status
+        new_status = updated_instance.status
+
+        if old_status == new_status:
+            return
+
+        match new_status:
+            case StatusTaak.UITGEVOERD:
+                send_taak_cloudevent(EXTERNETAAK_UITGEVOERD, updated_instance)
+            case StatusTaak.VERWERKT:
+                send_taak_cloudevent(EXTERNETAAK_VERWERKT, updated_instance)
+            case StatusTaak.AFGEBROKEN:
+                send_taak_cloudevent(EXTERNETAAK_AFGEBROKEN, updated_instance)
 
 
 def make_inline_response(
