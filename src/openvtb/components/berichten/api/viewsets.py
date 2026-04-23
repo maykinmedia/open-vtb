@@ -47,7 +47,7 @@ class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             subject=str(instance.uuid),
             data={
                 "onderwerp": instance.onderwerp,
-                "publicatiedatum": instance.publicatiedatum,
+                "publicatiedatum": instance.publicatiedatum.isoformat(),
                 "ontvanger": instance.ontvanger,
             },
         )

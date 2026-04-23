@@ -24,7 +24,7 @@ def send_published_berichten():
             subject=str(bericht.uuid),
             data={
                 "onderwerp": bericht.onderwerp,
-                "publicatiedatum": bericht.publicatiedatum,
+                "publicatiedatum": bericht.publicatiedatum.isoformat(),
                 "ontvanger": bericht.ontvanger,
             },
         )

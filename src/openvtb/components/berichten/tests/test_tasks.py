@@ -77,7 +77,7 @@ class PublishedBerichtenTest(TestCase):
                 "datacontenttype": "application/json",
                 "data": {
                     "onderwerp": bericht.onderwerp,
-                    "publicatiedatum": bericht.publicatiedatum,
+                    "publicatiedatum": bericht.publicatiedatum.isoformat(),
                     "ontvanger": bericht.ontvanger,
                 },
             },
