@@ -65,7 +65,9 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
                 "taak_soort": instance.taak_soort,
                 "titel": instance.titel,
                 "status": instance.status,
-                "einddatumHandelingsTermijn": instance.einddatum_handelings_termijn.isoformat(),
+                "einddatumHandelingsTermijn": instance.einddatum_handelings_termijn.isoformat()
+                if instance.einddatum_handelings_termijn
+                else "",
             },
         )
 

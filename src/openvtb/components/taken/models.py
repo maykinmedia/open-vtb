@@ -76,6 +76,11 @@ class ExterneTaak(models.Model):
             "ingesteld op een systeem-ingesteld aantal dagen voor de 'einddatumHandelingsTermijn'."
         ),
     )
+    is_herinnering_verzonden = models.BooleanField(
+        _("herinnering_verzonden"),
+        default=False,
+        help_text=_("Geeft aan of de herinnering voor dit taak al is verzonden."),
+    )
     toelichting = models.CharField(
         _("toelichting"),
         max_length=80,

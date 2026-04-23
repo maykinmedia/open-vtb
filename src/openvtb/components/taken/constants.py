@@ -17,3 +17,4 @@ class SoortTaak(models.TextChoices):
 
 
 EXTERNETAAK_GEREGISTREERD = "nl.overheid.berichten.externetaak-geregistreerd"
+EXTERNETAAK_HERINNERD = "nl.overheid.berichten.externetaak-herinnerd"
