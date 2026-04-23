@@ -107,9 +107,11 @@ OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_auth.oidc_backend.OIDCAuthentication
 #
 # django-setup-configuration
 #
-SETUP_CONFIGURATION_STEPS = (
+SETUP_CONFIGURATION_STEPS = [
     "mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep",
-)
+    "zgw_consumers.contrib.setup_configuration.steps.ServiceConfigurationStep",
+    "notifications_api_common.contrib.setup_configuration.steps.NotificationConfigurationStep",
+]
 
 
 TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
@@ -151,17 +153,24 @@ CELERY_ONCE = {
     },
 }
 
-CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
 PUBLISHED_BERICHTEN_JOB_MINUTE = config(
     "PUBLISHED_BERICHTEN_JOB_MINUTE",
-    default=0,  # every hour
-)
-PUBLISHED_BERICHTEN_JOB_HOUR = config(
-    "PUBLISHED_BERICHTEN_JOB_HOUR",
-    default=1,  # every hour
+    default=0,
+    help_text=(
+        "Minute of execution (0 - 59). Used by the `send-published-berichten` Celery Beat schedule."
+    ),
 )
 
+PUBLISHED_BERICHTEN_JOB_HOUR = config(
+    "PUBLISHED_BERICHTEN_JOB_HOUR",
+    default=1,
+    help_text=(
+        "Hour of execution (0 - 23). Used by the `send-published-berichten` Celery Beat schedule."
+    ),
+)
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
     "send-published-berichten": {
         "task": "openvtb.components.berichten.tasks.send_published_berichten",

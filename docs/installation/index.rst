@@ -15,3 +15,4 @@ For the sake of simplicity, we have chosen to use Docker and Docker Compose for 
 
    config/index
    health_checks
+   cloud_events

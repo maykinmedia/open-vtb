@@ -316,3 +316,28 @@ There are no specific commands for the project. See
 ``python src/manage.py --help``.
 
 .. _Django framework commands: https://docs.djangoproject.com/en/dev/ref/django-admin/#available-commands
+
+
+Running background tasks
+========================
+
+We use `Celery`_ as background task queue.
+
+You can run celery worker(s) in a shell to activate the asynchronous task
+queue processing.
+
+To start the background workers executing tasks:
+
+.. code-block:: bash
+
+   DB_HOST=localhost ./bin/celery_worker.sh
+
+
+To start flower for task monitoring:
+
+.. code-block:: bash
+
+   DB_HOST=localhost ./bin/celery_flower.sh
+
+
+.. _Celery: https://docs.celeryq.dev/en/stable/
