@@ -14,3 +14,6 @@ class SoortTaak(models.TextChoices):
     BETAALTAAK = "betaaltaak", _("Betaallink")
     URLTAAK = "urltaak", _("URL taak")
     FORMULIERTAAK = "formuliertaak", _("Standaard formulier")
+
+
+EXTERNETAAK_GEREGISTREERD = "nl.overheid.berichten.externetaak-geregistreerd"

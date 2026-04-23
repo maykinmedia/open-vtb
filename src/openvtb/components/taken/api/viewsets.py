@@ -1,9 +1,12 @@
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
-from ..constants import SoortTaak
+from openvtb.utils.cloudevents import process_cloudevent
+
+from ..constants import EXTERNETAAK_GEREGISTREERD, SoortTaak
 from ..models import ExterneTaak
 from .serializers import (
     BetaalTaakSerializer,
@@ -12,6 +15,8 @@ from .serializers import (
     URLTaakSerializer,
 )
 from .utils import SoortTaakMixin, make_inline_response
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema_view(
@@ -46,6 +51,23 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        instance = serializer.instance
+
+        logger.info("externetaak_created", uuid=str(instance.uuid))
+
+        process_cloudevent(
+            type_event=EXTERNETAAK_GEREGISTREERD,
+            subject=str(instance.uuid),
+            data={
+                "taak_soort": instance.taak_soort,
+                "titel": instance.titel,
+                "status": instance.status,
+                "einddatumHandelingsTermijn": instance.einddatum_handelings_termijn.isoformat(),
+            },
+        )
 
 
 @extend_schema_view(
