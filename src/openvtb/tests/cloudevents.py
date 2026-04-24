@@ -34,10 +34,7 @@ class CloudEventSettingMixin(TestCase):
         cls._freezer = freeze_time(FROZEN_TIME_Z)
         cls._freezer.start()
 
-        cls._override = override_settings(
-            ENABLE_CLOUD_EVENTS=True,
-            NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE,
-        )
+        cls._override = override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE)
         cls._override.enable()
 
     def setUp(self):

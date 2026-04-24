@@ -19,7 +19,7 @@ FROZEN_TIME_Z = "2026-01-01T00:00:00Z"
 @freeze_time(FROZEN_TIME)
 @patch("notifications_api_common.tasks.send_cloudevent.delay")
 @patch("notifications_api_common.cloudevents.uuid.uuid4", lambda: MOCKED_CLOUDEVENT_ID)
-@override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE, ENABLE_CLOUD_EVENTS=True)
+@override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE)
 class PublishedBerichtenTest(TestCase):
     @override_settings(ENABLE_CLOUD_EVENTS=False)
     def test_no_cloudevent_when_disabled(self, mock_process_cloudevent):

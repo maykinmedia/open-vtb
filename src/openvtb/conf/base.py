@@ -125,7 +125,7 @@ TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
 
 ENABLE_CLOUD_EVENTS = config(
     "ENABLE_CLOUD_EVENTS",
-    default=False,
+    default=True,
     cast=bool,
     help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
 )
@@ -158,7 +158,8 @@ PUBLISHED_BERICHTEN_JOB_MINUTE = config(
     "PUBLISHED_BERICHTEN_JOB_MINUTE",
     default=0,
     help_text=(
-        "Minute of execution (0 - 59). Used by the `send-published-berichten` Celery Beat schedule."
+        "Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, "
+        "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
     ),
 )
 
@@ -166,7 +167,9 @@ PUBLISHED_BERICHTEN_JOB_HOUR = config(
     "PUBLISHED_BERICHTEN_JOB_HOUR",
     default=1,
     help_text=(
-        "Hour of execution (0 - 23). Used by the `send-published-berichten` Celery Beat schedule."
+        "Hour interval (1 - 23). Determines the frequency of execution in hours. "
+        "The job runs repeatedly based on this interval rather than at a single fixed hour. "
+        "Default is every hour. The schedule is evaluated in UTC timezone."
     ),
 )
 

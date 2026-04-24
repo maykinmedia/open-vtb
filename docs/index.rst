@@ -19,7 +19,6 @@ Getting Started
    introduction/index
    installation/index
    development/index
-   observability/index
    manual/index
    testing
    changelog

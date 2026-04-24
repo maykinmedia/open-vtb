@@ -23,7 +23,7 @@ FROZEN_TIME_Z = "2026-01-01T00:00:00Z"
 @freeze_time(FROZEN_TIME)
 @patch("notifications_api_common.tasks.send_cloudevent.delay")
 @patch("notifications_api_common.cloudevents.uuid.uuid4", lambda: MOCKED_CLOUDEVENT_ID)
-@override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE, ENABLE_CLOUD_EVENTS=True)
+@override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE)
 class BerichtenCloudEventTest(APITestCase):
     maxDiff = None
     url = reverse("berichten:bericht-list")
@@ -109,9 +109,9 @@ class CloudEventCeleryRetryTestCase(CloudEventSettingMixin, APITestCase):
             response = self.client.post(self.url, self.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        bericht_uuid = response.data["uuid"]
 
         bericht_uuid = response.data["uuid"]
+
         payload = mock_send.call_args[0][0]
         expected_payload = {
             "id": MOCKED_CLOUDEVENT_ID,
@@ -151,9 +151,9 @@ class CloudEventCeleryRetryTestCase(CloudEventSettingMixin, APITestCase):
             response = self.client.post(self.url, self.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        bericht_uuid = response.data["uuid"]
 
         bericht_uuid = response.data["uuid"]
+
         payload = mock_send.call_args[0][0]
         expected_payload = {
             "id": MOCKED_CLOUDEVENT_ID,
