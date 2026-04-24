@@ -92,15 +92,7 @@ GDAL_LIBRARY_PATH = config(
 )
 
 #
-# URN settings
-#
-URN_NAMESPACE = config(
-    "URN_NAMESPACE",
-    help_text=("Namespace used in URNs schemas."),
-)
-
-#
-# MOZILLA DJANGO OIDC
+# mozilla-django-oidc-db
 #
 OIDC_DRF_AUTH_BACKEND = "openvtb.utils.oidc_auth.oidc_backend.OIDCAuthenticationBackend"
 
@@ -113,28 +105,23 @@ SETUP_CONFIGURATION_STEPS = [
     "notifications_api_common.contrib.setup_configuration.steps.NotificationConfigurationStep",
 ]
 
-
-TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
-    "TAKEN_DEFAULT_REMINDER_IN_DAYS",
-    default=7,
-    help_text=(
-        "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
-        "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
-    ),
-)
-
-ENABLE_CLOUD_EVENTS = config(
-    "ENABLE_CLOUD_EVENTS",
-    default=True,
-    cast=bool,
-    help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
-)
-
+#
+# notifications-api-common
+#
 NOTIFICATIONS_SOURCE = config(
     "NOTIFICATIONS_SOURCE",
     default="",
     help_text="The identifier of this application to use as the source in notifications and cloudevents",
 )
+
+#
+# maykin-common
+#
+MKN_HEALTH_CHECKS_BEAT_LIVENESS_FILE = BASE_DIR / "tmp" / "celery_beat.live"
+MKN_HEALTH_CHECKS_WORKER_EVENT_LOOP_LIVENESS_FILE = (
+    BASE_DIR / "tmp" / "celery_worker_event_loop.live"
+)
+MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.ready"
 
 
 #
@@ -184,12 +171,35 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+####################
+#                  #
+# PROJECT SETTINGS #
+#                  #
+####################
 
 #
-# MAYKIN-COMMON health checks
+# CloudEvents
 #
-MKN_HEALTH_CHECKS_BEAT_LIVENESS_FILE = BASE_DIR / "tmp" / "celery_beat.live"
-MKN_HEALTH_CHECKS_WORKER_EVENT_LOOP_LIVENESS_FILE = (
-    BASE_DIR / "tmp" / "celery_worker_event_loop.live"
+ENABLE_CLOUD_EVENTS = config(
+    "ENABLE_CLOUD_EVENTS",
+    default=True,
+    cast=bool,
+    help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
 )
-MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.ready"
+
+#
+# URN settings
+#
+URN_NAMESPACE = config(
+    "URN_NAMESPACE",
+    help_text=("Namespace used in URNs schemas."),
+)
+
+TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
+    "TAKEN_DEFAULT_REMINDER_IN_DAYS",
+    default=7,
+    help_text=(
+        "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
+        "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
+    ),
+)
