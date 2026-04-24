@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from freezegun.api import freeze_time
 
-from ..constants import BERICHT_GEPUBLICEERD
+from ..cloudevents import BERICHT_GEPUBLICEERD
 from ..tasks import send_published_berichten
 from .factories import BerichtFactory
 

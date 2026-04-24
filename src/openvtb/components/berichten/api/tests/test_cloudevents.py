@@ -10,7 +10,7 @@ from requests.exceptions import Timeout
 from rest_framework import status
 from vng_api_common.tests import reverse
 
-from openvtb.components.berichten.api.viewsets import BERICHT_GEREGISTREERD
+from openvtb.components.berichten.cloudevents import BERICHT_GEREGISTREERD
 from openvtb.tests.cloudevents import CloudEventSettingMixin, mock_cloud_event_send
 from openvtb.utils.api_testcase import APITestCase
 

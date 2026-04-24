@@ -6,9 +6,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
-from openvtb.utils.cloudevents import process_cloudevent
-
-from ..constants import BERICHT_GEREGISTREERD
+from ..cloudevents import BERICHT_GEREGISTREERD, send_bericht_cloudevent
 from ..models import Bericht
 from .serializers import BerichtSerializer
 
@@ -41,13 +39,4 @@ class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         instance = serializer.instance
 
         logger.info("bericht_created", uuid=str(instance.uuid))
-
-        process_cloudevent(
-            type_event=BERICHT_GEREGISTREERD,
-            subject=str(instance.uuid),
-            data={
-                "onderwerp": instance.onderwerp,
-                "publicatiedatum": instance.publicatiedatum.isoformat(),
-                "ontvanger": instance.ontvanger,
-            },
-        )
+        send_bericht_cloudevent(BERICHT_GEREGISTREERD, instance)
