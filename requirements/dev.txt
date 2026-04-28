@@ -151,7 +151,7 @@ coverage==7.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-cryptography==46.0.6
+cryptography==47.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -164,7 +164,7 @@ cssselect==1.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   pyquery
-django==5.2.12
+django==5.2.13
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -460,7 +460,7 @@ furl==2.1.4
     #   ape-pie
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.45
+gitpython==3.1.48
     # via -r requirements/dev.in
 glom==24.11.0
     # via
@@ -544,7 +544,7 @@ lark==1.3.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   rfc3987-syntax
-lxml==6.0.2
+lxml==6.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -778,7 +778,7 @@ pydantic-settings==2.11.0
     #   -r requirements/ci.txt
     #   bump-my-version
     #   django-setup-configuration
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -792,7 +792,7 @@ pyjwt==2.12.1
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
-pyopenssl==26.0.0
+pyopenssl==26.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -820,7 +820,7 @@ python-decouple==3.8
     #   -r requirements/ci.txt
     #   maykin-common
     #   open-api-framework
-python-dotenv==1.1.1
+python-dotenv==1.2.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
