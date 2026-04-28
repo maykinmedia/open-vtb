@@ -55,14 +55,18 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         super().perform_create(serializer)
         instance = serializer.instance
 
-        logger.info("externetaak_created", uuid=str(instance.uuid))
+        logger.info(
+            "externetaak_created",
+            uuid=str(instance.uuid),
+            taak_soort=instance.taak_soort,
+        )
         send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
 
     def perform_update(self, serializer):
         old_instance = self.get_object()
         super().perform_update(serializer)
         updated_instance = serializer.instance
-        logger.info("externetaak_created", uuid=str(updated_instance.uuid))
+        logger.info("externetaak_updated", uuid=str(updated_instance.uuid))
 
         old_status = old_instance.status
         new_status = updated_instance.status

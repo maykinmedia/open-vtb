@@ -15,7 +15,7 @@ def send_taak_cloudevent(type_event: str, taak: ExterneTaak) -> None:
         type_event=type_event,
         subject=str(taak.uuid),
         data={
-            "taak_soort": taak.taak_soort,
+            "taakSoort": taak.taak_soort,
             "titel": taak.titel,
             "status": taak.status,
             "einddatumHandelingsTermijn": taak.einddatum_handelings_termijn.isoformat()

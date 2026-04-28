@@ -31,18 +31,19 @@ class SoortTaakMixin:
     def perform_create(self, serializer):
         super().perform_create(serializer)
         instance = serializer.instance
-        if self.taak_soort:
-            logger.info("externetaak_created", uuid=str(instance.uuid))
-        else:
-            logger.info(f"{self.taak_soort}_created", uuid=str(instance.uuid))  # noqa
 
+        logger.info(
+            "externetaak_created",
+            uuid=str(instance.uuid),
+            taak_soort=self.taak_soort,
+        )
         send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
 
     def perform_update(self, serializer):
         old_instance = self.get_object()
         super().perform_update(serializer)
         updated_instance = serializer.instance
-        logger.info("externetaak_created", uuid=str(updated_instance.uuid))
+        logger.info("externetaak_updated", uuid=str(updated_instance.uuid))
 
         old_status = old_instance.status
         new_status = updated_instance.status
