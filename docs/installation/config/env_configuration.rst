@@ -112,11 +112,11 @@ Optional
 * ``DISABLE_2FA``: Whether or not two factor authentication should be disabled. Defaults to: ``False``.
 * ``GEOS_LIBRARY_PATH``: Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty. Defaults to: ``None``.
 * ``GDAL_LIBRARY_PATH``: Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty. Defaults to: ``None``.
-* ``TAKEN_DEFAULT_REMINDER_IN_DAYS``: The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. If ``0``, no reminders will be sent by default unless explicitly configured for a task. Defaults to: ``7``.
-* ``ENABLE_CLOUD_EVENTS``: Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API. Defaults to: ``True``.
 * ``NOTIFICATIONS_SOURCE``: The identifier of this application to use as the source in notifications and cloudevents. Defaults to: ``(empty string)``.
 * ``PUBLISHED_BERICHTEN_JOB_MINUTE``: Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, as defined by the hour interval configuration. The schedule is evaluated in UTC timezone. Defaults to: ``0``.
 * ``PUBLISHED_BERICHTEN_JOB_HOUR``: Hour interval (1 - 23). Determines the frequency of execution in hours. The job runs repeatedly based on this interval rather than at a single fixed hour. Default is every hour. The schedule is evaluated in UTC timezone. Defaults to: ``1``.
+* ``ENABLE_CLOUD_EVENTS``: Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API. Defaults to: ``True``.
+* ``TAKEN_DEFAULT_REMINDER_IN_DAYS``: The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. If ``0``, no reminders will be sent by default unless explicitly configured for a task. Defaults to: ``7``.
 
 
 
