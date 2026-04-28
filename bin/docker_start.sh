@@ -32,7 +32,10 @@ export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-openvtb}"
 
 # Apply database migrations
 >&2 echo "Apply database migrations"
-python src/manage.py migrate
+OTEL_SDK_DISABLED=True python src/manage.py migrate
+
+# Periodically recycle workers - recover memory in the event of memory leaks
+export UWSGI_MAX_REQUESTS=${UWSGI_MAX_REQUESTS:-1000}
 
 # Start server
 >&2 echo "Starting server"
@@ -46,6 +49,9 @@ exec uwsgi \
     --static-map /media=/app/media  \
     --chdir src \
     --enable-threads \
+    --single-interpreter \
+    --die-on-term \
+    --need-app \
     --processes $uwsgi_processes \
     --threads $uwsgi_threads \
     --post-buffering=8192 \

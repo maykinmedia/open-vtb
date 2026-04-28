@@ -92,6 +92,8 @@ celery==5.5.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-celery-beat
+    #   flower
     #   notifications-api-common
 certifi==2025.10.5
     # via
@@ -138,7 +140,7 @@ click-repl==0.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   celery
-commonground-api-common==2.10.7
+commonground-api-common==2.12.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -151,6 +153,11 @@ coverage==7.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+cron-descriptor==1.4.5
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-celery-beat
 cryptography==47.0.0
     # via
     #   -c requirements/ci.txt
@@ -172,6 +179,7 @@ django==5.2.13
     #   django-admin-index
     #   django-appconf
     #   django-axes
+    #   django-celery-beat
     #   django-cors-headers
     #   django-csp
     #   django-debug-toolbar
@@ -196,6 +204,7 @@ django==5.2.13
     #   django-simple-certmanager
     #   django-solo
     #   django-structlog
+    #   django-timezone-field
     #   django-two-factor-auth
     #   django-upgrade-check
     #   djangorestframework
@@ -227,6 +236,10 @@ django-axes==8.0.0
     #   -r requirements/ci.txt
     #   open-api-framework
 django-capture-tag==1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+django-celery-beat==2.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -352,6 +365,11 @@ django-structlog==10.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+django-timezone-field==7.2.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-celery-beat
 django-two-factor-auth==1.17.0
     # via
     #   -c requirements/ci.txt
@@ -445,6 +463,10 @@ faker==37.11.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   factory-boy
+flower==2.0.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 fqdn==1.5.1
     # via
     #   -c requirements/ci.txt
@@ -484,6 +506,11 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via bump-my-version
+humanize==4.15.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 idna==3.11
     # via
     #   -c requirements/ci.txt
@@ -583,7 +610,7 @@ mozilla-django-oidc-db==2.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
-notifications-api-common==0.10.0
+notifications-api-common==0.10.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -729,6 +756,11 @@ phonenumberslite==8.13.55
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-two-factor-auth
+prometheus-client==0.25.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 prompt-toolkit==3.0.52
     # via
     #   -c requirements/ci.txt
@@ -806,6 +838,11 @@ pyquery==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+python-crontab==3.3.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-celery-beat
 python-dateutil==2.9.0.post0
     # via
     #   -c requirements/ci.txt
@@ -840,6 +877,7 @@ pytz==2025.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   flower
 pyyaml==6.0.3
     # via
     #   -c requirements/ci.txt
@@ -1039,6 +1077,11 @@ tblib==3.1.0
     #   -r requirements/ci.txt
 tomlkit==0.13.3
     # via bump-my-version
+tornado==6.5.5
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 typer==0.24.1
     # via
     #   -c requirements/ci.txt
@@ -1080,6 +1123,7 @@ tzdata==2025.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   arrow
+    #   django-celery-beat
     #   faker
     #   kombu
 uri-template==1.3.0
@@ -1159,7 +1203,7 @@ wrapt==1.17.3
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-redis
     #   vcrpy
-zgw-consumers==1.1.0
+zgw-consumers==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt

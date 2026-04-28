@@ -37,6 +37,13 @@ class Bericht(models.Model):
             "De standaardwaarde is de huidige datum/tijd."
         ),
     )
+    is_gepubliceerd = models.BooleanField(
+        _("gepubliceerd"),
+        default=False,
+        help_text=_(
+            "Geeft aan of het object gepubliceerd is en zichtbaar voor gebruikers."
+        ),
+    )
     referentie = models.CharField(
         _("referentie"),
         max_length=25,

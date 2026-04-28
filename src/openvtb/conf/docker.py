@@ -9,6 +9,7 @@ os.environ.setdefault("DB_CONN_MAX_AGE", "60")
 
 os.environ.setdefault("ENVIRONMENT", "docker")
 os.environ.setdefault("LOG_STDOUT", "yes")
+os.environ.setdefault("LOG_FORMAT_CONSOLE", "json")
 
 # URNs
 os.environ.setdefault("URN_NAMESPACE", "maykin")

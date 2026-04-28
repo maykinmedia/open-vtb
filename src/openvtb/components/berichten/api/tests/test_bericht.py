@@ -133,7 +133,7 @@ class BerichtTests(APITestCase):
             "berichtTekst": "berichtTekst berichtTekst",
             # "publicatiedatum": datetime.datetime.now(), test default
             "referentie": "referentie",
-            "ontvanger": "urn:maykin:ontvanger1234",
+            "ontvanger": "urn:maykin:ontvanger:1234",
             "geopendOp": datetime.datetime.now(),
             "berichtType": "12345678",
             "handelingsPerspectief": "test",
