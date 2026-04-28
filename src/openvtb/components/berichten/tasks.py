@@ -41,4 +41,4 @@ def send_published_berichten():
         return
 
     header = [send_bericht.s(bericht_id) for bericht_id in bericht_ids]
-    return chord(header)(mark_as_published.s())
+    chord(header)(mark_as_published.s())
