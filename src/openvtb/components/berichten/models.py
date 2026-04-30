@@ -71,9 +71,8 @@ class Bericht(models.Model):
         max_length=8,
         blank=True,
         help_text=_(
-            "Een code die hoort bij het sjabloon zoals gebruikt in de Mijn Overheid berichtenbox. "
-            "Indien dit een geldige waarde bevat, wordt het bericht doorgezet naar Mijn Overheid berichtenbox. "
-            "In de andere gevallen is het bericht enkel op het portaal van de lokale overheid te zien."
+            "Een code voor het technisch identificeren van een bericht soort & origine. "
+            "Wordt ook gebruikt in de Mijn Overheid berichtenbox."
         ),
     )
     handelings_perspectief = models.CharField(
