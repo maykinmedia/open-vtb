@@ -2,12 +2,12 @@ from openvtb.utils.cloudevents import process_cloudevent
 
 from .models import ExterneTaak
 
-EXTERNETAAK_GEREGISTREERD = "nl.overheid.berichten.externetaak-geregistreerd"
-EXTERNETAAK_HERINNERD = "nl.overheid.berichten.externetaak-herinnerd"
-EXTERNETAAK_VERWERKT = "nl.overheid.berichten.externetaak-verwerkt"
-EXTERNETAAK_UITGEVOERD = "nl.overheid.berichten.externetaak-uitgevoerd"
-EXTERNETAAK_AFGEBROKEN = "nl.overheid.berichten.externetaak-afgebroken"
-EXTERNETAAK_VERLOPEN = "nl.overheid.berichten.externetaak-verlopen"
+EXTERNETAAK_GEREGISTREERD = "nl.overheid.taken.externetaak-geregistreerd"
+EXTERNETAAK_HERINNERD = "nl.overheid.taken.externetaak-herinnerd"
+EXTERNETAAK_VERWERKT = "nl.overheid.taken.externetaak-verwerkt"
+EXTERNETAAK_UITGEVOERD = "nl.overheid.taken.externetaak-uitgevoerd"
+EXTERNETAAK_AFGEBROKEN = "nl.overheid.taken.externetaak-afgebroken"
+EXTERNETAAK_VERLOPEN = "nl.overheid.taken.externetaak-verlopen"
 
 
 def send_taak_cloudevent(type_event: str, taak: ExterneTaak) -> None:

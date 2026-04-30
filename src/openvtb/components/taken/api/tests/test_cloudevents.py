@@ -135,57 +135,70 @@ class ExterneTaakCloudEventTest(APITestCase):
         assert mock_process_cloudevent.call_count == 3
 
     def test_taak_update_status_cloudevent(self, mock_process_cloudevent):
-        taak = ExterneTaakFactory.create(formuliertaak=True)
-        detail_url = reverse(
-            "taken:formuliertaak-detail", kwargs={"uuid": str(taak.uuid)}
+        formuliertaak = ExterneTaakFactory.create(formuliertaak=True)
+        formuliertaak_url = reverse(
+            "taken:formuliertaak-detail", kwargs={"uuid": str(formuliertaak.uuid)}
         )
+        externetaak = ExterneTaakFactory.create(formuliertaak=True)
+        externetaak_url = reverse(
+            "taken:externetaak-detail", kwargs={"uuid": str(externetaak.uuid)}
+        )
+        for taak, detail_url in [
+            (formuliertaak, formuliertaak_url),
+            (externetaak, externetaak_url),
+        ]:
+            # no status updates
+            self.assertEqual(taak.status, StatusTaak.OPEN)
+            response = self.client.patch(detail_url, {"titel": "new_title"})
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            taak.refresh_from_db()
+            self.assertEqual(taak.titel, "new_title")
+            self.assertEqual(taak.status, StatusTaak.OPEN)
+            mock_process_cloudevent.assert_not_called()
 
-        # no status updates
-        self.assertEqual(taak.status, StatusTaak.OPEN)
-        response = self.client.patch(detail_url, {"titel": "new_title"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        taak.refresh_from_db()
-        self.assertEqual(taak.titel, "new_title")
-        self.assertEqual(taak.status, StatusTaak.OPEN)
-        mock_process_cloudevent.assert_not_called()
+            # OPEN -> UITGEVOERD
+            with self.captureOnCommitCallbacks(execute=True):
+                response = self.client.patch(
+                    detail_url, {"status": StatusTaak.UITGEVOERD}
+                )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            taak.refresh_from_db()
+            self.assertEqual(taak.status, StatusTaak.UITGEVOERD)
+            self.assertTrue(mock_process_cloudevent.called)  # send event
+            mock_process_cloudevent.assert_called_once()
+            payload = mock_process_cloudevent.call_args[0][0]
+            self.assertEqual(payload["type"], EXTERNETAAK_UITGEVOERD)
+            mock_process_cloudevent.reset_mock()
 
-        # OPEN -> UITGEVOERD
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.client.patch(detail_url, {"status": StatusTaak.UITGEVOERD})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        taak.refresh_from_db()
-        self.assertEqual(taak.status, StatusTaak.UITGEVOERD)
-        self.assertTrue(mock_process_cloudevent.called)  # send event
-        mock_process_cloudevent.assert_called_once()
-        payload = mock_process_cloudevent.call_args[0][0]
-        self.assertEqual(payload["type"], EXTERNETAAK_UITGEVOERD)  # send event
-        mock_process_cloudevent.reset_mock()
+            # OPEN -> VERWERKT
+            taak.status = StatusTaak.OPEN
+            taak.save()
+            with self.captureOnCommitCallbacks(execute=True):
+                response = self.client.patch(
+                    detail_url, {"status": StatusTaak.VERWERKT}
+                )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            taak.refresh_from_db()
+            self.assertEqual(taak.status, StatusTaak.VERWERKT)
+            self.assertTrue(mock_process_cloudevent.called)  # send event
+            mock_process_cloudevent.assert_called_once()
+            payload = mock_process_cloudevent.call_args[0][0]
+            self.assertEqual(payload["type"], EXTERNETAAK_VERWERKT)
+            mock_process_cloudevent.reset_mock()
 
-        # OPEN -> VERWERKT
-        taak.status = StatusTaak.OPEN
-        taak.save()
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.client.patch(detail_url, {"status": StatusTaak.VERWERKT})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        taak.refresh_from_db()
-        self.assertEqual(taak.status, StatusTaak.VERWERKT)
-        self.assertTrue(mock_process_cloudevent.called)  # send event
-        mock_process_cloudevent.assert_called_once()
-        payload = mock_process_cloudevent.call_args[0][0]
-        self.assertEqual(payload["type"], EXTERNETAAK_VERWERKT)  # send event
-        mock_process_cloudevent.reset_mock()
-
-        # VERWERKT -> AFGEBROKEN
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.client.patch(detail_url, {"status": StatusTaak.AFGEBROKEN})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        taak.refresh_from_db()
-        self.assertEqual(taak.status, StatusTaak.AFGEBROKEN)
-        self.assertTrue(mock_process_cloudevent.called)  # send event
-        mock_process_cloudevent.assert_called_once()
-        payload = mock_process_cloudevent.call_args[0][0]
-        self.assertEqual(payload["type"], EXTERNETAAK_AFGEBROKEN)  # send event
-        mock_process_cloudevent.reset_mock()
+            # VERWERKT -> AFGEBROKEN
+            with self.captureOnCommitCallbacks(execute=True):
+                response = self.client.patch(
+                    detail_url, {"status": StatusTaak.AFGEBROKEN}
+                )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            taak.refresh_from_db()
+            self.assertEqual(taak.status, StatusTaak.AFGEBROKEN)
+            self.assertTrue(mock_process_cloudevent.called)  # send event
+            mock_process_cloudevent.assert_called_once()
+            payload = mock_process_cloudevent.call_args[0][0]
+            self.assertEqual(payload["type"], EXTERNETAAK_AFGEBROKEN)
+            mock_process_cloudevent.reset_mock()
 
 
 @requests_mock.Mocker()

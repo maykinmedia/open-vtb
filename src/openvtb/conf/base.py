@@ -141,8 +141,8 @@ CELERY_ONCE = {
 }
 
 # https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
-PUBLISHED_BERICHTEN_JOB_MINUTE = config(
-    "PUBLISHED_BERICHTEN_JOB_MINUTE",
+EVENTS_BERICHTEN_JOB_MINUTE = config(
+    "EVENTS_BERICHTEN_JOB_MINUTE",
     default=0,
     help_text=(
         "Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, "
@@ -150,8 +150,26 @@ PUBLISHED_BERICHTEN_JOB_MINUTE = config(
     ),
 )
 
-PUBLISHED_BERICHTEN_JOB_HOUR = config(
-    "PUBLISHED_BERICHTEN_JOB_HOUR",
+EVENTS_BERICHTEN_JOB_HOUR = config(
+    "EVENTS_BERICHTEN_JOB_HOUR",
+    default=1,
+    help_text=(
+        "Hour interval (1 - 23). Determines the frequency of execution in hours. "
+        "The job runs repeatedly based on this interval rather than at a single fixed hour. "
+        "Default is every hour. The schedule is evaluated in UTC timezone."
+    ),
+)
+EVENTS_TAKEN_JOB_MINUTE = config(
+    "EVENTS_TAKEN_JOB_MINUTE",
+    default=0,
+    help_text=(
+        "Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, "
+        "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
+    ),
+)
+
+EVENTS_TAKEN_JOB_HOUR = config(
+    "EVENTS_TAKEN_JOB_HOUR",
     default=1,
     help_text=(
         "Hour interval (1 - 23). Determines the frequency of execution in hours. "
@@ -162,11 +180,18 @@ PUBLISHED_BERICHTEN_JOB_HOUR = config(
 
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
-    "send-published-berichten": {
-        "task": "openvtb.components.berichten.tasks.send_published_berichten",
+    "send-berichten-events": {
+        "task": "openvtb.components.berichten.tasks.send_berichten_events",
         "schedule": crontab(
-            minute=PUBLISHED_BERICHTEN_JOB_MINUTE,
-            hour=f"*/{PUBLISHED_BERICHTEN_JOB_HOUR}",
+            minute=EVENTS_BERICHTEN_JOB_MINUTE,
+            hour=f"*/{EVENTS_BERICHTEN_JOB_HOUR}",
+        ),
+    },
+    "send-taken-events": {
+        "task": "openvtb.components.taken.tasks.send_taak_events",
+        "schedule": crontab(
+            minute=EVENTS_TAKEN_JOB_MINUTE,
+            hour=f"*/{EVENTS_TAKEN_JOB_HOUR}",
         ),
     },
 }

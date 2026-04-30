@@ -70,7 +70,7 @@ class ExterneTaak(models.Model):
         _("herinnering_verzonden"),
         default=False,
         help_text=_(
-            "Geeft aan of de melding voor de handelings-termijn van deze taak is verzonden."
+            "Geeft aan of de melding voor de handelingstermijn van deze taak is verzonden."
         ),
     )
     datum_herinnering = models.DateField(
@@ -86,7 +86,7 @@ class ExterneTaak(models.Model):
     is_herinnering_verzonden = models.BooleanField(
         _("herinnering_verzonden"),
         default=False,
-        help_text=_("Geeft aan of de herinnering voor dit taak al is verzonden."),
+        help_text=_("Geeft aan of de herinnering voor deze taak al is verzonden."),
     )
     toelichting = models.CharField(
         _("toelichting"),

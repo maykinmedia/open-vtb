@@ -43,7 +43,11 @@ class SoortTaakMixin:
         old_instance = self.get_object()
         super().perform_update(serializer)
         updated_instance = serializer.instance
-        logger.info("externetaak_updated", uuid=str(updated_instance.uuid))
+        logger.info(
+            "externetaak_updated",
+            uuid=str(updated_instance.uuid),
+            taak_soort=updated_instance.taak_soort,
+        )
 
         old_status = old_instance.status
         new_status = updated_instance.status

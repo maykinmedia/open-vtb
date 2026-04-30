@@ -31,7 +31,7 @@ def mark_as_published(bericht_ids: list[int]) -> None:
 
 
 @app.task
-def send_published_berichten():
+def send_berichten_events():
     """
     Publishes all Bericht instances whose publication date has been reached
     and which are not yet marked as published.

@@ -4,8 +4,14 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
-from ..cloudevents import EXTERNETAAK_GEREGISTREERD, send_taak_cloudevent
-from ..constants import SoortTaak
+from ..cloudevents import (
+    EXTERNETAAK_AFGEBROKEN,
+    EXTERNETAAK_GEREGISTREERD,
+    EXTERNETAAK_UITGEVOERD,
+    EXTERNETAAK_VERWERKT,
+    send_taak_cloudevent,
+)
+from ..constants import SoortTaak, StatusTaak
 from ..models import ExterneTaak
 from .serializers import (
     BetaalTaakSerializer,
@@ -66,7 +72,11 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         old_instance = self.get_object()
         super().perform_update(serializer)
         updated_instance = serializer.instance
-        logger.info("externetaak_updated", uuid=str(updated_instance.uuid))
+        logger.info(
+            "externetaak_updated",
+            uuid=str(updated_instance.uuid),
+            taak_soort=updated_instance.taak_soort,
+        )
 
         old_status = old_instance.status
         new_status = updated_instance.status

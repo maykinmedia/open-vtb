@@ -74,36 +74,22 @@ class CloudEventsTaskTakenTest(TestCase):
             # first run
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
             taak.refresh_from_db()
 
             assert mock_process_cloudevent.call_count == 1
+            payload = mock_process_cloudevent.call_args[0][0]
+            self.assertEqual(payload["type"], EXTERNETAAK_HERINNERD)
             self.assertTrue(taak.is_herinnering_verzonden)
 
             # second run, no process cloudevent
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
             taak.refresh_from_db()
 
-            assert mock_process_cloudevent.call_count == 1
+            assert mock_process_cloudevent.call_count == 1  # same as before
             self.assertTrue(taak.is_herinnering_verzonden)
 
-            payload = mock_process_cloudevent.call_args[0][0]
-            self.assertEqual(payload["type"], EXTERNETAAK_HERINNERD)
-
-            # third run, reset and check no calls
-            mock_process_cloudevent.reset_mock()
-            assert mock_process_cloudevent.call_count == 0
-
-            with self.captureOnCommitCallbacks(execute=True):
-                send_taak_events()
-            taak.refresh_from_db()
-
-            assert mock_process_cloudevent.call_count == 0
-            self.assertTrue(taak.is_herinnering_verzonden)
-
-            # fourth run, new taak in past
+            # third run, new taak in past
             old_taak = ExterneTaakFactory.create(
                 formuliertaak=True,
                 datum_herinnering=timezone.now() - timedelta(days=1),
@@ -112,12 +98,10 @@ class CloudEventsTaskTakenTest(TestCase):
             self.assertFalse(old_taak.is_herinnering_verzonden)
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
-            assert mock_process_cloudevent.call_count == 1  # only one for the new taak
             old_taak.refresh_from_db()
 
+            assert mock_process_cloudevent.call_count == 2  # new call for the new taak
             self.assertTrue(old_taak.is_herinnering_verzonden)
-
             payload = mock_process_cloudevent.call_args[0][0]
             self.assertEqual(payload["type"], EXTERNETAAK_HERINNERD)
 
@@ -148,7 +132,6 @@ class CloudEventsTaskTakenTest(TestCase):
                     send_taak_events()
 
             assert mock_process_cloudevent.call_count == 1
-
             payload = mock_process_cloudevent.call_args[0][0]
             self.assertEqual(payload["type"], EXTERNETAAK_HERINNERD)
 
@@ -157,7 +140,6 @@ class CloudEventsTaskTakenTest(TestCase):
                     send_taak_events()
 
             assert mock_process_cloudevent.call_count == 2
-
             payload = mock_process_cloudevent.call_args[0][0]
             self.assertEqual(payload["type"], EXTERNETAAK_HERINNERD)
 
@@ -173,33 +155,27 @@ class CloudEventsTaskTakenTest(TestCase):
             # first run
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
             taak.refresh_from_db()
 
             assert mock_process_cloudevent.call_count == 1
+            payload = mock_process_cloudevent.call_args[0][0]
+            self.assertEqual(payload["type"], EXTERNETAAK_VERLOPEN)
             self.assertTrue(taak.is_handelings_termijn_verzonden)
 
             # second run, no process cloudevent
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
             taak.refresh_from_db()
 
             assert mock_process_cloudevent.call_count == 1
             self.assertTrue(taak.is_handelings_termijn_verzonden)
 
-            payload = mock_process_cloudevent.call_args[0][0]
-            self.assertEqual(payload["type"], EXTERNETAAK_VERLOPEN)
-
-            # third run, reset and check no calls
-            mock_process_cloudevent.reset_mock()
-            assert mock_process_cloudevent.call_count == 0
-
+            # third run, check no calls
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
             taak.refresh_from_db()
 
-            assert mock_process_cloudevent.call_count == 0
+            assert mock_process_cloudevent.call_count == 1  # same as before
             self.assertTrue(taak.is_handelings_termijn_verzonden)
 
             # fourth run, new taak in past
@@ -211,14 +187,12 @@ class CloudEventsTaskTakenTest(TestCase):
             self.assertFalse(old_taak.is_handelings_termijn_verzonden)
             with self.captureOnCommitCallbacks(execute=True):
                 send_taak_events()
-
-            assert mock_process_cloudevent.call_count == 1  # only one for the new taak
             old_taak.refresh_from_db()
 
-            self.assertTrue(old_taak.is_handelings_termijn_verzonden)
-
+            assert mock_process_cloudevent.call_count == 2  # new call for the new taak
             payload = mock_process_cloudevent.call_args[0][0]
             self.assertEqual(payload["type"], EXTERNETAAK_VERLOPEN)
+            self.assertTrue(old_taak.is_handelings_termijn_verzonden)
 
         mock_process_cloudevent.reset_mock()
 
