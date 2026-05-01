@@ -145,7 +145,8 @@ EVENTS_BERICHTEN_JOB_MINUTE = config(
     "EVENTS_BERICHTEN_JOB_MINUTE",
     default=0,
     help_text=(
-        "Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, "
+        "Minute of execution (0 - 59) for the Berichten CloudEvents job. "
+        "The job is triggered at this minute within each scheduled hour interval, "
         "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
     ),
 )
@@ -154,16 +155,18 @@ EVENTS_BERICHTEN_JOB_HOUR = config(
     "EVENTS_BERICHTEN_JOB_HOUR",
     default=1,
     help_text=(
-        "Hour interval (1 - 23). Determines the frequency of execution in hours. "
+        "Hour interval (1 - 23) for the Berichten CloudEvents job. Determines the frequency of execution in hours. "
         "The job runs repeatedly based on this interval rather than at a single fixed hour. "
         "Default is every hour. The schedule is evaluated in UTC timezone."
     ),
 )
+
 EVENTS_TAKEN_JOB_MINUTE = config(
     "EVENTS_TAKEN_JOB_MINUTE",
     default=0,
     help_text=(
-        "Minute of execution (0 - 59). The job is triggered at this minute within each scheduled hour interval, "
+        "Minute of execution (0 - 59) for the Taken CloudEvents job. "
+        "The job is triggered at this minute within each scheduled hour interval, "
         "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
     ),
 )
@@ -172,7 +175,7 @@ EVENTS_TAKEN_JOB_HOUR = config(
     "EVENTS_TAKEN_JOB_HOUR",
     default=1,
     help_text=(
-        "Hour interval (1 - 23). Determines the frequency of execution in hours. "
+        "Hour interval (1 - 23) for the Taken CloudEvents job. Determines the frequency of execution in hours. "
         "The job runs repeatedly based on this interval rather than at a single fixed hour. "
         "Default is every hour. The schedule is evaluated in UTC timezone."
     ),

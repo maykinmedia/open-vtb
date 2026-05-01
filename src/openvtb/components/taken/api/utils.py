@@ -28,6 +28,8 @@ class SoortTaakMixin:
             context["taak_soort"] = self.taak_soort
         return context
 
+
+class TaakCloudEventsMixin:
     def perform_create(self, serializer):
         super().perform_create(serializer)
         instance = serializer.instance
@@ -35,7 +37,7 @@ class SoortTaakMixin:
         logger.info(
             "externetaak_created",
             uuid=str(instance.uuid),
-            taak_soort=self.taak_soort,
+            taak_soort=instance.taak_soort,
         )
         send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
 

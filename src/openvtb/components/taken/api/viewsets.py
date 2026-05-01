@@ -4,14 +4,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from vng_api_common.pagination import DynamicPageSizePagination
 
-from ..cloudevents import (
-    EXTERNETAAK_AFGEBROKEN,
-    EXTERNETAAK_GEREGISTREERD,
-    EXTERNETAAK_UITGEVOERD,
-    EXTERNETAAK_VERWERKT,
-    send_taak_cloudevent,
-)
-from ..constants import SoortTaak, StatusTaak
+from ..constants import SoortTaak
 from ..models import ExterneTaak
 from .serializers import (
     BetaalTaakSerializer,
@@ -19,7 +12,7 @@ from .serializers import (
     FormulierTaakSerializer,
     URLTaakSerializer,
 )
-from .utils import SoortTaakMixin, make_inline_response
+from .utils import SoortTaakMixin, TaakCloudEventsMixin, make_inline_response
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -50,47 +43,12 @@ logger = structlog.stdlib.get_logger(__name__)
         description="Een externe taak verwijderen",
     ),
 )
-class ExterneTaakViewSet(viewsets.ModelViewSet):
+class ExterneTaakViewSet(TaakCloudEventsMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
-
-    def perform_create(self, serializer):
-        super().perform_create(serializer)
-        instance = serializer.instance
-
-        logger.info(
-            "externetaak_created",
-            uuid=str(instance.uuid),
-            taak_soort=instance.taak_soort,
-        )
-        send_taak_cloudevent(EXTERNETAAK_GEREGISTREERD, instance)
-
-    def perform_update(self, serializer):
-        old_instance = self.get_object()
-        super().perform_update(serializer)
-        updated_instance = serializer.instance
-        logger.info(
-            "externetaak_updated",
-            uuid=str(updated_instance.uuid),
-            taak_soort=updated_instance.taak_soort,
-        )
-
-        old_status = old_instance.status
-        new_status = updated_instance.status
-
-        if old_status == new_status:
-            return
-
-        match new_status:
-            case StatusTaak.UITGEVOERD:
-                send_taak_cloudevent(EXTERNETAAK_UITGEVOERD, updated_instance)
-            case StatusTaak.VERWERKT:
-                send_taak_cloudevent(EXTERNETAAK_VERWERKT, updated_instance)
-            case StatusTaak.AFGEBROKEN:
-                send_taak_cloudevent(EXTERNETAAK_AFGEBROKEN, updated_instance)
 
 
 @extend_schema_view(
@@ -175,7 +133,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         },
     ),
 )
-class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class BetaalTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -266,7 +224,7 @@ class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
         },
     ),
 )
-class URLTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class URLTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -357,7 +315,7 @@ class URLTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
         },
     ),
 )
-class FormulierTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class FormulierTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
