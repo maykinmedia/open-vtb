@@ -25,7 +25,9 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
         required=False,
         many=True,
         help_text=_(
-            "Lijst van bijlagen bij het bericht. Mijn Overheid berichtenbox ondersteund slechts 1 bijlage en enkel PDF-bestanden."
+            "Lijst van bijlagen bij het bericht. Let op; In het geval dat dit bericht naar "
+            "de Mijn Overheid Berichtenbox moet, moet rekening gehouden worden met "
+            "de requirements van Logius in haar technische aansluithandleiding."
         ),
     )
 
