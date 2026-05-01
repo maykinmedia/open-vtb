@@ -12,6 +12,67 @@ See the `CloudEvents  <https://cloudevents.io/>`_ documentation for more informa
 Events
 ------
 
+Taken
+-----
+
+For the Taken component Open VTB can emit the following **Events** if configured:
+
+* ``nl.overheid.taken.externetaak-geregistreerd``: this event is emitted whenever a new external task is created in the system.
+
+    * Trigger:
+
+        * ``POST`` ``/externetaken``
+        * ``POST`` ``/betaaltaken``
+        * ``POST`` ``/urltaken``
+        * ``POST`` ``/formuliertaken``
+
+* ``nl.overheid.taken.externetaak-herinnerd``: this event is emitted asynchronously when the ``datum_herinnering`` of a task is reached.
+
+  * Trigger: periodic task executed via **Celery Beat**
+
+* ``nl.overheid.taken.externetaak-verwerkt``: this event is emitted when a task transitions to the status ``verwerkt``.
+
+      * Trigger:
+
+        * ``PATCH`` / ``PUT`` ``/externetaken``
+        * ``PATCH`` / ``PUT`` ``/betaaltaken``
+        * ``PATCH`` / ``PUT`` ``/urltaken``
+        * ``PATCH`` / ``PUT`` ``/formuliertaken``
+
+
+* ``nl.overheid.taken.externetaak-uitgevoerd``: this event is emitted when a task transitions to the status ``uitgevoerd``.
+
+      * Trigger:
+
+        * ``PATCH`` / ``PUT`` ``/externetaken``
+        * ``PATCH`` / ``PUT`` ``/betaaltaken``
+        * ``PATCH`` / ``PUT`` ``/urltaken``
+        * ``PATCH`` / ``PUT`` ``/formuliertaken``
+
+
+* ``nl.overheid.taken.externetaak-afgebroken``: this event is emitted when a task transitions to the status ``afgebroken``.
+
+      * Trigger:
+
+        * ``PATCH`` / ``PUT`` ``/externetaken``
+        * ``PATCH`` / ``PUT`` ``/betaaltaken``
+        * ``PATCH`` / ``PUT`` ``/urltaken``
+        * ``PATCH`` / ``PUT`` ``/formuliertaken``
+
+
+* ``nl.overheid.taken.externetaak-verlopen``: this event is emitted asynchronously when the ``einddatum_handelings_termijn`` of a task has expired.
+
+  * Trigger: periodic task executed via **Celery Beat**
+
+    .. warning::
+
+        The execution frequency depends on configuration
+        (by default the task runs every hour, but this can be adjusted via the settings
+        ``EVENTS_TAKEN_JOB_MINUTE`` and ``EVENTS_TAKEN_JOB_HOUR``).
+        As a result, emission of these events may be delayed by up to the configured interval
+        after the configured ``datum_herinnering`` or ``einddatum_handelings_termijn`` has been reached.
+
+
 Berichten
 ---------
 
@@ -31,7 +92,7 @@ For Berichten component Open VTB can emit the following **Events** if configured
 
         The execution frequency depends on configuration
         (by default the task runs every hour, but this can be adjusted via the settings
-        ``PUBLISHED_BERICHTEN_JOB_MINUTE`` and ``PUBLISHED_BERICHTEN_JOB_HOUR``).
+        ``EVENTS_BERICHTEN_JOB_MINUTE`` and ``EVENTS_BERICHTEN_JOB_HOUR``).
         As a result, emission of this event may be delayed by up to the configured interval
         for messages whose ``publicatiedatum`` occurs after the last scheduled execution.
 
