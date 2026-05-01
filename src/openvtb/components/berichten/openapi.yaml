@@ -231,10 +231,11 @@ components:
           maxLength: 40
         isBerichtTypeBijlage:
           type: boolean
-          description: Geeft aan of het een bijlage betreft die onderdeel is van het
-            sjabloon in de Mijn Overheid berichtenbox. Indien `true`, dan wordt deze
-            bijlage niet doorgestuurd naar de Mijn Overheid berichtenbox. De verwachting
-            is dat eenzelfde bericht reeds onderdeel is van het sjabloon.
+          default: false
+          description: Geeft aan of dit document een standaardbijlage is die vooraf
+            geüpload is in het Berichtenbox Leveranciersportaal. Standaard `false`.
+            Indien `true` moet deze bijlage door het outputmanagementcomponent genegeerd
+            worden - als de Berichtenbox het doelkanaal is.
       required:
       - informatieObject
     PaginatedBerichtList:

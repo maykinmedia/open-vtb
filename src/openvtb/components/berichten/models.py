@@ -129,9 +129,9 @@ class Bijlage(models.Model):
         _("is bericht type bijlage"),
         default=False,
         help_text=_(
-            "Geeft aan of het een bijlage betreft die onderdeel is van het sjabloon in de Mijn Overheid berichtenbox. "
-            "Indien `true`, dan wordt deze bijlage niet doorgestuurd naar de Mijn Overheid berichtenbox. "
-            "De verwachting is dat eenzelfde bericht reeds onderdeel is van het sjabloon."
+            "Geeft aan of dit document een standaardbijlage is die vooraf geüpload is in het Berichtenbox Leveranciersportaal. "
+            "Standaard `false`. Indien `true` moet deze bijlage door het outputmanagementcomponent "
+            "genegeerd worden - als de Berichtenbox het doelkanaal is."
         ),
     )
 

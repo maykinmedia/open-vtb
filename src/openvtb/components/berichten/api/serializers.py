@@ -18,6 +18,9 @@ class BijlageSerializer(serializers.ModelSerializer):
             "omschrijving",
             "is_bericht_type_bijlage",
         )
+        extra_kwargs = {
+            "is_bericht_type_bijlage": {"default": False},
+        }
 
 
 class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
