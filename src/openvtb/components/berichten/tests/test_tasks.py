@@ -7,7 +7,7 @@ from django.utils import timezone
 from freezegun.api import freeze_time
 
 from ..cloudevents import BERICHT_GEPUBLICEERD
-from ..tasks import send_published_berichten
+from ..tasks import send_berichten_events
 from .factories import BerichtFactory
 
 MOCKED_CLOUDEVENT_ID = "f347fd1f-dac1-4870-9dd0-f6c00edf4bf7"
@@ -28,11 +28,10 @@ class PublishedBerichtenTest(TestCase):
         bericht = BerichtFactory.create(
             publicatiedatum=timezone.now() + timedelta(days=1)
         )
-
         self.assertFalse(bericht.is_gepubliceerd)
 
         with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
+            send_berichten_events()
 
         mock_process_cloudevent.assert_not_called()
         self.assertFalse(bericht.is_gepubliceerd)
@@ -41,72 +40,37 @@ class PublishedBerichtenTest(TestCase):
         bericht = BerichtFactory.create(
             publicatiedatum=timezone.now() - timedelta(days=1)
         )
-
         self.assertFalse(bericht.is_gepubliceerd)
 
         # first run
         with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
-
+            send_berichten_events()
         bericht.refresh_from_db()
 
         assert mock_process_cloudevent.call_count == 1
-        self.assertTrue(bericht.is_gepubliceerd)
-
-        # second run, no process cloudevent
-        with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
-
-        bericht.refresh_from_db()
-
-        assert mock_process_cloudevent.call_count == 1
-        self.assertTrue(bericht.is_gepubliceerd)
-
         payload = mock_process_cloudevent.call_args[0][0]
-
-        self.assertEqual(
-            payload,
-            {
-                "id": MOCKED_CLOUDEVENT_ID,
-                "source": NOTIFICATIONS_SOURCE,
-                "specversion": "1.0",
-                "type": BERICHT_GEPUBLICEERD,
-                "subject": str(bericht.uuid),
-                "time": FROZEN_TIME_Z,
-                "dataref": None,
-                "datacontenttype": "application/json",
-                "data": {
-                    "onderwerp": bericht.onderwerp,
-                    "publicatiedatum": bericht.publicatiedatum.isoformat(),
-                    "ontvanger": bericht.ontvanger,
-                },
-            },
-        )
-
-        # third run, reset and check no calls
-        mock_process_cloudevent.reset_mock()
-        assert mock_process_cloudevent.call_count == 0
-
-        with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
-        bericht.refresh_from_db()
-
-        assert mock_process_cloudevent.call_count == 0  # no cloud events are being sent
+        self.assertEqual(payload["type"], BERICHT_GEPUBLICEERD)
         self.assertTrue(bericht.is_gepubliceerd)
 
-        # fourth run, new bericht in past
+        # second run, check no calls
+        with self.captureOnCommitCallbacks(execute=True):
+            send_berichten_events()
+        bericht.refresh_from_db()
+
+        assert mock_process_cloudevent.call_count == 1  # same as before
+        self.assertTrue(bericht.is_gepubliceerd)
+
+        # third run, new bericht in past
         old_bericht = BerichtFactory.create(
             publicatiedatum=timezone.now() - timedelta(days=2)
         )
         self.assertFalse(old_bericht.is_gepubliceerd)
         with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
-
-        assert mock_process_cloudevent.call_count == 1
+            send_berichten_events()
         old_bericht.refresh_from_db()
 
+        assert mock_process_cloudevent.call_count == 2  # new call for the new bericht
         self.assertTrue(old_bericht.is_gepubliceerd)
-
         payload = mock_process_cloudevent.call_args[0][0]
         self.assertEqual(
             payload,
@@ -136,19 +100,19 @@ class PublishedBerichtenTest(TestCase):
         BerichtFactory.create(publicatiedatum=date_10)
 
         with self.captureOnCommitCallbacks(execute=True):
-            send_published_berichten()
+            send_berichten_events()
 
         mock_process_cloudevent.assert_not_called()
 
         with freeze_time((date_1 + timedelta(days=1)).isoformat()):
             with self.captureOnCommitCallbacks(execute=True):
-                send_published_berichten()
+                send_berichten_events()
 
         assert mock_process_cloudevent.call_count == 1
 
         with freeze_time((date_10 + timedelta(days=1)).isoformat()):
             with self.captureOnCommitCallbacks(execute=True):
-                send_published_berichten()
+                send_berichten_events()
 
         assert mock_process_cloudevent.call_count == 2
 
@@ -163,7 +127,7 @@ class PublishedBerichtenTest(TestCase):
         )
 
         with self.assertRaises(Exception):
-            send_published_berichten()
+            send_berichten_events()
 
         bericht.refresh_from_db()
 

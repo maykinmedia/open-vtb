@@ -1,3 +1,4 @@
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +12,9 @@ from .serializers import (
     FormulierTaakSerializer,
     URLTaakSerializer,
 )
-from .utils import SoortTaakMixin, make_inline_response
+from .utils import SoortTaakMixin, TaakCloudEventsMixin, make_inline_response
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema_view(
@@ -40,7 +43,7 @@ from .utils import SoortTaakMixin, make_inline_response
         description="Een externe taak verwijderen",
     ),
 )
-class ExterneTaakViewSet(viewsets.ModelViewSet):
+class ExterneTaakViewSet(TaakCloudEventsMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -130,7 +133,7 @@ class ExterneTaakViewSet(viewsets.ModelViewSet):
         },
     ),
 )
-class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class BetaalTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -221,7 +224,7 @@ class BetaalTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
         },
     ),
 )
-class URLTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class URLTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination
@@ -312,7 +315,7 @@ class URLTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
         },
     ),
 )
-class FormulierTaakViewSet(SoortTaakMixin, viewsets.ModelViewSet):
+class FormulierTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet):
     queryset = ExterneTaak.objects.all()
     serializer_class = ExterneTaakPolymorphicSerializer
     pagination_class = DynamicPageSizePagination

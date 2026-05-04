@@ -66,6 +66,13 @@ class ExterneTaak(models.Model):
         _("einddatum handelings termijn"),
         help_text=_("Einddatum handelings termijn."),
     )
+    is_handelings_termijn_verzonden = models.BooleanField(
+        _("herinnering_verzonden"),
+        default=False,
+        help_text=_(
+            "Geeft aan of de melding voor de handelingstermijn van deze taak is verzonden."
+        ),
+    )
     datum_herinnering = models.DateField(
         _("datum herinnering"),
         blank=True,
@@ -75,6 +82,11 @@ class ExterneTaak(models.Model):
             "Indien deze waarde niet expliciet wordt meegegeven, dan wordt deze waarde automatisch "
             "ingesteld op een systeem-ingesteld aantal dagen voor de 'einddatumHandelingsTermijn'."
         ),
+    )
+    is_herinnering_verzonden = models.BooleanField(
+        _("herinnering_verzonden"),
+        default=False,
+        help_text=_("Geeft aan of de herinnering voor deze taak al is verzonden."),
     )
     toelichting = models.CharField(
         _("toelichting"),
