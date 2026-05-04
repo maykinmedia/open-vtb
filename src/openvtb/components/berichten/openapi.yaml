@@ -200,6 +200,11 @@ components:
           format: date-time
           nullable: true
           description: Datum/tijd waarop handeling afgerond moet zijn.
+        mijnOverheidBerichtenbox:
+          type: boolean
+          description: Geeft aan of dit bericht geschikt is voor publicatie in de
+            MijnOverheid Berichtenbox. Als dit op ``False`` staat, is het bericht
+            niet bedoeld voor publicatie in de Berichtenbox.
         bijlagen:
           type: array
           items:
@@ -209,6 +214,7 @@ components:
             worden met de requirements van Logius in haar technische aansluithandleiding.
       required:
       - berichtTekst
+      - mijnOverheidBerichtenbox
       - onderwerp
       - ontvanger
       - url
