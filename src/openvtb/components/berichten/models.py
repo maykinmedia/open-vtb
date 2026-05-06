@@ -89,6 +89,14 @@ class Bericht(models.Model):
         null=True,
         help_text=_("Datum/tijd waarop handeling afgerond moet zijn."),
     )
+    mijn_overheid_berichtenbox = models.BooleanField(
+        _("Mijn Overheid Berichtenbox"),
+        help_text=_(
+            "Geeft aan of dit bericht geschikt is voor publicatie in de "
+            "MijnOverheid Berichtenbox. Als dit op ``False`` staat, is het bericht "
+            "niet bedoeld voor publicatie in de Berichtenbox."
+        ),
+    )
 
     class Meta:
         verbose_name = _("Bericht")

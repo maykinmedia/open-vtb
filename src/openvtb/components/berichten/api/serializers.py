@@ -49,6 +49,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "bericht_type",
             "handelings_perspectief",
             "einddatum_handelings_termijn",
+            "mijn_overheid_berichtenbox",
             "bijlagen",
         )
         extra_kwargs = {

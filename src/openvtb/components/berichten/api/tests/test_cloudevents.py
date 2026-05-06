@@ -33,6 +33,7 @@ class BerichtenCloudEventTest(APITestCase):
         "referentie": "referentie",
         "ontvanger": "urn:maykin:ontvanger:1234",
         "berichtType": "12345678",
+        "mijnOverheidBerichtenbox": True,
     }
 
     @override_settings(ENABLE_CLOUD_EVENTS=False)
@@ -97,6 +98,7 @@ class CloudEventCeleryRetryTestCase(CloudEventSettingMixin, APITestCase):
         "referentie": "referentie",
         "ontvanger": "urn:maykin:ontvanger:1234",
         "berichtType": "12345678",
+        "mijnOverheidBerichtenbox": True,
     }
 
     def test_cloud_event_client_error_retry(self, m, retry_mock, mock_send):

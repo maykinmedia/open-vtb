@@ -53,6 +53,7 @@ class BerichtTests(APITestCase):
                         ),
                         "berichtType": bericht.bericht_type,
                         "handelingsPerspectief": bericht.handelings_perspectief,
+                        "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                         "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                             "+00:00", "Z"
                         ),
@@ -113,6 +114,7 @@ class BerichtTests(APITestCase):
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
+                "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -137,6 +139,7 @@ class BerichtTests(APITestCase):
             "geopendOp": datetime.datetime.now(),
             "berichtType": "12345678",
             "handelingsPerspectief": "test",
+            "mijnOverheidBerichtenbox": True,
             "einddatumHandelingsTermijn": datetime.datetime.now(),
             "bijlagen": [
                 {
@@ -175,6 +178,7 @@ class BerichtTests(APITestCase):
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
+                "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -200,7 +204,7 @@ class BerichtTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
-        self.assertEqual(len(response.data["invalid_params"]), 3)
+        self.assertEqual(len(response.data["invalid_params"]), 4)
         self.assertEqual(
             get_validation_errors(response, "onderwerp"),
             {
@@ -221,6 +225,14 @@ class BerichtTests(APITestCase):
             get_validation_errors(response, "ontvanger"),
             {
                 "name": "ontvanger",
+                "code": "required",
+                "reason": "Dit veld is vereist.",
+            },
+        )
+        self.assertEqual(
+            get_validation_errors(response, "mijnOverheidBerichtenbox"),
+            {
+                "name": "mijnOverheidBerichtenbox",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
