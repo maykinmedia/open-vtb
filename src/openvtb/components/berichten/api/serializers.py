@@ -10,6 +10,12 @@ from openvtb.utils.serializers import (
 from ..models import Bericht, Bijlage
 
 
+class BerichtGeopendOpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bericht
+        fields = ["geopend_op"]
+
+
 class BijlageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bijlage

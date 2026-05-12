@@ -124,6 +124,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bericht'
           description: ''
+    patch:
+      operationId: berichtenPartialUpdate
+      description: Werk het veld 'geopendOp' van een bericht bij.
+      summary: Werk het veld 'geopendOp' van een bericht bij.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke identificatiecode (UUID4) voor het Bericht.
+        required: true
+      tags:
+      - berichten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBerichtGeopendOp'
+      security:
+      - OpenID: []
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bericht'
+          description: ''
 components:
   schemas:
     Bericht:
@@ -267,6 +302,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Bericht'
+    PatchedBerichtGeopendOp:
+      type: object
+      properties:
+        geopendOp:
+          type: string
+          format: date-time
+          nullable: true
+          description: Het bericht is door de geadresseerde geopend op dit tijdstip
+            in het portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn
+            Overheid.
   securitySchemes:
     OpenID:
       type: openIdConnect
