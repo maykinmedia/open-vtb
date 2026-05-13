@@ -1,5 +1,7 @@
 import datetime
 
+from django.utils import timezone
+
 from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
@@ -238,21 +240,44 @@ class BerichtTests(APITestCase):
             },
         )
 
-    def test_update_not_allowed(self):
-        bericht = BerichtFactory.create(create_bijlage=True)
+    def test_update_patch(self):
+        now = timezone.now()
+        bericht = BerichtFactory.create(
+            onderwerp="test", create_bijlage=True, geopend_op=now
+        )
         detail_url = reverse(
             "berichten:bericht-detail", kwargs={"uuid": str(bericht.uuid)}
         )
 
-        # PATCH
+        # empty PATCH
         data = {}
         response = self.client.patch(detail_url, data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(response.data["code"], "method_not_allowed")
-        self.assertEqual(response.data["detail"], 'Methode "PATCH" niet toegestaan.')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        # geopendOp PATCH
+        new_time = now + datetime.timedelta(days=1)
+        data = {"geopendOp": new_time}
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        bericht.refresh_from_db()
+        self.assertEqual(bericht.geopend_op, new_time)
+
+        # onderwerp PATCH, not allowd field
+        self.assertEqual(bericht.onderwerp, "test")
+        data = {"onderwerp": "new_value"}
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        bericht.refresh_from_db()
+        self.assertNotEqual(bericht.onderwerp, "new_value")
+        self.assertEqual(bericht.onderwerp, "test")
+
+    def test_update_put_not_allowed(self):
+        bericht = BerichtFactory.create(create_bijlage=True)
+        detail_url = reverse(
+            "berichten:bericht-detail", kwargs={"uuid": str(bericht.uuid)}
+        )
         # PUT
-        response = self.client.put(detail_url, data)
+        response = self.client.put(detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response.data["code"], "method_not_allowed")
         self.assertEqual(response.data["detail"], 'Methode "PUT" niet toegestaan.')
