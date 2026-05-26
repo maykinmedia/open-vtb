@@ -163,7 +163,8 @@ class Bijlage(models.Model):
         blank=True,
         max_length=40,
         help_text=_(
-            "Een korte omschrijving of de titel van de bijlage. Deze wordt typisch getoond in een portaal."
+            "Een door de inwoner of bedrijf goed leesbare omschrijving van de bijlage die "
+            "wordt weergegeven als bestandsnaam in een berichtenbox of portaal."
         ),
     )
     is_bericht_type_bijlage = models.BooleanField(
