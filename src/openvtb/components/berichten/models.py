@@ -1,10 +1,14 @@
 import uuid
 
+from django.core.exceptions import ValidationError
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
+from openvtb.utils.validators import validate_jsonschema
 
 
 class Bericht(models.Model):
@@ -97,6 +101,18 @@ class Bericht(models.Model):
             "niet bedoeld voor publicatie in de Berichtenbox."
         ),
     )
+    is_gerelateerd_aan = models.JSONField(
+        _("is gerelateerd aan"),
+        default=list,
+        blank=True,
+        null=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. "
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165` "
+            "of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
+        ),
+        encoder=DjangoJSONEncoder,
+    )
 
     class Meta:
         verbose_name = _("Bericht")
@@ -104,6 +120,23 @@ class Bericht(models.Model):
 
     def __str__(self):
         return self.onderwerp
+
+    def clean_is_gerelateerd_aan(self):
+        if not self.is_gerelateerd_aan:
+            return
+
+        try:
+            validate_jsonschema(
+                instance=self.is_gerelateerd_aan,
+                label="is_gerelateerd_aan",
+                schema=IS_GERELATEERD_AAN_SCHEMA,
+            )
+        except ValidationError as error:
+            raise ValidationError({"is_gerelateerd_aan": str(error)})
+
+    def clean(self):
+        super().clean()
+        self.clean_is_gerelateerd_aan()
 
 
 class Bijlage(models.Model):

@@ -2,12 +2,23 @@ from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from vng_api_common.utils import get_help_text
 
 from openvtb.utils.serializers import (
+    URNField,
     URNModelSerializer,
 )
 
 from ..models import Bericht, Bijlage
+
+
+class IsGerelateerdAanSerializer(serializers.Serializer):
+    urn = URNField(
+        required=True,
+        help_text=_(
+            "URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+        ),
+    )
 
 
 class BerichtGeopendOpSerializer(serializers.ModelSerializer):
@@ -39,6 +50,11 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "de requirements van Logius in haar technische aansluithandleiding."
         ),
     )
+    is_gerelateerd_aan = serializers.ListSerializer(
+        child=IsGerelateerdAanSerializer(),
+        required=False,
+        help_text=get_help_text("berichten.Bericht", "is_gerelateerd_aan"),
+    )
 
     class Meta:
         model = Bericht
@@ -53,6 +69,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "ontvanger",
             "geopend_op",
             "bericht_type",
+            "is_gerelateerd_aan",
             "handelings_perspectief",
             "einddatum_handelings_termijn",
             "mijn_overheid_berichtenbox",

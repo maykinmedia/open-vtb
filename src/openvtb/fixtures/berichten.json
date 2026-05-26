@@ -7,12 +7,15 @@
         "onderwerp": "Sit per safe enjoy bag.",
         "bericht_tekst": "Test Bericht tekst \r\nTest Bericht tekst\r\nTest Bericht tekst \r\nTest Bericht tekst",
         "publicatiedatum": "2026-02-09T10:40:53Z",
+        "is_gepubliceerd": true,
         "referentie": "suffer",
         "ontvanger": "urn:nld:brp.bsn:111222333",
         "geopend_op": "2026-02-09T10:40:53Z",
         "bericht_type": "",
         "handelings_perspectief": "",
-        "einddatum_handelings_termijn": "2026-02-16T10:41:16Z"
+        "einddatum_handelings_termijn": "2026-02-16T10:41:16Z",
+        "mijn_overheid_berichtenbox": false,
+        "is_gerelateerd_aan": []
     }
 },
 {
