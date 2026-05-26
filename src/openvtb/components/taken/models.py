@@ -38,7 +38,8 @@ class ExterneTaak(models.Model):
         max_length=36,
         blank=True,
         help_text=_(
-            "Een identifier van het process dat deze taak verwerkt.",
+            "De identifier waarmee een taak door een verwerkende component "
+            "wordt gecorreleerd aan het onderliggende proces in een workflow-engine.",
         ),
     )
     status = models.CharField(
