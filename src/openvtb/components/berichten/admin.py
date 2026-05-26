@@ -11,7 +11,14 @@ class BijlageInline(admin.StackedInline):
 
 @admin.register(Bericht)
 class BerichtAdmin(admin.ModelAdmin):
-    list_display = ("uuid", "onderwerp", "publicatiedatum", "ontvanger", "geopend_op")
+    list_display = (
+        "uuid",
+        "onderwerp",
+        "publicatiedatum",
+        "ontvanger",
+        "geopend_op",
+        "is_gerelateerd_aan",
+    )
     readonly_fields = ("uuid",)
     search_fields = ("uuid", "onderwerp")
     inlines = [BijlageInline]

@@ -56,6 +56,7 @@ class BerichtTests(APITestCase):
                         "berichtType": bericht.bericht_type,
                         "handelingsPerspectief": bericht.handelings_perspectief,
                         "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
+                        "isGerelateerdAan": bericht.is_gerelateerd_aan,
                         "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                             "+00:00", "Z"
                         ),
@@ -116,6 +117,7 @@ class BerichtTests(APITestCase):
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
+                "isGerelateerdAan": bericht.is_gerelateerd_aan,
                 "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
@@ -143,6 +145,10 @@ class BerichtTests(APITestCase):
             "handelingsPerspectief": "test",
             "mijnOverheidBerichtenbox": True,
             "einddatumHandelingsTermijn": datetime.datetime.now(),
+            "isGerelateerdAan": [
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
+                {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
+            ],
             "bijlagen": [
                 {
                     "informatieObject": "urn:maykin:test1",
@@ -180,6 +186,7 @@ class BerichtTests(APITestCase):
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
                 "berichtType": bericht.bericht_type,
                 "handelingsPerspectief": bericht.handelings_perspectief,
+                "isGerelateerdAan": bericht.is_gerelateerd_aan,
                 "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
