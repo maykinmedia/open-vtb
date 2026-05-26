@@ -851,7 +851,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -975,7 +976,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1064,7 +1066,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1158,7 +1161,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1252,7 +1256,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1346,7 +1351,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1440,7 +1446,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1529,7 +1536,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1674,7 +1682,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1763,7 +1772,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1857,7 +1867,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -1951,7 +1962,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2045,7 +2057,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2139,7 +2152,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2228,7 +2242,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2425,7 +2440,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2518,7 +2534,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2600,7 +2617,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2713,7 +2731,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2802,7 +2821,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2896,7 +2916,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -2990,7 +3011,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -3084,7 +3106,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -3178,7 +3201,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
@@ -3267,7 +3291,8 @@ components:
         verwerkerTaakId:
           type: string
           title: Titel
-          description: Een identifier van het process dat deze taak verwerkt.
+          description: De identifier waarmee een taak door een verwerkende component
+            wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
         status:
           allOf:
