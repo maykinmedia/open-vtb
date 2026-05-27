@@ -119,10 +119,6 @@ pre_commit_hooks = [
 ]
 post_commit_hooks = []
 
-[tool.bumpversion.parts.pre_l]
-values = ["dev", "beta", "rc", "final"]
-optional_value = "final"
-
 [[tool.bumpversion.files]]
 filename = "src/openvtb/__init__.py"
 
@@ -136,8 +132,8 @@ replace = ":Version: {new_version}"
 
 [[tool.bumpversion.files]]
 filename = "package.json"
-search = "    \"version\": \"{current_version}\""
-replace = "    \"version\": \"{new_version}\""
+search = '"version": "{current_version}"'
+replace = '"version": "{new_version}"'
 
 
 [tool.coverage.run]
@@ -172,3 +168,4 @@ exclude_also = [
     "if settings.DEBUG:",
     "assert_never\\(.*\\)"
 ]
+

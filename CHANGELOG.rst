@@ -2,6 +2,13 @@
 Change history
 ==============
 
+0.1.0 (27-05-2026)
+==================
 
-1.X.X
-=====
+Initial release of Open VTB.
+
+Features:
+
+* Verzoeken API
+* Taken API
+* Berichten API

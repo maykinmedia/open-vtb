@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-13 20:35+0100\n"
+"POT-Creation-Date: 2026-05-27 12:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,45 +18,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: foobar/accounts/models.py:18
+#: accounts/models.py:19
 msgid "username"
 msgstr "gebruikersnaam"
 
-#: foobar/accounts/models.py:22
+#: accounts/models.py:23
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr ""
 "Vereist. 150 tekens of minder. Alleen letters, cijfers en @/,/+/-/_ tekens "
 "zijn toegestaan."
 
-#: foobar/accounts/models.py:26
+#: accounts/models.py:27
 msgid "A user with that username already exists."
 msgstr "Een gebruiker met deze gebruikersnaam bestaat al."
 
-#: foobar/accounts/models.py:29
+#: accounts/models.py:30
 msgid "first name"
 msgstr "voornaam"
 
-#: foobar/accounts/models.py:30
+#: accounts/models.py:31
 msgid "last name"
 msgstr "achternaam"
 
-#: foobar/accounts/models.py:31
+#: accounts/models.py:32
 msgid "email address"
 msgstr "e-mailadres"
 
-#: foobar/accounts/models.py:33
+#: accounts/models.py:34
 msgid "staff status"
 msgstr "stafstatus"
 
-#: foobar/accounts/models.py:35
+#: accounts/models.py:36
 msgid "Designates whether the user can log into this admin site."
 msgstr "Bepaalt of de gebruiker zich op deze beheerwebsite kan aanmelden."
 
-#: foobar/accounts/models.py:38
+#: accounts/models.py:39
 msgid "active"
 msgstr "actief"
 
-#: foobar/accounts/models.py:41
+#: accounts/models.py:42
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
@@ -64,83 +64,1367 @@ msgstr ""
 "Bepaalt of deze gebruiker als actief dient te worden behandeld. U kunt dit "
 "uitvinken in plaats van een gebruiker te verwijderen."
 
-#: foobar/accounts/models.py:45
+#: accounts/models.py:46
 msgid "date joined"
 msgstr "datum toegetreden"
 
-#: foobar/accounts/models.py:53
+#: accounts/models.py:54
 msgid "user"
 msgstr "gebruiker"
 
-#: foobar/accounts/models.py:54
+#: accounts/models.py:55
 msgid "users"
 msgstr "gebruikers"
 
-#: foobar/accounts/utils.py:18
+#: accounts/tests/test_oidc.py:58 accounts/tests/test_oidc.py:73
+#: accounts/tests/test_oidc.py:89 accounts/tests/test_oidc.py:111
+#: accounts/tests/test_oidc.py:152 accounts/tests/test_oidc.py:183
+#: templates/admin/login.html:12 templates/maykin_2fa/login.html:9
+msgid "Login with organization account"
+msgstr ""
+
+#: accounts/utils.py:18
 msgid "You need to be superuser to create other superusers."
 msgstr ""
 "U dient een supergebruiker te zijn om andere supergebruikers aan te maken."
 
-#: foobar/accounts/utils.py:44
+#: accounts/utils.py:44
 msgid "You cannot create or update a user with more permissions than yourself."
 msgstr "U kunt een gebruiker niet meer rechten geven dan u zelf heeft."
 
-#: foobar/templates/admin/base_site.html:5
-#: foobar/templates/admin/base_site.html:24
+#: components/berichten/api/schema.py:9
+msgid ""
+"De berichten-service bestaat uit een beschrijving van afspraken, standaarden "
+"en referentiecomponenten aangevuld met interactiepatronen, ontwerpbesluiten "
+"en aanbevelingen. Het Berichten-patroon biedt een gestandaardiseerde, "
+"flexibele oplossing voor de communicatie tussen inwoners, ondernemers en "
+"gemeenten via digitale kanalen. Met dit patroon kunnen berichten eenvoudig "
+"geregistreerd worden en door verschillende applicaties worden opgehaald, "
+"weergegeven en verwerkt. In tegenstelling tot traditionele berichtgevingen "
+"(zoals e-mail), zijn berichten centraal geregistreerd en kunnen ze eenvoudig "
+"getoond en gerelateerd worden naast zaken, taken of producten binnen het "
+"gemeentelijke landschap. "
+msgstr ""
+
+#: components/berichten/api/serializers.py:19
+#: components/taken/api/serializers.py:27
+#: components/verzoeken/api/serializers.py:257
+msgid ""
+"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:"
+"zaaknummer:000350165`"
+msgstr ""
+
+#: components/berichten/api/serializers.py:48
+msgid ""
+"Lijst van bijlagen bij het bericht. Let op; In het geval dat dit bericht "
+"naar de Mijn Overheid Berichtenbox moet, moet rekening gehouden worden met "
+"de requirements van Logius in haar technische aansluithandleiding."
+msgstr ""
+
+#: components/berichten/api/serializers.py:83
+msgid "De unieke URL van het Bericht binnen deze API."
+msgstr ""
+
+#: components/berichten/api/serializers.py:87
+msgid "De Uniform Resource Name van het Bericht."
+msgstr ""
+
+#: components/berichten/api/viewsets.py:19
+#: components/berichten/api/viewsets.py:20
+msgid "Vraag alle berichten aan."
+msgstr ""
+
+#: components/berichten/api/viewsets.py:23
+#: components/berichten/api/viewsets.py:24
+msgid "Een specifiek bericht opvragen."
+msgstr ""
+
+#: components/berichten/api/viewsets.py:27
+#: components/berichten/api/viewsets.py:28
+msgid "Maak een bericht aan."
+msgstr ""
+
+#: components/berichten/api/viewsets.py:31
+#: components/berichten/api/viewsets.py:32
+msgid "Werk het veld 'geopendOp' van een bericht bij."
+msgstr ""
+
+#: components/berichten/models.py:18
+msgid "Unieke identificatiecode (UUID4) voor het Bericht."
+msgstr ""
+
+#: components/berichten/models.py:21
+msgid "onderwerp"
+msgstr ""
+
+#: components/berichten/models.py:23
+msgid "Onderwerp van het bericht."
+msgstr ""
+
+#: components/berichten/models.py:26
+msgid "bericht tekst"
+msgstr ""
+
+#: components/berichten/models.py:29
+msgid ""
+"Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op "
+"alle portalen. Voor portalen van lokale overheden is de basic syntax van "
+"Markdown toegestaan, voor de Mijn Overheid berichtenbox enkel newlines "
+"(\\r\\n)."
+msgstr ""
+
+#: components/berichten/models.py:35
+msgid "publicatiedatum"
+msgstr ""
+
+#: components/berichten/models.py:39
+msgid ""
+"Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger. Dit geldt "
+"voor zowel de Mijn Overheid berichtenbox als het portaal van de lokale "
+"overheid. De standaardwaarde is de huidige datum/tijd."
+msgstr ""
+
+#: components/berichten/models.py:45
+msgid "gepubliceerd"
+msgstr ""
+
+#: components/berichten/models.py:48
+msgid "Geeft aan of het object gepubliceerd is en zichtbaar voor gebruikers."
+msgstr ""
+
+#: components/berichten/models.py:52
+msgid "referentie"
+msgstr ""
+
+#: components/berichten/models.py:55
+msgid "Zenderreferentie / interne referentie."
+msgstr ""
+
+#: components/berichten/models.py:58
+msgid "ontvanger"
+msgstr ""
+
+#: components/berichten/models.py:60
+msgid ""
+"URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: "
+"`urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:"
+"kvknummer:444555666:vestigingsnummer:777888999`"
+msgstr ""
+
+#: components/berichten/models.py:66
+msgid "geopend op"
+msgstr ""
+
+#: components/berichten/models.py:69
+msgid ""
+"Het bericht is door de geadresseerde geopend op dit tijdstip in het portaal "
+"van de lokale overheid. Deze waarde is onafhankelijk Mijn Overheid."
+msgstr ""
+
+#: components/berichten/models.py:74
+msgid "bericht type"
+msgstr ""
+
+#: components/berichten/models.py:78
+msgid ""
+"Een code voor het technisch identificeren van een bericht soort & origine. "
+"Wordt ook gebruikt in de Mijn Overheid berichtenbox."
+msgstr ""
+
+#: components/berichten/models.py:83 components/taken/models.py:58
+msgid "handelings perspectief"
+msgstr ""
+
+#: components/berichten/models.py:87 components/taken/models.py:62
+msgid ""
+"De door de toegewezen persoon of bedrijf uit te voeren handeling. "
+"Bijvoorbeeld: `lezen`, `naleveren`, `invullen`."
+msgstr ""
+
+#: components/berichten/models.py:92 components/taken/models.py:67
+msgid "einddatum handelings termijn"
+msgstr ""
+
+#: components/berichten/models.py:94
+msgid "Datum/tijd waarop handeling afgerond moet zijn."
+msgstr ""
+
+#: components/berichten/models.py:97
+msgid "Mijn Overheid Berichtenbox"
+msgstr ""
+
+#: components/berichten/models.py:99
+msgid ""
+"Geeft aan of dit bericht geschikt is voor publicatie in de MijnOverheid "
+"Berichtenbox. Als dit op ``False`` staat, is het bericht niet bedoeld voor "
+"publicatie in de Berichtenbox."
+msgstr ""
+
+#: components/berichten/models.py:105 components/taken/models.py:125
+#: components/verzoeken/models.py:313
+msgid "is gerelateerd aan"
+msgstr ""
+
+#: components/berichten/models.py:110 components/taken/models.py:130
+#: components/verzoeken/models.py:318
+msgid ""
+"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:"
+"zaaknummer:000350165` of `urn:nld:gemeenteutrecht:product:"
+"uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
+msgstr ""
+
+#: components/berichten/models.py:118
+msgid "Bericht"
+msgstr ""
+
+#: components/berichten/models.py:119
+msgid "Berichten"
+msgstr ""
+
+#: components/berichten/models.py:146 components/verzoeken/models.py:423
+msgid "Unieke identificatiecode (UUID4) voor het Bijlage."
+msgstr ""
+
+#: components/berichten/models.py:152
+msgid "Bijlagen gekoppeld aan het bericht."
+msgstr ""
+
+#: components/berichten/models.py:155 components/verzoeken/models.py:432
+msgid "informatie object"
+msgstr ""
+
+#: components/berichten/models.py:157 components/verzoeken/models.py:434
+msgid ""
+"URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:"
+"gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+msgstr ""
+
+#: components/berichten/models.py:162 components/verzoeken/models.py:34
+#: components/verzoeken/models.py:470
+msgid "omschrijving"
+msgstr ""
+
+#: components/berichten/models.py:166
+msgid ""
+"Een door de inwoner of bedrijf goed leesbare omschrijving van de bijlage die "
+"wordt weergegeven als bestandsnaam in een berichtenbox of portaal."
+msgstr ""
+
+#: components/berichten/models.py:171
+msgid "is bericht type bijlage"
+msgstr ""
+
+#: components/berichten/models.py:174
+msgid ""
+"Geeft aan of dit document een standaardbijlage is die vooraf geüpload is in "
+"het Berichtenbox Leveranciersportaal. Standaard `false`. Indien `true` moet "
+"deze bijlage door het outputmanagementcomponent genegeerd worden - als de "
+"Berichtenbox het doelkanaal is."
+msgstr ""
+
+#: components/berichten/models.py:181
+msgid "Bericht bijlage"
+msgstr ""
+
+#: components/berichten/models.py:182
+msgid "Berichten bijlagen"
+msgstr ""
+
+#: components/drf_spectacular.py:3
+msgid ""
+"\n"
+"\n"
+"**URN Pattern**\n"
+"\n"
+"Open VTB uses URNs (Uniform Resource Names) to link to other resources, "
+"below is a description of the pattern that should be used.\n"
+"\n"
+"**Syntax:**\n"
+"\n"
+"`urn:<NID>:<NSS>[#<f-component>]`\n"
+"\n"
+"**Parts:**\n"
+"\n"
+"- `urn:` (required): fixed prefix for all URNs, every URN must start with "
+"this prefix.\n"
+"- `NID` (required): Namespace Identifier: alphanumeric characters, e.g. "
+"`nld`.\n"
+"- `NSS` (required): Namespace Specific String identifying the object, e.g. "
+"`brp:bsn:111222333`.\n"
+"- `f-component` (optional): Optional component preceded by `#`, e.g. "
+"`#section1`.\n"
+"\n"
+"**Examples:**\n"
+"\n"
+"`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n"
+"\n"
+"For more information, see the official specification: https://datatracker."
+"ietf.org/doc/html/rfc8141\n"
+msgstr ""
+
+#: components/taken/admin.py:33 components/verzoeken/admin.py:154
+#, python-format
+msgid "'%(value)s' value must be valid JSON"
+msgstr ""
+
+#: components/taken/api/schema.py:20
+msgid ""
+"De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse "
+"overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren "
+"die burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen "
+"verschillende applicaties."
+msgstr ""
+
+#: components/taken/api/serializers.py:36
+msgid "Naam van de ontvanger van de betaling."
+msgstr ""
+
+#: components/taken/api/serializers.py:42
+msgid ""
+"Een arbitraire code die gebruikt kan worden om de juiste rekening en/of "
+"betaalprovider te kiezen in het systeem dat de taak afhandeld."
+msgstr ""
+
+#: components/taken/api/serializers.py:48
+msgid "IBAN code van de ontvanger."
+msgstr ""
+
+#: components/taken/api/serializers.py:55
+msgid "Bedrag dat betaald moet worden."
+msgstr ""
+
+#: components/taken/api/serializers.py:59
+msgid "Valuta van de betaling."
+msgstr ""
+
+#: components/taken/api/serializers.py:64
+msgid "Omschrijving van de transactie."
+msgstr ""
+
+#: components/taken/api/serializers.py:69
+msgid ""
+"Gegevens van de ontvangende bankrekening, ten minste één van de volgende "
+"velden is verplicht: `IBAN`, `code` of `naam`."
+msgstr ""
+
+#: components/taken/api/serializers.py:78
+msgid "Ten minste één van de volgende velden is verplicht: IBAN, code of naam."
+msgstr ""
+
+#: components/taken/api/serializers.py:88
+#, python-brace-format
+msgid "Het is niet toegestaan een andere waarde dan {valuta} door te geven."
+msgstr ""
+
+#: components/taken/api/serializers.py:97
+msgid "Link naar de externe gegevensaanvraag."
+msgstr ""
+
+#: components/taken/api/serializers.py:102 components/taken/schemas.py:82
+msgid ""
+"Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de "
+"uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of "
+"een veld in een sjabloon."
+msgstr ""
+
+#: components/taken/api/serializers.py:108
+#: components/taken/api/serializers.py:133
+msgid "Ontvangen gegevens als key-value object."
+msgstr ""
+
+#: components/taken/api/serializers.py:116
+msgid ""
+"Definitie van het formulier in JSON. Het formulier moet minimaal het veld "
+"`components` bevatten. Elke component moet de volgende verplichte velden "
+"hebben:\n"
+"- `label`: de naam die weergegeven wordt voor het veld\n"
+"- `key`: de unieke identifier voor het veld\n"
+"- `type`: het type van het veld, bijvoorbeeld `text`, `number` of `date`\n"
+" \n"
+" Andere velden, zoals `values`, `format`, `enableTime` of `fileTypes`, zijn "
+"optioneel en kunnen gebruikt worden om het gedrag of de weergave van het "
+"veld aan te passen."
+msgstr ""
+
+#: components/taken/api/serializers.py:127 components/taken/schemas.py:122
+msgid ""
+"Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het "
+"formulier. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, "
+"of een veld in een sjabloon."
+msgstr ""
+
+#: components/taken/api/serializers.py:195
+msgid "De unieke URL van de externe taak deze API."
+msgstr ""
+
+#: components/taken/api/serializers.py:199
+msgid "De Uniform Resource Name van de externe taak."
+msgstr ""
+
+#: components/taken/api/serializers.py:226
+msgid "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd."
+msgstr ""
+
+#: components/taken/constants.py:6
+msgid "Open"
+msgstr ""
+
+#: components/taken/constants.py:7
+msgid "Uitgevoerd"
+msgstr ""
+
+#: components/taken/constants.py:8
+msgid "Niet uitgevoerd"
+msgstr ""
+
+#: components/taken/constants.py:9
+msgid "Afgebroken"
+msgstr ""
+
+#: components/taken/constants.py:10 components/verzoeken/constants.py:13
+msgid "Verwerkt"
+msgstr ""
+
+#: components/taken/constants.py:14
+msgid "Betaallink"
+msgstr ""
+
+#: components/taken/constants.py:15
+msgid "URL taak"
+msgstr ""
+
+#: components/taken/constants.py:16
+msgid "Standaard formulier"
+msgstr ""
+
+#: components/taken/models.py:29 components/taken/models.py:37
+msgid "titel"
+msgstr ""
+
+#: components/taken/models.py:32
+msgid ""
+"Titel van de uit te voeren taak, zoals die door eindgebruikers gezien kan "
+"worden in bijvoorbeeld een portaal."
+msgstr ""
+
+#: components/taken/models.py:41
+msgid ""
+"De identifier waarmee een taak door een verwerkende component wordt "
+"gecorreleerd aan het onderliggende proces in een workflow-engine."
+msgstr ""
+
+#: components/taken/models.py:46 components/verzoeken/models.py:107
+#, fuzzy
+#| msgid "staff status"
+msgid "status"
+msgstr "stafstatus"
+
+#: components/taken/models.py:50
+msgid "Status van de taak."
+msgstr ""
+
+#: components/taken/models.py:53
+msgid "start datum"
+msgstr ""
+
+#: components/taken/models.py:55
+msgid "Startdatum van de taak."
+msgstr ""
+
+#: components/taken/models.py:68
+msgid "Einddatum handelings termijn."
+msgstr ""
+
+#: components/taken/models.py:71 components/taken/models.py:88
+msgid "herinnering_verzonden"
+msgstr ""
+
+#: components/taken/models.py:74
+msgid ""
+"Geeft aan of de melding voor de handelingstermijn van deze taak is verzonden."
+msgstr ""
+
+#: components/taken/models.py:78
+msgid "datum herinnering"
+msgstr ""
+
+#: components/taken/models.py:82
+msgid ""
+"Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde "
+"tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt deze "
+"waarde automatisch ingesteld op een systeem-ingesteld aantal dagen voor de "
+"'einddatumHandelingsTermijn'."
+msgstr ""
+
+#: components/taken/models.py:90
+msgid "Geeft aan of de herinnering voor deze taak al is verzonden."
+msgstr ""
+
+#: components/taken/models.py:93
+msgid "toelichting"
+msgstr ""
+
+#: components/taken/models.py:97
+msgid ""
+"Toelichting van de uit te voeren taak, zoals die door eindgebruikers gezien "
+"kan worden in bijvoorbeeld een portaal."
+msgstr ""
+
+#: components/taken/models.py:102
+msgid "taak soort"
+msgstr ""
+
+#: components/taken/models.py:105
+msgid "Het soort taak."
+msgstr ""
+
+#: components/taken/models.py:108
+msgid "details"
+msgstr ""
+
+#: components/taken/models.py:110
+msgid "De attributen die horen bij de `taakSoort`."
+msgstr ""
+
+#: components/taken/models.py:114
+msgid "is toegewezen aan subject"
+msgstr ""
+
+#: components/taken/models.py:116 components/verzoeken/models.py:304
+msgid ""
+"Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. "
+"Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. "
+"Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, "
+"`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:"
+"klant:klantnummer:610541501`"
+msgstr ""
+
+#: components/taken/models.py:138
+msgid "Externe taak"
+msgstr ""
+
+#: components/taken/models.py:139
+msgid "Externe taken"
+msgstr ""
+
+#: components/taken/schemas.py:11
+msgid ""
+"Schema voor de BetaalTaak, bevat informatie over betaling en rekening van de "
+"ontvanger."
+msgstr ""
+
+#: components/taken/schemas.py:69
+msgid ""
+"Schema voor de URLTaak, inclusief links voor gegevensaanvragen en ontvangen "
+"gegevens."
+msgstr ""
+
+#: components/taken/schemas.py:91 components/taken/schemas.py:131
+msgid "Gegevens ontvangen als key-value"
+msgstr ""
+
+#: components/taken/schemas.py:106
+msgid ""
+"Schema voor de FormulierTaak, inclusief definitie van het formulier en "
+"ontvangen gegevens."
+msgstr ""
+
+#: components/taken/schemas.py:114
+msgid "JSON-structuur van het formulier (FormIO)"
+msgstr ""
+
+#: components/verzoeken/admin.py:33
+#, fuzzy
+#| msgid "last name"
+msgid "last versie"
+msgstr "achternaam"
+
+#: components/verzoeken/admin.py:88
+#, python-brace-format
+msgid "The VerzoekType {versie} has been published successfully!"
+msgstr ""
+
+#: components/verzoeken/admin.py:106
+#, python-brace-format
+msgid "The new versie {versie} has been created successfully!"
+msgstr ""
+
+#: components/verzoeken/api/schema.py:9
+msgid ""
+"De 'Verzoeken-API' slaat ingediende formuliergegevens op als gestructureerde "
+"JSON.Aangezien formulieren elk type veld kunnen bevatten, definieert elk "
+"formulier een JSON-schema dat de verwachte structuur specificeert.Inkomende "
+"gegevens worden getoetst aan dit schema en opgeslagen in een consistent, "
+"gestructureerd formaat."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:60
+msgid "Lijst met bijlagen typen die aan deze bron zijn gekoppeld."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:83
+#: components/verzoeken/api/serializers.py:215
+msgid "De unieke URL van deze VerzoekType versie binnen deze API."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:111
+msgid "VerzoekType with the specified UUID does not exist"
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:125
+msgid "bijlageType must have a informatieObjecttype."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:225
+msgid "Lijst van beschikbare versies voor dit type verzoek."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:244
+msgid "De unieke URL van het VerzoekType binnen deze API."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:248
+msgid "De Uniform Resource Name van het VerzoekType."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:276
+msgid "URN field"
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:285
+msgid "Een verwijzing naar de bron waar dit verzoek vandaan komt."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:290
+msgid "Verzoek tot betaling gekoppeld aan deze resource."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:295
+msgid "Lijst met bijlagen die aan deze bron zijn gekoppeld."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:332
+msgid "De unieke URL van het verzoek binnen deze API."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:336
+msgid "De Uniform Resource Name van het Verzoek."
+msgstr ""
+
+#: components/verzoeken/api/serializers.py:354
+msgid "bijlage must have a informatieObject."
+msgstr ""
+
+#: components/verzoeken/api/utils.py:27
+msgid "UUID van het VerzoekType"
+msgstr ""
+
+#: components/verzoeken/api/validators.py:22
+msgid "Alleen `draft` kunnen worden gewijzigd."
+msgstr ""
+
+#: components/verzoeken/api/validators.py:62
+msgid "Onbekend VerzoekType schema: geen schema beschikbaar."
+msgstr ""
+
+#: components/verzoeken/api/validators.py:78
+msgid "Dit veld kan niet worden gewijzigd."
+msgstr ""
+
+#: components/verzoeken/api/validators.py:122
+#: components/verzoeken/models.py:396
+msgid "Onbekend VerzoekType schema versie: geen schema beschikbaar."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:22
+#: components/verzoeken/api/viewsets.py:23
+msgid "Vraag alle verzoeken aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:26
+#: components/verzoeken/api/viewsets.py:27
+msgid "Een specifiek verzoek opvragen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:30
+#: components/verzoeken/api/viewsets.py:31
+msgid "Maak een verzoek aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:34
+#: components/verzoeken/api/viewsets.py:35
+msgid "Volledig verzoek wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:38
+#: components/verzoeken/api/viewsets.py:39
+msgid "Een verzoek gedeeltelijk wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:42
+#: components/verzoeken/api/viewsets.py:43
+msgid "Een verzoek verwijderen"
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:58
+#: components/verzoeken/api/viewsets.py:59
+msgid "Vraag alle verzoektypen aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:62
+#: components/verzoeken/api/viewsets.py:63
+msgid "Een specifiek verzoektype opvragen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:66
+#: components/verzoeken/api/viewsets.py:67
+msgid "Maak een verzoektype aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:70
+#: components/verzoeken/api/viewsets.py:71
+msgid "Volledig verzoektype wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:74
+#: components/verzoeken/api/viewsets.py:75
+msgid "Een verzoektype gedeeltelijk wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:78
+#: components/verzoeken/api/viewsets.py:79
+msgid "Een verzoektype verwijderen"
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:92
+#: components/verzoeken/api/viewsets.py:93
+msgid "Vraag alle verzoektypen versies aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:97
+#: components/verzoeken/api/viewsets.py:98
+msgid "Een specifiek verzoektype versie opvragen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:102
+#: components/verzoeken/api/viewsets.py:103
+msgid "Maak een verzoektype versie aan."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:107
+#: components/verzoeken/api/viewsets.py:108
+msgid "Volledig verzoektype versie wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:112
+#: components/verzoeken/api/viewsets.py:113
+msgid "Een verzoektype versie gedeeltelijk wijzigen."
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:117
+#: components/verzoeken/api/viewsets.py:118
+msgid "Een verzoektype versie verwijderen"
+msgstr ""
+
+#: components/verzoeken/api/viewsets.py:135
+msgid "Only draft versies can be destroyed"
+msgstr ""
+
+#: components/verzoeken/constants.py:6
+msgid "Published"
+msgstr ""
+
+#: components/verzoeken/constants.py:7
+msgid "Draft"
+msgstr ""
+
+#: components/verzoeken/constants.py:8
+msgid "Deprecated"
+msgstr ""
+
+#: components/verzoeken/constants.py:12
+msgid "Geregistreerd"
+msgstr ""
+
+#: components/verzoeken/models.py:26
+msgid "Unieke identificatiecode (UUID4) voor het VerzoekType"
+msgstr ""
+
+#: components/verzoeken/models.py:29
+msgid "naam"
+msgstr ""
+
+#: components/verzoeken/models.py:31
+msgid "Naam voor het VerzoekType"
+msgstr ""
+
+#: components/verzoeken/models.py:38
+msgid ""
+"Interne omschrijving van het type verzoek. Bijvoorbeeld om de relatie naar "
+"het zaaktype te schetsen."
+msgstr ""
+
+#: components/verzoeken/models.py:42 components/verzoeken/models.py:76
+msgid "aangemaakt op"
+msgstr ""
+
+#: components/verzoeken/models.py:44
+msgid "Datum waarop het VerzoekType is aangemaakt"
+msgstr ""
+
+#: components/verzoeken/models.py:47 components/verzoeken/models.py:81
+msgid "gewijzigd op"
+msgstr ""
+
+#: components/verzoeken/models.py:49
+msgid "Laatste datum waarop het VerzoekType is gewijzigd"
+msgstr ""
+
+#: components/verzoeken/models.py:53
+msgid "VerzoekType"
+msgstr ""
+
+#: components/verzoeken/models.py:54
+msgid "VerzoekTypes"
+msgstr ""
+
+#: components/verzoeken/models.py:69
+msgid "Het VerzoekType waartoe deze versie behoort."
+msgstr ""
+
+#: components/verzoeken/models.py:72 components/verzoeken/models.py:281
+msgid "versie"
+msgstr ""
+
+#: components/verzoeken/models.py:73
+msgid "Integer-versie van het VerzoekType."
+msgstr ""
+
+#: components/verzoeken/models.py:78
+msgid "Datum waarop de versie is gemaakt"
+msgstr ""
+
+#: components/verzoeken/models.py:83
+msgid "Laatste datum waarop de versie is gewijzigd"
+msgstr ""
+
+#: components/verzoeken/models.py:86
+msgid "begin geldigheid"
+msgstr ""
+
+#: components/verzoeken/models.py:89
+msgid "Datum waarop de versie is gepubliceerd"
+msgstr ""
+
+#: components/verzoeken/models.py:92
+msgid "einde geldigheid"
+msgstr ""
+
+#: components/verzoeken/models.py:96
+msgid ""
+"Einde van de geldigheidsduur van de versie, automatisch ingesteld wanneer "
+"een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld "
+"voordat de versie wordt gepubliceerd, wordt deze overschreven met de "
+"publicatiedatum."
+msgstr ""
+
+#: components/verzoeken/models.py:101
+msgid "aanvraag gegevens schema"
+msgstr ""
+
+#: components/verzoeken/models.py:103
+msgid "JSON schema voor validatie van VerzoekType"
+msgstr ""
+
+#: components/verzoeken/models.py:111
+msgid "Status van het VerzoekTypeVersion"
+msgstr ""
+
+#: components/verzoeken/models.py:153
+msgid "Geen bijlagentypen"
+msgstr ""
+
+#: components/verzoeken/models.py:187
+msgid "bron naam"
+msgstr ""
+
+#: components/verzoeken/models.py:190
+msgid "De naam van de bron applicatie die dit verzoek heeft aangemaakt."
+msgstr ""
+
+#: components/verzoeken/models.py:193
+msgid "bron kenmerk"
+msgstr ""
+
+#: components/verzoeken/models.py:197
+msgid ""
+"Een kenmerk of identificatie van de specifieke instantie die in de bron "
+"applicatie heeft geleid tot dit verzoek. Bijvoorbeeld een inzendingsnummer."
+msgstr ""
+
+#: components/verzoeken/models.py:203
+msgid "Verzoek Bron"
+msgstr ""
+
+#: components/verzoeken/models.py:204
+msgid "Verzoeken Bron"
+msgstr ""
+
+#: components/verzoeken/models.py:217
+msgid "provider kenmerk"
+msgstr ""
+
+#: components/verzoeken/models.py:221
+msgid ""
+"Een kenmerk (bijv. het PSP ID van Worldline) dat aangeeft welke provider de "
+"betaling moet afhandelen."
+msgstr ""
+
+#: components/verzoeken/models.py:225
+msgid "bedrag"
+msgstr ""
+
+#: components/verzoeken/models.py:229
+msgid "Het bedrag van de betaling."
+msgstr ""
+
+#: components/verzoeken/models.py:232
+msgid "valuta"
+msgstr ""
+
+#: components/verzoeken/models.py:236
+msgid "Valuta van de betaling"
+msgstr ""
+
+#: components/verzoeken/models.py:239
+msgid "voltooid"
+msgstr ""
+
+#: components/verzoeken/models.py:241
+msgid "Geeft aan of de betaling voltooid is."
+msgstr ""
+
+#: components/verzoeken/models.py:244
+msgid "transactie datum"
+msgstr ""
+
+#: components/verzoeken/models.py:247
+msgid "Datum en tijd van de transactie."
+msgstr ""
+
+#: components/verzoeken/models.py:250
+msgid "transactie referentie"
+msgstr ""
+
+#: components/verzoeken/models.py:254
+msgid ""
+"Een nummer of code die volgt vanuit debetaalprovider na het voltooien van de "
+"transactie. Hiermee wordt de transactie administratief gekoppeld aan het "
+"verzoek."
+msgstr ""
+
+#: components/verzoeken/models.py:261
+msgid "Verzoek Betaling"
+msgstr ""
+
+#: components/verzoeken/models.py:262
+msgid "Verzoeken Betaling"
+msgstr ""
+
+#: components/verzoeken/models.py:272
+msgid "Unieke identificatiecode (UUID4) voor het Verzoek."
+msgstr ""
+
+#: components/verzoeken/models.py:278
+msgid "Type van het Verzoek."
+msgstr ""
+
+#: components/verzoeken/models.py:283
+msgid ""
+"Indien geen waarde is opgegeven wordt de laatste versie van het VERZOEKTYPE "
+"gebruikt."
+msgstr ""
+
+#: components/verzoeken/models.py:288
+msgid "geometrie"
+msgstr ""
+
+#: components/verzoeken/models.py:292
+msgid ""
+"Point, LineString of Polygon object dat de locatie van het verzoek "
+"representeert."
+msgstr ""
+
+#: components/verzoeken/models.py:296
+msgid "aanvraag gegevens"
+msgstr ""
+
+#: components/verzoeken/models.py:298
+msgid "JSON data voor validatie van het VerzoekType."
+msgstr ""
+
+#: components/verzoeken/models.py:302
+msgid "initiator"
+msgstr ""
+
+#: components/verzoeken/models.py:325
+msgid "kanaal"
+msgstr ""
+
+#: components/verzoeken/models.py:328
+msgid "Geeft aan via welk kanaal dit verzoek is binnengekomen."
+msgstr ""
+
+#: components/verzoeken/models.py:331
+msgid "verzoek informatie object"
+msgstr ""
+
+#: components/verzoeken/models.py:333
+msgid ""
+"URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document "
+"zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:"
+"informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+msgstr ""
+
+#: components/verzoeken/models.py:339
+msgid "verzoek taal"
+msgstr ""
+
+#: components/verzoeken/models.py:341
+msgid ""
+"De taal, volgens het IANA Language Subtag Registry, waarin het verzoek is "
+"gedaan. In de meest praktische vorm is dit de taal van de vragen maar het is "
+"mogelijk dat de antwoorden in een andere taal zijn gedaan. Bijvoorbeeld door "
+"iemand die wel Nederlands kan lezen maar niet kan schrijven."
+msgstr ""
+
+#: components/verzoeken/models.py:352
+msgid "verwerk status"
+msgstr ""
+
+#: components/verzoeken/models.py:357
+msgid ""
+"De initiële status is altijd `geregistreerd`. De status `verwerkt` moet "
+"gezet worden door het component dat verantwoordelijk is voor de afhandeling "
+"danwel opvolging."
+msgstr ""
+
+#: components/verzoeken/models.py:363
+msgid "Verzoek"
+msgstr ""
+
+#: components/verzoeken/models.py:364
+msgid "Verzoeken"
+msgstr ""
+
+#: components/verzoeken/models.py:429
+msgid "Bijlagen gekoppeld aan het Verzoek."
+msgstr ""
+
+#: components/verzoeken/models.py:441
+msgid "Bijlage"
+msgstr ""
+
+#: components/verzoeken/models.py:442
+msgid "Bijlagen"
+msgstr ""
+
+#: components/verzoeken/models.py:453
+msgid "Unieke identificatiecode (UUID4) voor het BijlageType."
+msgstr ""
+
+#: components/verzoeken/models.py:459
+msgid "Bijlagetypen gekoppeld aan het VerzoekTypeVersion."
+msgstr ""
+
+#: components/verzoeken/models.py:462
+msgid "informatie objecttype"
+msgstr ""
+
+#: components/verzoeken/models.py:464
+msgid ""
+"URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: `urn:nld:gemeenteutrecht:"
+"informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+msgstr ""
+
+#: components/verzoeken/models.py:473
+msgid ""
+"Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien "
+"kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving "
+"als die van het INFORMATIEOBJECTTYPE."
+msgstr ""
+
+#: components/verzoeken/models.py:479
+msgid "BijlageType"
+msgstr ""
+
+#: components/verzoeken/models.py:480
+msgid "BijlageTypen"
+msgstr ""
+
+#: templates/403.html:13
+msgid "Sorry, you don't have access to this page (403)"
+msgstr ""
+
+#: templates/404.html:13
+msgid "Sorry, the requested page could not be found (404)"
+msgstr ""
+
+#: templates/account_blocked.html:13
+msgid "Sorry, your account has been blocked"
+msgstr ""
+
+#: templates/account_blocked.html:14
+msgid "If you you want your account unblocked, please contact the webmaster."
+msgstr ""
+
+#: templates/admin/base_site.html:5 templates/admin/base_site.html:24
 msgid "Administration"
 msgstr "Beheer"
 
-#: foobar/templates/admin/base_site.html:41
-msgid "View 2fa profile"
-msgstr "Tweestapsauthenticatie beheren"
+#: templates/admin/base_site.html:34
+msgid "Logged in as"
+msgstr ""
 
-#: foobar/templates/admin/base_site.html:44
+#: templates/admin/base_site.html:44
+msgid "View site"
+msgstr ""
+
+#: templates/admin/base_site.html:50
+msgid "Account security"
+msgstr ""
+
+#: templates/admin/base_site.html:53
 msgid "Change password"
 msgstr "Wachtwoord wijzigen"
 
-#: foobar/templates/admin/base_site.html:46
+#: templates/admin/base_site.html:58
 msgid "Log out"
 msgstr "Afmelden"
 
-#: foobar/templates/admin/base_site__admintools.html:4
-msgid "admin"
-msgstr "beheer"
+#: templates/admin/login.html:10 templates/maykin_2fa/login.html:7
+msgid "or"
+msgstr ""
 
-#: foobar/templates/admin/base_site__admintools.html:17
-msgid "administration"
-msgstr "beheer"
+#: templates/admin/verzoeken/verzoektype/object_history.html:11
+msgid "Version"
+msgstr ""
 
-#: foobar/templates/hijack/contrib/admin/button.html:6
+#: templates/admin/verzoeken/verzoektype/object_history.html:12
+msgid "Status"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:13
+msgid "Created at"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:14
+msgid "Modified at"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:15
+msgid "Published at"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:16
+msgid "Expired on"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:17
+msgid "Aanvraag Gegevens Schema"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/object_history.html:18
+msgid "Bijlage Typen List"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/submit_line.html:8
+msgid "Add Bijlage Type "
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/submit_line.html:10
+msgid "Publish"
+msgstr ""
+
+#: templates/admin/verzoeken/verzoektype/submit_line.html:12
+msgid "New version"
+msgstr ""
+
+#: templates/hijack/contrib/admin/button.html:6
 msgid "hijack"
 msgstr "overnemen"
 
-#: foobar/templates/hijack/contrib/admin/button.html:8
+#: templates/hijack/contrib/admin/button.html:8
 #, python-format
 msgid "Hijack %(username)s"
 msgstr "Inloggen als %(username)s"
 
-#: foobar/templates/samples/pager.html:8 foobar/templates/samples/pager.html:10
+#: templates/includes/footer.html:15
+msgid "Documentation"
+msgstr ""
+
+#: templates/includes/footer.html:20
+msgid "Docker image"
+msgstr ""
+
+#: templates/includes/footer.html:25
+msgid "Code on Github"
+msgstr ""
+
+#: templates/index.html:8
+msgid ""
+"Technische API documentatie in de vorm van een Open API Specificatie (OAS)."
+msgstr ""
+
+#: templates/main.html:5
+msgid "Startpunt"
+msgstr ""
+
+#: templates/maykin_2fa/login.html:16
+msgid "Contact support to start the account recovery process"
+msgstr ""
+
+#: templates/samples/pager.html:8 templates/samples/pager.html:10
 msgid "Previous"
 msgstr "Vorige"
 
-#: foobar/templates/samples/pager.html:16
-#: foobar/templates/samples/pager.html:18
+#: templates/samples/pager.html:16 templates/samples/pager.html:18
 msgid "Next"
 msgstr "Volgende"
 
-#: foobar/utils/management/commands/clear_cache.py:10
-msgid "Clear given cache only"
-msgstr "Leeg alleen de opgegeven cache"
+#: tests/api_strategy/test_error_format.py:40
+#: tests/api_strategy/test_error_format.py:42
+#, fuzzy
+#| msgid "Invalid postal code."
+msgid "Invalid input."
+msgstr "Ongeldige postcode."
 
-#: foobar/utils/validators.py:22
+#: tests/api_strategy/test_error_format.py:124
+msgid "The resource is gone"
+msgstr ""
+
+#: tests/api_strategy/test_error_format.py:135
+msgid "Precondition failed"
+msgstr ""
+
+#: utils/constants.py:6
+msgid "Euro"
+msgstr ""
+
+#: utils/fields.py:19
+msgid "URN"
+msgstr ""
+
+#: utils/json_utils.py:29
+#, python-brace-format
+msgid "Onbekend '{key}': geen schema beschikbaar."
+msgstr ""
+
+#: utils/schema.py:34
+msgid ""
+"Geeft een specifieke API-versie aan in de context van een specifieke "
+"aanroep. Voorbeeld: 1.2.1."
+msgstr ""
+
+#: utils/serializers.py:61
+msgid "This field is required."
+msgstr ""
+
+#: utils/serializers.py:62
+msgid "Invalid URN - Could not match the expected pattern."
+msgstr ""
+
+#: utils/serializers.py:63
+msgid "Invalid URN - Does not conform to the expected format."
+msgstr ""
+
+#: utils/serializers.py:64
+msgid "Invalid URN - Corresponding object does not exist."
+msgstr ""
+
+#: utils/serializers.py:66
+#, python-brace-format
+msgid ""
+"Incorrect type. Expected a string representing a URN, received {data_type}."
+msgstr ""
+
+#: utils/serializers.py:106
+msgid ""
+"URNRelatedField could not determine the `urn_component`: request, "
+"resolver_match, or namespace is missing in serializer context."
+msgstr ""
+
+#: utils/serializers.py:125
+msgid ""
+"URNRelatedField could not determine the `urn_resource`: model not found on "
+"the view or serializer."
+msgstr ""
+
+#: utils/tests/test_validators.py:58 utils/validators.py:152
 #, python-format
 msgid "The provided value contains an invalid character: %s"
 msgstr "Uw invoer bevat een ongeldig teken: %s"
 
-#: foobar/utils/validators.py:30
-msgid "Invalid mobile phonenumber."
-msgstr "Ongeldig mobiel telefoonnumer."
+#: utils/validators.py:54
+#, python-brace-format
+msgid ""
+"'{value}' is not a valid hexadecimal color and not defined as a named color "
+"in CSS3 color"
+msgstr ""
 
-#: foobar/utils/validators.py:50
-msgid "Invalid postal code."
-msgstr "Ongeldige postcode."
+#: utils/validators.py:85
+#, python-brace-format
+msgid "'{value}' is not a valid decimal number"
+msgstr ""
+
+#: utils/validators.py:89
+#, python-brace-format
+msgid "'{value}' has more than 2 decimal places"
+msgstr ""
+
+#: utils/validators.py:103
+#, python-brace-format
+msgid "'{value}' is not a valid IBAN"
+msgstr ""
+
+#: utils/validators.py:176
+#, python-brace-format
+msgid "{end_date} date must be greater than {start_date}."
+msgstr ""
+
+#: utils/validators.py:189
+msgid "{} should be before {}."
+msgstr ""
+
+#: utils/validators.py:244
+msgid "Het opgegeven telefoonnummer is ongeldig."
+msgstr ""
+
+#: utils/validators.py:246
+msgid ""
+"Het opgegeven telefoonnummer is ongeldig, telefoonnummers beginnend met "
+"0800, 0900, 088, 1400 of 140xx zijn niet toegestaan."
+msgstr ""
+
+#: utils/validators.py:273
+msgid "Postcode moet aan het volgende formaat voldoen: `1234 AB` (met spatie)"
+msgstr ""
+
+#: utils/validators.py:276
+msgid "Ongeldige IBAN"
+msgstr ""
+
+#~ msgid "View 2fa profile"
+#~ msgstr "Tweestapsauthenticatie beheren"
+
+#~ msgid "admin"
+#~ msgstr "beheer"
+
+#~ msgid "administration"
+#~ msgstr "beheer"
+
+#~ msgid "Clear given cache only"
+#~ msgstr "Leeg alleen de opgegeven cache"
+
+#~ msgid "Invalid mobile phonenumber."
+#~ msgstr "Ongeldig mobiel telefoonnumer."

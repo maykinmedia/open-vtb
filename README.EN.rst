@@ -58,7 +58,7 @@ main/latest        n/a                        n/a             | Verzoeken:
                                                                  `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/main/src/openvtb/components/berichten/openapi.yaml>`_,
                                                                  (`diff <https://github.com/maykinmedia/open-vtb/compare/0.1.0..main>`_)
 
-0.1.0              | Verzoeken: 0.1.0        YYYY-MM-DD        | Verzoeken:
+0.1.0              | Verzoeken: 0.1.0        2026-05-27        | Verzoeken:
                    | Taken: 0.1.0                               `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
                    | Berichten: 0.1.0                           `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-vtb/0.1.0/src/openvtb/components/verzoeken/openapi.yaml>`_,
                                                                  (`diff <https://github.com/maykinmedia/open-vtb/compare/0.0.0..0.1.0>`_)
@@ -113,8 +113,6 @@ References
 * `Docker image <https://hub.docker.com/r/maykinmedia/open-vtb>`_
 * `Issues <https://github.com/maykinmedia/open-vtb/issues>`_
 * `Code <https://github.com/maykinmedia/open-vtb>`_
-* `Community <https://TODO>`_
-
 
 License
 =======
