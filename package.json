@@ -18,7 +18,7 @@
     },
     "author": "Maykin",
     "license": "UNLICENSED",
-    "homepage": "https://maykinmedia.nl",
+    "homepage": "https://maykin.nl",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^7.0.0",
         "microscope-sass": "^2.0.0",

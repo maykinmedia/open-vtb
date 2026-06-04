@@ -128,7 +128,7 @@ Licensed under the EUPL_
 
 .. _`Nederlandse versie`: README.rst
 
-.. _`Maykin B.V.`: https://www.maykinmedia.nl
+.. _`Maykin B.V.`: https://www.maykin.nl
 
 .. _`Platform Dienstverlening working group`: https://dienstverleningsplatform.gitbook.io/
 
