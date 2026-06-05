@@ -2,6 +2,10 @@
 Open Verzoek, Taken en Berichten (VTB)
 ======================================
 
+.. image:: https://raw.githubusercontent.com/maykinmedia/open-vtb/refs/heads/main/.github/assets/open-vtb-logo.svg
+    :height: 100px
+    :alt: Open VTB
+
 :Version: 0.1.0
 :Source: https://github.com/maykinmedia/open-vtb
 :Keywords: ``verzoeken`` ``taken`` ``berichten``
@@ -124,7 +128,7 @@ Licensed under the EUPL_
 
 .. _`Nederlandse versie`: README.rst
 
-.. _`Maykin B.V.`: https://www.maykinmedia.nl
+.. _`Maykin B.V.`: https://www.maykin.nl
 
 .. _`Platform Dienstverlening working group`: https://dienstverleningsplatform.gitbook.io/
 
