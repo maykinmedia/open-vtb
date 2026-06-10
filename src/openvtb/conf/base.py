@@ -2,9 +2,12 @@ import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
 from celery.schedules import crontab
+from maykin_common.config import (
+    DocumentationParams,
+    config,  # noqa
+)
 from maykin_common.health_checks import default_health_check_apps
 from open_api_framework.conf.base import *  # noqa
-from open_api_framework.conf.utils import config  # noqa
 
 from .api import *  # noqa
 
@@ -78,16 +81,20 @@ DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 #
 GEOS_LIBRARY_PATH = config(
     "GEOS_LIBRARY_PATH",
-    None,
-    help_text=(
-        "Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty."
+    default=None,
+    documentation=DocumentationParams(
+        help_text=(
+            "Full path to the GEOS library used by GeoDjango. In most circumstances, this can be left empty."
+        ),
     ),
 )
 GDAL_LIBRARY_PATH = config(
     "GDAL_LIBRARY_PATH",
-    None,
-    help_text=(
-        "Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty."
+    default=None,
+    documentation=DocumentationParams(
+        help_text=(
+            "Full path to the GDAL library used by GeoDjango. In most circumstances, this can be left empty."
+        ),
     ),
 )
 
@@ -111,7 +118,9 @@ SETUP_CONFIGURATION_STEPS = [
 NOTIFICATIONS_SOURCE = config(
     "NOTIFICATIONS_SOURCE",
     default="",
-    help_text="The identifier of this application to use as the source in notifications and cloudevents",
+    documentation=DocumentationParams(
+        help_text="The identifier of this application to use as the source in notifications and cloudevents",
+    ),
 )
 
 #
@@ -130,7 +139,9 @@ MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.read
 CELERY_ONCE_REDIS_URL = config(
     "CELERY_ONCE_REDIS_URL",
     default=CELERY_BROKER_URL,
-    group="Celery",
+    documentation=DocumentationParams(
+        group="Celery",
+    ),
 )
 CELERY_ONCE = {
     "backend": "celery_once.backends.Redis",
@@ -144,40 +155,48 @@ CELERY_ONCE = {
 EVENTS_BERICHTEN_JOB_MINUTE = config(
     "EVENTS_BERICHTEN_JOB_MINUTE",
     default=0,
-    help_text=(
-        "Minute of execution (0 - 59) for the Berichten CloudEvents job. "
-        "The job is triggered at this minute within each scheduled hour interval, "
-        "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
+    documentation=DocumentationParams(
+        help_text=(
+            "Minute of execution (0 - 59) for the Berichten CloudEvents job. "
+            "The job is triggered at this minute within each scheduled hour interval, "
+            "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
+        ),
     ),
 )
 
 EVENTS_BERICHTEN_JOB_HOUR = config(
     "EVENTS_BERICHTEN_JOB_HOUR",
     default=1,
-    help_text=(
-        "Hour interval (1 - 23) for the Berichten CloudEvents job. Determines the frequency of execution in hours. "
-        "The job runs repeatedly based on this interval rather than at a single fixed hour. "
-        "Default is every hour. The schedule is evaluated in UTC timezone."
+    documentation=DocumentationParams(
+        help_text=(
+            "Hour interval (1 - 23) for the Berichten CloudEvents job. Determines the frequency of execution in hours. "
+            "The job runs repeatedly based on this interval rather than at a single fixed hour. "
+            "Default is every hour. The schedule is evaluated in UTC timezone."
+        ),
     ),
 )
 
 EVENTS_TAKEN_JOB_MINUTE = config(
     "EVENTS_TAKEN_JOB_MINUTE",
     default=0,
-    help_text=(
-        "Minute of execution (0 - 59) for the Taken CloudEvents job. "
-        "The job is triggered at this minute within each scheduled hour interval, "
-        "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
+    documentation=DocumentationParams(
+        help_text=(
+            "Minute of execution (0 - 59) for the Taken CloudEvents job. "
+            "The job is triggered at this minute within each scheduled hour interval, "
+            "as defined by the hour interval configuration. The schedule is evaluated in UTC timezone."
+        ),
     ),
 )
 
 EVENTS_TAKEN_JOB_HOUR = config(
     "EVENTS_TAKEN_JOB_HOUR",
     default=1,
-    help_text=(
-        "Hour interval (1 - 23) for the Taken CloudEvents job. Determines the frequency of execution in hours. "
-        "The job runs repeatedly based on this interval rather than at a single fixed hour. "
-        "Default is every hour. The schedule is evaluated in UTC timezone."
+    documentation=DocumentationParams(
+        help_text=(
+            "Hour interval (1 - 23) for the Taken CloudEvents job. Determines the frequency of execution in hours. "
+            "The job runs repeatedly based on this interval rather than at a single fixed hour. "
+            "Default is every hour. The schedule is evaluated in UTC timezone."
+        ),
     ),
 )
 
@@ -210,9 +229,11 @@ CELERY_BEAT_SCHEDULE = {
 #
 ENABLE_CLOUD_EVENTS = config(
     "ENABLE_CLOUD_EVENTS",
-    default=True,
+    default="True",
     cast=bool,
-    help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
+    documentation=DocumentationParams(
+        help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
+    ),
 )
 
 #
@@ -220,14 +241,18 @@ ENABLE_CLOUD_EVENTS = config(
 #
 URN_NAMESPACE = config(
     "URN_NAMESPACE",
-    help_text=("Namespace used in URNs schemas."),
+    documentation=DocumentationParams(
+        help_text=("Namespace used in URNs schemas."),
+    ),
 )
 
 TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
     "TAKEN_DEFAULT_REMINDER_IN_DAYS",
     default=7,
-    help_text=(
-        "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
-        "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
+    documentation=DocumentationParams(
+        help_text=(
+            "The default number of days before the `einddatumHandelingsTermijn` to send a reminder for a task. "
+            "If ``0``, no reminders will be sent by default unless explicitly configured for a task."
+        ),
     ),
 )
