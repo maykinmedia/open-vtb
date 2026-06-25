@@ -7,6 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.constants import HandelingsPerspectiefEnum
 from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
@@ -58,9 +59,9 @@ class ExterneTaak(models.Model):
         _("handelings perspectief"),
         max_length=100,
         blank=True,
+        choices=HandelingsPerspectiefEnum.choices,
         help_text=_(
-            "De door de toegewezen persoon of bedrijf uit te voeren handeling. "
-            "Bijvoorbeeld: `lezen`, `naleveren`, `invullen`."
+            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
         ),
     )
     einddatum_handelings_termijn = models.DateField(

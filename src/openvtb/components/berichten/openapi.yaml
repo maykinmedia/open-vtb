@@ -202,7 +202,8 @@ components:
             de lokale overheid. De standaardwaarde is de huidige datum/tijd.
         referentie:
           type: string
-          description: Zenderreferentie / interne referentie.
+          description: Uw eigen optionele referentiegegevens, maximaal 25 tekens,
+            conform de requirements van Logius in haar technische aansluithandleiding.
           maxLength: 25
         ontvanger:
           type: string
@@ -232,10 +233,10 @@ components:
           description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
             of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 50
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date-time
@@ -286,6 +287,19 @@ components:
             worden - als de Berichtenbox het doelkanaal is.
       required:
       - informatieObject
+    BlankEnum:
+      enum:
+      - ''
+    HandelingsPerspectiefEnum:
+      enum:
+      - betalen
+      - incasso
+      - informatie_geven
+      - informatie_krijgen
+      - reactie_ontvangen
+      - vernieuwing_nodig
+      - uitnodiging_voor_afspraak
+      type: string
     IsGerelateerdAan:
       type: object
       properties:

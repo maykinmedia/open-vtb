@@ -142,7 +142,7 @@ class BerichtTests(APITestCase):
             "ontvanger": "urn:maykin:ontvanger:1234",
             "geopendOp": datetime.datetime.now(),
             "berichtType": "12345678",
-            "handelingsPerspectief": "test",
+            "handelingsPerspectief": "incasso",
             "mijnOverheidBerichtenbox": True,
             "einddatumHandelingsTermijn": datetime.datetime.now(),
             "isGerelateerdAan": [

@@ -12,7 +12,7 @@
         "ontvanger": "urn:nld:brp.bsn:111222333",
         "geopend_op": "2026-02-09T10:40:53Z",
         "bericht_type": "",
-        "handelings_perspectief": "",
+        "handelings_perspectief": "incasso",
         "einddatum_handelings_termijn": "2026-02-16T10:41:16Z",
         "mijn_overheid_berichtenbox": false,
         "is_gerelateerd_aan": []

@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from openvtb.components.constants import HandelingsPerspectiefEnum
 from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
@@ -52,7 +53,10 @@ class Bericht(models.Model):
         _("referentie"),
         max_length=25,
         blank=True,
-        help_text=_("Zenderreferentie / interne referentie."),
+        help_text=_(
+            "Uw eigen optionele referentiegegevens, maximaal 25 tekens, "
+            "conform de requirements van Logius in haar technische aansluithandleiding."
+        ),
     )
     ontvanger = URNField(
         _("ontvanger"),
@@ -83,9 +87,9 @@ class Bericht(models.Model):
         _("handelings perspectief"),
         max_length=50,
         blank=True,
+        choices=HandelingsPerspectiefEnum.choices,
         help_text=_(
-            "De door de toegewezen persoon of bedrijf uit te voeren handeling. "
-            "Bijvoorbeeld: `lezen`, `naleveren`, `invullen`."
+            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
         ),
     )
     einddatum_handelings_termijn = models.DateTimeField(
