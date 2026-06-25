@@ -56,6 +56,7 @@ class VerzoekTests(APITestCase):
                         "verzoekTaal": "nl",
                         "verwerkStatus": verzoek.verwerk_status,
                         "initiator": verzoek.initiator,
+                        "medeInitiator": verzoek.mede_initiator,
                         "verzoekBron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
@@ -104,6 +105,7 @@ class VerzoekTests(APITestCase):
                 "versie": 1,
                 "bijlagen": [],
                 "initiator": verzoek.initiator,
+                "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -154,6 +156,7 @@ class VerzoekTests(APITestCase):
                 "transactieReferentie": "string",
             },
             "initiator": "urn:nld:brp:bsn:111222333",
+            "medeInitiator": "urn:nld:brp:bsn:444555666",
             "isGerelateerdAan": [
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
@@ -179,6 +182,7 @@ class VerzoekTests(APITestCase):
                     }
                 ],
                 "initiator": verzoek.initiator,
+                "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -251,6 +255,7 @@ class VerzoekTests(APITestCase):
                     }
                 ],
                 "initiator": verzoek.initiator,
+                "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
                 "verzoekInformatieObject": verzoek.verzoek_informatie_object,
@@ -412,6 +417,7 @@ class VerzoekTests(APITestCase):
                 },
             ],
             "initiator": "urn:example:12345",
+            "medeInitiator": "urn:example:456789",
             "verzoekTaal": "en",
         }
         response = self.client.put(detail_url, data)
@@ -429,6 +435,7 @@ class VerzoekTests(APITestCase):
             "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
         )
         self.assertEqual(verzoek.initiator, "urn:example:12345")
+        self.assertEqual(verzoek.mede_initiator, "urn:example:456789")
         self.assertEqual(verzoek.verzoek_taal, "en")
 
     def test_update_with_bijlagen(self):
