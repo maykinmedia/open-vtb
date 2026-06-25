@@ -28,7 +28,7 @@ attrs==25.4.0
     #   referencing
 billiard==4.2.2
     # via celery
-bleach==6.3.0
+bleach==6.4.0
     # via open-api-framework
 boltons==25.0.0
     # via
@@ -69,13 +69,13 @@ commonground-api-common==2.12.0
     # via open-api-framework
 cron-descriptor==1.4.5
     # via django-celery-beat
-cryptography==47.0.0
+cryptography==49.0.0
     # via
     #   django-simple-certmanager
     #   mozilla-django-oidc
     #   pyopenssl
     #   webauthn
-django==5.2.14
+django==5.2.15
     # via
     #   commonground-api-common
     #   django-admin-index
@@ -417,12 +417,12 @@ pygments==2.20.0
     # via
     #   django-log-outgoing-requests
     #   rich
-pyjwt==2.12.1
+pyjwt==2.13.0
     # via
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
-pyopenssl==26.1.0
+pyopenssl==26.3.0
     # via webauthn
 pypng==0.20220715.0
     # via qrcode
@@ -507,7 +507,7 @@ structlog==25.5.0
     # via
     #   django-structlog
     #   open-api-framework
-tornado==6.5.5
+tornado==6.5.7
     # via flower
 typer==0.24.1
     # via maykin-common
@@ -553,7 +553,7 @@ urllib3==2.7.0
     #   types-requests
 uwsgi==2.0.31
     # via open-api-framework
-vcrpy==8.1.1
+vcrpy==8.2.1
     # via maykin-common
 vine==5.1.0
     # via
