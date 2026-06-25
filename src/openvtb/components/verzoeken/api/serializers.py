@@ -313,6 +313,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "versie",
             "bijlagen",
             "initiator",
+            "mede_initiator",
             "is_gerelateerd_aan",
             "kanaal",
             "verzoek_taal",

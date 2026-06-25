@@ -309,6 +309,17 @@ class Verzoek(models.Model):
         ),
         blank=True,
     )
+    mede_initiator = URNField(
+        _("mede initiator"),
+        help_text=_(
+            "Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. "
+            "Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. "
+            "Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, "
+            "`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of "
+            "`urn:nld:klant:klantnummer:610541501`"
+        ),
+        blank=True,
+    )
     is_gerelateerd_aan = models.JSONField(
         _("is gerelateerd aan"),
         default=list,

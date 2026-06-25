@@ -97,6 +97,7 @@ class VerzoekFactory(DjangoModelFactory):
     verzoek_type = factory.SubFactory(VerzoekTypeFactory)
     aanvraag_gegevens = factory.SubFactory(DataFactory)
     initiator = factory.LazyFunction(get_random_urn)
+    mede_initiator = factory.LazyFunction(get_random_urn)
     versie = 1
 
     class Meta:
