@@ -202,7 +202,8 @@ components:
             de lokale overheid. De standaardwaarde is de huidige datum/tijd.
         referentie:
           type: string
-          description: Zenderreferentie / interne referentie.
+          description: Uw eigen optionele referentiegegevens, maximaal 25 tekens,
+            conform de requirements van Logius in haar technische aansluithandleiding.
           maxLength: 25
         ontvanger:
           type: string

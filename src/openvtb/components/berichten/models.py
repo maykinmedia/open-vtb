@@ -52,7 +52,10 @@ class Bericht(models.Model):
         _("referentie"),
         max_length=25,
         blank=True,
-        help_text=_("Zenderreferentie / interne referentie."),
+        help_text=_(
+            "Uw eigen optionele referentiegegevens, maximaal 25 tekens, "
+            "conform de requirements van Logius in haar technische aansluithandleiding."
+        ),
     )
     ontvanger = URNField(
         _("ontvanger"),
