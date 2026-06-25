@@ -6,6 +6,7 @@ from vng_api_common.pagination import DynamicPageSizePagination
 
 from ..constants import SoortTaak
 from ..models import ExterneTaak
+from .filters import ExterneTaakFilter
 from .serializers import (
     BetaalTaakSerializer,
     ExterneTaakPolymorphicSerializer,
@@ -49,6 +50,7 @@ class ExterneTaakViewSet(TaakCloudEventsMixin, viewsets.ModelViewSet):
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    filterset_class = ExterneTaakFilter
 
 
 @extend_schema_view(
@@ -140,6 +142,7 @@ class BetaalTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelView
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.BETAALTAAK
+    filterset_class = ExterneTaakFilter
 
 
 @extend_schema_view(
@@ -231,6 +234,7 @@ class URLTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelViewSet
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.URLTAAK
+    filterset_class = ExterneTaakFilter
 
 
 @extend_schema_view(
@@ -322,3 +326,4 @@ class FormulierTaakViewSet(TaakCloudEventsMixin, SoortTaakMixin, viewsets.ModelV
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
     taak_soort = SoortTaak.FORMULIERTAAK
+    filterset_class = ExterneTaakFilter

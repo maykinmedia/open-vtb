@@ -39,6 +39,104 @@ paths:
       description: Vraag alle betaal taken aan.
       summary: Vraag alle betaal taken aan.
       parameters:
+      - in: query
+        name: datumHerinnering
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: einddatumHandelingsTermijn
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: handelingsPerspectief
+        schema:
+          type: string
+          enum:
+          - betalen
+          - incasso
+          - informatie_geven
+          - informatie_krijgen
+          - reactie_ontvangen
+          - uitnodiging_voor_afspraak
+          - vernieuwing_nodig
+        description: |+
+          De door de toegewezen persoon of bedrijf uit te voeren handeling.
+
+      - in: query
+        name: isToegewezenAan
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - name: page
         required: false
         in: query
@@ -52,6 +150,62 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - afgebroken
+          - niet_uitgevoerd
+          - open
+          - uitgevoerd
+          - verwerkt
+        description: |+
+          Status van de taak.
+
+      - in: query
+        name: titel
+        schema:
+          type: string
+        description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+          gezien kan worden in bijvoorbeeld een portaal.
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
+          zijn eigen administratie.
       tags:
       - betaaltaken
       security:
@@ -236,6 +390,104 @@ paths:
       description: Vraag alle externe taken aan.
       summary: Vraag alle externe taken aan.
       parameters:
+      - in: query
+        name: datumHerinnering
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: einddatumHandelingsTermijn
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: handelingsPerspectief
+        schema:
+          type: string
+          enum:
+          - betalen
+          - incasso
+          - informatie_geven
+          - informatie_krijgen
+          - reactie_ontvangen
+          - uitnodiging_voor_afspraak
+          - vernieuwing_nodig
+        description: |+
+          De door de toegewezen persoon of bedrijf uit te voeren handeling.
+
+      - in: query
+        name: isToegewezenAan
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - name: page
         required: false
         in: query
@@ -249,6 +501,62 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - afgebroken
+          - niet_uitgevoerd
+          - open
+          - uitgevoerd
+          - verwerkt
+        description: |+
+          Status van de taak.
+
+      - in: query
+        name: titel
+        schema:
+          type: string
+        description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+          gezien kan worden in bijvoorbeeld een portaal.
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
+          zijn eigen administratie.
       tags:
       - externetaken
       security:
@@ -431,6 +739,104 @@ paths:
       description: Vraag alle formulier taken aan.
       summary: Vraag alle formulier taken aan.
       parameters:
+      - in: query
+        name: datumHerinnering
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: einddatumHandelingsTermijn
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: handelingsPerspectief
+        schema:
+          type: string
+          enum:
+          - betalen
+          - incasso
+          - informatie_geven
+          - informatie_krijgen
+          - reactie_ontvangen
+          - uitnodiging_voor_afspraak
+          - vernieuwing_nodig
+        description: |+
+          De door de toegewezen persoon of bedrijf uit te voeren handeling.
+
+      - in: query
+        name: isToegewezenAan
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - name: page
         required: false
         in: query
@@ -444,6 +850,62 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - afgebroken
+          - niet_uitgevoerd
+          - open
+          - uitgevoerd
+          - verwerkt
+        description: |+
+          Status van de taak.
+
+      - in: query
+        name: titel
+        schema:
+          type: string
+        description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+          gezien kan worden in bijvoorbeeld een portaal.
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
+          zijn eigen administratie.
       tags:
       - formuliertaken
       security:
@@ -628,6 +1090,104 @@ paths:
       description: Vraag alle url taken aan.
       summary: Vraag alle url taken aan.
       parameters:
+      - in: query
+        name: datumHerinnering
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__gte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lt
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: datumHerinnering__lte
+        schema:
+          type: string
+          format: date
+        description: Stuurt een systeem-notificatie op deze datum op het systeem-ingestelde
+          tijdstip. Indien deze waarde niet expliciet wordt meegegeven, dan wordt
+          deze waarde automatisch ingesteld op een systeem-ingesteld aantal dagen
+          voor de 'einddatumHandelingsTermijn'.
+      - in: query
+        name: einddatumHandelingsTermijn
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__gte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lt
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: einddatumHandelingsTermijn__lte
+        schema:
+          type: string
+          format: date
+        description: Einddatum handelings termijn.
+      - in: query
+        name: handelingsPerspectief
+        schema:
+          type: string
+          enum:
+          - betalen
+          - incasso
+          - informatie_geven
+          - informatie_krijgen
+          - reactie_ontvangen
+          - uitnodiging_voor_afspraak
+          - vernieuwing_nodig
+        description: |+
+          De door de toegewezen persoon of bedrijf uit te voeren handeling.
+
+      - in: query
+        name: isToegewezenAan
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - name: page
         required: false
         in: query
@@ -641,6 +1201,62 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lt
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: Startdatum van de taak.
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - afgebroken
+          - niet_uitgevoerd
+          - open
+          - uitgevoerd
+          - verwerkt
+        description: |+
+          Status van de taak.
+
+      - in: query
+        name: titel
+        schema:
+          type: string
+        description: Titel van de uit te voeren taak, zoals die door eindgebruikers
+          gezien kan worden in bijvoorbeeld een portaal.
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
+          zijn eigen administratie.
       tags:
       - urltaken
       security:
