@@ -36,7 +36,7 @@ class ExterneTaakAdminTests(WebTest):
         form["titel"] = "test"
         form["status"] = StatusTaak.OPEN
         form["startdatum"] = timezone.now().date()
-        form["handelings_perspectief"] = "test"
+        form["handelings_perspectief"] = "incasso"
         form["einddatum_handelings_termijn"] = timezone.now().date()
         form["toelichting"] = "TEST TEST"
         form["taak_soort"] = SoortTaak.BETAALTAAK
@@ -95,7 +95,7 @@ class ExterneTaakAdminTests(WebTest):
         self.assertEqual(ExterneTaak.objects.count(), 1)
         self.assertEqual(ExterneTaak.objects.get().details, details)
 
-    def test_create_verzoek_invalid_is_gerelateerd_aan_field(self):
+    def test_create_taak_invalid_is_gerelateerd_aan_field(self):
         self.assertEqual(ExterneTaak.objects.count(), 0)
 
         response = self.app.get(self.url)
@@ -104,7 +104,7 @@ class ExterneTaakAdminTests(WebTest):
         form["titel"] = "test"
         form["status"] = StatusTaak.OPEN
         form["startdatum"] = timezone.now().date()
-        form["handelings_perspectief"] = "test"
+        form["handelings_perspectief"] = "incasso"
         form["einddatum_handelings_termijn"] = timezone.now().date()
         form["toelichting"] = "TEST TEST"
         form["taak_soort"] = SoortTaak.BETAALTAAK

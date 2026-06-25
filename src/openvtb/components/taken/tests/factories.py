@@ -2,6 +2,8 @@ import datetime
 
 import factory
 
+from openvtb.components.constants import HandelingsPerspectiefEnum
+
 from ..constants import SoortTaak
 from ..models import ExterneTaak
 
@@ -52,7 +54,7 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
         model = ExterneTaak
 
     titel = factory.Faker("sentence")
-    handelings_perspectief = "lezen"
+    handelings_perspectief = HandelingsPerspectiefEnum.BETALEN
     einddatum_handelings_termijn = factory.LazyFunction(
         lambda: datetime.date.today() + datetime.timedelta(days=7)
     )

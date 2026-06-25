@@ -20,7 +20,7 @@ class BerichtFactory(DjangoModelFactory):
 
     ontvanger = factory.LazyFunction(get_random_urn)
     geopend_op = timezone.now()
-    onderwerp = factory.Faker("sentence", nb_words=4)
+    onderwerp = factory.Faker("word")
     referentie = factory.Faker("word")
     bericht_tekst = factory.Faker("sentence")
     mijn_overheid_berichtenbox = True

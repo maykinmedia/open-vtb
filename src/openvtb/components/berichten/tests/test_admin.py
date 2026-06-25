@@ -41,7 +41,7 @@ class BerichtenAdminTests(WebTest):
         form["geopend_op_1"] = timezone.now().time()
         form["referentie"] = "12345678"
         form["bericht_type"] = "12345678"
-        form["handelings_perspectief"] = "Test"
+        form["handelings_perspectief"] = "incasso"
         form["einddatum_handelings_termijn_0"] = timezone.now().date()
         form["einddatum_handelings_termijn_1"] = timezone.now().time()
         form["is_gerelateerd_aan"] = json.dumps(
@@ -64,7 +64,7 @@ class BerichtenAdminTests(WebTest):
         form["geopend_op_1"] = timezone.now().time()
         form["referentie"] = "12345678"
         form["bericht_type"] = "12345678"
-        form["handelings_perspectief"] = "Test"
+        form["handelings_perspectief"] = "incasso"
         form["einddatum_handelings_termijn_0"] = timezone.now().date()
         form["einddatum_handelings_termijn_1"] = timezone.now().time()
 

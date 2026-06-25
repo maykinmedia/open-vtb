@@ -864,10 +864,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -989,10 +989,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1079,10 +1079,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1174,10 +1174,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1269,10 +1269,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1364,10 +1364,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1459,10 +1459,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1549,10 +1549,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1595,6 +1595,9 @@ components:
       - url
       - urn
       - uuid
+    BlankEnum:
+      enum:
+      - ''
     Doelrekening:
       type: object
       properties:
@@ -1695,10 +1698,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1785,10 +1788,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1880,10 +1883,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -1975,10 +1978,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2070,10 +2073,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2165,10 +2168,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2255,10 +2258,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2301,6 +2304,16 @@ components:
       - url
       - urn
       - uuid
+    HandelingsPerspectiefEnum:
+      enum:
+      - betalen
+      - incasso
+      - informatie_geven
+      - informatie_krijgen
+      - reactie_ontvangen
+      - vernieuwing_nodig
+      - uitnodiging_voor_afspraak
+      type: string
     IsGerelateerdAan:
       type: object
       properties:
@@ -2453,10 +2466,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2547,10 +2560,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2630,10 +2643,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2744,10 +2757,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2834,10 +2847,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -2929,10 +2942,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -3024,10 +3037,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -3119,10 +3132,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -3214,10 +3227,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
@@ -3304,10 +3317,10 @@ components:
           title: Start datum
           description: Startdatum van de taak.
         handelingsPerspectief:
-          type: string
-          description: 'De door de toegewezen persoon of bedrijf uit te voeren handeling.
-            Bijvoorbeeld: `lezen`, `naleveren`, `invullen`.'
-          maxLength: 100
+          description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
+          oneOf:
+          - $ref: '#/components/schemas/HandelingsPerspectiefEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         einddatumHandelingsTermijn:
           type: string
           format: date
