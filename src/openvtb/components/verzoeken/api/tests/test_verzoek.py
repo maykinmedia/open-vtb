@@ -467,6 +467,18 @@ class VerzoekTests(APITestCase):
         verzoek.refresh_from_db()
         self.assertEqual(verzoek.bijlagen.count(), 3)
 
+        data = {"bijlagen": [{}]}  # informatieObject require
+        response = self.client.patch(detail_url, data)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(
+            get_validation_errors(response, "bijlagen"),
+            {
+                "name": "bijlagen",
+                "code": "required",
+                "reason": "Bijlage must have a informatieObject.",
+            },
+        )
+
     def test_invalid_update_required(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
         verzoek = VerzoekFactory.create(create_details=True, verzoek_type=verzoektype)

@@ -1,4 +1,4 @@
-import uuid as _uuid
+import uuid
 from datetime import date, timedelta
 
 from django.conf import settings
@@ -20,7 +20,7 @@ from .schemas import FORMULIER_DEFINITIE_SCHEMA, SOORTTAAK_SCHEMA_MAPPING
 class ExterneTaak(models.Model):
     uuid = models.UUIDField(
         unique=True,
-        default=_uuid.uuid4,
+        default=uuid.uuid4,
         help_text=(
             "Een UUID waarmee een ZAC een link kan leggen tussen "
             "de taak en zijn eigen administratie."

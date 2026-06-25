@@ -83,6 +83,9 @@ class ExterneTaakFactory(factory.django.DjangoModelFactory):
                 "ontvangenGegevens": {
                     "key": "value",
                 },
+                "ontvangenBijlagen": [
+                    {"informatieObject": "urn:maykin:123456"},
+                ],
             },
         )
         formuliertaak = factory.Trait(

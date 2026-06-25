@@ -71,6 +71,9 @@ class BetaalTaakSerializer(serializers.Serializer):
         ),
     )
 
+    class Meta:
+        model = None
+
     def validate_doelrekening(self, value):
         if not value:
             raise serializers.ValidationError(
@@ -91,6 +94,16 @@ class BetaalTaakSerializer(serializers.Serializer):
         return value
 
 
+class BijlageSerializer(CamelToUnderscoreMixin, serializers.Serializer):
+    informatie_object = URNField(
+        required=True,
+        help_text=_(
+            "URN naar het ENKELVOUDIGINFORMATIEOBJECT. "
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+        ),
+    )
+
+
 class URLTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     uitvraag_link = serializers.URLField(
         required=True,
@@ -107,6 +120,14 @@ class URLTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
         default=dict,
         help_text=_("Ontvangen gegevens als key-value object."),
     )
+    ontvangen_bijlagen = serializers.ListSerializer(
+        child=BijlageSerializer(),
+        required=False,
+        help_text=_("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
+    )
+
+    class Meta:
+        model = None
 
 
 class FormulierTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
@@ -136,6 +157,9 @@ class FormulierTaakSerializer(CamelToUnderscoreMixin, serializers.Serializer):
     validators = [
         FormulierDefinitieValidator(),
     ]
+
+    class Meta:
+        model = None
 
 
 class ExterneTaakPolymorphicSerializer(URNModelSerializer, PolymorphicSerializer):

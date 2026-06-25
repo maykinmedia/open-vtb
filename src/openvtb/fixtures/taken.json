@@ -10,7 +10,9 @@
         "startdatum": "2026-02-09",
         "handelings_perspectief": "incasso",
         "einddatum_handelings_termijn": "2026-02-16",
+        "is_handelings_termijn_verzonden": false,
         "datum_herinnering": "2026-02-09",
+        "is_herinnering_verzonden": false,
         "toelichting": "",
         "taak_soort": "betaaltaak",
         "details": {
@@ -42,11 +44,18 @@
         "startdatum": "2026-02-09",
         "handelings_perspectief": "incasso",
         "einddatum_handelings_termijn": "2026-02-16",
+        "is_handelings_termijn_verzonden": false,
         "datum_herinnering": "2026-02-09",
+        "is_herinnering_verzonden": false,
         "toelichting": "",
         "taak_soort": "urltaak",
         "details": {
             "uitvraagLink": "http://example.com/",
+            "ontvangenBijlagen": [
+                {
+                    "informatieObject": "urn:maykin:123456"
+                }
+            ],
             "ontvangenGegevens": {
                 "key": "value"
             },
@@ -73,7 +82,9 @@
         "startdatum": "2026-02-09",
         "handelings_perspectief": "incasso",
         "einddatum_handelings_termijn": "2026-02-16",
+        "is_handelings_termijn_verzonden": false,
         "datum_herinnering": "2026-02-09",
+        "is_herinnering_verzonden": false,
         "toelichting": "",
         "taak_soort": "formuliertaak",
         "details": {

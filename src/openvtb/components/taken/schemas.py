@@ -92,6 +92,22 @@ URL_SCHEMA = {
             "keys": {},
             "additionalProperties": True,
         },
+        "ontvangenBijlagen": {
+            "type": "array",
+            "title": "ontvangenBijlagen",
+            "description": _("Lijst met bijlagen die aan deze bron zijn gekoppeld."),
+            "items": {
+                "type": "object",
+                "properties": {
+                    "informatieObject": {
+                        "type": "string",
+                        "pattern": "^urn:.*$",
+                    },
+                },
+                "required": ["informatieObject"],
+                "additionalProperties": False,
+            },
+        },
     },
     "required": [
         "uitvraagLink",

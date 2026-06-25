@@ -352,7 +352,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         for obj in value:
             if not obj.get("informatie_object"):
                 raise serializers.ValidationError(
-                    _("bijlage must have a informatieObject."),
+                    _("Bijlage must have a informatieObject."),
                     code="required",
                 )
         return value

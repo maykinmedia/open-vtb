@@ -21,7 +21,6 @@ class URLTaakTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()["results"]), 0)
         self.assertFalse(ExterneTaak.objects.exists())
-
         # create 1 urltaak
         ExterneTaakFactory.create(urltaak=True)
 
@@ -60,6 +59,7 @@ class URLTaakTests(APITestCase):
                                 "voorinvullenGegevens"
                             ],
                             "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                            "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                         },
                     },
                 ],
@@ -110,6 +110,7 @@ class URLTaakTests(APITestCase):
                     "uitvraagLink": urltaak.details["uitvraagLink"],
                     "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
                     "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                    "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                 },
             },
         )
@@ -151,6 +152,11 @@ class URLTaakTests(APITestCase):
                         "key_snake_case": ["value_3"],
                     },
                 },
+                "ontvangenBijlagen": [
+                    {"informatieObject": "urn:maykin:123456"},
+                    {"informatieObject": "urn:maykin:444555"},
+                    {"informatieObject": "urn:maykin:666777"},
+                ],
             },
             "isToegewezenAan": "urn:example:12345",
             "isGerelateerdAan": [
@@ -183,6 +189,7 @@ class URLTaakTests(APITestCase):
                     "uitvraagLink": urltaak.details["uitvraagLink"],
                     "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
                     "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                    "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                 },
             },
         )
@@ -248,6 +255,9 @@ class URLTaakTests(APITestCase):
                         "key_snake_case": ["value_3"],
                     },
                 },
+                "ontvangenBijlagen": [
+                    {"informatieObject": "urn:maykin:123456"},
+                ],
             },
         }
         response = self.client.post(self.list_url, data)
@@ -275,6 +285,7 @@ class URLTaakTests(APITestCase):
                     "uitvraagLink": urltaak.details["uitvraagLink"],
                     "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
                     "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                    "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                 },
             },
         )
@@ -365,6 +376,7 @@ class URLTaakTests(APITestCase):
                     "uitvraagLink": urltaak.details["uitvraagLink"],
                     "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
                     "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                    "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                 },
             },
         )
@@ -441,6 +453,36 @@ class URLTaakTests(APITestCase):
             [{"urn": "urn:nld:test1:12345"}, {"urn": "urn:nld:test2:67890"}],
         )
 
+        # update ontvangenBijlagen
+        self.assertEqual(
+            urltaak.details["ontvangenBijlagen"],
+            [{"informatieObject": "urn:maykin:123456"}],  # initial status
+        )
+        response = self.client.patch(
+            detail_url,
+            {
+                "details": {
+                    "ontvangenBijlagen": [{"informatieObject": "urn:maykin:555666"}]
+                },
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(
+            urltaak.details["ontvangenBijlagen"],
+            [{"informatieObject": "urn:maykin:555666"}],  # new value
+        )
+
+        response = self.client.patch(
+            detail_url,
+            {
+                "details": {"ontvangenBijlagen": []}  # set empty
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        urltaak = ExterneTaak.objects.get()
+        self.assertEqual(urltaak.details["ontvangenBijlagen"], [])
+
     def test_valid_update(self):
         urltaak = ExterneTaakFactory.create(urltaak=True)
 
@@ -483,6 +525,7 @@ class URLTaakTests(APITestCase):
                     "uitvraagLink": urltaak.details["uitvraagLink"],
                     "voorinvullenGegevens": urltaak.details["voorinvullenGegevens"],
                     "ontvangenGegevens": urltaak.details["ontvangenGegevens"],
+                    "ontvangenBijlagen": urltaak.details["ontvangenBijlagen"],
                 },
             },
         )
@@ -505,7 +548,7 @@ class URLTaakTests(APITestCase):
         self.assertFalse(ExterneTaak.objects.exists())
 
 
-class urltaakValidationTests(APITestCase):
+class URLTaakValidationTests(APITestCase):
     list_url = reverse("taken:urltaak-list")
 
     def test_invalid_create_pass_soort_taak(self):
@@ -653,5 +696,25 @@ class urltaakValidationTests(APITestCase):
                 "name": "taakSoort",
                 "code": "invalid",
                 "reason": "Dit veld wordt automatisch ingevuld; het kan niet worden geselecteerd.",
+            },
+        )
+        # ontvangenBijlagen.informatieObject required
+        response = self.client.patch(
+            detail_url,
+            {
+                "details": {
+                    "ontvangenBijlagen": [{"test": "urn:maykin:555666"}]
+                },  # wrong key
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
+        self.assertEqual(
+            get_validation_errors(response, "details.ontvangenBijlagen.0"),
+            {
+                "name": "details.ontvangenBijlagen.0",
+                "code": "invalid",
+                "reason": "'informatieObject' is a required property",
             },
         )
