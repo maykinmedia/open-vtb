@@ -9,6 +9,7 @@ from vng_api_common.pagination import DynamicPageSizePagination
 from openvtb.components.verzoeken.constants import VerzoekTypeVersionStatus
 
 from ..models import Verzoek, VerzoekType, VerzoekTypeVersion
+from .filters import VerzoekTypeFilter
 from .serializers import (
     VerzoekSerializer,
     VerzoekTypeSerializer,
@@ -51,6 +52,14 @@ class VerzoekViewSet(viewsets.ModelViewSet):
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    filterset_fields = [
+        "uuid",
+        "verzoek_type__uuid",
+        "initiator",
+        "mede_initiator",
+        "versie",
+        "verwerk_status",
+    ]
 
 
 @extend_schema_view(
@@ -85,6 +94,7 @@ class VerzoekTypeViewSet(viewsets.ModelViewSet):
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    filterset_class = VerzoekTypeFilter
 
 
 @extend_schema_view(
