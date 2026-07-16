@@ -39,6 +39,22 @@ paths:
       description: Vraag alle verzoeken aan.
       summary: Vraag alle verzoeken aan.
       parameters:
+      - in: query
+        name: initiator
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+      - in: query
+        name: medeInitiator
+        schema:
+          type: string
+        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
+          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
+          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
+          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - name: page
         required: false
         in: query
@@ -52,6 +68,34 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Unieke identificatiecode (UUID4) voor het Verzoek.
+      - in: query
+        name: versie
+        schema:
+          type: integer
+        description: Indien geen waarde is opgegeven wordt de laatste versie van het
+          VERZOEKTYPE gebruikt.
+      - in: query
+        name: verwerkStatus
+        schema:
+          type: string
+          enum:
+          - geregistreerd
+          - verwerkt
+        description: |+
+          De initiële status is altijd `geregistreerd`. De status `verwerkt` moet gezet worden door het component dat verantwoordelijk is voor de afhandeling danwel opvolging.
+
+      - in: query
+        name: verzoekType__uuid
+        schema:
+          type: string
+          format: uuid
+        description: Unieke identificatiecode (UUID4) voor het VerzoekType
       tags:
       - verzoeken
       security:
@@ -232,6 +276,17 @@ paths:
       description: Vraag alle verzoektypen aan.
       summary: Vraag alle verzoektypen aan.
       parameters:
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam voor het VerzoekType
+      - in: query
+        name: omschrijving__icontains
+        schema:
+          type: string
+        description: Interne omschrijving van het type verzoek. Bijvoorbeeld om de
+          relatie naar het zaaktype te schetsen.
       - name: page
         required: false
         in: query
@@ -245,6 +300,12 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Unieke identificatiecode (UUID4) voor het VerzoekType
       tags:
       - verzoektypen
       security:
