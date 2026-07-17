@@ -34,6 +34,24 @@ paths:
       description: Vraag alle berichten aan.
       summary: Vraag alle berichten aan.
       parameters:
+      - in: query
+        name: geopendOp__isnull
+        schema:
+          type: boolean
+        description: Filter op berichten die wel/niet geopend zijn. ``true`` = nog
+          niet geopend, ``false`` = wel geopend.
+      - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
+        name: ontvanger
+        schema:
+          type: string
+        description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld:
+          `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`'
       - name: page
         required: false
         in: query
@@ -47,6 +65,46 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: publicatiedatum
+        schema:
+          type: string
+          format: date-time
+        description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+          Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de
+          lokale overheid. De standaardwaarde is de huidige datum/tijd.
+      - in: query
+        name: publicatiedatum__gt
+        schema:
+          type: string
+          format: date-time
+        description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+          Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de
+          lokale overheid. De standaardwaarde is de huidige datum/tijd.
+      - in: query
+        name: publicatiedatum__gte
+        schema:
+          type: string
+          format: date-time
+        description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+          Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de
+          lokale overheid. De standaardwaarde is de huidige datum/tijd.
+      - in: query
+        name: publicatiedatum__lt
+        schema:
+          type: string
+          format: date-time
+        description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+          Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de
+          lokale overheid. De standaardwaarde is de huidige datum/tijd.
+      - in: query
+        name: publicatiedatum__lte
+        schema:
+          type: string
+          format: date-time
+        description: Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger.
+          Dit geldt voor zowel de Mijn Overheid berichtenbox als het portaal van de
+          lokale overheid. De standaardwaarde is de huidige datum/tijd.
       tags:
       - berichten
       security:
@@ -230,8 +288,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IsGerelateerdAan'
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
-            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
+          description: Lijst met URN’s naar de ZAAK of het PRODUCT.
         handelingsPerspectief:
           description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
           oneOf:
@@ -307,7 +364,8 @@ components:
           type: string
           format: urn
           example: urn:namespace:component:resource:uuid
-          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`'
+          description: 'URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`
+            of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`.'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
       required:
       - urn

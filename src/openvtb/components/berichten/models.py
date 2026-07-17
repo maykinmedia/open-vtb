@@ -110,11 +110,7 @@ class Bericht(models.Model):
         default=list,
         blank=True,
         null=True,
-        help_text=_(
-            "URN naar de ZAAK of het PRODUCT. "
-            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165` "
-            "of `urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
-        ),
+        help_text=_("Lijst met URN’s naar de ZAAK of het PRODUCT."),
         encoder=DjangoJSONEncoder,
     )
 
