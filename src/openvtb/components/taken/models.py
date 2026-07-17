@@ -35,7 +35,7 @@ class ExterneTaak(models.Model):
         ),
     )
     verwerker_taak_id = models.CharField(
-        _("titel"),
+        _("verwerker taak id"),
         max_length=36,
         blank=True,
         help_text=_(
