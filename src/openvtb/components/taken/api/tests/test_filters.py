@@ -4,7 +4,7 @@ from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.constants import HandelingsPerspectiefEnum
-from openvtb.components.taken.constants import StatusTaak
+from openvtb.components.taken.constants import SoortTaak, StatusTaak
 from openvtb.components.taken.tests.factories import ExterneTaakFactory
 from openvtb.utils.api_testcase import APITestCase
 
@@ -14,32 +14,47 @@ class ExterneTaakFilterTest(APITestCase):
 
     def setUp(self):
         super().setUp()
+
+        self.urn_zaak = "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+        self.urn_product = (
+            "urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        )
+
         self.taak_a = ExterneTaakFactory.create(
             titel="externetaak A",
+            verwerker_taak_id="externetaak ID 1111",
             status=StatusTaak.OPEN,
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             is_toegewezen_aan="urn:maykin:123",
             startdatum=date(2026, 1, 10),
             einddatum_handelings_termijn=date(2026, 3, 31),
             datum_herinnering=date(2026, 2, 15),
+            betaaltaak=True,
+            is_gerelateerd_aan=[{"urn": self.urn_zaak}],
         )
         self.taak_b = ExterneTaakFactory.create(
             titel="externetaak B",
+            verwerker_taak_id="externetaak ID 2222",
             status=StatusTaak.UITGEVOERD,
             handelings_perspectief=HandelingsPerspectiefEnum.INCASSO,
             is_toegewezen_aan="urn:maykin:456",
             startdatum=date(2026, 4, 1),
             einddatum_handelings_termijn=date(2026, 6, 30),
             datum_herinnering=date(2026, 5, 1),
+            urltaak=True,
+            is_gerelateerd_aan=[{"urn": self.urn_product}],
         )
         self.taak_c = ExterneTaakFactory.create(
             titel="externetaak C",
+            verwerker_taak_id="externetaak ID 3333",
             status=StatusTaak.VERWERKT,
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             is_toegewezen_aan="urn:maykin:789",
             startdatum=date(2026, 7, 1),
             einddatum_handelings_termijn=date(2026, 9, 30),
             datum_herinnering=date(2026, 8, 1),
+            formuliertaak=True,
+            is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
         )
 
     def test_filter_uuid(self):
@@ -55,6 +70,15 @@ class ExterneTaakFilterTest(APITestCase):
         data = response.json()
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["uuid"], str(self.taak_a.uuid))
+
+    def test_filter_verwerker_taak_id(self):
+        response = self.client.get(
+            self.list_url, {"verwerkerTaakId": "externetaak ID 2222"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["uuid"], str(self.taak_b.uuid))
 
     def test_filter_status(self):
         with self.subTest("OPEN"):
@@ -333,3 +357,74 @@ class ExterneTaakFilterTest(APITestCase):
             self.assertEqual(
                 result_uuids, {str(self.taak_a.uuid), str(self.taak_b.uuid)}
             )
+
+    def test_filter_taak_soort(self):
+        with self.subTest("betaaltaak"):
+            response = self.client.get(
+                self.list_url, {"taakSoort": SoortTaak.BETAALTAAK}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 1)
+            self.assertEqual(data["results"][0]["uuid"], str(self.taak_a.uuid))
+
+        with self.subTest("urltaak"):
+            response = self.client.get(self.list_url, {"taakSoort": SoortTaak.URLTAAK})
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 1)
+            self.assertEqual(data["results"][0]["uuid"], str(self.taak_b.uuid))
+
+        with self.subTest("formuliertaak"):
+            response = self.client.get(
+                self.list_url, {"taakSoort": SoortTaak.FORMULIERTAAK}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 1)
+            self.assertEqual(data["results"][0]["uuid"], str(self.taak_c.uuid))
+
+        with self.subTest("invalid choice"):
+            response = self.client.get(self.list_url, {"taakSoort": "test"})
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                get_validation_errors(response, "taakSoort"),
+                {
+                    "name": "taakSoort",
+                    "code": "invalid_choice",
+                    "reason": "Selecteer een geldige keuze. test is geen beschikbare keuze.",
+                },
+            )
+
+    def test_filter_is_gerelateerd_aan(self):
+        with self.subTest("zaak"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": self.urn_zaak}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(uuids, {str(self.taak_a.uuid), str(self.taak_c.uuid)})
+
+        with self.subTest("product"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": self.urn_product}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(uuids, {str(self.taak_b.uuid), str(self.taak_c.uuid)})
+
+        with self.subTest("no match"):
+            response = self.client.get(
+                self.list_url,
+                {
+                    "isGerelateerdAan": "urn:nld:gemeenteutrecht:zaak:zaaknummer:999999999"
+                },
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)

@@ -130,6 +130,12 @@ paths:
           De door de toegewezen persoon of bedrijf uit te voeren handeling.
 
       - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
         name: isToegewezenAan
         schema:
           type: string
@@ -194,6 +200,17 @@ paths:
           Status van de taak.
 
       - in: query
+        name: taakSoort
+        schema:
+          type: string
+          enum:
+          - betaaltaak
+          - formuliertaak
+          - urltaak
+        description: |+
+          Het soort taak.
+
+      - in: query
         name: titel
         schema:
           type: string
@@ -206,6 +223,12 @@ paths:
           format: uuid
         description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
           zijn eigen administratie.
+      - in: query
+        name: verwerkerTaakId
+        schema:
+          type: string
+        description: De identifier waarmee een taak door een verwerkende component
+          wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
       tags:
       - betaaltaken
       security:
@@ -481,6 +504,12 @@ paths:
           De door de toegewezen persoon of bedrijf uit te voeren handeling.
 
       - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
         name: isToegewezenAan
         schema:
           type: string
@@ -545,6 +574,17 @@ paths:
           Status van de taak.
 
       - in: query
+        name: taakSoort
+        schema:
+          type: string
+          enum:
+          - betaaltaak
+          - formuliertaak
+          - urltaak
+        description: |+
+          Het soort taak.
+
+      - in: query
         name: titel
         schema:
           type: string
@@ -557,6 +597,12 @@ paths:
           format: uuid
         description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
           zijn eigen administratie.
+      - in: query
+        name: verwerkerTaakId
+        schema:
+          type: string
+        description: De identifier waarmee een taak door een verwerkende component
+          wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
       tags:
       - externetaken
       security:
@@ -830,6 +876,12 @@ paths:
           De door de toegewezen persoon of bedrijf uit te voeren handeling.
 
       - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
         name: isToegewezenAan
         schema:
           type: string
@@ -894,6 +946,17 @@ paths:
           Status van de taak.
 
       - in: query
+        name: taakSoort
+        schema:
+          type: string
+          enum:
+          - betaaltaak
+          - formuliertaak
+          - urltaak
+        description: |+
+          Het soort taak.
+
+      - in: query
         name: titel
         schema:
           type: string
@@ -906,6 +969,12 @@ paths:
           format: uuid
         description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
           zijn eigen administratie.
+      - in: query
+        name: verwerkerTaakId
+        schema:
+          type: string
+        description: De identifier waarmee een taak door een verwerkende component
+          wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
       tags:
       - formuliertaken
       security:
@@ -1181,6 +1250,12 @@ paths:
           De door de toegewezen persoon of bedrijf uit te voeren handeling.
 
       - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
         name: isToegewezenAan
         schema:
           type: string
@@ -1245,6 +1320,17 @@ paths:
           Status van de taak.
 
       - in: query
+        name: taakSoort
+        schema:
+          type: string
+          enum:
+          - betaaltaak
+          - formuliertaak
+          - urltaak
+        description: |+
+          Het soort taak.
+
+      - in: query
         name: titel
         schema:
           type: string
@@ -1257,6 +1343,12 @@ paths:
           format: uuid
         description: Een UUID waarmee een ZAC een link kan leggen tussen de taak en
           zijn eigen administratie.
+      - in: query
+        name: verwerkerTaakId
+        schema:
+          type: string
+        description: De identifier waarmee een taak door een verwerkende component
+          wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
       tags:
       - urltaken
       security:
@@ -1466,7 +1558,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -1591,7 +1682,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -1681,7 +1771,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -1776,7 +1865,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -1871,7 +1959,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -1966,7 +2053,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2061,7 +2147,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2151,7 +2236,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2311,7 +2395,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2401,7 +2484,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2496,7 +2578,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2591,7 +2672,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2686,7 +2766,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2781,7 +2860,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -2871,7 +2949,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3079,7 +3156,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3173,7 +3249,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3256,7 +3331,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3375,7 +3449,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3465,7 +3538,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3560,7 +3632,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3655,7 +3726,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3750,7 +3820,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3845,7 +3914,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
@@ -3935,7 +4003,6 @@ components:
           maxLength: 100
         verwerkerTaakId:
           type: string
-          title: Titel
           description: De identifier waarmee een taak door een verwerkende component
             wordt gecorreleerd aan het onderliggende proces in een workflow-engine.
           maxLength: 36
