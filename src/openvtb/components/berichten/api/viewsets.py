@@ -9,6 +9,7 @@ from vng_api_common.pagination import DynamicPageSizePagination
 
 from ..cloudevents import BERICHT_GEREGISTREERD, send_bericht_cloudevent
 from ..models import Bericht
+from .filters import BerichtFilter
 from .serializers import BerichtGeopendOpSerializer, BerichtSerializer
 
 logger = structlog.stdlib.get_logger(__name__)
@@ -40,6 +41,7 @@ class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)
     lookup_field = "uuid"
+    filterset_class = BerichtFilter
 
     def get_serializer_class(self):
         if self.action == "partial_update":
