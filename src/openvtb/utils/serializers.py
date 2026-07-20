@@ -85,11 +85,11 @@ class URNRelatedField(RelatedField):
 
         super().__init__(**kwargs)
 
-    def get_object(self, value):
+    def get_object(self, lookup_kwarg, value):
         """
         Return the object corresponding to a matched URN.
         """
-        lookup_kwargs = {self.lookup_field: value}
+        lookup_kwargs = {lookup_kwarg: value}
         queryset = self.get_queryset()
         try:
             return queryset.get(**lookup_kwargs)
@@ -171,13 +171,15 @@ class URNRelatedField(RelatedField):
 
         urn_component, urn_resource, urn_identifier = match.groups()
 
-        lookup_value = urn_identifier
+        lookup_value = self.lookup_field
         if self.lookup_field == "uuid":
-            if not re.match(self.UUID_REGEX, lookup_value):
+            uuid_match = re.search(self.UUID_REGEX, urn_identifier)
+            if not uuid_match:
                 self.fail("incorrect_match")
+            lookup_value = uuid_match.group(1)
 
         try:
-            return self.get_object(lookup_value)
+            return self.get_object(self.lookup_field, lookup_value)
         except (ObjectDoesNotExist, ObjectValueError, ObjectTypeError):
             self.fail("does_not_exist")
 

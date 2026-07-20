@@ -48,6 +48,12 @@ paths:
           PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
           `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
       - in: query
+        name: isGerelateerdAan
+        schema:
+          type: string
+        description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
+          op de URN.
+      - in: query
         name: medeInitiator
         schema:
           type: string
@@ -91,11 +97,24 @@ paths:
           De initiële status is altijd `geregistreerd`. De status `verwerkt` moet gezet worden door het component dat verantwoordelijk is voor de afhandeling danwel opvolging.
 
       - in: query
+        name: verzoekBetaling__transactieReferentie
+        schema:
+          type: string
+      - in: query
+        name: verzoekBetaling__voltooid
+        schema:
+          type: boolean
+      - in: query
+        name: verzoekType__urn
+        schema:
+          type: string
+        description: Zoek de Verzoeken op basis van de URN van het VerzoeksType
+      - in: query
         name: verzoekType__uuid
         schema:
           type: string
           format: uuid
-        description: Unieke identificatiecode (UUID4) voor het VerzoekType
+        description: Zoek de Verzoeken op basis van de UUID van het VerzoeksType
       tags:
       - verzoeken
       security:

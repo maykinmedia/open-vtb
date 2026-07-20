@@ -16,7 +16,10 @@ class VerzoekFilterTest(APITestCase):
 
     def setUp(self):
         super().setUp()
-
+        self.urn_zaak = "urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165"
+        self.urn_product = (
+            "urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
+        )
         self.verzoek_type_a = VerzoekTypeFactory.create(create_versie=True)
         self.verzoek_type_b = VerzoekTypeFactory.create(create_versie=True)
 
@@ -26,6 +29,8 @@ class VerzoekFilterTest(APITestCase):
             mede_initiator="urn:maykin:456",
             versie=1,
             verwerk_status=VerwerkStatus.GEREGISTREERD,
+            is_gerelateerd_aan=[{"urn": self.urn_zaak}],
+            create_details=True,
         )
         self.verzoek_b = VerzoekFactory.create(
             verzoek_type=self.verzoek_type_b,
@@ -33,6 +38,8 @@ class VerzoekFilterTest(APITestCase):
             mede_initiator="urn:maykin:012",
             versie=2,
             verwerk_status=VerwerkStatus.VERWERKT,
+            is_gerelateerd_aan=[{"urn": self.urn_product}],
+            create_details=True,
         )
         self.verzoek_c = VerzoekFactory.create(
             verzoek_type=self.verzoek_type_a,
@@ -40,7 +47,17 @@ class VerzoekFilterTest(APITestCase):
             mede_initiator="urn:maykin:678",
             versie=3,
             verwerk_status=VerwerkStatus.VERWERKT,
+            is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
+            create_details=True,
         )
+
+        self.verzoek_a.betaling.voltooid = True
+        self.verzoek_a.betaling.transactie_referentie = "REF 123"
+        self.verzoek_a.betaling.save()
+        self.verzoek_b.betaling.voltooid = True
+        self.verzoek_b.betaling.save()
+        self.verzoek_c.betaling.voltooid = False
+        self.verzoek_c.betaling.save()
 
     def test_filter_uuid(self):
         response = self.client.get(self.list_url, {"uuid": str(self.verzoek_a.uuid)})
@@ -94,6 +111,95 @@ class VerzoekFilterTest(APITestCase):
                 "reason": "Voer een geldige UUID in.",
             },
         )
+
+    def test_filter_verzoek_type_urn(self):
+        response = self.client.get(
+            self.list_url,
+            {
+                "verzoekType__urn": f"urn:maykin:verzoeken:verzoektype:{str(self.verzoek_type_a.uuid)}"
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+        uuids = {result["uuid"] for result in data["results"]}
+        self.assertEqual(uuids, {str(self.verzoek_a.uuid), str(self.verzoek_c.uuid)})
+
+        # random uuid
+        response = self.client.get(
+            self.list_url,
+            {
+                "verzoekType__urn": f"urn:maykin:verzoeken:verzoektype:{str(uuid.uuid4())}"
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "verzoekType__urn"),
+            {
+                "name": "verzoekType__urn",
+                "code": "invalid",
+                "reason": "Invalid or unknown URN.",
+            },
+        )
+
+        # invalid uuid
+        response = self.client.get(self.list_url, {"verzoekType__urn": "test"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "verzoekType__urn"),
+            {
+                "name": "verzoekType__urn",
+                "code": "invalid",
+                "reason": "Invalid or unknown URN.",
+            },
+        )
+
+    def test_filter_verzoek_betaling_voltooid(self):
+        with self.subTest("true"):
+            response = self.client.get(
+                self.list_url, {"verzoekBetaling__voltooid": True}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(
+                uuids, {str(self.verzoek_a.uuid), str(self.verzoek_b.uuid)}
+            )
+
+        with self.subTest("false"):
+            response = self.client.get(
+                self.list_url, {"verzoekBetaling__voltooid": False}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 1)
+            self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_c.uuid))
+
+        with self.subTest("invalid"):
+            response = self.client.get(
+                self.list_url, {"verzoekBetaling__voltooid": "test"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            # return all values
+            self.assertEqual(data["count"], 3)
+
+    def test_filter_verzoek_betaling_transactiereferentie(self):
+        response = self.client.get(
+            self.list_url, {"verzoekBetaling__transactieReferentie": "REF 123"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_a.uuid))
+
+        response = self.client.get(
+            self.list_url, {"verzoekBetaling__transactieReferentie": "test"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 0)
 
     def test_filter_initiator(self):
         response = self.client.get(self.list_url, {"initiator": "urn:maykin:123"})
@@ -179,6 +285,42 @@ class VerzoekFilterTest(APITestCase):
                 "reason": "Selecteer een geldige keuze. test is geen beschikbare keuze.",
             },
         )
+
+    def test_filter_is_gerelateerd_aan(self):
+        with self.subTest("zaak"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": self.urn_zaak}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(
+                uuids, {str(self.verzoek_a.uuid), str(self.verzoek_c.uuid)}
+            )
+
+        with self.subTest("product"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": self.urn_product}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(
+                uuids, {str(self.verzoek_b.uuid), str(self.verzoek_c.uuid)}
+            )
+
+        with self.subTest("no match"):
+            response = self.client.get(
+                self.list_url,
+                {
+                    "isGerelateerdAan": "urn:nld:gemeenteutrecht:zaak:zaaknummer:999999999"
+                },
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)
 
 
 class VerzoekTypeFilterTest(APITestCase):
