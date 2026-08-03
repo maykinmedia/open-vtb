@@ -1,0 +1,15 @@
+{
+    "supportedTags": [
+        {
+            "gitRef": "main",
+            "tag": "latest"
+        }
+    ],
+    "dockerOrg": "maykinmedia",
+    "dockerRepo": "open-vtb",
+    "githubOrg": "maykinmedia",
+    "githubRepo": "open-vtb",
+    "projectName": "Open VTB",
+    "projectDocumentation": "https://open-vtb.readthedocs.io",
+    "projectDescription": "Platform Dienstverlening verlegt de grens voor Zaakgericht Werken en introduceert een aantal concepten die aanvullende functionaliteit geven binnen Platform Dienstverlening. Deze concepten zijn:\n\n* **Verzoeken** Een ontkoppeling tussen een applicatie en een zaakregister, waarin het verzoek de gegevens van de aanvraag (het verzoek) bevat. Op basis van dit verzoek kan een applicatie bepalen wat voor zaak dit moet worden.\n\n* **Taken** Aanvullende vragen van de overheid aan de inwoner of ondernemer kunnen uitgezet worden als taken. Bijvoorbeeld voor het aanleveren van een document, of een uitstaande betaling. Een taak wordt typisch uitgezet door een afhandelcomponent en wordt typisch weergegeven in een mijn-omgeving.\n\n* **Berichten** Communicatie tussen inwoners, ondernemers en gemeenten via digitale kanalen. Het vormt een naslag van alle communicatie die is verstuurd en ook is in te zien via bijvoorbeeld een mijn-omgeving of KCC-applicatie."
+}
