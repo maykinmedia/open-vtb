@@ -108,13 +108,13 @@ paths:
         name: verzoekType__urn
         schema:
           type: string
-        description: Zoek de Verzoeken op basis van de URN van het VerzoeksType
+        description: Zoek de Verzoeken op basis van de URN van het VerzoekType
       - in: query
         name: verzoekType__uuid
         schema:
           type: string
           format: uuid
-        description: Zoek de Verzoeken op basis van de UUID van het VerzoeksType
+        description: Zoek de Verzoeken op basis van de UUID van het VerzoekType
       tags:
       - verzoeken
       security:
