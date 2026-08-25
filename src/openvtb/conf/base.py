@@ -210,25 +210,6 @@ MKN_BRANDING_DERIVED_PRODUCT_DEFINITION = (
     else None
 )
 
-
-#
-# CELERY-ONCE
-#
-CELERY_ONCE_REDIS_URL = config(
-    "CELERY_ONCE_REDIS_URL",
-    default=CELERY_BROKER_URL,
-    documentation=DocumentationParams(
-        group="Celery",
-    ),
-)
-CELERY_ONCE = {
-    "backend": "celery_once.backends.Redis",
-    "settings": {
-        "url": CELERY_ONCE_REDIS_URL,
-        "default_timeout": 60 * 60,  # one hour
-    },
-}
-
 # https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
 EVENTS_BERICHTEN_JOB_MINUTE = config(
     "EVENTS_BERICHTEN_JOB_MINUTE",
