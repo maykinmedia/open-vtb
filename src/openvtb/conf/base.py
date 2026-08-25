@@ -307,8 +307,7 @@ CELERY_BEAT_SCHEDULE = {
 #
 ENABLE_CLOUD_EVENTS = config(
     "ENABLE_CLOUD_EVENTS",
-    default="True",
-    cast=bool,
+    default=True,
     documentation=DocumentationParams(
         help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
     ),
