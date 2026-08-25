@@ -2,6 +2,7 @@ import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
 from celery.schedules import crontab
+from maykin_common.branding import ProductDefinition
 from maykin_common.config import (
     DocumentationParams,
     config,  # noqa
@@ -123,6 +124,23 @@ NOTIFICATIONS_SOURCE = config(
     ),
 )
 
+LOG_NOTIFICATIONS_IN_DB = config(
+    "LOG_NOTIFICATIONS_IN_DB",
+    default=True,
+    documentation=DocumentationParams(
+        help_text="Indicates whether or not failed notifications/cloud events should be saved to the database"
+    ),
+)
+
+NOTIFICATION_NUMBER_OF_DAYS_RETAINED = config(
+    "NOTIFICATION_NUMBER_OF_DAYS_RETAINED",
+    default=60,
+    documentation=DocumentationParams(
+        help_text="the number of days for which you wish to keep failed notifications/cloud events in the database"
+    ),
+)
+
+
 #
 # maykin-common
 #
@@ -131,6 +149,66 @@ MKN_HEALTH_CHECKS_WORKER_EVENT_LOOP_LIVENESS_FILE = (
     BASE_DIR / "tmp" / "celery_worker_event_loop.live"
 )
 MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.ready"
+
+
+#
+# MAYKIN-COMMON branding
+#
+MKN_BRANDING_PRODUCT_DEFINITION = ProductDefinition(
+    name="Open VTB",
+    hyperlink="https://github.com/maykinmedia/open-vtb",
+    logo_path="ico/open-vtb-icon.svg",
+)
+
+custom_product_name: str = config(
+    "CUSTOM_PRODUCT_NAME",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Specify the custom product name when redistributing the application, e.g. "
+            "as part of your own software suite."
+        ),
+        group="Branding",
+    ),
+)
+custom_product_url: str = config(
+    "CUSTOM_PRODUCT_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product when redistributing the "
+            "application. If provided, the product name will be clickable."
+        ),
+        group="Branding",
+    ),
+)
+custom_product_logo_path: str = config(
+    "CUSTOM_PRODUCT_LOGO_PATH",
+    default="",
+    documentation=DocumentationParams(group="Branding"),
+)
+custom_product_logo_url: str = config(
+    "CUSTOM_PRODUCT_LOGO_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product logo when redistributing the "
+            "application. When using externally hosted assets, note that you may "
+            "need to tweak the Content-Security-Policy settings."
+        ),
+        group="Branding",
+    ),
+)
+MKN_BRANDING_DERIVED_PRODUCT_DEFINITION = (
+    ProductDefinition(
+        name=custom_product_name,
+        hyperlink=custom_product_url,
+        logo_path=custom_product_logo_path,
+        logo_url=custom_product_logo_url,
+    )
+    if custom_product_name
+    else None
+)
 
 
 #
