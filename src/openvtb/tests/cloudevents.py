@@ -3,9 +3,12 @@ from unittest.mock import patch
 
 from django.test import override_settings
 
+import requests
 import requests_mock
 from freezegun import freeze_time
+from notifications_api_common.autoretry import add_autoretry_behaviour
 from notifications_api_common.models import NotificationsConfig
+from notifications_api_common.tasks import CloudEventException, send_cloudevent
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
@@ -26,6 +29,23 @@ def mock_cloud_event_send(m: requests_mock.Mocker, **kwargs) -> None:
     m.post("http://webhook.local/cloudevents", **mock_kwargs)
 
 
+def _ensure_cloudevent_autoretry():
+    """
+    Fix: some interaction between tests strips the autoretry
+    wrapper that notifications_api_common applies to send_cloudevent at
+    import time (task.run reverts to the unwrapped original), causing
+    exceptions to propagate raw instead of triggering task.retry(). Root
+    cause not yet identified; re-apply the wrapper if missing, since
+    add_autoretry_behaviour is idempotent (no-ops if already wrapped).
+    """
+    if not hasattr(send_cloudevent, "_orig_run"):
+        add_autoretry_behaviour(
+            send_cloudevent,
+            autoretry_for=(CloudEventException, requests.RequestException),
+            retry_jitter=False,
+        )
+
+
 class CloudEventSettingMixin(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -39,6 +59,7 @@ class CloudEventSettingMixin(TestCase):
 
     def setUp(self):
         super().setUp()
+        _ensure_cloudevent_autoretry()
 
         self.service = ServiceFactory.create(
             api_root="http://webhook.local",

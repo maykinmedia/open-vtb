@@ -31,7 +31,9 @@ FROZEN_TIME_Z = "2026-01-01T00:00:00Z"
 @freeze_time(FROZEN_TIME)
 @patch("notifications_api_common.tasks.send_cloudevent.delay")
 @patch("notifications_api_common.cloudevents.uuid.uuid4", lambda: MOCKED_CLOUDEVENT_ID)
-@override_settings(NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE)
+@override_settings(
+    NOTIFICATIONS_SOURCE=NOTIFICATIONS_SOURCE, LOG_NOTIFICATIONS_IN_DB=False
+)
 class ExterneTaakCloudEventTest(APITestCase):
     url = reverse("taken:externetaak-list")
     data = {
@@ -206,7 +208,7 @@ class ExterneTaakCloudEventTest(APITestCase):
 @patch("notifications_api_common.tasks.send_cloudevent.delay")
 @patch("notifications_api_common.tasks.send_cloudevent.retry", side_effect=Retry)
 @patch("notifications_api_common.cloudevents.uuid.uuid4", lambda: MOCKED_CLOUDEVENT_ID)
-@override_settings(SITE_DOMAIN="testserver")
+@override_settings(SITE_DOMAIN="testserver", LOG_NOTIFICATIONS_IN_DB=False)
 class CloudEventCeleryRetryTestCase(CloudEventSettingMixin, APITestCase):
     url = reverse("taken:externetaak-list")
     data = {
