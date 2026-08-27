@@ -11,6 +11,67 @@ from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
+"""
+
+    + Create model BerichtType
+    - Remove field handelings_perspectief from bericht
+    - Remove field mijn_overheid_berichtenbox from bericht
+    - Remove field is_bericht_type_bijlage from bijlage
+    ~ Alter field bericht_type on bericht
+    + Create model BerichtTypeBijlage
+
+"""
+
+
+class BerichtType(models.Model):
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        help_text=_("Unieke identificatiecode (UUID4) voor het BerichtType."),
+    )
+    handelings_perspectief = models.CharField(
+        _("handelings perspectief"),
+        max_length=50,
+        blank=True,
+        choices=HandelingsPerspectiefEnum.choices,
+        help_text=_(
+            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
+        ),
+    )
+    mijn_overheid_berichtenbox = models.BooleanField(
+        _("Mijn Overheid Berichtenbox"),
+        help_text=_(
+            "Geeft aan of berichten van dit type geschikt zijn voor publicatie in de "
+            "MijnOverheid Berichtenbox. Als dit op ``False`` staat, zijn berichten "
+            "van dit type niet bedoeld voor publicatie in de Berichtenbox."
+        ),
+    )
+    mijn_overheid_berichtenbox_type = models.CharField(
+        _("Mijn Overheid Berichtenbox Type"),
+        max_length=8,
+        blank=True,
+        help_text=_(
+            "Een code voor het technisch identificeren van een bericht soort & origine. "
+            "Wordt gebruikt in de Mijn Overheid berichtenbox."
+        ),
+    )
+    verantwoordelijke_organisatie = URNField(
+        _("verantwoordelijke organisatie"),
+        help_text=_(
+            "Geeft aan welk onderdeel van de organisatie de eigenaar is van dit "
+            "berichtType. Kan bijv. gebruikt worden voor routering, administratieve "
+            "doeleinden en zichtbaarheid in de keten."
+        ),
+    )
+
+    class Meta:
+        verbose_name = _("BerichtType")
+        verbose_name_plural = _("BerichtTypen")
+
+    def __str__(self):
+        return str(self.uuid)
+
 
 class Bericht(models.Model):
     uuid = models.UUIDField(
@@ -74,36 +135,17 @@ class Bericht(models.Model):
             "portaal van de lokale overheid. Deze waarde is onafhankelijk Mijn Overheid."
         ),
     )
-    bericht_type = models.CharField(
-        _("bericht type"),
-        max_length=8,
-        blank=True,
-        help_text=_(
-            "Een code voor het technisch identificeren van een bericht soort & origine. "
-            "Wordt ook gebruikt in de Mijn Overheid berichtenbox."
-        ),
-    )
-    handelings_perspectief = models.CharField(
-        _("handelings perspectief"),
-        max_length=50,
-        blank=True,
-        choices=HandelingsPerspectiefEnum.choices,
-        help_text=_(
-            "De door de toegewezen persoon of bedrijf uit te voeren handeling."
-        ),
+    bericht_type = models.ForeignKey(
+        BerichtType,
+        on_delete=models.PROTECT,
+        related_name="berichten",
+        verbose_name=_("bericht type"),
+        help_text=_("Het berichttype waartoe dit bericht behoort."),
     )
     einddatum_handelings_termijn = models.DateTimeField(
         _("einddatum handelings termijn"),
         null=True,
         help_text=_("Datum/tijd waarop handeling afgerond moet zijn."),
-    )
-    mijn_overheid_berichtenbox = models.BooleanField(
-        _("Mijn Overheid Berichtenbox"),
-        help_text=_(
-            "Geeft aan of dit bericht geschikt is voor publicatie in de "
-            "MijnOverheid Berichtenbox. Als dit op ``False`` staat, is het bericht "
-            "niet bedoeld voor publicatie in de Berichtenbox."
-        ),
     )
     is_gerelateerd_aan = models.JSONField(
         _("is gerelateerd aan"),
@@ -139,6 +181,45 @@ class Bericht(models.Model):
         self.clean_is_gerelateerd_aan()
 
 
+class BijlageType(models.Model):
+    uuid = models.UUIDField(
+        unique=True,
+        default=uuid.uuid4,
+        help_text=_("Unieke identificatiecode (UUID4) voor het BijlageType."),
+    )
+    bericht_type = models.ForeignKey(
+        BerichtType,
+        on_delete=models.CASCADE,
+        related_name="bijlage_typen",
+        verbose_name=_("bericht type"),
+    )
+    informatie_objecttype = URNField(
+        _("informatie objecttype"),
+        help_text=_(
+            "URN van het INFORMATIEOBJECTTYPE. "
+            "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+        ),
+        blank=True,
+    )
+    omschrijving = models.TextField(
+        _("omschrijving"),
+        blank=True,
+        help_text=_(
+            "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "
+            "Typisch is dit dezelfde omschrijving als die van het INFORMATIEOBJECTTYPE."
+        ),
+    )
+
+    class Meta:
+        verbose_name = _("BijlageType")
+        verbose_name_plural = _("BijlageTypen")
+
+        unique_together = ("bericht_type", "informatie_objecttype")
+
+    def __str__(self):
+        return self.informatie_objecttype
+
+
 class Bijlage(models.Model):
     uuid = models.UUIDField(
         unique=True,
@@ -165,15 +246,6 @@ class Bijlage(models.Model):
         help_text=_(
             "Een door de inwoner of bedrijf goed leesbare omschrijving van de bijlage die "
             "wordt weergegeven als bestandsnaam in een berichtenbox of portaal."
-        ),
-    )
-    is_bericht_type_bijlage = models.BooleanField(
-        _("is bericht type bijlage"),
-        default=False,
-        help_text=_(
-            "Geeft aan of dit document een standaardbijlage is die vooraf geüpload is in het Berichtenbox Leveranciersportaal. "
-            "Standaard `false`. Indien `true` moet deze bijlage door het outputmanagementcomponent "
-            "genegeerd worden - als de Berichtenbox het doelkanaal is."
         ),
     )
 
