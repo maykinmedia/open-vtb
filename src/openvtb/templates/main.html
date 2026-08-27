@@ -73,3 +73,12 @@
     <a href="{% url 'index-berichten' %}" class="button"><i class="fas fa-file-alt" aria-hidden="true"></i> Berichten</a>
 
 {% endblock %}
+
+{% block extra_buttons %}
+    <div class="button-group">
+        <a href="https://github.com/maykinmedia/open-vtb/blob/main/docs/installation/cloud_events.rst" class="button">
+            <i class="fas fa-bullhorn"></i>
+            {% trans "Notifications" %}
+        </a>
+    </div>
+{% endblock %}

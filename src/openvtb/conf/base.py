@@ -2,6 +2,7 @@ import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
 from celery.schedules import crontab
+from maykin_common.branding import ProductDefinition
 from maykin_common.config import (
     DocumentationParams,
     config,  # noqa
@@ -123,6 +124,23 @@ NOTIFICATIONS_SOURCE = config(
     ),
 )
 
+LOG_NOTIFICATIONS_IN_DB = config(
+    "LOG_NOTIFICATIONS_IN_DB",
+    default=True,
+    documentation=DocumentationParams(
+        help_text="Indicates whether or not failed notifications/cloud events should be saved to the database"
+    ),
+)
+
+NOTIFICATION_NUMBER_OF_DAYS_RETAINED = config(
+    "NOTIFICATION_NUMBER_OF_DAYS_RETAINED",
+    default=60,
+    documentation=DocumentationParams(
+        help_text="the number of days for which you wish to keep failed notifications/cloud events in the database"
+    ),
+)
+
+
 #
 # maykin-common
 #
@@ -134,22 +152,63 @@ MKN_HEALTH_CHECKS_WORKER_READINESS_FILE = BASE_DIR / "tmp" / "celery_worker.read
 
 
 #
-# CELERY-ONCE
+# MAYKIN-COMMON branding
 #
-CELERY_ONCE_REDIS_URL = config(
-    "CELERY_ONCE_REDIS_URL",
-    default=CELERY_BROKER_URL,
+MKN_BRANDING_PRODUCT_DEFINITION = ProductDefinition(
+    name="Open VTB",
+    hyperlink="https://github.com/maykinmedia/open-vtb",
+    logo_path="ico/open-vtb-icon.svg",
+)
+
+custom_product_name: str = config(
+    "CUSTOM_PRODUCT_NAME",
+    default="",
     documentation=DocumentationParams(
-        group="Celery",
+        help_text=(
+            "Specify the custom product name when redistributing the application, e.g. "
+            "as part of your own software suite."
+        ),
+        group="Branding",
     ),
 )
-CELERY_ONCE = {
-    "backend": "celery_once.backends.Redis",
-    "settings": {
-        "url": CELERY_ONCE_REDIS_URL,
-        "default_timeout": 60 * 60,  # one hour
-    },
-}
+custom_product_url: str = config(
+    "CUSTOM_PRODUCT_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product when redistributing the "
+            "application. If provided, the product name will be clickable."
+        ),
+        group="Branding",
+    ),
+)
+custom_product_logo_path: str = config(
+    "CUSTOM_PRODUCT_LOGO_PATH",
+    default="",
+    documentation=DocumentationParams(group="Branding"),
+)
+custom_product_logo_url: str = config(
+    "CUSTOM_PRODUCT_LOGO_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product logo when redistributing the "
+            "application. When using externally hosted assets, note that you may "
+            "need to tweak the Content-Security-Policy settings."
+        ),
+        group="Branding",
+    ),
+)
+MKN_BRANDING_DERIVED_PRODUCT_DEFINITION = (
+    ProductDefinition(
+        name=custom_product_name,
+        hyperlink=custom_product_url,
+        logo_path=custom_product_logo_path,
+        logo_url=custom_product_logo_url,
+    )
+    if custom_product_name
+    else None
+)
 
 # https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html#crontab-schedules
 EVENTS_BERICHTEN_JOB_MINUTE = config(
@@ -229,8 +288,7 @@ CELERY_BEAT_SCHEDULE = {
 #
 ENABLE_CLOUD_EVENTS = config(
     "ENABLE_CLOUD_EVENTS",
-    default="True",
-    cast=bool,
+    default=True,
     documentation=DocumentationParams(
         help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
     ),
