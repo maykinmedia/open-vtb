@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from rest_framework.fields import get_attribute
 
 from openvtb.utils.api_utils import get_from_serializer_data_or_instance
 from openvtb.utils.json_utils import check_json_schema
@@ -64,29 +63,6 @@ class CheckVerzoekTypeVersion:
 
     def __call__(self, instance):
         if not instance.versies.exists():
-            raise serializers.ValidationError(self.message, code=self.code)
-
-
-class IsImmutableValidator:
-    """
-    Validator to ensure that a field cannot be changed on update.
-
-    If the serializer is updating an existing instance and the field value
-    differs from the current value, a ValidationError is raised.
-    """
-
-    message = _("Dit veld kan niet worden gewijzigd.")
-    code = "immutable-field"
-    requires_context = True
-
-    def __call__(self, new_value, serializer_field):
-        instance = getattr(serializer_field.parent, "instance", None)
-        if not instance:
-            return
-
-        current_value = get_attribute(instance, serializer_field.source_attrs)
-
-        if new_value != current_value:
             raise serializers.ValidationError(self.message, code=self.code)
 
 

@@ -12,6 +12,7 @@ from openvtb.utils.serializers import (
     URNModelSerializer,
     URNRelatedField,
 )
+from openvtb.utils.validators import IsImmutableValidator
 
 from ..constants import VerwerkStatus
 from ..models import (
@@ -26,7 +27,6 @@ from ..models import (
 from .validators import (
     AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
-    IsImmutableValidator,
     JsonSchemaValidator,
     VersionStatusValidator,
 )

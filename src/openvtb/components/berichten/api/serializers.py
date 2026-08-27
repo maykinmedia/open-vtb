@@ -10,6 +10,7 @@ from openvtb.utils.serializers import (
     URNModelSerializer,
     URNRelatedField,
 )
+from openvtb.utils.validators import IsImmutableValidator
 
 from ..models import Bericht, BerichtType, Bijlage, BijlageType
 
@@ -72,7 +73,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
         lookup_field="uuid",
         required=True,
         queryset=BerichtType.objects.all(),
-        # validators=[CheckVerzoekTypeVersion(), IsImmutableValidator()],
+        validators=[IsImmutableValidator()],
         help_text=get_help_text("berichten.Bericht", "bericht_type"),
     )
     bericht_type_urn = URNRelatedField(
@@ -155,12 +156,46 @@ class BerichtTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
         extra_kwargs = {
             "uuid": {"read_only": True},
             "url": {
-                "view_name": "berichten:bericht-detail",
+                "view_name": "berichten:berichttype-detail",
                 "lookup_field": "uuid",
-                "help_text": _("De unieke URL van het Bericht binnen deze API."),
+                "help_text": _("De unieke URL van het BerichtType binnen deze API."),
             },
             "urn": {
                 "lookup_field": "uuid",
                 "help_text": _("De Uniform Resource Name van het Bericht."),
             },
         }
+
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().create(validated_data)
+
+        if bijlage_typen:
+            try:
+                objs = [
+                    BijlageType(bericht_type=instance, **data) for data in bijlage_typen
+                ]
+                BijlageType.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                    },
+                    code="unique",
+                )
+
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().update(instance, validated_data)
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.update_or_create(
+                    bericht_type=instance,
+                    informatie_objecttype=bijlage_type["informatie_objecttype"],
+                    defaults={**bijlage_type},
+                )
+        return instance
