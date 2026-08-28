@@ -1,12 +1,16 @@
 import datetime
+import uuid
 
 from django.utils import timezone
 
 from freezegun import freeze_time
 from rest_framework import status
-from vng_api_common.tests import reverse
+from vng_api_common.tests import get_validation_errors, reverse
 
-from openvtb.components.berichten.tests.factories import BerichtFactory
+from openvtb.components.berichten.tests.factories import (
+    BerichtFactory,
+    BerichtTypeFactory,
+)
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -23,23 +27,131 @@ class BerichtFilterTest(APITestCase):
             "urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e"
         )
 
+        self.bericht_type_a = BerichtTypeFactory.create()
+        self.bericht_type_b = BerichtTypeFactory.create()
+
         self.bericht_a = BerichtFactory.create(
             ontvanger="urn:maykin:123",
             publicatiedatum=self.now - datetime.timedelta(days=5),
             geopend_op=self.now - datetime.timedelta(days=4),
             is_gerelateerd_aan=[{"urn": self.urn_zaak}],
+            bericht_type=self.bericht_type_a,
         )
         self.bericht_b = BerichtFactory.create(
             ontvanger="urn:maykin:456",
             publicatiedatum=self.now - datetime.timedelta(days=1),
             geopend_op=None,
             is_gerelateerd_aan=[{"urn": self.urn_product}],
+            bericht_type=self.bericht_type_a,
         )
         self.bericht_c = BerichtFactory.create(
             ontvanger="urn:maykin:789",
             publicatiedatum=self.now + datetime.timedelta(days=5),
             geopend_op=None,
             is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
+            bericht_type=self.bericht_type_b,
+        )
+
+    def test_filter_bericht_type_uuid(self):
+        response = self.client.get(
+            self.list_url, {"berichtType__uuid": self.bericht_type_a.uuid}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+        self.assertEqual(
+            data["results"][0]["berichtType"],
+            f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(self.bericht_type_a.uuid)})}",
+        )
+
+        response = self.client.get(
+            self.list_url, {"berichtType__uuid": self.bericht_type_b.uuid}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(
+            data["results"][0]["berichtType"],
+            f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(self.bericht_type_b.uuid)})}",
+        )
+
+        # random uuid
+        response = self.client.get(self.list_url, {"berichtType__uuid": uuid.uuid4()})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 0)
+
+        # wrong uuid
+        response = self.client.get(self.list_url, {"berichtType__uuid": "test"})
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "berichtType__uuid"),
+            {
+                "name": "berichtType__uuid",
+                "code": "invalid",
+                "reason": "Voer een geldige UUID in.",
+            },
+        )
+
+    def test_filter_bericht_type_urn(self):
+        response = self.client.get(
+            self.list_url,
+            {
+                "berichtType__urn": f"urn:maykin:berichten:berichttype:{str(self.bericht_type_a.uuid)}"
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+        self.assertEqual(
+            data["results"][0]["berichtType"],
+            f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(self.bericht_type_a.uuid)})}",
+        )
+
+        response = self.client.get(
+            self.list_url,
+            {
+                "berichtType__urn": f"urn:maykin:berichten:berichttype:{str(self.bericht_type_b.uuid)}"
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(
+            data["results"][0]["berichtType"],
+            f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(self.bericht_type_b.uuid)})}",
+        )
+
+        # random uuid
+        response = self.client.get(
+            self.list_url,
+            {"berichtType__urn": "urn:maykin:berichten:berichttype:1234"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "berichtType__urn"),
+            {
+                "name": "berichtType__urn",
+                "code": "invalid",
+                "reason": "Invalid or unknown URN.",
+            },
+        )
+
+        # wrong uuid
+        response = self.client.get(
+            self.list_url,
+            {"berichtType__urn": "test"},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            get_validation_errors(response, "berichtType__urn"),
+            {
+                "name": "berichtType__urn",
+                "code": "invalid",
+                "reason": "Invalid or unknown URN.",
+            },
         )
 
     def test_filter_ontvanger(self):

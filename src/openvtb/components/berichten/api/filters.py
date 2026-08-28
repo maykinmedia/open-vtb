@@ -51,7 +51,7 @@ class BerichtFilter(FilterSet):
         except Exception:
             raise ValidationError({"bericht_type__urn": _("Invalid or unknown URN.")})
 
-        return queryset.filter(verzoek_type=obj)
+        return queryset.filter(bericht_type=obj)
 
     def filter_is_gerelateerd_aan(self, queryset, name, value):
         return queryset.filter(is_gerelateerd_aan__contains=[{"urn": value}])

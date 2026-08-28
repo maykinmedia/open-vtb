@@ -11,17 +11,6 @@ from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
-"""
-
-    + Create model BerichtType
-    - Remove field handelings_perspectief from bericht
-    - Remove field mijn_overheid_berichtenbox from bericht
-    - Remove field is_bericht_type_bijlage from bijlage
-    ~ Alter field bericht_type on bericht
-    + Create model BerichtTypeBijlage
-
-"""
-
 
 class BerichtType(models.Model):
     uuid = models.UUIDField(

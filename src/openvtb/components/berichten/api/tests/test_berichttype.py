@@ -183,6 +183,38 @@ class BerichtTypeTests(APITestCase):
             },
         )
 
+    def test_invalid_create_bijlage_typen_duplicated(self):
+        self.assertFalse(BerichtType.objects.exists())
+        data = {
+            "handelingsPerspectief": "incasso",
+            "mijnOverheidBerichtenbox": False,
+            "mijnOverheidBerichtenboxType": "test",
+            "verantwoordelijkeOrganisatie": "urn:nld:gemeenteutrecht:product:00011111",
+            "bijlageTypen": [
+                {
+                    "informatieObjecttype": "urn:maykin:test1",
+                    "omschrijving": "test1",
+                },
+                {
+                    "informatieObjecttype": "urn:maykin:test1",
+                    "omschrijving": "test1",
+                },
+            ],
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "bijlageTypen"),
+            {
+                "name": "bijlageTypen",
+                "code": "unique",
+                "reason": "BijlageType with the specified informatieObjecttype already exists.",
+            },
+        )
+
     def test_valid_update(self):
         bericht_type = BerichtTypeFactory.create()
         detail_url = reverse(
