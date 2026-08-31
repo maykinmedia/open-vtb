@@ -192,6 +192,7 @@ class BijlageType(models.Model):
     )
     omschrijving = models.TextField(
         _("omschrijving"),
+        max_length=4000,
         blank=True,
         help_text=_(
             "Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan worden in bijvoorbeeld een portaal. "

@@ -55,3 +55,23 @@ class BerichtFilter(FilterSet):
 
     def filter_is_gerelateerd_aan(self, queryset, name, value):
         return queryset.filter(is_gerelateerd_aan__contains=[{"urn": value}])
+
+
+class BerichtTypeFilter(FilterSet):
+    mijn_overheid_berichtenbox = filters.BooleanFilter(
+        field_name="mijn_overheid_berichtenbox",
+        help_text=_(
+            "Filter op berichttypen die wel/niet geschikt zijn voor publicatie "
+            "in de MijnOverheid Berichtenbox. "
+            "``true`` = geschikt voor publicatie, ``false`` = niet geschikt voor publicatie."
+        ),
+    )
+
+    class Meta:
+        model = BerichtType
+        fields = {
+            "uuid": ["exact"],
+            "handelings_perspectief": ["exact"],
+            "mijn_overheid_berichtenbox_type": ["exact"],
+            "verantwoordelijke_organisatie": ["exact"],
+        }

@@ -1133,7 +1133,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
+          description: Lijst met bijlagenTypen die aan deze bron zijn gekoppeld.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
@@ -1455,7 +1455,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
+          description: Lijst met bijlagenTypen die aan deze bron zijn gekoppeld.
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'

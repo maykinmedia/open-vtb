@@ -57,7 +57,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
-        help_text=_("Lijst met bijlagen typen die aan deze bron zijn gekoppeld."),
+        help_text=_("Lijst met bijlagenTypen die aan deze bron zijn gekoppeld."),
     )
 
     class Meta:

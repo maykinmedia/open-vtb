@@ -231,9 +231,37 @@ paths:
   /berichttypen:
     get:
       operationId: berichttypenList
-      description: Vraag alle bericht typen aan.
-      summary: Vraag alle bericht typen aan.
+      description: Vraag alle berichttypen aan.
+      summary: Vraag alle berichttypen aan.
       parameters:
+      - in: query
+        name: handelingsPerspectief
+        schema:
+          type: string
+          enum:
+          - betalen
+          - incasso
+          - informatie_geven
+          - informatie_krijgen
+          - reactie_ontvangen
+          - uitnodiging_voor_afspraak
+          - vernieuwing_nodig
+        description: |+
+          De door de toegewezen persoon of bedrijf uit te voeren handeling.
+
+      - in: query
+        name: mijnOverheidBerichtenbox
+        schema:
+          type: boolean
+        description: Filter op berichttypen die wel/niet geschikt zijn voor publicatie
+          in de MijnOverheid Berichtenbox. ``true`` = geschikt voor publicatie, ``false``
+          = niet geschikt voor publicatie.
+      - in: query
+        name: mijnOverheidBerichtenboxType
+        schema:
+          type: string
+        description: Een code voor het technisch identificeren van een bericht soort
+          & origine. Wordt gebruikt in de Mijn Overheid berichtenbox.
       - name: page
         required: false
         in: query
@@ -247,6 +275,19 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: Unieke identificatiecode (UUID4) voor het BerichtType.
+      - in: query
+        name: verantwoordelijkeOrganisatie
+        schema:
+          type: string
+        description: Geeft aan welk onderdeel van de organisatie de eigenaar is van
+          dit berichtType. Kan bijv. gebruikt worden voor routering, administratieve
+          doeleinden en zichtbaarheid in de keten.
       tags:
       - berichttypen
       security:
@@ -267,8 +308,8 @@ paths:
           description: ''
     post:
       operationId: berichttypenCreate
-      description: Maak een bericht type aan.
-      summary: Maak een bericht type aan.
+      description: Maak een berichttypen aan.
+      summary: Maak een berichttypen aan.
       tags:
       - berichttypen
       requestBody:
@@ -296,8 +337,8 @@ paths:
   /berichttypen/{uuid}:
     get:
       operationId: berichttypenRetrieve
-      description: Een specifiek bericht type opvragen.
-      summary: Een specifiek bericht type opvragen.
+      description: Een specifiek berichttypen opvragen.
+      summary: Een specifiek berichttypen opvragen.
       parameters:
       - in: path
         name: uuid
@@ -326,8 +367,8 @@ paths:
           description: ''
     put:
       operationId: berichttypenUpdate
-      description: Volledig bericht type wijzigen.
-      summary: Volledig bericht type wijzigen.
+      description: Volledig berichttypen wijzigen.
+      summary: Volledig berichttypen wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -362,8 +403,8 @@ paths:
           description: ''
     patch:
       operationId: berichttypenPartialUpdate
-      description: Een bericht type gedeeltelijk wijzigen.
-      summary: Een bericht type gedeeltelijk wijzigen.
+      description: Een berichttypen gedeeltelijk wijzigen.
+      summary: Een berichttypen gedeeltelijk wijzigen.
       parameters:
       - in: path
         name: uuid
@@ -542,7 +583,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
+          description: Lijst met bijlagenTypen die aan deze bron zijn gekoppeld.
         handelingsPerspectief:
           description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
           oneOf:
@@ -606,6 +647,7 @@ components:
           description: Omschrijving van het soort bijlage, zoals dat door eind gebruikers
             gezien kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde
             omschrijving als die van het INFORMATIEOBJECTTYPE.
+          maxLength: 4000
       required:
       - informatieObjecttype
     BlankEnum:
@@ -714,7 +756,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BijlageType'
-          description: Lijst met bijlagen typen die aan deze bron zijn gekoppeld.
+          description: Lijst met bijlagenTypen die aan deze bron zijn gekoppeld.
         handelingsPerspectief:
           description: De door de toegewezen persoon of bedrijf uit te voeren handeling.
           oneOf:
