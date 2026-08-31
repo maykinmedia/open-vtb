@@ -11,6 +11,7 @@ from rest_framework import status
 from vng_api_common.tests import reverse
 
 from openvtb.components.berichten.cloudevents import BERICHT_GEREGISTREERD
+from openvtb.components.berichten.tests.factories import BerichtTypeFactory
 from openvtb.tests.cloudevents import CloudEventSettingMixin, mock_cloud_event_send
 from openvtb.utils.api_testcase import APITestCase
 
@@ -29,14 +30,21 @@ FROZEN_TIME_Z = "2026-01-01T00:00:00Z"
 class BerichtenCloudEventTest(APITestCase):
     maxDiff = None
     url = reverse("berichten:bericht-list")
-    data = {
-        "onderwerp": "onderwerp",
-        "berichtTekst": "berichtTekst berichtTekst",
-        "referentie": "referentie",
-        "ontvanger": "urn:maykin:ontvanger:1234",
-        "berichtType": "12345678",
-        "mijnOverheidBerichtenbox": True,
-    }
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.bericht_type = BerichtTypeFactory.create()
+        cls.data = {
+            "onderwerp": "onderwerp",
+            "berichtTekst": "berichtTekst berichtTekst",
+            "referentie": "referentie",
+            "ontvanger": "urn:maykin:ontvanger:1234",
+            "berichtType": reverse(
+                "berichten:berichttype-detail",
+                kwargs={"uuid": str(cls.bericht_type.uuid)},
+            ),
+        }
 
     @override_settings(ENABLE_CLOUD_EVENTS=False)
     def test_no_cloudevent_when_disabled(self, mock_process_cloudevent):
@@ -94,14 +102,21 @@ class BerichtenCloudEventTest(APITestCase):
 @override_settings(SITE_DOMAIN="testserver", LOG_NOTIFICATIONS_IN_DB=False)
 class CloudEventCeleryRetryTestCase(CloudEventSettingMixin, APITestCase):
     url = reverse("berichten:bericht-list")
-    data = {
-        "onderwerp": "onderwerp",
-        "berichtTekst": "berichtTekst berichtTekst",
-        "referentie": "referentie",
-        "ontvanger": "urn:maykin:ontvanger:1234",
-        "berichtType": "12345678",
-        "mijnOverheidBerichtenbox": True,
-    }
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.bericht_type = BerichtTypeFactory.create()
+        cls.data = {
+            "onderwerp": "onderwerp",
+            "berichtTekst": "berichtTekst berichtTekst",
+            "referentie": "referentie",
+            "ontvanger": "urn:maykin:ontvanger:1234",
+            "berichtType": reverse(
+                "berichten:berichttype-detail",
+                kwargs={"uuid": str(cls.bericht_type.uuid)},
+            ),
+        }
 
     def test_cloud_event_client_error_retry(self, m, retry_mock, mock_send):
         """

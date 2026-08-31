@@ -109,6 +109,10 @@
                 [
                     "berichten",
                     "bericht"
+                ],
+                [
+                    "berichten",
+                    "berichttype"
                 ]
             ]
         }

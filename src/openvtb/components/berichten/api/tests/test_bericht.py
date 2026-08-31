@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from django.utils import timezone
 
@@ -7,7 +8,10 @@ from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
 
 from openvtb.components.berichten.models import Bericht
-from openvtb.components.berichten.tests.factories import BerichtFactory
+from openvtb.components.berichten.tests.factories import (
+    BerichtFactory,
+    BerichtTypeFactory,
+)
 from openvtb.utils.api_testcase import APITestCase
 
 
@@ -53,9 +57,8 @@ class BerichtTests(APITestCase):
                         "geopendOp": bericht.geopend_op.isoformat().replace(
                             "+00:00", "Z"
                         ),
-                        "berichtType": bericht.bericht_type,
-                        "handelingsPerspectief": bericht.handelings_perspectief,
-                        "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
+                        "berichtType": f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(bericht.bericht_type.uuid)})}",
+                        "berichtTypeUrn": f"urn:maykin:berichten:berichttype:{str(bericht.bericht_type.uuid)}",
                         "isGerelateerdAan": bericht.is_gerelateerd_aan,
                         "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                             "+00:00", "Z"
@@ -64,7 +67,6 @@ class BerichtTests(APITestCase):
                             {
                                 "informatieObject": bericht.bijlagen.first().informatie_object,
                                 "omschrijving": bericht.bijlagen.first().omschrijving,
-                                "isBerichtTypeBijlage": bericht.bijlagen.first().is_bericht_type_bijlage,
                             },
                         ],
                     },
@@ -115,10 +117,9 @@ class BerichtTests(APITestCase):
                 "referentie": bericht.referentie,
                 "ontvanger": bericht.ontvanger,
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
-                "berichtType": bericht.bericht_type,
-                "handelingsPerspectief": bericht.handelings_perspectief,
+                "berichtType": f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(bericht.bericht_type.uuid)})}",
+                "berichtTypeUrn": f"urn:maykin:berichten:berichttype:{str(bericht.bericht_type.uuid)}",
                 "isGerelateerdAan": bericht.is_gerelateerd_aan,
-                "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -126,7 +127,6 @@ class BerichtTests(APITestCase):
                     {
                         "informatieObject": bericht.bijlagen.first().informatie_object,
                         "omschrijving": bericht.bijlagen.first().omschrijving,
-                        "isBerichtTypeBijlage": bericht.bijlagen.first().is_bericht_type_bijlage,
                     },
                 ],
             },
@@ -134,6 +134,7 @@ class BerichtTests(APITestCase):
 
     def test_valid_create(self):
         self.assertFalse(Bericht.objects.exists())
+        bericht_type = BerichtTypeFactory.create()
         data = {
             "onderwerp": "onderwerp",
             "berichtTekst": "berichtTekst berichtTekst",
@@ -141,9 +142,9 @@ class BerichtTests(APITestCase):
             "referentie": "referentie",
             "ontvanger": "urn:maykin:ontvanger:1234",
             "geopendOp": datetime.datetime.now(),
-            "berichtType": "12345678",
-            "handelingsPerspectief": "incasso",
-            "mijnOverheidBerichtenbox": True,
+            "berichtType": reverse(
+                "berichten:berichttype-detail", kwargs={"uuid": str(bericht_type.uuid)}
+            ),
             "einddatumHandelingsTermijn": datetime.datetime.now(),
             "isGerelateerdAan": [
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
@@ -153,12 +154,10 @@ class BerichtTests(APITestCase):
                 {
                     "informatieObject": "urn:maykin:test1",
                     "omschrijving": "test1",
-                    "isBerichtTypeBijlage": False,
                 },
                 {
                     "informatieObject": "urn:maykin:test2",
                     "omschrijving": "test2",
-                    "isBerichtTypeBijlage": False,
                 },
             ],
         }
@@ -184,10 +183,9 @@ class BerichtTests(APITestCase):
                 "referentie": bericht.referentie,
                 "ontvanger": bericht.ontvanger,
                 "geopendOp": bericht.geopend_op.isoformat().replace("+00:00", "Z"),
-                "berichtType": bericht.bericht_type,
-                "handelingsPerspectief": bericht.handelings_perspectief,
+                "berichtType": f"http://testserver{reverse('berichten:berichttype-detail', kwargs={'uuid': str(bericht.bericht_type.uuid)})}",
+                "berichtTypeUrn": f"urn:maykin:berichten:berichttype:{str(bericht.bericht_type.uuid)}",
                 "isGerelateerdAan": bericht.is_gerelateerd_aan,
-                "mijnOverheidBerichtenbox": bericht.mijn_overheid_berichtenbox,
                 "einddatumHandelingsTermijn": bericht.einddatum_handelings_termijn.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -195,12 +193,10 @@ class BerichtTests(APITestCase):
                     {
                         "informatieObject": bijlage1.informatie_object,
                         "omschrijving": bijlage1.omschrijving,
-                        "isBerichtTypeBijlage": False,
                     },
                     {
                         "informatieObject": bijlage2.informatie_object,
                         "omschrijving": bijlage2.omschrijving,
-                        "isBerichtTypeBijlage": False,
                     },
                 ],
             },
@@ -239,11 +235,35 @@ class BerichtTests(APITestCase):
             },
         )
         self.assertEqual(
-            get_validation_errors(response, "mijnOverheidBerichtenbox"),
+            get_validation_errors(response, "berichtType"),
             {
-                "name": "mijnOverheidBerichtenbox",
+                "name": "berichtType",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
+            },
+        )
+
+    def test_invalid_create_bericht_type(self):
+        self.assertFalse(Bericht.objects.exists())
+        data = {
+            "onderwerp": "onderwerp",
+            "berichtTekst": "berichtTekst berichtTekst",
+            "ontvanger": "urn:maykin:ontvanger:1234",
+            "berichtType": reverse(
+                "berichten:berichttype-detail", kwargs={"uuid": str(uuid.uuid4())}
+            ),
+        }
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["code"], "invalid")
+        self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
+        self.assertEqual(len(response.data["invalid_params"]), 1)
+        self.assertEqual(
+            get_validation_errors(response, "berichtType"),
+            {
+                "name": "berichtType",
+                "code": "does_not_exist",
+                "reason": "Ongeldige hyperlink - Object bestaat niet.",
             },
         )
 

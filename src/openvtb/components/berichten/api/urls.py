@@ -6,12 +6,13 @@ from vng_api_common import routers
 from openvtb.utils.views import SpectacularJSONAPIView, SpectacularYAMLAPIView
 
 from .schema import custom_settings
-from .viewsets import BerichtViewset
+from .viewsets import BerichtTypeViewset, BerichtViewset
 
 app_name = "berichten"
 
 router = routers.DefaultRouter()
 router.register("berichten", BerichtViewset)
+router.register("berichttypen", BerichtTypeViewset)
 
 
 urlpatterns = [

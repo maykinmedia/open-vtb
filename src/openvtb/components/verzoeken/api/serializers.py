@@ -12,6 +12,7 @@ from openvtb.utils.serializers import (
     URNModelSerializer,
     URNRelatedField,
 )
+from openvtb.utils.validators import IsImmutableValidator
 
 from ..constants import VerwerkStatus
 from ..models import (
@@ -26,7 +27,6 @@ from ..models import (
 from .validators import (
     AanvraagGegevensValidator,
     CheckVerzoekTypeVersion,
-    IsImmutableValidator,
     JsonSchemaValidator,
     VersionStatusValidator,
 )
@@ -57,7 +57,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
     bijlage_typen = BijlageTypeSerializer(
         required=False,
         many=True,
-        help_text=_("Lijst met bijlagen typen die aan deze bron zijn gekoppeld."),
+        help_text=_("Lijst met bijlagenTypen die aan deze bron zijn gekoppeld."),
     )
 
     class Meta:

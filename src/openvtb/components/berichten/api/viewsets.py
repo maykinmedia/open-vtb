@@ -8,9 +8,13 @@ from rest_framework.response import Response
 from vng_api_common.pagination import DynamicPageSizePagination
 
 from ..cloudevents import BERICHT_GEREGISTREERD, send_bericht_cloudevent
-from ..models import Bericht
-from .filters import BerichtFilter
-from .serializers import BerichtGeopendOpSerializer, BerichtSerializer
+from ..models import Bericht, BerichtType
+from .filters import BerichtFilter, BerichtTypeFilter
+from .serializers import (
+    BerichtGeopendOpSerializer,
+    BerichtSerializer,
+    BerichtTypeSerializer,
+)
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -66,3 +70,34 @@ class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             ).data,
             status=status.HTTP_200_OK,
         )
+
+
+@extend_schema_view(
+    list=extend_schema(
+        summary=_("Vraag alle berichttypen aan."),
+        description=_("Vraag alle berichttypen aan."),
+    ),
+    retrieve=extend_schema(
+        summary=_("Een specifiek berichttypen opvragen."),
+        description=_("Een specifiek berichttypen opvragen."),
+    ),
+    create=extend_schema(
+        summary=_("Maak een berichttypen aan."),
+        description=_("Maak een berichttypen aan."),
+    ),
+    partial_update=extend_schema(
+        summary=_("Een berichttypen gedeeltelijk wijzigen."),
+        description=_("Een berichttypen gedeeltelijk wijzigen."),
+    ),
+    update=extend_schema(
+        summary=_("Volledig berichttypen wijzigen."),
+        description=_("Volledig berichttypen wijzigen."),
+    ),
+)
+class BerichtTypeViewset(viewsets.ModelViewSet):
+    queryset = BerichtType.objects.prefetch_related("bijlage_typen")
+    serializer_class = BerichtTypeSerializer
+    pagination_class = DynamicPageSizePagination
+    permission_classes = (IsAuthenticated,)
+    lookup_field = "uuid"
+    filterset_class = BerichtTypeFilter

@@ -2,14 +2,17 @@ from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from vng_api_common.serializers import CachedHyperlinkedRelatedField
 from vng_api_common.utils import get_help_text
 
 from openvtb.utils.serializers import (
     URNField,
     URNModelSerializer,
+    URNRelatedField,
 )
+from openvtb.utils.validators import IsImmutableValidator
 
-from ..models import Bericht, Bijlage
+from ..models import Bericht, BerichtType, Bijlage, BijlageType
 
 
 class IsGerelateerdAanSerializer(serializers.Serializer):
@@ -35,10 +38,18 @@ class BijlageSerializer(serializers.ModelSerializer):
         fields = (
             "informatie_object",
             "omschrijving",
-            "is_bericht_type_bijlage",
+        )
+
+
+class BijlageTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BijlageType
+        fields = (
+            "informatie_objecttype",
+            "omschrijving",
         )
         extra_kwargs = {
-            "is_bericht_type_bijlage": {"default": False},
+            "informatie_objecttype": {"required": True, "validators": []},
         }
 
 
@@ -57,6 +68,21 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
         required=False,
         help_text=get_help_text("berichten.Bericht", "is_gerelateerd_aan"),
     )
+    bericht_type = CachedHyperlinkedRelatedField(
+        view_name="berichten:berichttype-detail",
+        lookup_field="uuid",
+        required=True,
+        queryset=BerichtType.objects.all(),
+        validators=[IsImmutableValidator()],
+        help_text=get_help_text("berichten.Bericht", "bericht_type"),
+    )
+    bericht_type_urn = URNRelatedField(
+        lookup_field="uuid",
+        source="bericht_type",
+        urn_resource="berichttype",
+        read_only=True,
+        help_text=get_help_text("berichten.Bericht", "bericht_type") + _("URN field"),
+    )
 
     class Meta:
         model = Bericht
@@ -71,10 +97,9 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "ontvanger",
             "geopend_op",
             "bericht_type",
+            "bericht_type_urn",
             "is_gerelateerd_aan",
-            "handelings_perspectief",
             "einddatum_handelings_termijn",
-            "mijn_overheid_berichtenbox",
             "bijlagen",
         )
         extra_kwargs = {
@@ -105,5 +130,72 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
                         "bijlagen": "Bijlage with the specified informatieObject already exists."
                     },
                     code="unique",
+                )
+        return instance
+
+
+class BerichtTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
+    bijlage_typen = BijlageTypeSerializer(
+        required=False,
+        many=True,
+        help_text=_("Lijst met bijlagenTypen die aan deze bron zijn gekoppeld."),
+    )
+
+    class Meta:
+        model = BerichtType
+        fields = (
+            "url",
+            "urn",
+            "uuid",
+            "bijlage_typen",
+            "handelings_perspectief",
+            "mijn_overheid_berichtenbox",
+            "mijn_overheid_berichtenbox_type",
+            "verantwoordelijke_organisatie",
+        )
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+            "url": {
+                "view_name": "berichten:berichttype-detail",
+                "lookup_field": "uuid",
+                "help_text": _("De unieke URL van het BerichtType binnen deze API."),
+            },
+            "urn": {
+                "lookup_field": "uuid",
+                "help_text": _("De Uniform Resource Name van het Bericht."),
+            },
+        }
+
+    @transaction.atomic
+    def create(self, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().create(validated_data)
+
+        if bijlage_typen:
+            try:
+                objs = [
+                    BijlageType(bericht_type=instance, **data) for data in bijlage_typen
+                ]
+                BijlageType.objects.bulk_create(objs)
+            except IntegrityError:
+                raise serializers.ValidationError(
+                    {
+                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                    },
+                    code="unique",
+                )
+
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        bijlage_typen = validated_data.pop("bijlage_typen", None)
+        instance = super().update(instance, validated_data)
+        if bijlage_typen:
+            for bijlage_type in bijlage_typen:
+                BijlageType.objects.update_or_create(
+                    bericht_type=instance,
+                    informatie_objecttype=bijlage_type["informatie_objecttype"],
+                    defaults={**bijlage_type},
                 )
         return instance
