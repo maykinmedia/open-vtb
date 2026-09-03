@@ -1,0 +1,15 @@
+{
+    "supportedTags": [
+        {
+            "gitRef": "main",
+            "tag": "latest"
+        }
+    ],
+    "dockerOrg": "maykinmedia",
+    "dockerRepo": "open-vtb",
+    "githubOrg": "maykinmedia",
+    "githubRepo": "open-vtb",
+    "projectName": "Open VTB",
+    "projectDocumentation": "https://open-vtb.readthedocs.io",
+    "projectDescription": "Platform Dienstverlening pushes the boundaries of case-oriented working and introduces several concepts that provide additional functionality within Platform Dienstverlening. These concepts are:\n\n* **Verzoeken (Requests)** A decoupling between an application and a case register, in which the request contains the details of the request. Based on this request, an application can determine what type of case it should be.\n\n* **Taken (Tasks)** Additional questions from the government to the resident or business owner can be assigned as tasks. For example, for submitting a document or an outstanding payment. A task is typically assigned by a client-application and is typically displayed in a portal.\n\n* **Berichten (Messages)** Communication between residents, businesses, and municipalities via digital channels. It provides a record of all communication that has been sent and can also be viewed via, for example, a portal or servicedesk application."
+}
