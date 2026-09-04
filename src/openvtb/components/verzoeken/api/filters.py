@@ -3,7 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from django_filters import filters
 from rest_framework.exceptions import ValidationError
 from vng_api_common.filtersets import FilterSet
+from vng_api_common.utils import get_help_text
 
+from openvtb.utils.filters import URNFilter
 from openvtb.utils.serializers import URNRelatedField
 
 from ..models import Verzoek, VerzoekType
@@ -30,13 +32,23 @@ class VerzoekFilter(FilterSet):
     verzoek_betaling__voltooid = filters.BooleanFilter(
         method="filter_verzoek_betaling_voltooid",
     )
+    initiator = URNFilter(
+        field_name="initiator",
+        help_text=get_help_text("verzoeken.Verzoek", "initiator"),
+    )
+    mede_initiator = URNFilter(
+        field_name="mede_initiator",
+        help_text=get_help_text("verzoeken.Verzoek", "mede_initiator"),
+    )
+    verzoek_informatie_object = URNFilter(
+        field_name="verzoek_informatie_object",
+        help_text=get_help_text("verzoeken.Verzoek", "verzoek_informatie_object"),
+    )
 
     class Meta:
         model = Verzoek
         fields = {
             "uuid": ["exact"],
-            "initiator": ["exact"],
-            "mede_initiator": ["exact"],
             "versie": ["exact"],
             "verwerk_status": ["exact"],
         }
