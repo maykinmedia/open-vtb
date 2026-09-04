@@ -37,9 +37,13 @@ services:
       CACHE_AXES: redis:6379/0
       SUBPATH: ${SUBPATH:-/}
       SECRET_KEY: ${SECRET_KEY:-django-insecure-##q31k@oa@my@(twhvqsvv#+-9x0h0@94^f9=vmxe(zzkg^mot}
+      # Celery
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/0
       CELERY_WORKER_NAME: celery@docker
+      CELERY_RESULT_EXPIRES: 3600
+      CELERY_LOGLEVEL: DEBUG
+      CELERY_WORKER_CONCURRENCY: ${CELERY_WORKER_CONCURRENCY:-100}
       DISABLE_2FA: true
       LOG_NOTIFICATIONS_IN_DB: ${LOG_NOTIFICATIONS_IN_DB:-yes}
       DB_CONN_MAX_AGE: "0"
