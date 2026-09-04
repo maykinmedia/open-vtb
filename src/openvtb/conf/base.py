@@ -1,6 +1,8 @@
 import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
+from django.core.exceptions import ImproperlyConfigured
+
 from celery.schedules import crontab
 from maykin_common.branding import ProductDefinition
 from maykin_common.config import (
@@ -114,6 +116,17 @@ SETUP_CONFIGURATION_STEPS = [
 ]
 
 #
+# CloudEvents
+#
+ENABLE_CLOUD_EVENTS = config(
+    "ENABLE_CLOUD_EVENTS",
+    default=True,
+    documentation=DocumentationParams(
+        help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
+    ),
+)
+
+#
 # notifications-api-common
 #
 NOTIFICATIONS_SOURCE = config(
@@ -123,6 +136,11 @@ NOTIFICATIONS_SOURCE = config(
         help_text="The identifier of this application to use as the source in notifications and cloudevents",
     ),
 )
+
+
+if ENABLE_CLOUD_EVENTS and not NOTIFICATIONS_SOURCE:
+    raise ImproperlyConfigured("NOTIFICATIONS_SOURCE is REQUIRED for CloudEvents")
+
 
 LOG_NOTIFICATIONS_IN_DB = config(
     "LOG_NOTIFICATIONS_IN_DB",
@@ -298,17 +316,6 @@ CELERY_BEAT_SCHEDULE = {
 # PROJECT SETTINGS #
 #                  #
 ####################
-
-#
-# CloudEvents
-#
-ENABLE_CLOUD_EVENTS = config(
-    "ENABLE_CLOUD_EVENTS",
-    default=True,
-    documentation=DocumentationParams(
-        help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
-    ),
-)
 
 #
 # URN settings
