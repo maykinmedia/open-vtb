@@ -25,8 +25,8 @@ class VerzoekFilterTest(APITestCase):
 
         self.verzoek_a = VerzoekFactory.create(
             verzoek_type=self.verzoek_type_a,
-            initiator="urn:maykin:123",
-            mede_initiator="urn:maykin:456",
+            initiator="urn:maykin:123:test:456",
+            mede_initiator="urn:maykin:456:newtest:456",
             versie=1,
             verwerk_status=VerwerkStatus.GEREGISTREERD,
             is_gerelateerd_aan=[{"urn": self.urn_zaak}],
@@ -34,8 +34,8 @@ class VerzoekFilterTest(APITestCase):
         )
         self.verzoek_b = VerzoekFactory.create(
             verzoek_type=self.verzoek_type_b,
-            initiator="urn:maykin:789",
-            mede_initiator="urn:maykin:012",
+            initiator="urn:maykin:789:test:456",
+            mede_initiator="urn:maykin:123:newtest:456",
             versie=2,
             verwerk_status=VerwerkStatus.VERWERKT,
             is_gerelateerd_aan=[{"urn": self.urn_product}],
@@ -43,8 +43,8 @@ class VerzoekFilterTest(APITestCase):
         )
         self.verzoek_c = VerzoekFactory.create(
             verzoek_type=self.verzoek_type_a,
-            initiator="urn:maykin:345",
-            mede_initiator="urn:maykin:678",
+            initiator="urn:maykin:345:test:4567",
+            mede_initiator="urn:maykin:456:newtest:456000000",
             versie=3,
             verwerk_status=VerwerkStatus.VERWERKT,
             is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
@@ -208,12 +208,16 @@ class VerzoekFilterTest(APITestCase):
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_a.uuid))
 
+        response = self.client.get(self.list_url, {"initiator": "test:456"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["count"], 2)
+
+        response = self.client.get(self.list_url, {"initiator": "test:4567"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["count"], 1)
+
         # not found
         response = self.client.get(self.list_url, {"initiator": "urn:maykin:test"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 0)
-
-        response = self.client.get(self.list_url, {"initiator": "test"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["count"], 0)
 
@@ -221,12 +225,22 @@ class VerzoekFilterTest(APITestCase):
         response = self.client.get(self.list_url, {"medeInitiator": "urn:maykin:456"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
-        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["count"], 2)
         self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_a.uuid))
 
-        response = self.client.get(self.list_url, {"medeInitiator": "urn:maykin:test"})
+        response = self.client.get(self.list_url, {"medeInitiator": "newtest:456"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["count"], 0)
+        self.assertEqual(response.json()["count"], 2)
+
+        response = self.client.get(self.list_url, {"medeInitiator": "urn:maykin:456"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["count"], 2)
+
+        response = self.client.get(
+            self.list_url, {"medeInitiator": "urn:maykin:456:newtest:456000000"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["count"], 1)
 
         response = self.client.get(self.list_url, {"medeInitiator": "test"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)

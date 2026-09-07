@@ -3,7 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from django_filters import filters
 from rest_framework.exceptions import ValidationError
 from vng_api_common.filtersets import FilterSet
+from vng_api_common.utils import get_help_text
 
+from openvtb.utils.filters import URNFilter
 from openvtb.utils.serializers import URNRelatedField
 
 from ..models import Bericht, BerichtType
@@ -15,7 +17,7 @@ class BerichtFilter(FilterSet):
         field_name="bericht_type__uuid",
     )
     bericht_type__urn = filters.CharFilter(
-        help_text=_("Zoek de Berichten op basis van de URN van het BerichtType"),
+        help_text=_("Zoek berichten op basis van de exacte URN van het berichttype"),
         method="filter_bericht_type__urn",
     )
     geopend_op__isnull = filters.BooleanFilter(
@@ -32,11 +34,14 @@ class BerichtFilter(FilterSet):
             "Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match op de URN."
         ),
     )
+    ontvanger = URNFilter(
+        field_name="ontvanger",
+        help_text=get_help_text("berichten.Bericht", "ontvanger"),
+    )
 
     class Meta:
         model = Bericht
         fields = {
-            "ontvanger": ["exact"],
             "publicatiedatum": ["exact", "gt", "gte", "lt", "lte"],
         }
 
@@ -66,6 +71,12 @@ class BerichtTypeFilter(FilterSet):
             "``true`` = geschikt voor publicatie, ``false`` = niet geschikt voor publicatie."
         ),
     )
+    verantwoordelijke_organisatie = URNFilter(
+        field_name="verantwoordelijke_organisatie",
+        help_text=get_help_text(
+            "berichten.BerichtType", "verantwoordelijke_organisatie"
+        ),
+    )
 
     class Meta:
         model = BerichtType
@@ -73,5 +84,4 @@ class BerichtTypeFilter(FilterSet):
             "uuid": ["exact"],
             "handelings_perspectief": ["exact"],
             "mijn_overheid_berichtenbox_type": ["exact"],
-            "verantwoordelijke_organisatie": ["exact"],
         }
