@@ -330,3 +330,5 @@ TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
         ),
     ),
 )
+
+TEST = True
