@@ -25,7 +25,7 @@ class ExterneTaakFilterTest(APITestCase):
             verwerker_taak_id="externetaak ID 1111",
             status=StatusTaak.OPEN,
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
-            is_toegewezen_aan="urn:maykin:123",
+            is_toegewezen_aan="urn:maykin:123:test:123",
             startdatum=date(2026, 1, 10),
             einddatum_handelings_termijn=date(2026, 3, 31),
             datum_herinnering=date(2026, 2, 15),
@@ -37,7 +37,7 @@ class ExterneTaakFilterTest(APITestCase):
             verwerker_taak_id="externetaak ID 2222",
             status=StatusTaak.UITGEVOERD,
             handelings_perspectief=HandelingsPerspectiefEnum.INCASSO,
-            is_toegewezen_aan="urn:maykin:456",
+            is_toegewezen_aan="urn:maykin:456:test:123",
             startdatum=date(2026, 4, 1),
             einddatum_handelings_termijn=date(2026, 6, 30),
             datum_herinnering=date(2026, 5, 1),
@@ -49,7 +49,7 @@ class ExterneTaakFilterTest(APITestCase):
             verwerker_taak_id="externetaak ID 3333",
             status=StatusTaak.VERWERKT,
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
-            is_toegewezen_aan="urn:maykin:789",
+            is_toegewezen_aan="urn:maykin:789:test:123",
             startdatum=date(2026, 7, 1),
             einddatum_handelings_termijn=date(2026, 9, 30),
             datum_herinnering=date(2026, 8, 1),
@@ -158,9 +158,21 @@ class ExterneTaakFilterTest(APITestCase):
             data = response.json()
             self.assertEqual(data["count"], 1)
             self.assertEqual(data["results"][0]["uuid"], str(self.taak_a.uuid))
+        with self.subTest("contains"):
+            response = self.client.get(self.list_url, {"isToegewezenAan": "test:123"})
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 3)
+
+            response = self.client.get(
+                self.list_url, {"isToegewezenAan": "maykin:456:test:123"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 1)
 
         with self.subTest("not found"):
-            response = self.client.get(self.list_url, {"isToegewezenAan": "test"})
+            response = self.client.get(self.list_url, {"isToegewezenAan": "notfound"})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.json()["count"], 0)
 

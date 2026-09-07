@@ -299,19 +299,19 @@ class BerichtTypeFilterTest(APITestCase):
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             mijn_overheid_berichtenbox=True,
             mijn_overheid_berichtenbox_type="test1",
-            verantwoordelijke_organisatie="urn:maykin:test:1",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:12345:vestigingsnummer:7777",
         )
         self.bericht_type_b = BerichtTypeFactory.create(
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             mijn_overheid_berichtenbox=False,
             mijn_overheid_berichtenbox_type="test1",
-            verantwoordelijke_organisatie="urn:maykin:test:2",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:12345:vestigingsnummer:8888",
         )
         self.bericht_type_c = BerichtTypeFactory.create(
             handelings_perspectief=HandelingsPerspectiefEnum.INCASSO,
             mijn_overheid_berichtenbox=False,
             mijn_overheid_berichtenbox_type="test2",
-            verantwoordelijke_organisatie="urn:maykin:test:3",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:67890:vestigingsnummer:7777",
         )
 
     def test_filter_uuid(self):
@@ -395,7 +395,23 @@ class BerichtTypeFilterTest(APITestCase):
 
     def test_filter_verantwoordelijke_organisatie(self):
         response = self.client.get(
-            self.list_url, {"verantwoordelijke_organisatie": "urn:maykin:test:1"}
+            self.list_url,
+            {"verantwoordelijke_organisatie": "vestigingsnummer:7777"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+        response = self.client.get(
+            self.list_url,
+            {"verantwoordelijke_organisatie": "urn:nld:hr:kvknummer:12345"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+
+        response = self.client.get(
+            self.list_url,
+            {"verantwoordelijke_organisatie": "12345:vestigingsnummer:7777"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -403,7 +419,8 @@ class BerichtTypeFilterTest(APITestCase):
 
         # random value
         response = self.client.get(
-            self.list_url, {"verantwoordelijke_organisatie": "test"}
+            self.list_url,
+            {"verantwoordelijke_organisatie": "test"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()

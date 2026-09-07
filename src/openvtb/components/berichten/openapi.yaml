@@ -38,7 +38,7 @@ paths:
         name: berichtType__urn
         schema:
           type: string
-        description: Zoek de Berichten op basis van de URN van het BerichtType
+        description: Zoek berichten op basis van de exacte URN van het berichttype
       - in: query
         name: berichtType__uuid
         schema:

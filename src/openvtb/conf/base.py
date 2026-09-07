@@ -1,6 +1,7 @@
 import os
 
 os.environ["_USE_STRUCTLOG"] = "True"
+
 from celery.schedules import crontab
 from maykin_common.branding import ProductDefinition
 from maykin_common.config import (
@@ -112,6 +113,17 @@ SETUP_CONFIGURATION_STEPS = [
     "zgw_consumers.contrib.setup_configuration.steps.ServiceConfigurationStep",
     "notifications_api_common.contrib.setup_configuration.steps.NotificationConfigurationStep",
 ]
+
+#
+# CloudEvents
+#
+ENABLE_CLOUD_EVENTS = config(
+    "ENABLE_CLOUD_EVENTS",
+    default=True,
+    documentation=DocumentationParams(
+        help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
+    ),
+)
 
 #
 # notifications-api-common
@@ -298,17 +310,6 @@ CELERY_BEAT_SCHEDULE = {
 # PROJECT SETTINGS #
 #                  #
 ####################
-
-#
-# CloudEvents
-#
-ENABLE_CLOUD_EVENTS = config(
-    "ENABLE_CLOUD_EVENTS",
-    default=True,
-    documentation=DocumentationParams(
-        help_text="Indicates whether or not cloud events should be sent to the configured endpoint for specific operations via the API",
-    ),
-)
 
 #
 # URN settings
