@@ -25,6 +25,21 @@ info:
     `urn:namespace:component:resource:uuid`, `urn:example:foo#bar`
 
     For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141
+
+    **Filtering on URNs**
+
+    Filters on URN fields match an exact, complete segment of the URN (parts separated by `:`).
+
+    For example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:
+
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)
+    * `urn:nld:hr:kvknummer:123456` - match (start of the URN)
+    * `vestigingsnummer:7890` - match (end of the URN)
+    * `123456:vestigingsnummer:7890` - match (middle, on segment boundaries)
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated segment)
+    * `urn:nld:hr:kvknummer:1234` - no match (truncated segment)
+    * `nummer:7890` - no match (substring within a segment, not a full segment)
+    * `3456:vestigingsnummer:7890` - no match (substring within a segment)
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -43,24 +58,20 @@ paths:
         name: initiator
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `initiator`.
       - in: query
         name: isGerelateerdAan
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: medeInitiator
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `mede_initiator`.
       - name: page
         required: false
         in: query
@@ -108,8 +119,8 @@ paths:
         name: verzoekInformatieObject
         schema:
           type: string
-        description: 'URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek
-          als document zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `verzoek_informatie_object`.
       - in: query
         name: verzoekType__urn
         schema:

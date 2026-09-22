@@ -3,9 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django_filters import filters
 from rest_framework.exceptions import ValidationError
 from vng_api_common.filtersets import FilterSet
-from vng_api_common.utils import get_help_text
 
-from openvtb.utils.filters import URNFilter
+from openvtb.utils.filters import ListURNFilter, URNFilter
 from openvtb.utils.serializers import URNRelatedField
 
 from ..models import Bericht, BerichtType
@@ -28,15 +27,19 @@ class BerichtFilter(FilterSet):
             "``true`` = nog niet geopend, ``false`` = wel geopend."
         ),
     )
-    is_gerelateerd_aan = filters.CharFilter(
-        method="filter_is_gerelateerd_aan",
+    is_gerelateerd_aan = ListURNFilter(
+        field_name="is_gerelateerd_aan",
         help_text=_(
-            "Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match op de URN."
+            "Filter op URN aanwezig in de lijst isGerelateerdAan. "
+            "Exacte match op een volledig URN-segment (gescheiden door `:`)."
         ),
     )
     ontvanger = URNFilter(
         field_name="ontvanger",
-        help_text=get_help_text("berichten.Bericht", "ontvanger"),
+        help_text=_(
+            "Filtert op een exacte match van een volledig segment van de URN "
+            "(gescheiden door `:`) in het veld `ontvanger`."
+        ),
     )
 
     class Meta:
@@ -58,9 +61,6 @@ class BerichtFilter(FilterSet):
 
         return queryset.filter(bericht_type=obj)
 
-    def filter_is_gerelateerd_aan(self, queryset, name, value):
-        return queryset.filter(is_gerelateerd_aan__contains=[{"urn": value}])
-
 
 class BerichtTypeFilter(FilterSet):
     mijn_overheid_berichtenbox = filters.BooleanFilter(
@@ -73,8 +73,9 @@ class BerichtTypeFilter(FilterSet):
     )
     verantwoordelijke_organisatie = URNFilter(
         field_name="verantwoordelijke_organisatie",
-        help_text=get_help_text(
-            "berichten.BerichtType", "verantwoordelijke_organisatie"
+        help_text=_(
+            "Filtert op een exacte match van een volledig segment van de URN "
+            "(gescheiden door `:`) in het veld `verantwoordelijke_organisatie`."
         ),
     )
 

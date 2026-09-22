@@ -54,7 +54,13 @@ class ExterneTaakFilterTest(APITestCase):
             einddatum_handelings_termijn=date(2026, 9, 30),
             datum_herinnering=date(2026, 8, 1),
             formuliertaak=True,
-            is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
+            is_gerelateerd_aan=[
+                {"urn": self.urn_zaak},
+                {"urn": self.urn_product},
+                {
+                    "urn": "urn:nld:gemeenteutrecht:product:uuid:2f463a72-83fd-48bc-a3cf-901755c1644c",
+                },
+            ],
         )
 
     def test_filter_uuid(self):
@@ -430,6 +436,23 @@ class ExterneTaakFilterTest(APITestCase):
             uuids = {result["uuid"] for result in data["results"]}
             self.assertEqual(uuids, {str(self.taak_b.uuid), str(self.taak_c.uuid)})
 
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "gemeenteutrecht:product"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(uuids, {str(self.taak_b.uuid), str(self.taak_c.uuid)})
+
+        with self.subTest("all"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "urn:nld:gemeenteutrecht"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 3)
+
         with self.subTest("no match"):
             response = self.client.get(
                 self.list_url,
@@ -437,6 +460,18 @@ class ExterneTaakFilterTest(APITestCase):
                     "isGerelateerdAan": "urn:nld:gemeenteutrecht:zaak:zaaknummer:999999999"
                 },
             )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)
+
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "urn:nld:test"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)
+
+            response = self.client.get(self.list_url, {"isGerelateerdAan": "test"})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = response.json()
             self.assertEqual(data["count"], 0)

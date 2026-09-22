@@ -25,6 +25,21 @@ info:
     `urn:namespace:component:resource:uuid`, `urn:example:foo#bar`
 
     For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141
+
+    **Filtering on URNs**
+
+    Filters on URN fields match an exact, complete segment of the URN (parts separated by `:`).
+
+    For example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:
+
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)
+    * `urn:nld:hr:kvknummer:123456` - match (start of the URN)
+    * `vestigingsnummer:7890` - match (end of the URN)
+    * `123456:vestigingsnummer:7890` - match (middle, on segment boundaries)
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated segment)
+    * `urn:nld:hr:kvknummer:1234` - no match (truncated segment)
+    * `nummer:7890` - no match (substring within a segment, not a full segment)
+    * `3456:vestigingsnummer:7890` - no match (substring within a segment)
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -134,15 +149,13 @@ paths:
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: isToegewezenAan
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `is_toegewezen_aan`.
       - name: page
         required: false
         in: query
@@ -508,15 +521,13 @@ paths:
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: isToegewezenAan
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `is_toegewezen_aan`.
       - name: page
         required: false
         in: query
@@ -880,15 +891,13 @@ paths:
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: isToegewezenAan
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `is_toegewezen_aan`.
       - name: page
         required: false
         in: query
@@ -1254,15 +1263,13 @@ paths:
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: isToegewezenAan
         schema:
           type: string
-        description: 'Verwijzing naar een authentieke of niet-authentieke persoon
-          of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK
-          PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`,
-          `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `is_toegewezen_aan`.
       - name: page
         required: false
         in: query
