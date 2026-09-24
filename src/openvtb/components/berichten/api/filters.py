@@ -4,6 +4,7 @@ from django_filters import filters
 from rest_framework.exceptions import ValidationError
 from vng_api_common.filtersets import FilterSet
 
+from openvtb.utils.filters import ListURNFilter, URNFilter
 from openvtb.utils.serializers import URNRelatedField
 
 from ..models import Bericht, BerichtType
@@ -15,7 +16,7 @@ class BerichtFilter(FilterSet):
         field_name="bericht_type__uuid",
     )
     bericht_type__urn = filters.CharFilter(
-        help_text=_("Zoek de Berichten op basis van de URN van het BerichtType"),
+        help_text=_("Zoek berichten op basis van de exacte URN van het berichttype"),
         method="filter_bericht_type__urn",
     )
     geopend_op__isnull = filters.BooleanFilter(
@@ -26,17 +27,24 @@ class BerichtFilter(FilterSet):
             "``true`` = nog niet geopend, ``false`` = wel geopend."
         ),
     )
-    is_gerelateerd_aan = filters.CharFilter(
-        method="filter_is_gerelateerd_aan",
+    is_gerelateerd_aan = ListURNFilter(
+        field_name="is_gerelateerd_aan",
         help_text=_(
-            "Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match op de URN."
+            "Filter op URN aanwezig in de lijst isGerelateerdAan. "
+            "Exacte match op een volledig URN-segment (gescheiden door `:`)."
+        ),
+    )
+    ontvanger = URNFilter(
+        field_name="ontvanger",
+        help_text=_(
+            "Filtert op een exacte match van een volledig segment van de URN "
+            "(gescheiden door `:`) in het veld `ontvanger`."
         ),
     )
 
     class Meta:
         model = Bericht
         fields = {
-            "ontvanger": ["exact"],
             "publicatiedatum": ["exact", "gt", "gte", "lt", "lte"],
         }
 
@@ -53,9 +61,6 @@ class BerichtFilter(FilterSet):
 
         return queryset.filter(bericht_type=obj)
 
-    def filter_is_gerelateerd_aan(self, queryset, name, value):
-        return queryset.filter(is_gerelateerd_aan__contains=[{"urn": value}])
-
 
 class BerichtTypeFilter(FilterSet):
     mijn_overheid_berichtenbox = filters.BooleanFilter(
@@ -66,6 +71,13 @@ class BerichtTypeFilter(FilterSet):
             "``true`` = geschikt voor publicatie, ``false`` = niet geschikt voor publicatie."
         ),
     )
+    verantwoordelijke_organisatie = URNFilter(
+        field_name="verantwoordelijke_organisatie",
+        help_text=_(
+            "Filtert op een exacte match van een volledig segment van de URN "
+            "(gescheiden door `:`) in het veld `verantwoordelijke_organisatie`."
+        ),
+    )
 
     class Meta:
         model = BerichtType
@@ -73,5 +85,4 @@ class BerichtTypeFilter(FilterSet):
             "uuid": ["exact"],
             "handelings_perspectief": ["exact"],
             "mijn_overheid_berichtenbox_type": ["exact"],
-            "verantwoordelijke_organisatie": ["exact"],
         }

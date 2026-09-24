@@ -19,7 +19,16 @@ info:
     \ Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.\n\
     - `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.\n\
     \n**Examples:**\n\n`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n\
-    \nFor more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141\n"
+    \nFor more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141\n\
+    \n**Filtering on URNs**\n\nFilters on URN fields match an exact, complete segment\
+    \ of the URN (parts separated by `:`).\n\nFor example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:\n\
+    \n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)\n*\
+    \ `urn:nld:hr:kvknummer:123456` - match (start of the URN)\n* `vestigingsnummer:7890`\
+    \ - match (end of the URN)\n* `123456:vestigingsnummer:7890` - match (middle,\
+    \ on segment boundaries)\n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78`\
+    \ - no match (truncated segment)\n* `urn:nld:hr:kvknummer:1234` - no match (truncated\
+    \ segment)\n* `nummer:7890` - no match (substring within a segment, not a full\
+    \ segment)\n* `3456:vestigingsnummer:7890` - no match (substring within a segment)\n"
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -38,7 +47,7 @@ paths:
         name: berichtType__urn
         schema:
           type: string
-        description: Zoek de Berichten op basis van de URN van het BerichtType
+        description: Zoek berichten op basis van de exacte URN van het berichttype
       - in: query
         name: berichtType__uuid
         schema:
@@ -56,13 +65,13 @@ paths:
         schema:
           type: string
         description: Filter op URN aanwezig in de lijst isGerelateerdAan. Exacte match
-          op de URN.
+          op een volledig URN-segment (gescheiden door `:`).
       - in: query
         name: ontvanger
         schema:
           type: string
-        description: 'URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld:
-          `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`'
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `ontvanger`.
       - name: page
         required: false
         in: query
@@ -285,9 +294,8 @@ paths:
         name: verantwoordelijkeOrganisatie
         schema:
           type: string
-        description: Geeft aan welk onderdeel van de organisatie de eigenaar is van
-          dit berichtType. Kan bijv. gebruikt worden voor routering, administratieve
-          doeleinden en zichtbaarheid in de keten.
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `verantwoordelijke_organisatie`.
       tags:
       - berichttypen
       security:
