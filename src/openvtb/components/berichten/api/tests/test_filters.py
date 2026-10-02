@@ -49,7 +49,13 @@ class BerichtFilterTest(APITestCase):
             ontvanger="urn:maykin:789",
             publicatiedatum=self.now + datetime.timedelta(days=5),
             geopend_op=None,
-            is_gerelateerd_aan=[{"urn": self.urn_zaak}, {"urn": self.urn_product}],
+            is_gerelateerd_aan=[
+                {"urn": self.urn_zaak},
+                {"urn": self.urn_product},
+                {
+                    "urn": "urn:nld:gemeenteutrecht:product:uuid:2f463a72-83fd-48bc-a3cf-901755c1644c",
+                },
+            ],
             bericht_type=self.bericht_type_b,
         )
 
@@ -277,6 +283,26 @@ class BerichtFilterTest(APITestCase):
             self.assertEqual(
                 uuids, {str(self.bericht_b.uuid), str(self.bericht_c.uuid)}
             )
+
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "gemeenteutrecht:product"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 2)
+            uuids = {result["uuid"] for result in data["results"]}
+            self.assertEqual(
+                uuids, {str(self.bericht_b.uuid), str(self.bericht_c.uuid)}
+            )
+
+        with self.subTest("all"):
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "urn:nld:gemeenteutrecht"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 3)
+
         with self.subTest("no match"):
             response = self.client.get(
                 self.list_url,
@@ -284,6 +310,18 @@ class BerichtFilterTest(APITestCase):
                     "isGerelateerdAan": "urn:nld:gemeenteutrecht:zaak:zaaknummer:999999999"
                 },
             )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)
+
+            response = self.client.get(
+                self.list_url, {"isGerelateerdAan": "urn:nld:test"}
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            data = response.json()
+            self.assertEqual(data["count"], 0)
+
+            response = self.client.get(self.list_url, {"isGerelateerdAan": "test"})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = response.json()
             self.assertEqual(data["count"], 0)
@@ -299,19 +337,19 @@ class BerichtTypeFilterTest(APITestCase):
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             mijn_overheid_berichtenbox=True,
             mijn_overheid_berichtenbox_type="test1",
-            verantwoordelijke_organisatie="urn:maykin:test:1",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:12345:vestigingsnummer:7777",
         )
         self.bericht_type_b = BerichtTypeFactory.create(
             handelings_perspectief=HandelingsPerspectiefEnum.BETALEN,
             mijn_overheid_berichtenbox=False,
             mijn_overheid_berichtenbox_type="test1",
-            verantwoordelijke_organisatie="urn:maykin:test:2",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:12345:vestigingsnummer:8888",
         )
         self.bericht_type_c = BerichtTypeFactory.create(
             handelings_perspectief=HandelingsPerspectiefEnum.INCASSO,
             mijn_overheid_berichtenbox=False,
             mijn_overheid_berichtenbox_type="test2",
-            verantwoordelijke_organisatie="urn:maykin:test:3",
+            verantwoordelijke_organisatie="urn:nld:hr:kvknummer:67890:vestigingsnummer:7777",
         )
 
     def test_filter_uuid(self):
@@ -395,7 +433,23 @@ class BerichtTypeFilterTest(APITestCase):
 
     def test_filter_verantwoordelijke_organisatie(self):
         response = self.client.get(
-            self.list_url, {"verantwoordelijke_organisatie": "urn:maykin:test:1"}
+            self.list_url,
+            {"verantwoordelijke_organisatie": "vestigingsnummer:7777"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+        response = self.client.get(
+            self.list_url,
+            {"verantwoordelijke_organisatie": "urn:nld:hr:kvknummer:12345"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 2)
+
+        response = self.client.get(
+            self.list_url,
+            {"verantwoordelijke_organisatie": "12345:vestigingsnummer:7777"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -403,7 +457,8 @@ class BerichtTypeFilterTest(APITestCase):
 
         # random value
         response = self.client.get(
-            self.list_url, {"verantwoordelijke_organisatie": "test"}
+            self.list_url,
+            {"verantwoordelijke_organisatie": "test"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()

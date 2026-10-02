@@ -22,4 +22,19 @@ Open VTB uses URNs (Uniform Resource Names) to link to other resources, below is
 `urn:namespace:component:resource:uuid`, `urn:example:foo#bar`
 
 For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141
+
+**Filtering on URNs**
+
+Filters on URN fields match an exact, complete segment of the URN (parts separated by `:`).
+
+For example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:
+
+* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)
+* `urn:nld:hr:kvknummer:123456` - match (start of the URN)
+* `vestigingsnummer:7890` - match (end of the URN)
+* `123456:vestigingsnummer:7890` - match (middle, on segment boundaries)
+* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated segment)
+* `urn:nld:hr:kvknummer:1234` - no match (truncated segment)
+* `nummer:7890` - no match (substring within a segment, not a full segment)
+* `3456:vestigingsnummer:7890` - no match (substring within a segment)
 """)
