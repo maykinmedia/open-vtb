@@ -121,7 +121,7 @@ click-repl==0.3.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
-commonground-api-common==2.14.0
+commonground-api-common==3.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -528,7 +528,7 @@ maykin-2fa==1.0.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
-maykin-common==0.20.1
+maykin-common==0.22.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -553,7 +553,7 @@ notifications-api-common==0.13.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-open-api-framework==0.14.2
+open-api-framework==0.16.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -1071,7 +1071,7 @@ wrapt==1.17.3
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-redis
     #   vcrpy
-zgw-consumers==2.0.3
+zgw-consumers==2.1.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
