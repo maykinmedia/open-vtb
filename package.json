@@ -1,6 +1,6 @@
 {
     "name": "openvtb",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "openvtb project",
     "main": "src/static/openvtb/js/openvtb.js",
     "directories": {
