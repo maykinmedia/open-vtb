@@ -127,7 +127,9 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             except IntegrityError:
                 raise serializers.ValidationError(
                     {
-                        "bijlagen": "Bijlage with the specified informatieObject already exists."
+                        "bijlagen": _(
+                            "Bijlage met de opgegeven informatieObject bestaat al."
+                        )
                     },
                     code="unique",
                 )
@@ -180,7 +182,9 @@ class BerichtTypeSerializer(URNModelSerializer, serializers.ModelSerializer):
             except IntegrityError:
                 raise serializers.ValidationError(
                     {
-                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                        "bijlageTypen": _(
+                            "Het bijlageType met het opgegeven informatieObjecttype bestaat al."
+                        )
                     },
                     code="unique",
                 )

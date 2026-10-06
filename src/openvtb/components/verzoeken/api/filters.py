@@ -26,10 +26,10 @@ class VerzoekFilter(FilterSet):
             "Exacte match op een volledig URN-segment (gescheiden door `:`)."
         ),
     )
-    verzoek_betaling__transactie_referentie = filters.CharFilter(
+    betaling__transactie_referentie = filters.CharFilter(
         method="filter_verzoek_betaling_transactiereferentie",
     )
-    verzoek_betaling__voltooid = filters.BooleanFilter(
+    betaling__voltooid = filters.BooleanFilter(
         method="filter_verzoek_betaling_voltooid",
     )
     initiator = URNFilter(
@@ -46,11 +46,11 @@ class VerzoekFilter(FilterSet):
             "(gescheiden door `:`) in het veld `mede_initiator`."
         ),
     )
-    verzoek_informatie_object = URNFilter(
-        field_name="verzoek_informatie_object",
+    informatie_object = URNFilter(
+        field_name="informatie_object",
         help_text=_(
             "Filtert op een exacte match van een volledig segment van de URN "
-            "(gescheiden door `:`) in het veld `verzoek_informatie_object`."
+            "(gescheiden door `:`) in het veld `informatie_object`."
         ),
     )
 
@@ -71,7 +71,9 @@ class VerzoekFilter(FilterSet):
         try:
             obj = field.to_internal_value(value)
         except Exception:
-            raise ValidationError({"verzoek_type__urn": _("Invalid or unknown URN.")})
+            raise ValidationError(
+                {"verzoek_type__urn": _("Ongeldige of onbekende URN.")}
+            )
 
         return queryset.filter(verzoek_type=obj)
 

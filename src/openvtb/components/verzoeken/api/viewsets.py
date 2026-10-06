@@ -135,7 +135,7 @@ class VerzoekTypeVersionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             raise serializers.ValidationError(
                 {
                     api_settings.NON_FIELD_ERRORS_KEY: [
-                        _("Only draft versies can be destroyed")
+                        _("Alleen draft-versies kunnen worden verwijderd")
                     ]
                 },
                 code="non-draft-versie-destroy",

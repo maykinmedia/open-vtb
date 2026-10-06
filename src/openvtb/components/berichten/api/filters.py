@@ -57,7 +57,9 @@ class BerichtFilter(FilterSet):
         try:
             obj = field.to_internal_value(value)
         except Exception:
-            raise ValidationError({"bericht_type__urn": _("Invalid or unknown URN.")})
+            raise ValidationError(
+                {"bericht_type__urn": _("Ongeldige of onbekende URN.")}
+            )
 
         return queryset.filter(bericht_type=obj)
 

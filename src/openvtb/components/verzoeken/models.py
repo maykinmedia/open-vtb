@@ -338,16 +338,16 @@ class Verzoek(models.Model):
         max_length=200,
         help_text=_("Geeft aan via welk kanaal dit verzoek is binnengekomen."),
     )
-    verzoek_informatie_object = URNField(
-        _("verzoek informatie object"),
+    informatie_object = URNField(
+        _("informatie object"),
         help_text=_(
             "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager."
             "Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
         ),
         blank=True,
     )
-    verzoek_taal = models.CharField(
-        _("verzoek taal"),
+    taal = models.CharField(
+        _("taal"),
         help_text=_(
             "De taal, volgens het IANA Language Subtag Registry, waarin het verzoek is gedaan. "
             "In de meest praktische vorm is dit de taal van de vragen maar het is mogelijk dat de "

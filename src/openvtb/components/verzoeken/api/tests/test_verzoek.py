@@ -52,16 +52,16 @@ class VerzoekTests(APITestCase):
                         "bijlagen": [],
                         "isGerelateerdAan": [],
                         "kanaal": "",
-                        "verzoekInformatieObject": "",
-                        "verzoekTaal": "nl",
+                        "informatieObject": "",
+                        "taal": "nl",
                         "verwerkStatus": verzoek.verwerk_status,
                         "initiator": verzoek.initiator,
                         "medeInitiator": verzoek.mede_initiator,
-                        "verzoekBron": {
+                        "bron": {
                             "naam": verzoek.bron.naam,
                             "kenmerk": verzoek.bron.kenmerk,
                         },
-                        "verzoekBetaling": {
+                        "betaling": {
                             "providerKenmerk": verzoek.betaling.provider_kenmerk,
                             "bedrag": str(verzoek.betaling.bedrag),
                             "voltooid": verzoek.betaling.voltooid,
@@ -108,14 +108,14 @@ class VerzoekTests(APITestCase):
                 "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
-                "verzoekTaal": "nl",
+                "informatieObject": verzoek.informatie_object,
+                "taal": "nl",
                 "verwerkStatus": verzoek.verwerk_status,
-                "verzoekBron": {
+                "bron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
                 },
-                "verzoekBetaling": {
+                "betaling": {
                     "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
@@ -142,13 +142,13 @@ class VerzoekTests(APITestCase):
                     "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
                 },
             ],
-            "verzoekBron": {
+            "bron": {
                 "naam": "string",
                 "kenmerk": "string",
             },
             "kanaal": "test",
-            "verzoekInformatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
-            "verzoekBetaling": {
+            "informatieObject": "urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e",
+            "betaling": {
                 "providerKenmerk": "string",
                 "bedrag": "10",
                 "voltooid": True,
@@ -185,14 +185,14 @@ class VerzoekTests(APITestCase):
                 "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
-                "verzoekTaal": verzoek.verzoek_taal,
+                "informatieObject": verzoek.informatie_object,
+                "taal": verzoek.taal,
                 "verwerkStatus": verzoek.verwerk_status,
-                "verzoekBron": {
+                "bron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
                 },
-                "verzoekBetaling": {
+                "betaling": {
                     "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
@@ -223,11 +223,11 @@ class VerzoekTests(APITestCase):
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00011111"},
                 {"urn": "urn:nld:gemeenteutrecht:zaak:zaaknummer:00022222"},
             ],
-            "verzoekBron": {
+            "bron": {
                 "naam": "string",
                 "kenmerk": "string",
             },
-            "verzoekBetaling": {
+            "betaling": {
                 "providerKenmerk": "string",
                 "bedrag": "10",
                 "voltooid": True,
@@ -258,14 +258,14 @@ class VerzoekTests(APITestCase):
                 "medeInitiator": verzoek.mede_initiator,
                 "isGerelateerdAan": verzoek.is_gerelateerd_aan,
                 "kanaal": verzoek.kanaal,
-                "verzoekInformatieObject": verzoek.verzoek_informatie_object,
-                "verzoekTaal": verzoek.verzoek_taal,
+                "informatieObject": verzoek.informatie_object,
+                "taal": verzoek.taal,
                 "verwerkStatus": verzoek.verwerk_status,
-                "verzoekBron": {
+                "bron": {
                     "naam": verzoek.bron.naam,
                     "kenmerk": verzoek.bron.kenmerk,
                 },
-                "verzoekBetaling": {
+                "betaling": {
                     "providerKenmerk": verzoek.betaling.provider_kenmerk,
                     "bedrag": str(verzoek.betaling.bedrag),
                     "voltooid": verzoek.betaling.voltooid,
@@ -375,10 +375,10 @@ class VerzoekTests(APITestCase):
 
         # verzoekBron and verzoekBetaling PATCH
         data = {
-            "verzoekBron": {
+            "bron": {
                 "naam": "new_naam",
             },
-            "verzoekBetaling": {
+            "betaling": {
                 "bedrag": "55",
             },
         }
@@ -403,11 +403,11 @@ class VerzoekTests(APITestCase):
                 "diameter": 20,
             },
             "versie": 2,
-            "verzoekBron": {
+            "bron": {
                 "naam": "new_naam",
                 "kenmerk": "new_kenmerk",
             },
-            "verzoekBetaling": {
+            "betaling": {
                 "bedrag": "10",
                 "transactieReferentie": "new_ref",
             },
@@ -418,7 +418,7 @@ class VerzoekTests(APITestCase):
             ],
             "initiator": "urn:example:12345",
             "medeInitiator": "urn:example:456789",
-            "verzoekTaal": "en",
+            "taal": "en",
         }
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -436,7 +436,7 @@ class VerzoekTests(APITestCase):
         )
         self.assertEqual(verzoek.initiator, "urn:example:12345")
         self.assertEqual(verzoek.mede_initiator, "urn:example:456789")
-        self.assertEqual(verzoek.verzoek_taal, "en")
+        self.assertEqual(verzoek.taal, "en")
 
     def test_update_with_bijlagen(self):
         verzoektype = VerzoekTypeFactory.create(create_versie=True)
@@ -475,7 +475,7 @@ class VerzoekTests(APITestCase):
             {
                 "name": "bijlagen",
                 "code": "required",
-                "reason": "Bijlage must have a informatieObject.",
+                "reason": "Bijlage moet een informatieObject hebben.",
             },
         )
 
@@ -520,10 +520,10 @@ class VerzoekTests(APITestCase):
         self.assertFalse(hasattr(verzoek, "betaling"))
 
         data = {
-            "verzoekBron": {
+            "bron": {
                 "naam": "new_naam",
             },
-            "verzoekBetaling": {
+            "betaling": {
                 "bedrag": "55",
             },
         }

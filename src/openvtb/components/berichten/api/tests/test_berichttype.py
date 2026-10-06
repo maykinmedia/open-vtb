@@ -211,7 +211,7 @@ class BerichtTypeTests(APITestCase):
             {
                 "name": "bijlageTypen",
                 "code": "unique",
-                "reason": "BijlageType with the specified informatieObjecttype already exists.",
+                "reason": "Het bijlageType met het opgegeven informatieObjecttype bestaat al.",
             },
         )
 
