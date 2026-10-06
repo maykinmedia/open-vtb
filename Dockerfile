@@ -25,7 +25,7 @@ RUN uv pip install --system -r requirements/production.txt
 
 
 # Stage 2 - Install frontend deps and build assets
-FROM node:24-alpine AS frontend-build
+FROM node:26-alpine AS frontend-build
 
 WORKDIR /app
 
