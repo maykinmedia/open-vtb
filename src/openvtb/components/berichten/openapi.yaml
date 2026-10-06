@@ -497,7 +497,7 @@ components:
           type: string
           description: Onderwerp van het bericht.
           maxLength: 50
-        berichtTekst:
+        tekst:
           type: string
           description: Tekst van het bericht. URLs worden altijd weergegeven als klikbare
             URLs op alle portalen. Voor portalen van lokale overheden is de basic
@@ -560,7 +560,6 @@ components:
             dit bericht naar de Mijn Overheid Berichtenbox moet, moet rekening gehouden
             worden met de requirements van Logius in haar technische aansluithandleiding.
       required:
-      - berichtTekst
       - berichtType
       - berichtTypeUrn
       - onderwerp

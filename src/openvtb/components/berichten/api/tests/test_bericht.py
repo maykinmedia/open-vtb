@@ -48,7 +48,7 @@ class BerichtTests(APITestCase):
                         "urn": f"urn:maykin:berichten:bericht:{str(bericht.uuid)}",
                         "uuid": str(bericht.uuid),
                         "onderwerp": bericht.onderwerp,
-                        "berichtTekst": bericht.bericht_tekst,
+                        "tekst": bericht.tekst,
                         "publicatiedatum": bericht.publicatiedatum.isoformat().replace(
                             "+00:00", "Z"
                         ),
@@ -110,7 +110,7 @@ class BerichtTests(APITestCase):
                 "urn": f"urn:maykin:berichten:bericht:{str(bericht.uuid)}",
                 "uuid": str(bericht.uuid),
                 "onderwerp": bericht.onderwerp,
-                "berichtTekst": bericht.bericht_tekst,
+                "tekst": bericht.tekst,
                 "publicatiedatum": bericht.publicatiedatum.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -137,7 +137,7 @@ class BerichtTests(APITestCase):
         bericht_type = BerichtTypeFactory.create()
         data = {
             "onderwerp": "onderwerp",
-            "berichtTekst": "berichtTekst berichtTekst",
+            "tekst": "tekst tekst",
             # "publicatiedatum": datetime.datetime.now(), test default
             "referentie": "referentie",
             "ontvanger": "urn:maykin:ontvanger:1234",
@@ -176,7 +176,7 @@ class BerichtTests(APITestCase):
                 "urn": f"urn:maykin:berichten:bericht:{str(bericht.uuid)}",
                 "uuid": str(bericht.uuid),
                 "onderwerp": bericht.onderwerp,
-                "berichtTekst": bericht.bericht_tekst,
+                "tekst": bericht.tekst,
                 "publicatiedatum": bericht.publicatiedatum.isoformat().replace(
                     "+00:00", "Z"
                 ),
@@ -209,19 +209,11 @@ class BerichtTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["code"], "invalid")
         self.assertEqual(response.data["title"], "Ongeldige invoerwaarde.")
-        self.assertEqual(len(response.data["invalid_params"]), 4)
+        self.assertEqual(len(response.data["invalid_params"]), 3)
         self.assertEqual(
             get_validation_errors(response, "onderwerp"),
             {
                 "name": "onderwerp",
-                "code": "required",
-                "reason": "Dit veld is vereist.",
-            },
-        )
-        self.assertEqual(
-            get_validation_errors(response, "berichtTekst"),
-            {
-                "name": "berichtTekst",
                 "code": "required",
                 "reason": "Dit veld is vereist.",
             },
@@ -247,7 +239,7 @@ class BerichtTests(APITestCase):
         self.assertFalse(Bericht.objects.exists())
         data = {
             "onderwerp": "onderwerp",
-            "berichtTekst": "berichtTekst berichtTekst",
+            "tekst": "tekst tekst",
             "ontvanger": "urn:maykin:ontvanger:1234",
             "berichtType": reverse(
                 "berichten:berichttype-detail", kwargs={"uuid": str(uuid.uuid4())}

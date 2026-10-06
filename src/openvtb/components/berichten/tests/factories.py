@@ -43,7 +43,7 @@ class BerichtFactory(DjangoModelFactory):
     geopend_op = timezone.now()
     onderwerp = factory.Faker("word")
     referentie = factory.Faker("word")
-    bericht_tekst = factory.Faker("sentence")
+    tekst = factory.Faker("sentence")
     publicatiedatum = timezone.now()
     einddatum_handelings_termijn = factory.LazyFunction(
         lambda: timezone.now() + datetime.timedelta(days=7)

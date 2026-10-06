@@ -91,7 +91,7 @@ class BerichtSerializer(URNModelSerializer, serializers.ModelSerializer):
             "urn",
             "uuid",
             "onderwerp",
-            "bericht_tekst",
+            "tekst",
             "publicatiedatum",
             "referentie",
             "ontvanger",
