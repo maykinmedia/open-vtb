@@ -30,11 +30,12 @@ FROM node:24-alpine AS frontend-build
 WORKDIR /app
 
 # copy configuration/build files
-COPY ./build /app/build/
-COPY ./*.json ./*.js ./.babelrc /app/
+COPY ./*.json /app/
 
 # install WITH dev tooling
 RUN npm ci --legacy-peer-deps
+
+COPY ./*.js /app/
 
 # copy source code
 COPY ./src /app/src

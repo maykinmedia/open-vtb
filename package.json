@@ -1,16 +1,16 @@
 {
-    "name": "openvtb",
+    "name": "Open VTB",
     "version": "0.2.0",
-    "description": "openvtb project",
-    "main": "src/static/openvtb/js/openvtb.js",
+    "description": "Open VTB project",
+    "type": "module",
+    "main": "src/openvtb/static/bundles/index.js",
     "directories": {
         "doc": "doc"
     },
     "scripts": {
-        "build": "npm run bundle",
-        "bundle": "webpack",
-        "test": "karma start",
-        "watch": "webpack -w"
+        "build": "node build.js",
+        "test": "echo 'no tests defined' && exit 1",
+        "watch": "node build.js --watch"
     },
     "repository": {
         "type": "git",
@@ -31,34 +31,8 @@
         "serialize-javascript": "^7.0.5"
     },
     "devDependencies": {
-        "@babel/core": "^7.28.4",
-        "@babel/polyfill": "^7.12.1",
-        "@babel/preset-env": "^7.28.3",
-        "autoprefixer": "^10.4.21",
-        "babel-loader": "^10.0.0",
-        "chai": "^6.2.0",
-        "css-loader": "^7.1.2",
-        "cssnano": "^7.1.1",
-        "karma": "^6.4.4",
-        "karma-chrome-launcher": "^3.2.0",
-        "karma-coverage": "^2.2.1",
-        "karma-junit-reporter": "^2.0.1",
-        "karma-mocha": "^2.0.1",
-        "karma-spec-reporter": "^0.0.36",
-        "karma-webpack": "^5.0.1",
-        "mini-css-extract-plugin": "^2.9.4",
-        "mocha": "^11.3.0",
-        "postcss-loader": "^8.2.0",
-        "postcss-selector-lint": "^1.0.2",
-        "sass": "^1.93.2",
-        "sass-loader": "^16.0.5",
-        "simulant": "^0.2.2",
-        "sinon": "^21.0.0",
-        "url-loader": "^4.1.1",
-        "webpack": "^5.105.4",
-        "webpack-cli": "^6.0.1",
-        "webpack-dev-server": "^6.0.0",
-        "webpack-stream": "^7.0.0",
-        "yargs": "^17.0.0"
+        "esbuild": "latest",
+        "esbuild-sass-plugin": "latest",
+        "sass-embedded": "latest"
     }
 }
