@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Berichten API
-  version: 0.1.0
+  version: 0.2.0
   description: "De berichten-service bestaat uit een beschrijving van afspraken, standaarden\
     \ en referentiecomponenten aangevuld met interactiepatronen, ontwerpbesluiten\
     \ en aanbevelingen. Het Berichten-patroon biedt een gestandaardiseerde, flexibele\
@@ -10,25 +10,27 @@ info:
     \ en door verschillende applicaties worden opgehaald, weergegeven en verwerkt.\
     \ In tegenstelling tot traditionele berichtgevingen (zoals e-mail), zijn berichten\
     \ centraal geregistreerd en kunnen ze eenvoudig getoond en gerelateerd worden\
-    \ naast zaken, taken of producten binnen het gemeentelijke landschap. \n\n**URN\
-    \ Pattern**\n\nOpen VTB uses URNs (Uniform Resource Names) to link to other resources,\
-    \ below is a description of the pattern that should be used.\n\n**Syntax:**\n\n\
-    `urn:<NID>:<NSS>[#<f-component>]`\n\n**Parts:**\n\n- `urn:` (required): fixed\
-    \ prefix for all URNs, every URN must start with this prefix.\n- `NID` (required):\
-    \ Namespace Identifier: alphanumeric characters, e.g. `nld`.\n- `NSS` (required):\
-    \ Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.\n\
-    - `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.\n\
-    \n**Examples:**\n\n`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n\
-    \nFor more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141\n\
-    \n**Filtering on URNs**\n\nFilters on URN fields match an exact, complete segment\
-    \ of the URN (parts separated by `:`).\n\nFor example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:\n\
-    \n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)\n*\
-    \ `urn:nld:hr:kvknummer:123456` - match (start of the URN)\n* `vestigingsnummer:7890`\
-    \ - match (end of the URN)\n* `123456:vestigingsnummer:7890` - match (middle,\
-    \ on segment boundaries)\n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78`\
-    \ - no match (truncated segment)\n* `urn:nld:hr:kvknummer:1234` - no match (truncated\
-    \ segment)\n* `nummer:7890` - no match (substring within a segment, not a full\
-    \ segment)\n* `3456:vestigingsnummer:7890` - no match (substring within a segment)\n"
+    \ naast zaken, taken of producten binnen het gemeentelijke landschap. \n\n**URN-patroon**\n\
+    \nOpen VTB gebruikt URN's (Uniform Resource Names) om naar andere resources te\
+    \ verwijzen. Hieronder staat een beschrijving van het patroon dat gebruikt moet\
+    \ worden.\n\n**Syntax:**\n\n`urn:<NID>:<NSS>[#<f-component>]`\n\n**Onderdelen:**\n\
+    \n- `urn:` (verplicht): vast voorvoegsel voor alle URN's; elke URN moet met dit\
+    \ voorvoegsel beginnen.\n- `NID` (verplicht): Namespace Identifier: alfanumerieke\
+    \ tekens, bijv. `nld`.\n- `NSS` (verplicht): Namespace Specific String die het\
+    \ object identificeert, bijv. `brp:bsn:111222333`.\n- `f-component` (optioneel):\
+    \ optioneel onderdeel voorafgegaan door `#`, bijv. `#section1`.\n\n**Voorbeelden:**\n\
+    \n`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n\nZie voor meer\
+    \ informatie de officiële specificatie: https://datatracker.ietf.org/doc/html/rfc8141\n\
+    \n**Filteren op URN's**\n\nFilters op URN-velden matchen op een exact, volledig\
+    \ segment van de URN (onderdelen gescheiden door `:`).\n\nBijvoorbeeld, gegeven\
+    \ de URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:\n\n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`\
+    \ - match (volledige URN)\n* `urn:nld:hr:kvknummer:123456` - match (begin van\
+    \ de URN)\n* `vestigingsnummer:7890` - match (einde van de URN)\n* `123456:vestigingsnummer:7890`\
+    \ - match (midden, op segmentgrenzen)\n* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78`\
+    \ - geen match (afgekapt segment)\n* `urn:nld:hr:kvknummer:1234` - geen match\
+    \ (afgekapt segment)\n* `nummer:7890` - geen match (deel van een segment, geen\
+    \ volledig segment)\n* `3456:vestigingsnummer:7890` - geen match (deel van een\
+    \ segment)\n"
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -539,7 +541,7 @@ components:
           format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
-          description: Het berichttype waartoe dit bericht behoort.URN field
+          description: Het berichttype waartoe dit bericht behoort.URN-veld
         isGerelateerdAan:
           type: array
           items:

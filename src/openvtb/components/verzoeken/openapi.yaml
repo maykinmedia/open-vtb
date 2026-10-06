@@ -1,45 +1,45 @@
 openapi: 3.0.3
 info:
   title: Verzoeken API
-  version: 0.1.0
+  version: 0.2.0
   description: |
     De 'Verzoeken-API' slaat ingediende formuliergegevens op als gestructureerde JSON.Aangezien formulieren elk type veld kunnen bevatten, definieert elk formulier een JSON-schema dat de verwachte structuur specificeert.Inkomende gegevens worden getoetst aan dit schema en opgeslagen in een consistent, gestructureerd formaat.
 
-    **URN Pattern**
+    **URN-patroon**
 
-    Open VTB uses URNs (Uniform Resource Names) to link to other resources, below is a description of the pattern that should be used.
+    Open VTB gebruikt URN's (Uniform Resource Names) om naar andere resources te verwijzen. Hieronder staat een beschrijving van het patroon dat gebruikt moet worden.
 
     **Syntax:**
 
     `urn:<NID>:<NSS>[#<f-component>]`
 
-    **Parts:**
+    **Onderdelen:**
 
-    - `urn:` (required): fixed prefix for all URNs, every URN must start with this prefix.
-    - `NID` (required): Namespace Identifier: alphanumeric characters, e.g. `nld`.
-    - `NSS` (required): Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.
-    - `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.
+    - `urn:` (verplicht): vast voorvoegsel voor alle URN's; elke URN moet met dit voorvoegsel beginnen.
+    - `NID` (verplicht): Namespace Identifier: alfanumerieke tekens, bijv. `nld`.
+    - `NSS` (verplicht): Namespace Specific String die het object identificeert, bijv. `brp:bsn:111222333`.
+    - `f-component` (optioneel): optioneel onderdeel voorafgegaan door `#`, bijv. `#section1`.
 
-    **Examples:**
+    **Voorbeelden:**
 
     `urn:namespace:component:resource:uuid`, `urn:example:foo#bar`
 
-    For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141
+    Zie voor meer informatie de officiële specificatie: https://datatracker.ietf.org/doc/html/rfc8141
 
-    **Filtering on URNs**
+    **Filteren op URN's**
 
-    Filters on URN fields match an exact, complete segment of the URN (parts separated by `:`).
+    Filters op URN-velden matchen op een exact, volledig segment van de URN (onderdelen gescheiden door `:`).
 
-    For example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:
+    Bijvoorbeeld, gegeven de URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:
 
-    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)
-    * `urn:nld:hr:kvknummer:123456` - match (start of the URN)
-    * `vestigingsnummer:7890` - match (end of the URN)
-    * `123456:vestigingsnummer:7890` - match (middle, on segment boundaries)
-    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated segment)
-    * `urn:nld:hr:kvknummer:1234` - no match (truncated segment)
-    * `nummer:7890` - no match (substring within a segment, not a full segment)
-    * `3456:vestigingsnummer:7890` - no match (substring within a segment)
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (volledige URN)
+    * `urn:nld:hr:kvknummer:123456` - match (begin van de URN)
+    * `vestigingsnummer:7890` - match (einde van de URN)
+    * `123456:vestigingsnummer:7890` - match (midden, op segmentgrenzen)
+    * `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - geen match (afgekapt segment)
+    * `urn:nld:hr:kvknummer:1234` - geen match (afgekapt segment)
+    * `nummer:7890` - geen match (deel van een segment, geen volledig segment)
+    * `3456:vestigingsnummer:7890` - geen match (deel van een segment)
   contact:
     email: standaarden.ondersteuning@vng.nl
     name: VNG
@@ -1005,7 +1005,7 @@ components:
           format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
-          description: Type van het Verzoek.URN field
+          description: Type van het Verzoek.URN-veld
         geometrie:
           allOf:
           - $ref: '#/components/schemas/GeoJSONGeometry'
@@ -1272,7 +1272,7 @@ components:
           format: urn
           example: urn:namespace:component:resource:uuid
           readOnly: true
-          description: Type van het Verzoek.URN field
+          description: Type van het Verzoek.URN-veld
         geometrie:
           allOf:
           - $ref: '#/components/schemas/GeoJSONGeometry'

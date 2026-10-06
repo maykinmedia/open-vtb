@@ -3,6 +3,10 @@
         {
             "gitRef": "main",
             "tag": "latest"
+        },
+        {
+            "gitRef": "0.2.0",
+            "tag": "0.2.0"
         }
     ],
     "dockerOrg": "maykinmedia",

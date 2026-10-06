@@ -4,12 +4,20 @@
 Environment configuration reference
 ===================================
 
-
+Open VTB can be ran both as a Docker container or directly on a VPS or dedicated server.
+It relies on other services, such as database and cache backends,
+which can be configured through environment variables.
 
 Available environment variables
 ===============================
 
 .. config-all-params::
+
+.. Environment variables that are not defined in Python code and therefore not automatically
+.. picked up by the documentation generation directive
+
+* ``OPENVTB_PORT``: The port the uWSGI (web server) process binds to in the Docker
+  entrypoint (``bin/docker_start.sh``). Defaults to ``8000``.
 
 Specifying the environment variables
 =====================================

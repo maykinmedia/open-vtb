@@ -110,7 +110,17 @@ linkcheck_ignore = [
     r"https://gdpr.eu*",
 ]
 
-extlinks = {}
+extlinks = {
+    "open-vtb": ("https://github.com/maykinmedia/open-vtb/issues/%s", "#%s"),
+    "open-api-workflows": (
+        "https://github.com/maykinmedia/open-api-workflows/issues/%s",
+        "#%s",
+    ),
+    "open-api-framework": (
+        "https://github.com/maykinmedia/open-api-framework/issues/%s",
+        "#%s",
+    ),
+}
 
 django_structlog_version = _version("django-structlog")
 oaf_version = _version("open-api-framework")
