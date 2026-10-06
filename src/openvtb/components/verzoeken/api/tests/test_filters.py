@@ -141,7 +141,7 @@ class VerzoekFilterTest(APITestCase):
             {
                 "name": "verzoekType__urn",
                 "code": "invalid",
-                "reason": "Invalid or unknown URN.",
+                "reason": "Ongeldige of onbekende URN.",
             },
         )
 
@@ -153,15 +153,13 @@ class VerzoekFilterTest(APITestCase):
             {
                 "name": "verzoekType__urn",
                 "code": "invalid",
-                "reason": "Invalid or unknown URN.",
+                "reason": "Ongeldige of onbekende URN.",
             },
         )
 
     def test_filter_verzoek_betaling_voltooid(self):
         with self.subTest("true"):
-            response = self.client.get(
-                self.list_url, {"verzoekBetaling__voltooid": True}
-            )
+            response = self.client.get(self.list_url, {"betaling__voltooid": True})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = response.json()
             self.assertEqual(data["count"], 2)
@@ -171,18 +169,14 @@ class VerzoekFilterTest(APITestCase):
             )
 
         with self.subTest("false"):
-            response = self.client.get(
-                self.list_url, {"verzoekBetaling__voltooid": False}
-            )
+            response = self.client.get(self.list_url, {"betaling__voltooid": False})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = response.json()
             self.assertEqual(data["count"], 1)
             self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_c.uuid))
 
         with self.subTest("invalid"):
-            response = self.client.get(
-                self.list_url, {"verzoekBetaling__voltooid": "test"}
-            )
+            response = self.client.get(self.list_url, {"betaling__voltooid": "test"})
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = response.json()
             # return all values
@@ -190,7 +184,7 @@ class VerzoekFilterTest(APITestCase):
 
     def test_filter_verzoek_betaling_transactiereferentie(self):
         response = self.client.get(
-            self.list_url, {"verzoekBetaling__transactieReferentie": "REF 123"}
+            self.list_url, {"betaling__transactieReferentie": "REF 123"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -198,7 +192,7 @@ class VerzoekFilterTest(APITestCase):
         self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_a.uuid))
 
         response = self.client.get(
-            self.list_url, {"verzoekBetaling__transactieReferentie": "test"}
+            self.list_url, {"betaling__transactieReferentie": "test"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()

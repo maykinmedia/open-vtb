@@ -141,7 +141,7 @@ class BerichtFilterTest(APITestCase):
             {
                 "name": "berichtType__urn",
                 "code": "invalid",
-                "reason": "Invalid or unknown URN.",
+                "reason": "Ongeldige of onbekende URN.",
             },
         )
 
@@ -157,7 +157,7 @@ class BerichtFilterTest(APITestCase):
             {
                 "name": "berichtType__urn",
                 "code": "invalid",
-                "reason": "Invalid or unknown URN.",
+                "reason": "Ongeldige of onbekende URN.",
             },
         )
 

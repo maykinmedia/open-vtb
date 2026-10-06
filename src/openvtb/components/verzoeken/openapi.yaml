@@ -55,6 +55,20 @@ paths:
       summary: Vraag alle verzoeken aan.
       parameters:
       - in: query
+        name: betaling__transactieReferentie
+        schema:
+          type: string
+      - in: query
+        name: betaling__voltooid
+        schema:
+          type: boolean
+      - in: query
+        name: informatieObject
+        schema:
+          type: string
+        description: Filtert op een exacte match van een volledig segment van de URN
+          (gescheiden door `:`) in het veld `informatie_object`.
+      - in: query
         name: initiator
         schema:
           type: string
@@ -107,20 +121,6 @@ paths:
         description: |+
           De initiële status is altijd `geregistreerd`. De status `verwerkt` moet gezet worden door het component dat verantwoordelijk is voor de afhandeling danwel opvolging.
 
-      - in: query
-        name: verzoekBetaling__transactieReferentie
-        schema:
-          type: string
-      - in: query
-        name: verzoekBetaling__voltooid
-        schema:
-          type: boolean
-      - in: query
-        name: verzoekInformatieObject
-        schema:
-          type: string
-        description: Filtert op een exacte match van een volledig segment van de URN
-          (gescheiden door `:`) in het veld `verzoek_informatie_object`.
       - in: query
         name: verzoekType__urn
         schema:
@@ -1055,7 +1055,7 @@ components:
           type: string
           description: Geeft aan via welk kanaal dit verzoek is binnengekomen.
           maxLength: 200
-        verzoekTaal:
+        taal:
           type: string
           default: nl
           description: De taal, volgens het IANA Language Subtag Registry, waarin
@@ -1072,7 +1072,7 @@ components:
           description: De initiële status is altijd `geregistreerd`. De status `verwerkt`
             moet gezet worden door het component dat verantwoordelijk is voor de afhandeling
             danwel opvolging.
-        verzoekInformatieObject:
+        informatieObject:
           type: string
           format: urn
           example: urn:namespace:component:resource:uuid
@@ -1080,11 +1080,11 @@ components:
             als document zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
-        verzoekBron:
+        bron:
           allOf:
           - $ref: '#/components/schemas/VerzoekBron'
           description: Een verwijzing naar de bron waar dit verzoek vandaan komt.
-        verzoekBetaling:
+        betaling:
           allOf:
           - $ref: '#/components/schemas/VerzoekBetaling'
           description: Verzoek tot betaling gekoppeld aan deze resource.
@@ -1322,7 +1322,7 @@ components:
           type: string
           description: Geeft aan via welk kanaal dit verzoek is binnengekomen.
           maxLength: 200
-        verzoekTaal:
+        taal:
           type: string
           default: nl
           description: De taal, volgens het IANA Language Subtag Registry, waarin
@@ -1339,7 +1339,7 @@ components:
           description: De initiële status is altijd `geregistreerd`. De status `verwerkt`
             moet gezet worden door het component dat verantwoordelijk is voor de afhandeling
             danwel opvolging.
-        verzoekInformatieObject:
+        informatieObject:
           type: string
           format: urn
           example: urn:namespace:component:resource:uuid
@@ -1347,11 +1347,11 @@ components:
             als document zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`'
           pattern: ^urn:[A-Za-z0-9](?:[A-Za-z0-9]|-){0,30}[A-Za-z0-9]:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/)*(?:\?\+(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:\?=(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?(?:#(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])(?:(?:[A-Za-z0-9]|[-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@])|/|\?)*)?$
           maxLength: 255
-        verzoekBron:
+        bron:
           allOf:
           - $ref: '#/components/schemas/VerzoekBron'
           description: Een verwijzing naar de bron waar dit verzoek vandaan komt.
-        verzoekBetaling:
+        betaling:
           allOf:
           - $ref: '#/components/schemas/VerzoekBetaling'
           description: Verzoek tot betaling gekoppeld aan deze resource.

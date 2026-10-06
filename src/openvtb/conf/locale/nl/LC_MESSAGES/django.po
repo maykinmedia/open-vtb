@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 14:48+0000\n"
+"POT-Creation-Date: 2026-10-06 13:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Dutch\n"
@@ -119,19 +119,19 @@ msgid ""
 "door `:`) in het veld `ontvanger`."
 msgstr ""
 
-#: components/berichten/api/filters.py:60
-#: components/verzoeken/api/filters.py:74
-msgid "Invalid or unknown URN."
-msgstr "Ongeldige of onbekende URN."
+#: components/berichten/api/filters.py:61
+#: components/verzoeken/api/filters.py:75
+msgid "Ongeldige of onbekende URN."
+msgstr ""
 
-#: components/berichten/api/filters.py:69
+#: components/berichten/api/filters.py:71
 msgid ""
 "Filter op berichttypen die wel/niet geschikt zijn voor publicatie in de "
 "MijnOverheid Berichtenbox. ``true`` = geschikt voor publicatie, ``false`` = "
 "niet geschikt voor publicatie."
 msgstr ""
 
-#: components/berichten/api/filters.py:77
+#: components/berichten/api/filters.py:79
 msgid ""
 "Filtert op een exacte match van een volledig segment van de URN (gescheiden "
 "door `:`) in het veld `verantwoordelijke_organisatie`."
@@ -154,20 +154,20 @@ msgstr ""
 #: components/berichten/api/serializers.py:22 components/taken/models.py:131
 #: components/verzoeken/models.py:329
 msgid ""
-"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: "
-"`urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165` of "
-"`urn:nld:gemeenteutrecht:product:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
+"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:"
+"zaaknummer:000350165` of `urn:nld:gemeenteutrecht:product:"
+"uuid:717815f6-1939-4fd2-93f0-83d25bad154e`."
 msgstr ""
 
 #: components/berichten/api/serializers.py:61
 msgid ""
-"Lijst van bijlagen bij het bericht. Let op; In het geval dat dit bericht naar"
-" de Mijn Overheid Berichtenbox moet, moet rekening gehouden worden met de "
-"requirements van Logius in haar technische aansluithandleiding."
+"Lijst van bijlagen bij het bericht. Let op; In het geval dat dit bericht "
+"naar de Mijn Overheid Berichtenbox moet, moet rekening gehouden worden met "
+"de requirements van Logius in haar technische aansluithandleiding."
 msgstr ""
 
 #: components/berichten/api/serializers.py:84
-#: components/verzoeken/api/serializers.py:276
+#: components/verzoeken/api/serializers.py:278
 msgid "URN field"
 msgstr "URN-veld"
 
@@ -176,17 +176,27 @@ msgid "De unieke URL van het Bericht binnen deze API."
 msgstr ""
 
 #: components/berichten/api/serializers.py:114
-#: components/berichten/api/serializers.py:165
+#: components/berichten/api/serializers.py:167
 msgid "De Uniform Resource Name van het Bericht."
 msgstr ""
 
-#: components/berichten/api/serializers.py:141
+#: components/berichten/api/serializers.py:131
+#: components/verzoeken/api/serializers.py:379
+msgid "Bijlage met de opgegeven informatieObject bestaat al."
+msgstr ""
+
+#: components/berichten/api/serializers.py:143
 #: components/verzoeken/api/serializers.py:60
 msgid "Lijst met bijlagenTypen die aan deze bron zijn gekoppeld."
 msgstr ""
 
-#: components/berichten/api/serializers.py:161
+#: components/berichten/api/serializers.py:163
 msgid "De unieke URL van het BerichtType binnen deze API."
+msgstr ""
+
+#: components/berichten/api/serializers.py:186
+#: components/verzoeken/api/serializers.py:146
+msgid "Het bijlageType met het opgegeven informatieObjecttype bestaat al."
 msgstr ""
 
 #: components/berichten/api/viewsets.py:24
@@ -257,8 +267,8 @@ msgstr ""
 #: components/berichten/models.py:34
 msgid ""
 "Geeft aan of berichten van dit type geschikt zijn voor publicatie in de "
-"MijnOverheid Berichtenbox. Als dit op ``False`` staat, zijn berichten van dit"
-" type niet bedoeld voor publicatie in de Berichtenbox."
+"MijnOverheid Berichtenbox. Als dit op ``False`` staat, zijn berichten van "
+"dit type niet bedoeld voor publicatie in de Berichtenbox."
 msgstr ""
 
 #: components/berichten/models.py:40
@@ -303,7 +313,7 @@ msgid "Onderwerp van het bericht."
 msgstr ""
 
 #: components/berichten/models.py:77
-msgid "bericht tekst"
+msgid "tekst"
 msgstr ""
 
 #: components/berichten/models.py:80
@@ -314,153 +324,154 @@ msgid ""
 "(\\r\\n)."
 msgstr ""
 
-#: components/berichten/models.py:86
+#: components/berichten/models.py:87
 msgid "publicatiedatum"
 msgstr ""
 
-#: components/berichten/models.py:90
+#: components/berichten/models.py:91
 msgid ""
 "Datum/tijd waarop bericht zichtbaar moet worden voor de ontvanger. Dit geldt "
 "voor zowel de Mijn Overheid berichtenbox als het portaal van de lokale "
 "overheid. De standaardwaarde is de huidige datum/tijd."
 msgstr ""
 
-#: components/berichten/models.py:96
+#: components/berichten/models.py:97
 msgid "gepubliceerd"
 msgstr ""
 
-#: components/berichten/models.py:99
+#: components/berichten/models.py:100
 msgid "Geeft aan of het object gepubliceerd is en zichtbaar voor gebruikers."
 msgstr ""
 
-#: components/berichten/models.py:103
+#: components/berichten/models.py:104
 msgid "referentie"
 msgstr ""
 
-#: components/berichten/models.py:107
+#: components/berichten/models.py:108
 msgid ""
 "Uw eigen optionele referentiegegevens, maximaal 25 tekens, conform de "
 "requirements van Logius in haar technische aansluithandleiding."
 msgstr ""
 
-#: components/berichten/models.py:112
+#: components/berichten/models.py:113
 msgid "ontvanger"
 msgstr ""
 
-#: components/berichten/models.py:114
+#: components/berichten/models.py:115
 msgid ""
 "URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: "
-"`urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of "
-"`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`"
+"`urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:"
+"kvknummer:444555666:vestigingsnummer:777888999`"
 msgstr ""
 
-#: components/berichten/models.py:120
+#: components/berichten/models.py:121
 msgid "geopend op"
 msgstr ""
 
-#: components/berichten/models.py:123
+#: components/berichten/models.py:124
 msgid ""
 "Het bericht is door de geadresseerde geopend op dit tijdstip in het portaal "
 "van de lokale overheid. Deze waarde is onafhankelijk Mijn Overheid."
 msgstr ""
 
-#: components/berichten/models.py:131 components/berichten/models.py:183
+#: components/berichten/models.py:132 components/berichten/models.py:184
 msgid "bericht type"
 msgstr ""
 
-#: components/berichten/models.py:132
+#: components/berichten/models.py:133
 msgid "Het berichttype waartoe dit bericht behoort."
 msgstr ""
 
-#: components/berichten/models.py:135 components/taken/models.py:68
+#: components/berichten/models.py:136 components/taken/models.py:68
 msgid "einddatum handelings termijn"
 msgstr ""
 
-#: components/berichten/models.py:137
+#: components/berichten/models.py:138
 msgid "Datum/tijd waarop handeling afgerond moet zijn."
 msgstr ""
 
-#: components/berichten/models.py:140 components/taken/models.py:126
+#: components/berichten/models.py:141 components/taken/models.py:126
 #: components/verzoeken/models.py:324
 msgid "is gerelateerd aan"
 msgstr ""
 
-#: components/berichten/models.py:144
+#: components/berichten/models.py:145
 msgid "Lijst met URN’s naar de ZAAK of het PRODUCT."
 msgstr ""
 
-#: components/berichten/models.py:149
+#: components/berichten/models.py:150
 msgid "Bericht"
 msgstr ""
 
-#: components/berichten/models.py:150
+#: components/berichten/models.py:151
 msgid "Berichten"
 msgstr ""
 
-#: components/berichten/models.py:177 components/verzoeken/models.py:464
+#: components/berichten/models.py:178 components/verzoeken/models.py:464
 msgid "Unieke identificatiecode (UUID4) voor het BijlageType."
 msgstr ""
 
-#: components/berichten/models.py:186 components/verzoeken/models.py:473
+#: components/berichten/models.py:187 components/verzoeken/models.py:473
 msgid "informatie objecttype"
 msgstr ""
 
-#: components/berichten/models.py:188 components/verzoeken/models.py:475
+#: components/berichten/models.py:189 components/verzoeken/models.py:475
 msgid ""
-"URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: "
-"`urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+"URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: `urn:nld:gemeenteutrecht:"
+"informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
 msgstr ""
 
-#: components/berichten/models.py:194 components/berichten/models.py:233
+#: components/berichten/models.py:195 components/berichten/models.py:234
 #: components/verzoeken/models.py:34 components/verzoeken/models.py:481
 msgid "omschrijving"
 msgstr ""
 
-#: components/berichten/models.py:198 components/verzoeken/models.py:484
+#: components/berichten/models.py:199 components/verzoeken/models.py:484
 msgid ""
-"Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien kan"
-" worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving als"
-" die van het INFORMATIEOBJECTTYPE."
+"Omschrijving van het soort bijlage, zoals dat door eind gebruikers gezien "
+"kan worden in bijvoorbeeld een portaal. Typisch is dit dezelfde omschrijving "
+"als die van het INFORMATIEOBJECTTYPE."
 msgstr ""
 
-#: components/berichten/models.py:204 components/verzoeken/models.py:490
+#: components/berichten/models.py:205 components/verzoeken/models.py:490
 msgid "BijlageType"
 msgstr ""
 
-#: components/berichten/models.py:205 components/verzoeken/models.py:491
+#: components/berichten/models.py:206 components/verzoeken/models.py:491
 msgid "BijlageTypen"
 msgstr ""
 
-#: components/berichten/models.py:217 components/verzoeken/models.py:434
+#: components/berichten/models.py:218 components/verzoeken/models.py:434
 msgid "Unieke identificatiecode (UUID4) voor het Bijlage."
 msgstr ""
 
-#: components/berichten/models.py:223
+#: components/berichten/models.py:224
 msgid "Bijlagen gekoppeld aan het bericht."
 msgstr ""
 
-#: components/berichten/models.py:226 components/verzoeken/models.py:443
+#: components/berichten/models.py:227 components/verzoeken/models.py:342
+#: components/verzoeken/models.py:443
 msgid "informatie object"
 msgstr ""
 
-#: components/berichten/models.py:228 components/taken/api/serializers.py:101
+#: components/berichten/models.py:229 components/taken/api/serializers.py:101
 #: components/verzoeken/models.py:445
 msgid ""
-"URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: "
-"`urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+"URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:"
+"gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
 msgstr ""
 
-#: components/berichten/models.py:237
+#: components/berichten/models.py:238
 msgid ""
 "Een door de inwoner of bedrijf goed leesbare omschrijving van de bijlage die "
 "wordt weergegeven als bestandsnaam in een berichtenbox of portaal."
 msgstr ""
 
-#: components/berichten/models.py:243
+#: components/berichten/models.py:244
 msgid "Bericht bijlage"
 msgstr ""
 
-#: components/berichten/models.py:244
+#: components/berichten/models.py:245
 msgid "Berichten bijlagen"
 msgstr ""
 
@@ -498,7 +509,8 @@ msgid ""
 "\n"
 "**URN Pattern**\n"
 "\n"
-"Open VTB uses URNs (Uniform Resource Names) to link to other resources, below is a description of the pattern that should be used.\n"
+"Open VTB uses URNs (Uniform Resource Names) to link to other resources, "
+"below is a description of the pattern that should be used.\n"
 "\n"
 "**Syntax:**\n"
 "\n"
@@ -506,28 +518,36 @@ msgid ""
 "\n"
 "**Parts:**\n"
 "\n"
-"- `urn:` (required): fixed prefix for all URNs, every URN must start with this prefix.\n"
-"- `NID` (required): Namespace Identifier: alphanumeric characters, e.g. `nld`.\n"
-"- `NSS` (required): Namespace Specific String identifying the object, e.g. `brp:bsn:111222333`.\n"
-"- `f-component` (optional): Optional component preceded by `#`, e.g. `#section1`.\n"
+"- `urn:` (required): fixed prefix for all URNs, every URN must start with "
+"this prefix.\n"
+"- `NID` (required): Namespace Identifier: alphanumeric characters, e.g. "
+"`nld`.\n"
+"- `NSS` (required): Namespace Specific String identifying the object, e.g. "
+"`brp:bsn:111222333`.\n"
+"- `f-component` (optional): Optional component preceded by `#`, e.g. "
+"`#section1`.\n"
 "\n"
 "**Examples:**\n"
 "\n"
 "`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n"
 "\n"
-"For more information, see the official specification: https://datatracker.ietf.org/doc/html/rfc8141\n"
+"For more information, see the official specification: https://datatracker."
+"ietf.org/doc/html/rfc8141\n"
 "\n"
 "**Filtering on URNs**\n"
 "\n"
-"Filters on URN fields match an exact, complete segment of the URN (parts separated by `:`).\n"
+"Filters on URN fields match an exact, complete segment of the URN (parts "
+"separated by `:`).\n"
 "\n"
-"For example, given the URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:\n"
+"For example, given the URN `urn:nld:hr:kvknummer:123456:"
+"vestigingsnummer:7890`:\n"
 "\n"
 "* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (full URN)\n"
 "* `urn:nld:hr:kvknummer:123456` - match (start of the URN)\n"
 "* `vestigingsnummer:7890` - match (end of the URN)\n"
 "* `123456:vestigingsnummer:7890` - match (middle, on segment boundaries)\n"
-"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated segment)\n"
+"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - no match (truncated "
+"segment)\n"
 "* `urn:nld:hr:kvknummer:1234` - no match (truncated segment)\n"
 "* `nummer:7890` - no match (substring within a segment, not a full segment)\n"
 "* `3456:vestigingsnummer:7890` - no match (substring within a segment)\n"
@@ -536,7 +556,9 @@ msgstr ""
 "\n"
 "**URN-patroon**\n"
 "\n"
-"Open VTB gebruikt URN's (Uniform Resource Names) om naar andere resources te verwijzen. Hieronder staat een beschrijving van het patroon dat gebruikt moet worden.\n"
+"Open VTB gebruikt URN's (Uniform Resource Names) om naar andere resources te "
+"verwijzen. Hieronder staat een beschrijving van het patroon dat gebruikt "
+"moet worden.\n"
 "\n"
 "**Syntax:**\n"
 "\n"
@@ -544,28 +566,37 @@ msgstr ""
 "\n"
 "**Onderdelen:**\n"
 "\n"
-"- `urn:` (verplicht): vast voorvoegsel voor alle URN's; elke URN moet met dit voorvoegsel beginnen.\n"
-"- `NID` (verplicht): Namespace Identifier: alfanumerieke tekens, bijv. `nld`.\n"
-"- `NSS` (verplicht): Namespace Specific String die het object identificeert, bijv. `brp:bsn:111222333`.\n"
-"- `f-component` (optioneel): optioneel onderdeel voorafgegaan door `#`, bijv. `#section1`.\n"
+"- `urn:` (verplicht): vast voorvoegsel voor alle URN's; elke URN moet met "
+"dit voorvoegsel beginnen.\n"
+"- `NID` (verplicht): Namespace Identifier: alfanumerieke tekens, bijv. "
+"`nld`.\n"
+"- `NSS` (verplicht): Namespace Specific String die het object identificeert, "
+"bijv. `brp:bsn:111222333`.\n"
+"- `f-component` (optioneel): optioneel onderdeel voorafgegaan door `#`, "
+"bijv. `#section1`.\n"
 "\n"
 "**Voorbeelden:**\n"
 "\n"
 "`urn:namespace:component:resource:uuid`, `urn:example:foo#bar`\n"
 "\n"
-"Zie voor meer informatie de officiële specificatie: https://datatracker.ietf.org/doc/html/rfc8141\n"
+"Zie voor meer informatie de officiële specificatie: https://datatracker.ietf."
+"org/doc/html/rfc8141\n"
 "\n"
 "**Filteren op URN's**\n"
 "\n"
-"Filters op URN-velden matchen op een exact, volledig segment van de URN (onderdelen gescheiden door `:`).\n"
+"Filters op URN-velden matchen op een exact, volledig segment van de URN "
+"(onderdelen gescheiden door `:`).\n"
 "\n"
-"Bijvoorbeeld, gegeven de URN `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890`:\n"
+"Bijvoorbeeld, gegeven de URN `urn:nld:hr:kvknummer:123456:"
+"vestigingsnummer:7890`:\n"
 "\n"
-"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (volledige URN)\n"
+"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:7890` - match (volledige "
+"URN)\n"
 "* `urn:nld:hr:kvknummer:123456` - match (begin van de URN)\n"
 "* `vestigingsnummer:7890` - match (einde van de URN)\n"
 "* `123456:vestigingsnummer:7890` - match (midden, op segmentgrenzen)\n"
-"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - geen match (afgekapt segment)\n"
+"* `urn:nld:hr:kvknummer:123456:vestigingsnummer:78` - geen match (afgekapt "
+"segment)\n"
 "* `urn:nld:hr:kvknummer:1234` - geen match (afgekapt segment)\n"
 "* `nummer:7890` - geen match (deel van een segment, geen volledig segment)\n"
 "* `3456:vestigingsnummer:7890` - geen match (deel van een segment)\n"
@@ -584,16 +615,16 @@ msgstr ""
 #: components/taken/api/schema.py:20
 msgid ""
 "De 'Taken-Service' is een gestandaardiseerde architectuur voor Nederlandse "
-"overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren die"
-" burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen "
+"overheidssystemen,ontworpen om acties (taken) te definiëren en te beheren "
+"die burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen "
 "verschillende applicaties."
 msgstr ""
 
 #: components/taken/api/serializers.py:27
-#: components/verzoeken/api/serializers.py:257
+#: components/verzoeken/api/serializers.py:259
 msgid ""
-"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: "
-"`urn:nld:gemeenteutrecht:zaak:zaaknummer:000350165`"
+"URN naar de ZAAK of het PRODUCT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:zaak:"
+"zaaknummer:000350165`"
 msgstr ""
 
 #: components/taken/api/serializers.py:36
@@ -643,9 +674,9 @@ msgstr ""
 
 #: components/taken/api/serializers.py:115 components/taken/schemas.py:82
 msgid ""
-"Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de uitvraag."
-" De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of een veld "
-"in een sjabloon."
+"Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in de "
+"uitvraag. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of "
+"een veld in een sjabloon."
 msgstr ""
 
 #: components/taken/api/serializers.py:121
@@ -660,19 +691,23 @@ msgstr ""
 
 #: components/taken/api/serializers.py:137
 msgid ""
-"Definitie van het formulier in JSON. Het formulier moet minimaal het veld `components` bevatten. Elke component moet de volgende verplichte velden hebben:\n"
+"Definitie van het formulier in JSON. Het formulier moet minimaal het veld "
+"`components` bevatten. Elke component moet de volgende verplichte velden "
+"hebben:\n"
 "- `label`: de naam die weergegeven wordt voor het veld\n"
 "- `key`: de unieke identifier voor het veld\n"
 "- `type`: het type van het veld, bijvoorbeeld `text`, `number` of `date`\n"
 " \n"
-" Andere velden, zoals `values`, `format`, `enableTime` of `fileTypes`, zijn optioneel en kunnen gebruikt worden om het gedrag of de weergave van het veld aan te passen."
+" Andere velden, zoals `values`, `format`, `enableTime` of `fileTypes`, zijn "
+"optioneel en kunnen gebruikt worden om het gedrag of de weergave van het "
+"veld aan te passen."
 msgstr ""
 
 #: components/taken/api/serializers.py:148 components/taken/schemas.py:138
 msgid ""
 "Arbitraire sleutel-waarde gegevens die ingevuld moeten worden in het "
-"formulier. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, of"
-" een veld in een sjabloon."
+"formulier. De sleutel kan bijvoorbeeld een veldnaam zijn in een formulier, "
+"of een veld in een sjabloon."
 msgstr ""
 
 #: components/taken/api/serializers.py:219
@@ -820,8 +855,8 @@ msgid ""
 "Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. "
 "Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. "
 "Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, "
-"`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of "
-"`urn:nld:klant:klantnummer:610541501`"
+"`urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:"
+"klant:klantnummer:610541501`"
 msgstr ""
 
 #: components/taken/models.py:139
@@ -895,7 +930,7 @@ msgstr ""
 #: components/verzoeken/api/filters.py:52
 msgid ""
 "Filtert op een exacte match van een volledig segment van de URN (gescheiden "
-"door `:`) in het veld `verzoek_informatie_object`."
+"door `:`) in het veld `informatie_object`."
 msgstr ""
 
 #: components/verzoeken/api/schema.py:9
@@ -908,31 +943,31 @@ msgid ""
 msgstr ""
 
 #: components/verzoeken/api/serializers.py:83
-#: components/verzoeken/api/serializers.py:215
+#: components/verzoeken/api/serializers.py:217
 msgid "De unieke URL van deze VerzoekType versie binnen deze API."
 msgstr ""
 
 #: components/verzoeken/api/serializers.py:111
-msgid "VerzoekType with the specified UUID does not exist"
-msgstr "VerzoekType met de opgegeven UUID bestaat niet"
+msgid "VerzoekType met de opgegeven UUID bestaat niet"
+msgstr ""
 
 #: components/verzoeken/api/serializers.py:125
-msgid "bijlageType must have a informatieObjecttype."
-msgstr "bijlageType moet een informatieObjecttype hebben."
+msgid "bijlageType moet een informatieObjecttype hebben."
+msgstr ""
 
-#: components/verzoeken/api/serializers.py:225
+#: components/verzoeken/api/serializers.py:227
 msgid "Lijst van beschikbare versies voor dit type verzoek."
 msgstr ""
 
-#: components/verzoeken/api/serializers.py:244
+#: components/verzoeken/api/serializers.py:246
 msgid "De unieke URL van het VerzoekType binnen deze API."
 msgstr ""
 
-#: components/verzoeken/api/serializers.py:248
+#: components/verzoeken/api/serializers.py:250
 msgid "De Uniform Resource Name van het VerzoekType."
 msgstr ""
 
-#: components/verzoeken/api/serializers.py:285
+#: components/verzoeken/api/serializers.py:286
 msgid "Een verwijzing naar de bron waar dit verzoek vandaan komt."
 msgstr ""
 
@@ -949,7 +984,9 @@ msgid "De Uniform Resource Name van het Verzoek."
 msgstr ""
 
 #: components/verzoeken/api/serializers.py:355
-msgid "Bijlage must have a informatieObject."
+#, fuzzy
+#| msgid "Bijlage must have a informatieObject."
+msgid "Bijlage moet een informatieObject hebben."
 msgstr "Bijlage moet een informatieObject hebben."
 
 #: components/verzoeken/api/utils.py:27
@@ -1059,8 +1096,8 @@ msgid "Een verzoektype versie verwijderen"
 msgstr ""
 
 #: components/verzoeken/api/viewsets.py:138
-msgid "Only draft versies can be destroyed"
-msgstr "Alleen draft-versies kunnen worden verwijderd"
+msgid "Alleen draft-versies kunnen worden verwijderd"
+msgstr ""
 
 #: components/verzoeken/constants.py:6
 msgid "Published"
@@ -1154,9 +1191,10 @@ msgstr ""
 
 #: components/verzoeken/models.py:96
 msgid ""
-"Einde van de geldigheidsduur van de versie, automatisch ingesteld wanneer een"
-" nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld voordat de"
-" versie wordt gepubliceerd, wordt deze overschreven met de publicatiedatum."
+"Einde van de geldigheidsduur van de versie, automatisch ingesteld wanneer "
+"een nieuwere versie wordt gepubliceerd. Als de waarde wordt ingesteld "
+"voordat de versie wordt gepubliceerd, wordt deze overschreven met de "
+"publicatiedatum."
 msgstr ""
 
 #: components/verzoeken/models.py:101
@@ -1310,19 +1348,15 @@ msgstr ""
 msgid "Geeft aan via welk kanaal dit verzoek is binnengekomen."
 msgstr ""
 
-#: components/verzoeken/models.py:342
-msgid "verzoek informatie object"
-msgstr ""
-
 #: components/verzoeken/models.py:344
 msgid ""
 "URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document "
-"zoals gezien door de aanvrager.Bijvoorbeeld: "
-"`urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
+"zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:"
+"informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`"
 msgstr ""
 
 #: components/verzoeken/models.py:350
-msgid "verzoek taal"
+msgid "taal"
 msgstr ""
 
 #: components/verzoeken/models.py:352
@@ -1339,9 +1373,9 @@ msgstr ""
 
 #: components/verzoeken/models.py:368
 msgid ""
-"De initiële status is altijd `geregistreerd`. De status `verwerkt` moet gezet"
-" worden door het component dat verantwoordelijk is voor de afhandeling danwel"
-" opvolging."
+"De initiële status is altijd `geregistreerd`. De status `verwerkt` moet "
+"gezet worden door het component dat verantwoordelijk is voor de afhandeling "
+"danwel opvolging."
 msgstr ""
 
 #: components/verzoeken/models.py:374
@@ -1507,7 +1541,7 @@ msgstr "Volgende"
 #: tests/api_strategy/test_error_format.py:40
 #: tests/api_strategy/test_error_format.py:42
 msgid "Invalid input."
-msgstr "Ongeldige invoer."
+msgstr "Ongeldige invoerwaarde."
 
 #: tests/api_strategy/test_error_format.py:124
 msgid "The resource is gone"
@@ -1532,49 +1566,31 @@ msgstr ""
 
 #: utils/schema.py:34
 msgid ""
-"Geeft een specifieke API-versie aan in de context van een specifieke aanroep."
-" Voorbeeld: 1.2.1."
+"Geeft een specifieke API-versie aan in de context van een specifieke "
+"aanroep. Voorbeeld: 1.2.1."
 msgstr ""
 
 #: utils/serializers.py:61
 msgid "This field is required."
-msgstr "Dit veld is verplicht."
+msgstr "Dit veld is vereist."
 
 #: utils/serializers.py:62
 msgid "Invalid URN - Could not match the expected pattern."
-msgstr "Ongeldige URN - komt niet overeen met het verwachte patroon."
+msgstr ""
 
 #: utils/serializers.py:63
 msgid "Invalid URN - Does not conform to the expected format."
-msgstr "Ongeldige URN - voldoet niet aan het verwachte formaat."
+msgstr ""
 
 #: utils/serializers.py:64
 msgid "Invalid URN - Corresponding object does not exist."
-msgstr "Ongeldige URN - het bijbehorende object bestaat niet."
+msgstr ""
 
 #: utils/serializers.py:66
 #, python-brace-format
 msgid ""
 "Incorrect type. Expected a string representing a URN, received {data_type}."
 msgstr ""
-"Onjuist type. Verwacht een string die een URN voorstelt, ontvangen: "
-"{data_type}."
-
-#: utils/serializers.py:106
-msgid ""
-"URNRelatedField could not determine the `urn_component`: request, "
-"resolver_match, or namespace is missing in serializer context."
-msgstr ""
-"URNRelatedField kon de `urn_component` niet bepalen: request, resolver_match "
-"of namespace ontbreekt in de serializer-context."
-
-#: utils/serializers.py:125
-msgid ""
-"URNRelatedField could not determine the `urn_resource`: model not found on "
-"the view or serializer."
-msgstr ""
-"URNRelatedField kon de `urn_resource` niet bepalen: model niet gevonden op de"
-" view of serializer."
 
 #: utils/tests/test_validators.py:58 utils/validators.py:153
 #, python-format
@@ -1615,8 +1631,8 @@ msgid "Dit veld kan niet worden gewijzigd."
 msgstr ""
 
 #: utils/validators.py:213
-msgid "{} should be before {}."
-msgstr "{} moet vóór {} liggen."
+msgid "{} moet vóór {}."
+msgstr ""
 
 #: utils/validators.py:268
 msgid "Het opgegeven telefoonnummer is ongeldig."
@@ -1624,8 +1640,8 @@ msgstr ""
 
 #: utils/validators.py:270
 msgid ""
-"Het opgegeven telefoonnummer is ongeldig, telefoonnummers beginnend met 0800,"
-" 0900, 088, 1400 of 140xx zijn niet toegestaan."
+"Het opgegeven telefoonnummer is ongeldig, telefoonnummers beginnend met "
+"0800, 0900, 088, 1400 of 140xx zijn niet toegestaan."
 msgstr ""
 
 #: utils/validators.py:297
@@ -1635,18 +1651,3 @@ msgstr ""
 #: utils/validators.py:300
 msgid "Ongeldige IBAN"
 msgstr ""
-
-#~ msgid "View 2fa profile"
-#~ msgstr "Tweestapsauthenticatie beheren"
-
-#~ msgid "admin"
-#~ msgstr "beheer"
-
-#~ msgid "administration"
-#~ msgstr "beheer"
-
-#~ msgid "Clear given cache only"
-#~ msgstr "Leeg alleen de opgegeven cache"
-
-#~ msgid "Invalid mobile phonenumber."
-#~ msgstr "Ongeldig mobiel telefoonnummer."

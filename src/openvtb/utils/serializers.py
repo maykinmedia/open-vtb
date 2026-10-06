@@ -102,7 +102,7 @@ class URNRelatedField(RelatedField):
         """
         Extract the `urn_component` name from the DRF request context.
         """
-        error_msg = _(
+        error_msg = (
             "URNRelatedField could not determine the `urn_component`: "
             "request, resolver_match, or namespace is missing in serializer context."
         )
@@ -121,7 +121,7 @@ class URNRelatedField(RelatedField):
         """
         Extract the `urn_resource` name from the model associated with the view.
         """
-        error_msg = _(
+        error_msg = (
             "URNRelatedField could not determine the `urn_resource`: "
             "model not found on the view or serializer."
         )

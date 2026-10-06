@@ -250,7 +250,7 @@ class VerzoekTypeversieTests(APITestCase):
             {
                 "name": "bijlageTypen",
                 "code": "unique",
-                "reason": "BijlageType with the specified informatieObjecttype already exists.",
+                "reason": "Het bijlageType met het opgegeven informatieObjecttype bestaat al.",
             },
         )
 
@@ -549,7 +549,7 @@ class VerzoekTypeversieTests(APITestCase):
             {
                 "name": "bijlageTypen",
                 "code": "required",
-                "reason": "bijlageType must have a informatieObjecttype.",
+                "reason": "bijlageType moet een informatieObjecttype hebben.",
             },
         )
 
@@ -597,6 +597,6 @@ class VerzoekTypeversieTests(APITestCase):
             {
                 "name": "nonFieldErrors",
                 "code": "non-draft-versie-destroy",
-                "reason": "Only draft versies can be destroyed",
+                "reason": "Alleen draft-versies kunnen worden verwijderd",
             },
         )

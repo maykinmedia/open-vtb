@@ -609,7 +609,7 @@ class URLTaakValidationTests(APITestCase):
                 {
                     "name": "einddatumHandelingsTermijn",
                     "code": "date-mismatch",
-                    "reason": "startdatum should be before einddatum_handelings_termijn.",
+                    "reason": "startdatum moet vóór einddatum_handelings_termijn.",
                 },
             )
             self.assertFalse(ExterneTaak.objects.exists())

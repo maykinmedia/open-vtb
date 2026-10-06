@@ -210,7 +210,7 @@ class StartBeforeEndValidator:
     """
 
     code = "date-mismatch"
-    message = _("{} should be before {}.")
+    message = _("{} moet vóór {}.")
     requires_context = True
 
     def __init__(self, start_date_field, end_date_field):

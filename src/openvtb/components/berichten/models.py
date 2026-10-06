@@ -73,14 +73,15 @@ class Bericht(models.Model):
         max_length=50,
         help_text=_("Onderwerp van het bericht."),
     )
-    bericht_tekst = models.TextField(
-        _("bericht tekst"),
+    tekst = models.TextField(
+        _("tekst"),
         max_length=4000,
         help_text=_(
             "Tekst van het bericht. URLs worden altijd weergegeven als klikbare URLs op alle portalen. "
             "Voor portalen van lokale overheden is de basic syntax van Markdown toegestaan, "
             "voor de Mijn Overheid berichtenbox enkel newlines (\\r\\n)."
         ),
+        blank=True,
     )
     publicatiedatum = models.DateTimeField(
         _("publicatiedatum"),

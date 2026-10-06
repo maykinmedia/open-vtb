@@ -108,7 +108,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         verzoek_type = VerzoekType.objects.filter(uuid=verzoektype_uuid).first()
         if not verzoek_type:
             raise serializers.ValidationError(
-                _("VerzoekType with the specified UUID does not exist"),
+                _("VerzoekType met de opgegeven UUID bestaat niet"),
                 code="verzoektype-does-not-exist",
             )
 
@@ -122,7 +122,7 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
         for obj in value:
             if not obj.get("informatie_objecttype"):
                 raise serializers.ValidationError(
-                    _("bijlageType must have a informatieObjecttype."),
+                    _("bijlageType moet een informatieObjecttype hebben."),
                     code="required",
                 )
         return value
@@ -142,7 +142,9 @@ class VerzoekTypeVersionSerializer(NestedHyperlinkedModelSerializer):
             except IntegrityError:
                 raise serializers.ValidationError(
                     {
-                        "bijlageTypen": "BijlageType with the specified informatieObjecttype already exists."
+                        "bijlageTypen": _(
+                            "Het bijlageType met het opgegeven informatieObjecttype bestaat al."
+                        )
                     },
                     code="unique",
                 )
@@ -279,13 +281,11 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         help_text=get_help_text("verzoeken.Verzoek", "geometrie"),
         required=False,
     )
-    verzoek_bron = VerzoekBronSerializer(
-        source="bron",
+    bron = VerzoekBronSerializer(
         required=False,
         help_text=_("Een verwijzing naar de bron waar dit verzoek vandaan komt."),
     )
-    verzoek_betaling = VerzoekBetalingSerializer(
-        source="betaling",
+    betaling = VerzoekBetalingSerializer(
         required=False,
         help_text=_("Verzoek tot betaling gekoppeld aan deze resource."),
     )
@@ -316,11 +316,11 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "mede_initiator",
             "is_gerelateerd_aan",
             "kanaal",
-            "verzoek_taal",
+            "taal",
             "verwerk_status",
-            "verzoek_informatie_object",
-            "verzoek_bron",
-            "verzoek_betaling",
+            "informatie_object",
+            "bron",
+            "betaling",
         )
 
         extra_kwargs = {
@@ -339,7 +339,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             "aanvraag_gegevens": {
                 "required": True,
             },
-            "verzoek_taal": {"default": "nl"},
+            "taal": {"default": "nl"},
             "verwerk_status": {"default": VerwerkStatus.GEREGISTREERD},
         }
 
@@ -352,7 +352,7 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
         for obj in value:
             if not obj.get("informatie_object"):
                 raise serializers.ValidationError(
-                    _("Bijlage must have a informatieObject."),
+                    _("Bijlage moet een informatieObject hebben."),
                     code="required",
                 )
         return value
@@ -375,7 +375,9 @@ class VerzoekSerializer(URNModelSerializer, serializers.ModelSerializer):
             except IntegrityError:
                 raise serializers.ValidationError(
                     {
-                        "bijlagen": "Bijlage with the specified informatieObject already exists."
+                        "bijlagen": _(
+                            "Bijlage met de opgegeven informatieObject bestaat al."
+                        )
                     },
                     code="unique",
                 )

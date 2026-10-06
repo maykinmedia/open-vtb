@@ -61,7 +61,7 @@ class BerichtenAdminTests(WebTest):
         form = response.forms.get("bericht_form")
 
         form["onderwerp"] = "Test"
-        form["bericht_tekst"] = "Test"
+        form["tekst"] = "Test"
         form["publicatiedatum_0"] = timezone.now().date()
         form["publicatiedatum_1"] = timezone.now().time()
         form["ontvanger"] = "urn:nld:brp:bsn:111222333"
@@ -85,7 +85,7 @@ class BerichtenAdminTests(WebTest):
         form = response.forms.get("bericht_form")
 
         form["onderwerp"] = "Test"
-        form["bericht_tekst"] = "Test"
+        form["tekst"] = "Test"
         form["publicatiedatum_0"] = timezone.now().date()
         form["publicatiedatum_1"] = timezone.now().time()
         form["ontvanger"] = "urn:nld:brp:bsn:111222333"
