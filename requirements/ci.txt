@@ -377,7 +377,7 @@ djangorestframework-inclusions==1.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-dnspython==2.8.0
+dnspython==2.9.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

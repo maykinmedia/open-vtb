@@ -221,7 +221,7 @@ djangorestframework-gis==1.3.0
     # via open-api-framework
 djangorestframework-inclusions==1.2.0
     # via open-api-framework
-dnspython==2.8.0
+dnspython==2.9.0
     # via django-health-check
 docutils==0.21.2
     # via django-setup-configuration

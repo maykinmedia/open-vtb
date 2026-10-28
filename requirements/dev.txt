@@ -412,7 +412,7 @@ djangorestframework-inclusions==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-dnspython==2.8.0
+dnspython==2.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
