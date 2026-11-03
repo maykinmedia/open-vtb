@@ -9,6 +9,7 @@ FROM python:3.12-slim-bookworm AS backend-build
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
         pkg-config \
+        git \
         build-essential \
         # only relevant when using editable/github dependencies, which is discouraged
         libpq-dev \
