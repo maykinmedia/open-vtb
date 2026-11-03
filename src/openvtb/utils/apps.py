@@ -1,9 +1,8 @@
 from django.apps import AppConfig
 
 from rest_framework.serializers import ModelSerializer
-
-from .fields import URNField
-from .serializers import URNField as URNSerializerField
+from vng_api_common.fields import URNField
+from vng_api_common.serializers import URNField as URNSerializerField
 
 
 class UtilsConfig(AppConfig):
