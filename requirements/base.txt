@@ -45,6 +45,7 @@ celery==5.5.3
     #   open-api-framework
 certifi==2026.10.23
     # via
+    #   commonground-api-common
     #   elastic-apm
     #   requests
     #   sentry-sdk
@@ -65,8 +66,10 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-commonground-api-common==3.0.1
-    # via open-api-framework
+commonground-api-common @ git+https://github.com/maykinmedia/commonground-api-common.git@dca57a8058ab8cfbfbc1afb26a346ac7e4e97be2
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
 cron-descriptor==1.4.5
     # via django-celery-beat
 cryptography==50.0.0
