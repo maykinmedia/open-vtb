@@ -95,7 +95,7 @@ celery==5.5.3
     #   django-celery-beat
     #   flower
     #   notifications-api-common
-certifi==2025.10.5
+certifi==2026.10.23
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -387,7 +387,7 @@ django-webtest==1.9.14
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-djangorestframework==3.18.1
+djangorestframework==3.18.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -412,7 +412,7 @@ djangorestframework-inclusions==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-dnspython==2.8.0
+dnspython==2.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
