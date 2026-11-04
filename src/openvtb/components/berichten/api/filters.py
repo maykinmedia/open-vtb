@@ -50,6 +50,7 @@ class BerichtFilter(FilterSet):
     def filter_bericht_type__urn(self, queryset, name, value):
         field = URNRelatedField(
             lookup_field="uuid",
+            urn_component="berichten",
             urn_resource="berichttype",
             queryset=BerichtType.objects.all(),
         )
