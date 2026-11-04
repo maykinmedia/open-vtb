@@ -64,6 +64,7 @@ class VerzoekFilter(FilterSet):
     def filter_verzoek_type__urn(self, queryset, name, value):
         field = URNRelatedField(
             lookup_field="uuid",
+            urn_component="verzoeken",
             urn_resource="verzoektype",
             queryset=VerzoekType.objects.all(),
         )
