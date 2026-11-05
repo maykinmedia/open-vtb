@@ -1,19 +1,21 @@
 import datetime
-import random
-import string
+import uuid
 
 from django.utils import timezone
 
 import factory
 from factory.django import DjangoModelFactory
+from faker import Faker
 
 from openvtb.components.constants import HandelingsPerspectiefEnum
 
 from ..models import Bericht, BerichtType, Bijlage, BijlageType
 
+fake = Faker()
 
-def get_random_urn() -> str:
-    return f"urn:maykin:{''.join(random.choices(string.ascii_lowercase + string.digits, k=10))}"
+
+def get_random_urn(num_words: int = 1) -> str:
+    return f"urn:maykin:{'-'.join(fake.words(nb=num_words))}:{uuid.uuid4()}"
 
 
 class BerichtTypeFactory(DjangoModelFactory):
