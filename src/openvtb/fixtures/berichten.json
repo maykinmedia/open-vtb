@@ -16,7 +16,6 @@
         "fields": {
             "uuid": "85af56b8-02a2-4f71-9f63-f8675312a351",
             "onderwerp": "Test",
-            "bericht_tekst": "Long text",
             "publicatiedatum": "2026-08-27T10:22:33Z",
             "is_gepubliceerd": false,
             "referentie": "",
