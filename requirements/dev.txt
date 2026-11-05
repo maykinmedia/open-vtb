@@ -123,6 +123,7 @@ click==8.3.0
     #   click-didyoumean
     #   click-plugins
     #   click-repl
+    #   django-typer
     #   rich-click
     #   typer
 click-didyoumean==0.3.1
@@ -206,6 +207,7 @@ django==5.2.19
     #   django-structlog
     #   django-timezone-field
     #   django-two-factor-auth
+    #   django-typer
     #   django-upgrade-check
     #   djangorestframework
     #   djangorestframework-gis
@@ -378,6 +380,11 @@ django-two-factor-auth==1.17.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   maykin-2fa
+django-typer==3.9.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 django-upgrade-check==1.1.0
     # via
     #   -c requirements/ci.txt
@@ -482,6 +489,7 @@ furl==2.1.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   ape-pie
 gitdb==4.0.12
     # via gitpython
@@ -531,6 +539,11 @@ inflection==0.5.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
+iniconfig==2.3.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
 iso639-lang==2.6.3
     # via
     #   -c requirements/ci.txt
@@ -762,12 +775,18 @@ packaging==25.0
     #   django-csp
     #   kombu
     #   opentelemetry-instrumentation
+    #   pytest
     #   sphinx
 phonenumberslite==8.13.55
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-two-factor-auth
+pluggy==1.7.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
 prometheus-client==0.25.0
     # via
     #   -c requirements/ci.txt
@@ -799,6 +818,11 @@ psycopg-pool==3.2.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+py-cpuinfo2==10.1.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest-benchmark
 pycparser==2.23
     # via
     #   -c requirements/ci.txt
@@ -827,6 +851,7 @@ pygments==2.20.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-log-outgoing-requests
+    #   pytest
     #   rich
     #   sphinx
     #   sphinx-tabs
@@ -834,6 +859,7 @@ pyjwt==2.15.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
@@ -851,6 +877,17 @@ pyquery==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+pytest==9.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
+    #   pytest-benchmark
+pytest-benchmark==5.3.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 python-crontab==3.3.0
     # via
     #   -c requirements/ci.txt
@@ -924,6 +961,7 @@ requests==2.33.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests
@@ -1099,6 +1137,7 @@ typer==0.24.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-typer
 types-requests==2.33.0.20260327
     # via
     #   -c requirements/ci.txt

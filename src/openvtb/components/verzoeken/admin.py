@@ -141,11 +141,10 @@ class BijlageInline(admin.StackedInline):
 
 @admin.register(Verzoek)
 class VerzoekAdmin(admin.ModelAdmin):
-    list_display = ("uuid", "verzoek_type")
+    list_display = ("uuid", "verzoek_type", "versie")
     readonly_fields = ("uuid",)
     search_fields = ("uuid", "verzoek_type__naam", "bron__naam")
     inlines = [VerzoekBronInline, VerzoekBetalingInline, BijlageInline]
-    list_filter = ("verzoek_type",)
     formfield_overrides = {
         GeometryField: {"widget": forms.Textarea},
         JSONField: {
