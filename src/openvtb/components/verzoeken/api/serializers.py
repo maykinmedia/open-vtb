@@ -4,14 +4,14 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_gis.fields import GeometryField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
-from vng_api_common.serializers import CachedHyperlinkedRelatedField
-from vng_api_common.utils import get_help_text
-
-from openvtb.utils.serializers import (
+from vng_api_common.serializers import (
+    CachedHyperlinkedRelatedField,
     URNField,
     URNModelSerializer,
     URNRelatedField,
 )
+from vng_api_common.utils import get_help_text
+
 from openvtb.utils.validators import IsImmutableValidator
 
 from ..constants import VerwerkStatus

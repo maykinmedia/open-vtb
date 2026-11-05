@@ -5,7 +5,7 @@ import uuid
 import django.db.models.deletion
 from django.db import migrations, models
 
-import openvtb.utils.fields
+import vng_api_common.fields
 
 
 class Migration(migrations.Migration):
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "verantwoordelijke_organisatie",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         help_text="Geeft aan welk onderdeel van de organisatie de eigenaar is van dit berichtType. Kan bijv. gebruikt worden voor routering, administratieve doeleinden en zichtbaarheid in de keten.",
                         max_length=255,
                         verbose_name="verantwoordelijke organisatie",
@@ -128,7 +128,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "informatie_objecttype",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         blank=True,
                         help_text="URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                         max_length=255,

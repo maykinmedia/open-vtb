@@ -10,6 +10,7 @@ from maykin_common.config import (
 )
 from maykin_common.health_checks import default_health_check_apps
 from open_api_framework.conf.base import *  # noqa
+from vng_api_common.settings import COMMONGROUND_API_COMMON
 
 from .api import *  # noqa
 
@@ -311,16 +312,6 @@ CELERY_BEAT_SCHEDULE = {
 #                  #
 ####################
 
-#
-# URN settings
-#
-URN_NAMESPACE = config(
-    "URN_NAMESPACE",
-    documentation=DocumentationParams(
-        help_text=("Namespace used in URNs schemas."),
-    ),
-)
-
 TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
     "TAKEN_DEFAULT_REMINDER_IN_DAYS",
     default=7,
@@ -331,3 +322,15 @@ TAKEN_DEFAULT_REMINDER_IN_DAYS = config(
         ),
     ),
 )
+
+# COMMONGROUND-API-COMMON SETTINGS
+#
+# URN settings
+#
+URN_NAMESPACE = config(
+    "URN_NAMESPACE",
+    documentation=DocumentationParams(
+        help_text=("Namespace used in URNs schemas."),
+    ),
+)
+COMMONGROUND_API_COMMON.update({"URN_NAMESPACE": URN_NAMESPACE})

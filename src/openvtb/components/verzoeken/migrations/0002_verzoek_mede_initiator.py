@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-import openvtb.utils.fields
+import vng_api_common.fields
 
 
 class Migration(migrations.Migration):
@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="verzoek",
             name="mede_initiator",
-            field=openvtb.utils.fields.URNField(
+            field=vng_api_common.fields.URNField(
                 blank=True,
                 help_text="Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`",
                 max_length=255,

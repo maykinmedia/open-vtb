@@ -1,4 +1,5 @@
 open-api-framework[celery,cors,markup,geo,csp,commonground,inclusions,sanitization,server,redis, structlog-celery]
+git+https://github.com/maykinmedia/commonground-api-common.git@dca57a8058ab8cfbfbc1afb26a346ac7e4e97be2
 
 psycopg[pool]
 

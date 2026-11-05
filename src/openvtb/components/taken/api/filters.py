@@ -1,8 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
+from vng_api_common.filters import ListURNFilter, URNFilter
 from vng_api_common.filtersets import FilterSet
-
-from openvtb.utils.filters import ListURNFilter, URNFilter
 
 from ..models import ExterneTaak
 
