@@ -4,3 +4,4 @@ furl
 requests
 pyjwt
 django_typer
+locust
