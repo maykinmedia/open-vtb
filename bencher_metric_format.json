@@ -1,0 +1,210 @@
+{
+  "berichten_list": {
+    "latency": {
+      "value": 11000000000,
+      "lower_value": 10000000000,
+      "upper_value": 12000000000
+    },
+    "throughput": {
+      "value": 2.5931159543083977
+    },
+    "latency-mean": {
+      "value": 9279377869.246758
+    },
+    "latency-min": {
+      "value": 602660139.9998981
+    },
+    "latency-max": {
+      "value": 11731825918.999676
+    },
+    "latency-p50": {
+      "value": 10000000000
+    },
+    "latency-p75": {
+      "value": 11000000000
+    },
+    "latency-p90": {
+      "value": 11000000000
+    },
+    "latency-p95": {
+      "value": 11000000000
+    },
+    "latency-p99": {
+      "value": 12000000000
+    },
+    "latency-p999": {
+      "value": 12000000000
+    },
+    "requests": {
+      "value": 154
+    },
+    "failures": {
+      "value": 0
+    },
+    "failure-ratio": {
+      "value": 0.0
+    },
+    "failures-per-second": {
+      "value": 0.0
+    },
+    "response-size": {
+      "value": 85390.0
+    }
+  },
+  "taken_list": {
+    "latency": {
+      "value": 9800000000,
+      "lower_value": 8500000000,
+      "upper_value": 10000000000
+    },
+    "throughput": {
+      "value": 3.0140763365013195
+    },
+    "latency-mean": {
+      "value": 7682438415.955298
+    },
+    "latency-min": {
+      "value": 48858798.00076509
+    },
+    "latency-max": {
+      "value": 10492023019.000044
+    },
+    "latency-p50": {
+      "value": 8500000000
+    },
+    "latency-p75": {
+      "value": 9000000000
+    },
+    "latency-p90": {
+      "value": 9500000000
+    },
+    "latency-p95": {
+      "value": 9800000000
+    },
+    "latency-p99": {
+      "value": 10000000000
+    },
+    "latency-p999": {
+      "value": 10000000000
+    },
+    "requests": {
+      "value": 179
+    },
+    "failures": {
+      "value": 0
+    },
+    "failure-ratio": {
+      "value": 0.0
+    },
+    "failures-per-second": {
+      "value": 0.0
+    },
+    "response-size": {
+      "value": 66168.0
+    }
+  },
+  "verzoeken_list": {
+    "latency": {
+      "value": 9200000000,
+      "lower_value": 7900000000,
+      "upper_value": 9700000000
+    },
+    "throughput": {
+      "value": 3.0982684129399036
+    },
+    "latency-mean": {
+      "value": 7267841795.581503
+    },
+    "latency-min": {
+      "value": 386875205.0002513
+    },
+    "latency-max": {
+      "value": 9720939330.000874
+    },
+    "latency-p50": {
+      "value": 7900000000
+    },
+    "latency-p75": {
+      "value": 8500000000
+    },
+    "latency-p90": {
+      "value": 9100000000
+    },
+    "latency-p95": {
+      "value": 9200000000
+    },
+    "latency-p99": {
+      "value": 9700000000
+    },
+    "latency-p999": {
+      "value": 9700000000
+    },
+    "requests": {
+      "value": 184
+    },
+    "failures": {
+      "value": 0
+    },
+    "failure-ratio": {
+      "value": 0.0
+    },
+    "failures-per-second": {
+      "value": 0.0
+    },
+    "response-size": {
+      "value": 108415.0
+    }
+  },
+  "aggregated": {
+    "latency": {
+      "value": 11000000000,
+      "lower_value": 8500000000,
+      "upper_value": 11000000000
+    },
+    "throughput": {
+      "value": 8.70546070374962
+    },
+    "latency-mean": {
+      "value": 8010567811.812375
+    },
+    "latency-min": {
+      "value": 48858798.00076509
+    },
+    "latency-max": {
+      "value": 11731825918.999676
+    },
+    "latency-p50": {
+      "value": 8500000000
+    },
+    "latency-p75": {
+      "value": 9500000000
+    },
+    "latency-p90": {
+      "value": 10000000000
+    },
+    "latency-p95": {
+      "value": 11000000000
+    },
+    "latency-p99": {
+      "value": 11000000000
+    },
+    "latency-p999": {
+      "value": 12000000000
+    },
+    "requests": {
+      "value": 517
+    },
+    "failures": {
+      "value": 0
+    },
+    "failure-ratio": {
+      "value": 0.0
+    },
+    "failures-per-second": {
+      "value": 0.0
+    },
+    "response-size": {
+      "value": 86929.38491295939
+    }
+  }
+}
