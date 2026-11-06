@@ -19,10 +19,10 @@ import typer
 from django_typer.management import TyperCommand
 
 from openvtb.accounts.tests.factories import UserFactory
+from performance_test.constants import AUTH_TOKEN
 
 User = get_user_model()
 BULK_BATCH_SIZE = 1000
-AUTH_TOKEN = "performance_token"
 
 
 class Resource(str, Enum):

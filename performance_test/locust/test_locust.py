@@ -6,24 +6,18 @@ ready for `bencher run --adapter json`.
 """
 
 import json
-import logging
-import os
 
 from locust import HttpUser, between, events, task
 from locust.runners import WorkerRunner
 
-logger = logging.getLogger(__name__)
-
-VERZOEKEN_LIST = "/verzoeken/api/v1/verzoeken"
-TAKEN_LIST = "/taken/api/v1/externetaken"
-BERICHTEN_LIST = "/berichten/api/v1/berichten"
-
-AUTH_HEADERS = {
-    "Authorization": f"Token {os.environ.get('OPENVTB_TOKEN', 'performance_token')}"
-}
-BMF_OUTPUT = os.environ.get("BMF_OUTPUT", "bencher_metric_format.json")
-
-MS_TO_NS = 1_000_000
+from ..constants import (
+    AUTH_HEADERS,
+    BERICHTEN_LIST,
+    BMF_OUTPUT,
+    MS_TO_NS,
+    TAKEN_LIST,
+    VERZOEKEN_LIST,
+)
 
 
 @events.quitting.add_listener
@@ -46,7 +40,6 @@ def _entry_metrics(entry) -> dict:
     """
     percentile = entry.get_response_time_percentile
     return {
-        # Built-in measures
         "latency": {
             "value": _ns(percentile(0.95)),
             "lower_value": _ns(percentile(0.50)),
@@ -94,16 +87,20 @@ class OpenVTBEndpoints(HttpUser):
     wait_time = between(1, 3)
 
     def _get_list(self, path: str, name: str) -> None:
-        self.client.get(path, headers=AUTH_HEADERS, name=name)
+        with self.client.get(
+            path, headers=AUTH_HEADERS, name=name, catch_response=True
+        ) as response:
+            if response.status_code == 200 and not response.json().get("results"):
+                response.failure("Empty response")
 
     @task
     def get_verzoeken(self):
-        self._get_list(VERZOEKEN_LIST, "verzoeken_list")
+        self._get_list(f"{VERZOEKEN_LIST}?pageSize=100&page=10", "verzoeken_list")
 
     @task
     def get_taken(self):
-        self._get_list(TAKEN_LIST, "taken_list")
+        self._get_list(f"{TAKEN_LIST}?pageSize=100&page=10", "taken_list")
 
     @task
     def get_berichten(self):
-        self._get_list(BERICHTEN_LIST, "berichten_list")
+        self._get_list(f"{BERICHTEN_LIST}?pageSize=100&page=10", "berichten_list")
