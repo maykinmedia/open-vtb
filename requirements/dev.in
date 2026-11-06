@@ -8,3 +8,5 @@ gitpython
 # Debug tooling
 django-debug-toolbar
 django-extensions
+django-silk
+whitenoise
