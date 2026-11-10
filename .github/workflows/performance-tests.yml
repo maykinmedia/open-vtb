@@ -1,0 +1,155 @@
+name: Performance test
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
+  workflow_dispatch:
+
+# One load test at a time on the dedicated runner: parallel runs would compete for CPU
+concurrency:
+  group: performance-test-maykin-runner
+  cancel-in-progress: false
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    # runs-on: [self-hosted, linux, load-test] # TODO: switch to the dedicated runner
+
+    permissions:
+      contents: read
+      pull-requests: write # Bencher comments the results on the PR
+      checks: write
+
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: openvtb
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+
+    env:
+      DJANGO_SETTINGS_MODULE: openvtb.conf.production
+      SECRET_KEY: secret
+      DEBUG: 'false' # debug tooling adds overhead to every request
+      RUN_SETUP_CONFIG: 'false'
+      SITE_DOMAIN: localhost:8000
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      URN_NAMESPACE: maykin
+      DB_HOST: localhost
+      DB_NAME: openvtb
+      DB_USER: postgres
+      DB_PASSWORD: ''
+      # uWSGI settings
+      UWSGI_PROCESSES: '4'
+      UWSGI_THREADS: '1'
+      # Bencher settings
+      BENCHER_PROJECT: open-vtb
+      BENCHER_ADAPTER: json
+      BENCHER_TESTBED: githubrunner-uwsgi-4p1t
+      BENCHER_BRANCH: ${{ github.ref_type == 'tag' && 'releases' || github.head_ref || github.ref_name }}
+      BENCHER_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+      BENCHER_BASE_BRANCH: ${{ github.base_ref }}
+      BENCHER_BASE_HASH: ${{ github.event.pull_request.base.sha }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up backend environment
+        uses: maykinmedia/setup-django-backend@4a6c5facc65bb1dd510cf06be20871db11a156b3 # v1.4.2
+        with:
+          apt-packages: "gdal-bin"
+          python-version: "3.12"
+          optimize-postgres: "no"
+          setup-node: "no"
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          pkgs=$(cat requirements/performance-tests.in)
+          grep -E "^($(echo $pkgs | sed 's/ /|/g'))([=<>]|$)" requirements/ci.txt | xargs uv pip install
+          curl --proto '=https' --tlsv1.2 -sSfL https://bencher.dev/download/install-cli.sh | sh
+
+      - name: Generate data for load tests
+        run: |
+          src/manage.py migrate --noinput
+          echo "yes" | src/manage.py generate_data --count 50000
+          psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "VACUUM ANALYZE;"
+
+      - name: Start uWSGI (${{ env.UWSGI_PROCESSES }} processes, ${{ env.UWSGI_THREADS }} threads)
+        env:
+          SCRIPTPATH: bin
+        run: |
+          bin/docker_start.sh > "$RUNNER_TEMP/uwsgi.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/uwsgi.pid"
+          # Wait until uWSGI accepts connections, so Locust's first requests aren't refused.
+          curl -s -o /dev/null --retry 60 --retry-delay 1 --retry-connrefused http://localhost:8000/
+
+      - name: Run load test with locust
+        run: locust --config performance_test/locust/locust.conf
+
+      - name: Report locust results to Bencher
+        env:
+          BENCHER_KEY: ${{ secrets.BENCHER_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          results="$RUNNER_TEMP/bencher_metric_format.json"
+          if [ ! -f "$results" ]; then
+            echo "::error::Locust produced no results ($results is missing)"
+            exit 1
+          fi
+
+          # Only on a PR: start from the base branch history and thresholds, so every
+          # run of the PR is compared with main, and comment the results on the PR.
+          pr_args=()
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            pr_args=(
+              --start-point "$BENCHER_BASE_BRANCH"
+              --start-point-hash "$BENCHER_BASE_HASH"
+              --start-point-max-versions 30
+              --start-point-clone-thresholds
+              --start-point-reset
+              --github-actions "$GITHUB_TOKEN"
+              --ci-only-thresholds
+            )
+          fi
+
+          # IQR thresholds: a run alerts when it is above Q3 + 2.0 × IQR of the last
+          # 30 runs, once there are at least 15. Robust to the noise of the runner.
+          bencher run \
+            --project "$BENCHER_PROJECT" \
+            --key "$BENCHER_KEY" \
+            --branch "$BENCHER_BRANCH" \
+            --hash "$BENCHER_HASH" \
+            --testbed "$BENCHER_TESTBED" \
+            "${pr_args[@]}" \
+            --adapter "$BENCHER_ADAPTER" \
+            --file "$results" \
+            --threshold-measure latency-p50  --threshold-test iqr --threshold-min-sample-size 15 --threshold-max-sample-size 30 --threshold-upper-boundary 2.0 \
+            --threshold-measure latency-mean --threshold-test iqr --threshold-min-sample-size 15 --threshold-max-sample-size 30 --threshold-upper-boundary 2.0
+
+      # Always stop uWSGI: required on a self-hosted runner
+      - name: Stop uWSGI
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/uwsgi.pid" ]; then
+            pid=$(cat "$RUNNER_TEMP/uwsgi.pid")
+            pkill -TERM -P "$pid" || true
+            kill -TERM "$pid" || true
+          fi
