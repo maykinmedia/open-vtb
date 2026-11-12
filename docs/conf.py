@@ -108,6 +108,8 @@ linkcheck_ignore = [
     r"https://portal.azure.com*",
     r"https://.*kvk\.nl*",
     r"https://gdpr.eu*",
+    # bencher.dev answers 403 to automated requests
+    r"https://bencher\.dev/perf/.*",
 ]
 
 extlinks = {
