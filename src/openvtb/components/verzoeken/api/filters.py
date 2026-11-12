@@ -2,10 +2,9 @@ from django.utils.translation import gettext_lazy as _
 
 from django_filters import filters
 from rest_framework.exceptions import ValidationError
+from vng_api_common.filters import ListURNFilter, URNFilter
 from vng_api_common.filtersets import FilterSet
-
-from openvtb.utils.filters import ListURNFilter, URNFilter
-from openvtb.utils.serializers import URNRelatedField
+from vng_api_common.serializers import URNRelatedField
 
 from ..models import Verzoek, VerzoekType
 
@@ -65,6 +64,7 @@ class VerzoekFilter(FilterSet):
     def filter_verzoek_type__urn(self, queryset, name, value):
         field = URNRelatedField(
             lookup_field="uuid",
+            urn_component="verzoeken",
             urn_resource="verzoektype",
             queryset=VerzoekType.objects.all(),
         )

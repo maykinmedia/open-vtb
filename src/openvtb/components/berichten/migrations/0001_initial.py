@@ -7,7 +7,7 @@ import django.db.models.deletion
 import django.utils.timezone
 from django.db import migrations, models
 
-import openvtb.utils.fields
+import vng_api_common.fields
 
 
 class Migration(migrations.Migration):
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "ontvanger",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         help_text="URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666` of `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999`",
                         max_length=255,
                         verbose_name="ontvanger",
@@ -166,7 +166,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "informatie_object",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         help_text="URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                         max_length=255,
                         verbose_name="informatie object",

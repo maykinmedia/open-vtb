@@ -99,6 +99,7 @@ certifi==2026.10.23
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   commonground-api-common
     #   elastic-apm
     #   httpcore
     #   httpx
@@ -140,7 +141,7 @@ click-repl==0.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   celery
-commonground-api-common==3.0.1
+commonground-api-common==3.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt

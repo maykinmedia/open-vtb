@@ -372,7 +372,7 @@ class VerzoekValidatorsTests(APITestCase):
                 {
                     "name": "isGerelateerdAan.0.urn",
                     "code": "invalid_urn",
-                    "reason": "Enter a valid URN. Correct format: 'urn:<namespace>:<resource>' (e.g., urn:isbn:9780143127796).",
+                    "reason": "Voer een geldige URN in. Juiste indeling: ‘urn:<namespace>:<resource>’ (bijv., urn:isbn:9780143127796).",
                 },
             )
 

@@ -3,7 +3,7 @@
 import django.core.validators
 from django.db import migrations, models
 
-import openvtb.utils.fields
+from vng_api_common.fields import URNField
 
 
 class Migration(migrations.Migration):
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="verzoek",
             name="informatie_object",
-            field=openvtb.utils.fields.URNField(
+            field=URNField(
                 blank=True,
                 help_text="URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                 max_length=255,

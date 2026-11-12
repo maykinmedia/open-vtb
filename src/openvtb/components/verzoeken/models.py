@@ -10,9 +10,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from vng_api_common.fields import URNField
+
 from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
 from openvtb.utils.constants import Valuta
-from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import check_json_schema
 from openvtb.utils.validators import validate_jsonschema
 
