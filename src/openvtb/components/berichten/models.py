@@ -6,9 +6,10 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from vng_api_common.fields import URNField
+
 from openvtb.components.constants import HandelingsPerspectiefEnum
 from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
-from openvtb.utils.fields import URNField
 from openvtb.utils.validators import validate_jsonschema
 
 

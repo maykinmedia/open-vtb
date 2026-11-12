@@ -6,7 +6,9 @@ import uuid
 import django.core.serializers.json
 from django.db import migrations, models
 
-import openvtb.utils.fields
+from vng_api_common.fields import URNField
+
+# import openvtb.utils.fields
 
 
 class Migration(migrations.Migration):
@@ -150,7 +152,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_toegewezen_aan",
-                    openvtb.utils.fields.URNField(
+                    URNField(
                         blank=True,
                         help_text="Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`",
                         max_length=255,

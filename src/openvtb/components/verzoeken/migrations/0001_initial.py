@@ -8,7 +8,7 @@ import django.core.validators
 import django.db.models.deletion
 from django.db import migrations, models
 
-import openvtb.utils.fields
+import vng_api_common.fields
 
 
 class Migration(migrations.Migration):
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "initiator",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         blank=True,
                         help_text="Verwijzing naar een authentieke of niet-authentieke persoon of organisatie. Dit kan een URN van een NATUURLIJK PERSOON of NIET-NATUURLIJK PERSOON zijn. Bijvoorbeeld: `urn:nld:brp:bsn:111222333`, `urn:nld:hr:kvknummer:444555666`, `urn:nld:hr:kvknummer:444555666:vestigingsnummer:777888999` of `urn:nld:klant:klantnummer:610541501`",
                         max_length=255,
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "verzoek_informatie_object",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         blank=True,
                         help_text="URN naar het ENKELVOUDIGINFORMATIEOBJECT zijnde het verzoek als document zoals gezien door de aanvrager.Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                         max_length=255,
@@ -440,7 +440,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "informatie_object",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         blank=True,
                         help_text="URN naar het ENKELVOUDIGINFORMATIEOBJECT. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobject:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                         max_length=255,
@@ -485,7 +485,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "informatie_objecttype",
-                    openvtb.utils.fields.URNField(
+                    vng_api_common.fields.URNField(
                         blank=True,
                         help_text="URN van het INFORMATIEOBJECTTYPE. Bijvoorbeeld: `urn:nld:gemeenteutrecht:informatieobjecttype:uuid:717815f6-1939-4fd2-93f0-83d25bad154e`",
                         max_length=255,

@@ -7,9 +7,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from vng_api_common.fields import URNField
+
 from openvtb.components.constants import HandelingsPerspectiefEnum
 from openvtb.components.schemas import IS_GERELATEERD_AAN_SCHEMA
-from openvtb.utils.fields import URNField
 from openvtb.utils.json_utils import get_json_schema
 from openvtb.utils.validators import validate_date, validate_jsonschema
 
