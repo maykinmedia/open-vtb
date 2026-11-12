@@ -1,10 +1,5 @@
 """
 Generate test data for Open VTB: verzoeken, taken and berichten.
-
-Examples:
-    python manage.py generate_test_data
-    python manage.py generate_test_data --resources verzoeken --resources taken
-    python manage.py generate_test_data --count 5000
 """
 
 import time
@@ -19,10 +14,11 @@ import typer
 from django_typer.management import TyperCommand
 
 from openvtb.accounts.tests.factories import UserFactory
+from performance_test.constants import AUTH_TOKEN
 
 User = get_user_model()
+
 BULK_BATCH_SIZE = 1000
-AUTH_TOKEN = "performance_token"
 
 
 class Resource(str, Enum):
@@ -56,7 +52,7 @@ class Command(TyperCommand):
         ] = 500,
         token: Annotated[
             str, typer.Option(help="Token of the load test user.")
-        ] = AUTH_TOKEN,
+        ] = "performance_token",
     ) -> None:
         generators = {
             Resource.verzoeken: self.generate_verzoeken,
@@ -74,7 +70,6 @@ class Command(TyperCommand):
         if token:
             self.stdout.write("")
             self.stdout.write(self.style.MIGRATE_HEADING("User and token"))
-            # use token string for username, password and key
             self.recreate_user_and_token(token)
 
         with transaction.atomic():
@@ -98,13 +93,11 @@ class Command(TyperCommand):
     def _create_type(type_factory, count: int, **kwargs):
         from factory.fuzzy import FuzzyChoice
 
+        # types are 25%
         types = type_factory.create_batch(max(1, count // 4), **kwargs)
         return FuzzyChoice(types)
 
     def recreate_user_and_token(self, token: str) -> None:
-        """
-        Delete the load test user and token, and create them again
-        """
         from openvtb.accounts.tests.factories import TokenFactory
 
         User = UserFactory._meta.model
