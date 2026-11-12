@@ -159,7 +159,9 @@ omit =[
     "src/openvtb/conf/docker.py",
     "src/openvtb/conf/jenkins.py",
     "src/openvtb/conf/test.py",
-
+    # management commands
+    "src/openvtb/management/**",
+    "src/openvtb/**/management/**",
 ]
 
 [tool.coverage.report]

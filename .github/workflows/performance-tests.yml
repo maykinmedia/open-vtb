@@ -16,8 +16,12 @@ concurrency:
 
 jobs:
   load-test:
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+
+    # runs-on: [maykin-runner] # TODO enable later
     runs-on: ubuntu-latest
-    # runs-on: [self-hosted, linux, load-test] # TODO: switch to the dedicated runner
 
     permissions:
       contents: read
