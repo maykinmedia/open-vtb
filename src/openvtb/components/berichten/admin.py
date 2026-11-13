@@ -39,6 +39,7 @@ class BerichtTypeAdmin(admin.ModelAdmin):
         "mijn_overheid_berichtenbox_type",
         "verantwoordelijke_organisatie",
     )
+    list_filter = ("handelings_perspectief",)
     readonly_fields = ("uuid",)
     search_fields = ("uuid", "handelings_perspectief")
     inlines = [BijlageTypeInline]

@@ -64,6 +64,11 @@ beautifulsoup4==4.14.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   webtest
+bidict==0.24.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   python-socketio
 billiard==4.2.2
     # via
     #   -c requirements/ci.txt
@@ -73,6 +78,11 @@ bleach==6.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+blinker==1.9.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flask
 boltons==25.0.0
     # via
     #   -c requirements/ci.txt
@@ -81,6 +91,11 @@ boltons==25.0.0
     #   glom
 bracex==2.6
     # via wcmatch
+brotli==1.2.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   geventhttpclient
 bump-my-version==1.2.2
     # via -r requirements/dev.in
 cbor2==5.9.0
@@ -101,6 +116,7 @@ certifi==2026.10.23
     #   -r requirements/ci.txt
     #   commonground-api-common
     #   elastic-apm
+    #   geventhttpclient
     #   httpcore
     #   httpx
     #   requests
@@ -110,6 +126,8 @@ cffi==2.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   cryptography
+cfgv==3.5.0
+    # via pre-commit
 charset-normalizer==3.4.4
     # via
     #   -c requirements/ci.txt
@@ -124,6 +142,8 @@ click==8.3.0
     #   click-didyoumean
     #   click-plugins
     #   click-repl
+    #   django-typer
+    #   flask
     #   rich-click
     #   typer
 click-didyoumean==0.3.1
@@ -150,6 +170,11 @@ commonmark==0.9.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   recommonmark
+configargparse==1.9.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 coverage==7.11.0
     # via
     #   -c requirements/ci.txt
@@ -172,6 +197,8 @@ cssselect==1.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   pyquery
+distlib==0.4.4
+    # via virtualenv
 django==5.2.19
     # via
     #   -c requirements/ci.txt
@@ -202,11 +229,13 @@ django==5.2.19
     #   django-sendfile2
     #   django-sessionprofile
     #   django-setup-configuration
+    #   django-silk
     #   django-simple-certmanager
     #   django-solo
     #   django-structlog
     #   django-timezone-field
     #   django-two-factor-auth
+    #   django-typer
     #   django-upgrade-check
     #   djangorestframework
     #   djangorestframework-gis
@@ -351,6 +380,8 @@ django-setup-configuration==0.11.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
+django-silk==5.6.0
+    # via -r requirements/dev.in
 django-simple-certmanager==4.0.0
     # via
     #   -c requirements/ci.txt
@@ -379,6 +410,11 @@ django-two-factor-auth==1.17.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   maykin-2fa
+django-typer==3.9.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 django-upgrade-check==1.1.0
     # via
     #   -c requirements/ci.txt
@@ -467,6 +503,27 @@ faker==37.11.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   factory-boy
+filelock==4.2.9
+    # via
+    #   python-discovery
+    #   virtualenv
+flask==3.1.3
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flask-cors
+    #   flask-login
+    #   locust
+flask-cors==6.0.5
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
+flask-login==0.6.3
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 flower==2.0.1
     # via
     #   -c requirements/ci.txt
@@ -483,7 +540,19 @@ furl==2.1.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   ape-pie
+gevent==26.9.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   geventhttpclient
+    #   locust
+geventhttpclient==2.6.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 gitdb==4.0.12
     # via gitpython
 gitpython==3.2.1
@@ -499,13 +568,24 @@ googleapis-common-protos==1.70.0
     #   -r requirements/ci.txt
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
+gprof2dot==2025.4.14
+    # via django-silk
+greenlet==3.5.6
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   gevent
 grpcio==1.75.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   opentelemetry-exporter-otlp-proto-grpc
 h11==0.16.0
-    # via httpcore
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   httpcore
+    #   wsproto
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
@@ -515,6 +595,8 @@ humanize==4.15.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   flower
+identify==2.6.20
+    # via pre-commit
 idna==3.16
     # via
     #   -c requirements/ci.txt
@@ -532,6 +614,11 @@ inflection==0.5.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
+iniconfig==2.3.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
 iso639-lang==2.6.3
     # via
     #   -c requirements/ci.txt
@@ -541,10 +628,16 @@ isoduration==20.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+itsdangerous==2.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flask
 jinja2==3.1.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   flask
     #   sphinx
 jsonpointer==3.0.0
     # via
@@ -570,6 +663,11 @@ lark==1.3.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   rfc3987-syntax
+locust==2.46.6
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 lxml==6.1.0
     # via
     #   -c requirements/ci.txt
@@ -584,7 +682,9 @@ markupsafe==3.0.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   flask
     #   jinja2
+    #   werkzeug
 maykin-2fa==1.0.2
     # via
     #   -c requirements/ci.txt
@@ -610,6 +710,13 @@ mozilla-django-oidc-db==2.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
+msgpack==1.2.4
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
+nodeenv==1.12.0
+    # via pre-commit
 notifications-api-common==0.13.1
     # via
     #   -c requirements/ci.txt
@@ -763,12 +870,23 @@ packaging==25.0
     #   django-csp
     #   kombu
     #   opentelemetry-instrumentation
+    #   pytest
     #   sphinx
+    #   virtualenv
 phonenumberslite==8.13.55
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-two-factor-auth
+platformdirs==4.14.5
+    # via virtualenv
+pluggy==1.7.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest
+pre-commit==4.7.0
+    # via -r requirements/dev.in
 prometheus-client==0.25.0
     # via
     #   -c requirements/ci.txt
@@ -786,6 +904,11 @@ protobuf==6.33.5
     #   -r requirements/ci.txt
     #   googleapis-common-protos
     #   opentelemetry-proto
+psutil==7.2.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 psycopg==3.2.11
     # via
     #   -c requirements/ci.txt
@@ -800,6 +923,11 @@ psycopg-pool==3.2.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+py-cpuinfo2==10.1.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pytest-benchmark
 pycparser==2.23
     # via
     #   -c requirements/ci.txt
@@ -828,6 +956,7 @@ pygments==2.20.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-log-outgoing-requests
+    #   pytest
     #   rich
     #   sphinx
     #   sphinx-tabs
@@ -835,6 +964,7 @@ pyjwt==2.15.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
@@ -852,6 +982,18 @@ pyquery==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+pytest==9.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
+    #   locust
+    #   pytest-benchmark
+pytest-benchmark==5.3.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 python-crontab==3.3.0
     # via
     #   -c requirements/ci.txt
@@ -870,17 +1012,30 @@ python-decouple==3.8
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   maykin-common
+python-discovery==1.9.4
+    # via virtualenv
 python-dotenv==1.2.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
     #   pydantic-settings
+python-engineio==4.15.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
+    #   python-socketio
 python-ipware==3.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-ipware
+python-socketio==5.18.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 python-stdnum==2.1
     # via
     #   -c requirements/ci.txt
@@ -897,8 +1052,14 @@ pyyaml==6.0.3
     #   -r requirements/ci.txt
     #   drf-spectacular
     #   oyaml
+    #   pre-commit
     #   pydantic-settings
     #   vcrpy
+pyzmq==27.3.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   locust
 qrcode==7.4.2
     # via
     #   -c requirements/ci.txt
@@ -925,13 +1086,16 @@ requests==2.33.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests
+    #   locust
     #   mozilla-django-oidc
     #   open-api-framework
     #   opentelemetry-exporter-http-transport
     #   opentelemetry-exporter-otlp-proto-http
+    #   python-socketio
     #   requests-mock
     #   sphinx
     #   zgw-consumers
@@ -1001,6 +1165,11 @@ shellingham==1.5.4
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   typer
+simple-websocket==1.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   python-engineio
 six==1.17.0
     # via
     #   -c requirements/ci.txt
@@ -1078,6 +1247,7 @@ sqlparse==0.6.0
     #   -r requirements/ci.txt
     #   django
     #   django-debug-toolbar
+    #   django-silk
 structlog==25.5.0
     # via
     #   -c requirements/ci.txt
@@ -1100,6 +1270,7 @@ typer==0.24.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-typer
 types-requests==2.33.0.20260327
     # via
     #   -c requirements/ci.txt
@@ -1173,6 +1344,8 @@ vine==5.1.0
     #   amqp
     #   celery
     #   kombu
+virtualenv==21.14.5
+    # via pre-commit
 waitress==3.0.2
     # via
     #   -c requirements/ci.txt
@@ -1204,11 +1377,26 @@ webob==1.8.11
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   webtest
+websocket-client==1.9.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   python-socketio
 webtest==3.0.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-webtest
+werkzeug==3.1.9
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flask
+    #   flask-cors
+    #   flask-login
+    #   locust
+whitenoise==6.12.0
+    # via -r requirements/dev.in
 wrapt==1.17.3
     # via
     #   -c requirements/ci.txt
@@ -1218,9 +1406,24 @@ wrapt==1.17.3
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-redis
     #   vcrpy
+wsproto==1.3.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   simple-websocket
 zgw-consumers==2.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   commonground-api-common
     #   notifications-api-common
+zope-event==6.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   gevent
+zope-interface==8.7
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   gevent

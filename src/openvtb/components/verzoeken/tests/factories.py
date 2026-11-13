@@ -1,10 +1,10 @@
-import random
-import string
+import uuid
 
 from django.utils import timezone
 
 import factory
 from factory.django import DjangoModelFactory
+from faker import Faker
 
 from ..models import (
     Bijlage,
@@ -15,6 +15,8 @@ from ..models import (
     VerzoekType,
     VerzoekTypeVersion,
 )
+
+fake = Faker()
 
 ADRES = {
     "woonplaats": "Amsterdam",
@@ -45,8 +47,8 @@ JSON_SCHEMA = {
 }
 
 
-def get_random_urn() -> str:
-    return f"urn:maykin:{''.join(random.choices(string.ascii_lowercase + string.digits, k=10))}"
+def get_random_urn(num_words: int = 1) -> str:
+    return f"urn:maykin:{'-'.join(fake.words(nb=num_words))}:{uuid.uuid4()}"
 
 
 class VerzoekTypeFactory(DjangoModelFactory):
@@ -150,7 +152,7 @@ class VerzoekBronFactory(DjangoModelFactory):
 class VerzoekBetalingFactory(DjangoModelFactory):
     verzoek = factory.SubFactory(VerzoekFactory)
     provider_kenmerk = factory.Faker("word")
-    bedrag = factory.Faker("pydecimal", left_digits=8, right_digits=2, positive=True)
+    bedrag = factory.Faker("pydecimal", left_digits=5, right_digits=2, positive=True)
     voltooid = factory.Faker("pybool")
     transactie_datum = factory.LazyAttribute(lambda _: timezone.now())
     transactie_referentie = factory.Faker("uuid4")

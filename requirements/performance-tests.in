@@ -1,0 +1,7 @@
+pytest
+pytest-benchmark
+furl
+requests
+pyjwt
+django_typer
+locust
