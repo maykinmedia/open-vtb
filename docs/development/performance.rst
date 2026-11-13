@@ -97,4 +97,4 @@ The load test lives in the ``performance_test`` folder of the repository, whose
 `README`_ explains how to run it locally and how it is set up in continuous
 integration.
 
-.. _README: https://github.com/maykinmedia/open-vtb/blob/main/performance_test/README.rst
+.. _README: https://github.com/maykinmedia/open-vtb/blob/feature/225-add-performance-tests/performance_test/README.rst
