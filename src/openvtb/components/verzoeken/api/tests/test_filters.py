@@ -223,7 +223,9 @@ class VerzoekFilterTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
         self.assertEqual(data["count"], 2)
-        self.assertEqual(data["results"][0]["uuid"], str(self.verzoek_a.uuid))
+        uuid_results = [item["uuid"] for item in data["results"]]
+        self.assertTrue(str(self.verzoek_a.uuid) in uuid_results)
+        self.assertTrue(str(self.verzoek_c.uuid) in uuid_results)
 
         response = self.client.get(self.list_url, {"medeInitiator": "newtest:456"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)

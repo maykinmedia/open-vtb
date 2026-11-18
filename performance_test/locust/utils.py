@@ -3,8 +3,16 @@ Generic Locust users for (paginated) DRF-style list endpoints.
 """
 
 from collections.abc import Callable, Mapping
+from typing import Any
 
+import msgspec
 from locust import HttpUser, between
+
+
+class Page(msgspec.Struct):
+    """A paginated DRF list. Other fields (count, next, previous) are ignored."""
+
+    results: list[Any]
 
 
 class ListEndpointsTest(HttpUser):
@@ -14,7 +22,7 @@ class ListEndpointsTest(HttpUser):
 
     wait_time = between(1, 3)
     headers: Mapping[str, str] = {}
-    results_key = "results"
+    response_type: type = Page
 
     def get_list(self, path: str, name: str) -> None:
         with self.client.get(
@@ -24,12 +32,17 @@ class ListEndpointsTest(HttpUser):
             if response.status_code != 200:
                 return
             try:
-                results = response.json().get(self.results_key)
-            except ValueError:
+                body = msgspec.json.decode(response.content, type=self.response_type)
+            except msgspec.ValidationError as exc:
+                response.failure(f"Unexpected response shape: {exc}")
+                return
+            except msgspec.DecodeError:
                 response.failure("Invalid JSON")
                 return
-            if not results:
-                response.failure("Empty response")
+
+            items = body.results if isinstance(body, Page) else body
+            if not items:
+                response.failure("Empty list")
 
 
 def list_tasks(

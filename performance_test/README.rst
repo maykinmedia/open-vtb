@@ -23,7 +23,6 @@ Structure
     ├── bencher.py                  # Writes the Locust results in the Bencher Metric Format (reusable)
     ├── tests.py                    # The Open VTB locustfile: which endpoints to hit
     └── locust/
-        ├── __init__.py
         ├── locust.conf             # Load profile: users, duration, host
         └── utils.py                # Generic user and tasks for list endpoints (reusable)
 
@@ -97,7 +96,7 @@ the speed of the server: it is not a measure of capacity with this profile.
 Continuous integration
 ======================
 
-The ``Performance test`` GitHub Actions workflow (``.github/workflows/performance-testsest.yml``) runs the whole process on every push to ``main``, on every tag and on pull requests: it starts Open VTB with uWSGI,
+The ``Performance test`` GitHub Actions workflow (``.github/workflows/performance-tests.yml``) runs the whole process on every push to ``main``, on every tag and on pull requests: it starts Open VTB with uWSGI,
 generates the data, runs Locust and sends the results to Bencher.
 On a pull request, Bencher compares the results with ``main`` and comments them on the PR.
 
@@ -108,6 +107,10 @@ Bencher raises an alert when the median (``latency-p50``) or the average
 (``latency-mean``) of a run is unusually high compared with the last 30 runs:
 above the third quartile plus 2 times the interquartile range (IQR).
 This adapts to how much the results normally vary, instead of using a fixed percentage.
+
+An alert fails the workflow, on ``main``, on tags and on pull requests. On a
+pull request, Bencher also reports it in the comment and the check run it adds
+to the PR.
 
 A threshold only applies once there are at least 15 earlier runs: before that
 there is too little history to tell a regression from normal variation.

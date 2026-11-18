@@ -51,7 +51,7 @@ measure, and the one used to detect regressions.
 
 .. raw:: html
 
-    <iframe src="https://bencher.dev/perf/open-vtb/embed?branches=01a1bfbe-9720-717b-b958-65b118a4121d,01a1c0be-17fd-74a0-bf23-7f671da8f1ee&amp;testbeds=01a1c0be-17ff-77bc-8fd3-7ef281c405d1&amp;benchmarks=01a1bfbe-972c-7152-b7e4-de98aa867d91,01a1bfbe-9725-71be-8424-1ffdae388190,01a1bfbe-972b-73f5-b148-5491533c37f4&amp;measures=01a1bfbe-9729-7414-ba5c-f6cebf90bcc4&amp;window=92d&amp;y_axis=linear" title="Median response time | open-vtb" width="100%" height="700" style="border: 0" loading="lazy"></iframe>
+    <iframe src="https://bencher.dev/perf/open-vtb/embed?branches=01a1bfbe-9720-717b-b958-65b118a4121d&amp;testbeds=01a1c0be-17ff-77bc-8fd3-7ef281c405d1&amp;benchmarks=01a1bfbe-972c-7152-b7e4-de98aa867d91,01a1bfbe-9725-71be-8424-1ffdae388190,01a1bfbe-972b-73f5-b148-5491533c37f4&amp;measures=01a1bfbe-9729-7414-ba5c-f6cebf90bcc4&amp;window=92d&amp;y_axis=linear" title="Median response time | open-vtb" width="100%" height="700" style="border: 0" loading="lazy"></iframe>
 
 Response time of 95% of the requests
 ------------------------------------
@@ -61,7 +61,7 @@ slower requests get, and varies more from one run to the next.
 
 .. raw:: html
 
-    <iframe src="https://bencher.dev/perf/open-vtb/embed?branches=01a1c0be-17fd-74a0-bf23-7f671da8f1ee,01a1bfbe-9720-717b-b958-65b118a4121d&amp;testbeds=01a1c0be-17ff-77bc-8fd3-7ef281c405d1&amp;benchmarks=01a1bfbe-972c-7152-b7e4-de98aa867d91,01a1bfbe-9725-71be-8424-1ffdae388190,01a1bfbe-972b-73f5-b148-5491533c37f4&amp;measures=01a1bfbe-9728-72fd-b41a-3b75e6560634&amp;window=92d&amp;y_axis=linear" title="Response time of 95% of the requests | open-vtb" width="100%" height="700" style="border: 0" loading="lazy"></iframe>
+    <iframe src="https://bencher.dev/perf/open-vtb/embed?branches=01a1bfbe-9720-717b-b958-65b118a4121d&amp;testbeds=01a1c0be-17ff-77bc-8fd3-7ef281c405d1&amp;benchmarks=01a1bfbe-972c-7152-b7e4-de98aa867d91,01a1bfbe-9725-71be-8424-1ffdae388190,01a1bfbe-972b-73f5-b148-5491533c37f4&amp;measures=01a1bfbe-9728-72fd-b41a-3b75e6560634&amp;window=92d&amp;y_axis=linear" title="Response time of 95% of the requests | open-vtb" width="100%" height="700" style="border: 0" loading="lazy"></iframe>
 
 Releases
 --------
@@ -97,4 +97,4 @@ The load test lives in the ``performance_test`` folder of the repository, whose
 `README`_ explains how to run it locally and how it is set up in continuous
 integration.
 
-.. _README: https://github.com/maykinmedia/open-vtb/blob/feature/225-add-performance-tests/performance_test/README.rst
+.. _README: https://github.com/maykinmedia/open-vtb/blob/main/performance_test/README.rst

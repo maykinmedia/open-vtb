@@ -464,7 +464,6 @@ furl==2.1.4
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   -r requirements/performance-tests.in
     #   ape-pie
 gevent==26.9.0
     # via
@@ -591,6 +590,8 @@ mozilla-django-oidc-db==2.0.1
     #   open-api-framework
 msgpack==1.2.4
     # via locust
+msgspec==0.22.0
+    # via -r requirements/performance-tests.in
 notifications-api-common==0.13.1
     # via
     #   -c requirements/base.txt
@@ -785,8 +786,6 @@ psycopg-pool==3.2.7
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-py-cpuinfo2==10.1.1
-    # via pytest-benchmark
 pycparser==2.23
     # via
     #   -c requirements/base.txt
@@ -821,7 +820,6 @@ pyjwt==2.15.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   -r requirements/performance-tests.in
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
@@ -838,12 +836,7 @@ pypng==0.20220715.0
 pyquery==2.0.1
     # via -r requirements/test-tools.in
 pytest==9.2.0
-    # via
-    #   -r requirements/performance-tests.in
-    #   locust
-    #   pytest-benchmark
-pytest-benchmark==5.3.1
-    # via -r requirements/performance-tests.in
+    # via locust
 python-crontab==3.3.0
     # via
     #   -c requirements/base.txt
@@ -921,7 +914,6 @@ requests==2.33.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   -r requirements/performance-tests.in
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests

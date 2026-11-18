@@ -6,7 +6,6 @@ import time
 from enum import Enum
 from typing import Annotated
 
-from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import Model
 
@@ -14,8 +13,6 @@ import typer
 from django_typer.management import TyperCommand
 
 from openvtb.accounts.tests.factories import UserFactory
-
-User = get_user_model()
 
 BULK_BATCH_SIZE = 1000
 
@@ -29,7 +26,7 @@ class Resource(str, Enum):
 DEFAULT_RESOURCES = list(Resource)
 
 
-def bulk_create(objects: list[Model]) -> list[Model]:
+def bulk_create[M: Model](objects: list[M]) -> list[M]:
     if not objects:
         return []
     model = type(objects[0])
@@ -107,14 +104,9 @@ class Command(TyperCommand):
         if tokens_deleted or users_deleted:
             self.stdout.write(f"  Deleted existing user {token!r} and token {token!r}")
 
-        user = UserFactory.create(
-            username=token,
-            password=token,
-            is_staff=True,
-            is_superuser=True,
-        )
+        user = UserFactory.create(username=token, password=None)
         TokenFactory.create(key=token, user=user)
-        self.stdout.write(f"  Created superuser {token!r} with token {token!r}")
+        self.stdout.write(f"  Created user {token!r} with token {token!r}")
 
     def generate_verzoeken(self, count: int) -> int:
         from openvtb.components.verzoeken.tests.factories import (
@@ -141,9 +133,10 @@ class Command(TyperCommand):
         return len(verzoeken)
 
     def generate_taken(self, count: int) -> int:
+        from openvtb.components.taken.constants import SoortTaak
         from openvtb.components.taken.tests.factories import ExterneTaakFactory
 
-        TAAK_TYPES = ("betaaltaak", "urltaak", "formuliertaak")
+        TAAK_TYPES = (SoortTaak.BETAALTAAK, SoortTaak.URLTAAK, SoortTaak.FORMULIERTAAK)
 
         per_type, remainder = divmod(count, len(TAAK_TYPES))
         taken = []

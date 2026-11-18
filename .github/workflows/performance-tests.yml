@@ -9,19 +9,17 @@ on:
   pull_request:
   workflow_dispatch:
 
-# One load test at a time on the dedicated runner: parallel runs would compete for CPU
+# main and each release tag get their own group, so a PR run can never drop them.
+# PRs share one group: one running and one pending across all PRs.
+# Isolation (one job on the machine) comes from the runner, not from these groups.
 concurrency:
-  group: performance-test-maykin-runner
+  group: performance-test-${{ github.event_name == 'pull_request' && 'pr' || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
   load-test:
-    if: >-
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
-
-    # runs-on: [maykin-runner] # TODO enable later
     runs-on: ubuntu-latest
+    # runs-on: [self-hosted, linux, load-test] # TODO: switch to the dedicated runner
 
     permissions:
       contents: read
@@ -32,7 +30,7 @@ jobs:
 
     services:
       postgres:
-        image: postgis/postgis:17-3.5
+        image: postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: openvtb
@@ -42,7 +40,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       redis:
-        image: redis:8
+        image: redis:8@sha256:1f88291b4c57bdf249f02eb085a8669889b2d2954e91d4de5118a5da6b78dd53
         ports:
           - 6379:6379
 
@@ -83,17 +81,22 @@ jobs:
           optimize-postgres: "no"
           setup-node: "no"
 
-      - name: Install dependencies
+      - name: Install Bencher CLI
+        env:
+          BENCHER_VERSION: 0.6.16
+          BENCHER_SHA256: a9e68e29d72cdd3f58b8c6f79e8947e5a913be3fec8c990ab6be15cbbca5cfdf
         run: |
-          pip install uv
-          pkgs=$(cat requirements/performance-tests.in)
-          grep -E "^($(echo $pkgs | sed 's/ /|/g'))([=<>]|$)" requirements/ci.txt | xargs uv pip install
-          curl --proto '=https' --tlsv1.2 -sSfL https://bencher.dev/download/install-cli.sh | sh
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl --proto '=https' --tlsv1.2 -sSfL -o "$RUNNER_TEMP/bin/bencher" \
+            "https://github.com/bencherdev/bencher/releases/download/v${BENCHER_VERSION}/bencher-v${BENCHER_VERSION}-linux-x86-64"
+          echo "${BENCHER_SHA256}  $RUNNER_TEMP/bin/bencher" | sha256sum --check --strict
+          chmod +x "$RUNNER_TEMP/bin/bencher"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
 
       - name: Generate data for load tests
         run: |
           src/manage.py migrate --noinput
-          echo "yes" | src/manage.py generate_data --count 50000
+          src/manage.py generate_data --count 50000
           psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "VACUUM ANALYZE;"
 
       - name: Start uWSGI (${{ env.UWSGI_PROCESSES }} processes, ${{ env.UWSGI_THREADS }} threads)
@@ -146,7 +149,8 @@ jobs:
             --adapter "$BENCHER_ADAPTER" \
             --file "$results" \
             --threshold-measure latency-p50  --threshold-test iqr --threshold-min-sample-size 15 --threshold-max-sample-size 30 --threshold-upper-boundary 2.0 \
-            --threshold-measure latency-mean --threshold-test iqr --threshold-min-sample-size 15 --threshold-max-sample-size 30 --threshold-upper-boundary 2.0
+            --threshold-measure latency-mean --threshold-test iqr --threshold-min-sample-size 15 --threshold-max-sample-size 30 --threshold-upper-boundary 2.0 \
+            --error-on-alert
 
       # Always stop uWSGI: required on a self-hosted runner
       - name: Stop uWSGI

@@ -1,5 +1,8 @@
 import datetime
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
+
 from freezegun import freeze_time
 from rest_framework import status
 from vng_api_common.tests import get_validation_errors, reverse
@@ -595,3 +598,15 @@ class ExterneTaakTests(APITestCase):
         response = self.client.get(self.list_url)
         self.assertEqual(response.json()["count"], 0)
         self.assertFalse(ExterneTaak.objects.exists())
+
+    def test_list_query_count_does_not_grow_with_results(self):
+        ExterneTaakFactory.create_batch(2)
+        with CaptureQueriesContext(connection) as first_run:
+            self.client.get(self.list_url)
+
+        ExterneTaakFactory.create_batch(3)
+        with CaptureQueriesContext(connection) as second_run:
+            response = self.client.get(self.list_url)
+
+        self.assertEqual(len(response.json()["results"]), 5)
+        self.assertEqual(len(second_run), len(first_run))

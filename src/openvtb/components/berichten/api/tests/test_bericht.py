@@ -1,6 +1,8 @@
 import datetime
 import uuid
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 
 from freezegun import freeze_time
@@ -312,3 +314,15 @@ class BerichtTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response.data["code"], "method_not_allowed")
         self.assertEqual(response.data["detail"], 'Methode "DELETE" niet toegestaan.')
+
+    def test_list_query_count_does_not_grow_with_results(self):
+        BerichtFactory.create_batch(2, create_bijlage=True)
+        with CaptureQueriesContext(connection) as first_run:
+            self.client.get(self.list_url)
+
+        BerichtFactory.create_batch(3, create_bijlage=True)
+        with CaptureQueriesContext(connection) as second_run:
+            response = self.client.get(self.list_url)
+
+        self.assertEqual(len(response.json()["results"]), 5)
+        self.assertEqual(len(second_run), len(first_run))
