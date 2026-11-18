@@ -53,6 +53,7 @@ class VerzoekType(models.Model):
     class Meta:
         verbose_name = _("VerzoekType")
         verbose_name_plural = _("VerzoekTypes")
+        ordering = ["-pk"]
 
     def __str__(self):
         return self.naam
@@ -203,6 +204,7 @@ class VerzoekBron(models.Model):
     class Meta:
         verbose_name = _("Verzoek Bron")
         verbose_name_plural = _("Verzoeken Bron")
+        ordering = ["-pk"]
 
     def __str__(self):
         return self.naam
@@ -261,6 +263,7 @@ class VerzoekBetaling(models.Model):
     class Meta:
         verbose_name = _("Verzoek Betaling")
         verbose_name_plural = _("Verzoeken Betaling")
+        ordering = ["-pk"]
 
     def __str__(self):
         return f"{self.verzoek} ({str(self.bedrag)})"
@@ -374,6 +377,7 @@ class Verzoek(models.Model):
     class Meta:
         verbose_name = _("Verzoek")
         verbose_name_plural = _("Verzoeken")
+        ordering = ["-pk"]
 
     def __str__(self):
         return f"{self.uuid}"
@@ -452,6 +456,7 @@ class Bijlage(models.Model):
     class Meta:
         verbose_name = _("Bijlage")
         verbose_name_plural = _("Bijlagen")
+        ordering = ["-pk"]
         unique_together = ("verzoek", "informatie_object")
 
     def __str__(self):
@@ -490,7 +495,7 @@ class BijlageType(models.Model):
     class Meta:
         verbose_name = _("BijlageType")
         verbose_name_plural = _("BijlageTypen")
-
+        ordering = ["-pk"]
         unique_together = ("verzoek_type_versie", "informatie_objecttype")
 
     def __str__(self):

@@ -4,7 +4,10 @@
 # Helpers
 bump-my-version
 gitpython
+pre-commit
 
 # Debug tooling
 django-debug-toolbar
 django-extensions
+django-silk
+whitenoise
