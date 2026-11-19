@@ -8,7 +8,7 @@ django-localflavor
 mozilla-django-oidc-db[setup-configuration]
 django-celery-beat
 
-maykin-common[axes,mfa,otel,vcr,cli,health-checks]
+maykin-common[axes,mfa,otel,vcr,cli,health-checks,structlog]
 
 # Extra
 pytz
