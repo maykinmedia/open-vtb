@@ -58,6 +58,7 @@ class BerichtType(models.Model):
     class Meta:
         verbose_name = _("BerichtType")
         verbose_name_plural = _("BerichtTypen")
+        ordering = ["-pk"]
 
     def __str__(self):
         return str(self.uuid)
@@ -150,6 +151,7 @@ class Bericht(models.Model):
     class Meta:
         verbose_name = _("Bericht")
         verbose_name_plural = _("Berichten")
+        ordering = ["-pk"]
 
     def __str__(self):
         return self.onderwerp
@@ -205,7 +207,6 @@ class BijlageType(models.Model):
     class Meta:
         verbose_name = _("BijlageType")
         verbose_name_plural = _("BijlageTypen")
-
         unique_together = ("bericht_type", "informatie_objecttype")
 
     def __str__(self):

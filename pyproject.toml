@@ -1,5 +1,7 @@
 [project]
-requires-python = "== 3.12"
+requires-python = "~= 3.12.12"
+version = "0.2.0"
+name = "open-vtb"
 
 [tool.uv.pip]
 emit-index-url = false
@@ -120,6 +122,9 @@ pre_commit_hooks = [
 post_commit_hooks = []
 
 [[tool.bumpversion.files]]
+filename = "pyproject.toml"
+
+[[tool.bumpversion.files]]
 filename = "src/openvtb/__init__.py"
 
 [[tool.bumpversion.files]]
@@ -158,10 +163,7 @@ omit =[
     "src/openvtb/conf/dev.py",
     "src/openvtb/conf/docker.py",
     "src/openvtb/conf/jenkins.py",
-    "src/openvtb/conf/test.py",
-    # management commands
-    "src/openvtb/management/**",
-    "src/openvtb/**/management/**",
+    "src/openvtb/conf/test.py"
 ]
 
 [tool.coverage.report]

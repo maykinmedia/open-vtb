@@ -139,6 +139,7 @@ class ExterneTaak(models.Model):
     class Meta:
         verbose_name = _("Externe taak")
         verbose_name_plural = _("Externe taken")
+        ordering = ["-pk"]
 
     def __str__(self):
         return f"{self.titel} ({self.status})"

@@ -21,7 +21,7 @@ annotated-types==0.7.0
     #   -r requirements/ci.txt
     #   pydantic
 anyio==4.14.2
-    # via httpx
+    # via httpx2
 ape-pie==0.2.0
     # via
     #   -c requirements/ci.txt
@@ -96,7 +96,7 @@ brotli==1.2.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   geventhttpclient
-bump-my-version==1.2.2
+bump-my-version==1.8.1
     # via -r requirements/dev.in
 cbor2==5.9.0
     # via
@@ -117,8 +117,6 @@ certifi==2026.10.23
     #   commonground-api-common
     #   elastic-apm
     #   geventhttpclient
-    #   httpcore
-    #   httpx
     #   requests
     #   sentry-sdk
 cffi==2.0.0
@@ -540,7 +538,6 @@ furl==2.1.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   -r requirements/performance-tests.in
     #   ape-pie
 gevent==26.9.0
     # via
@@ -584,11 +581,11 @@ h11==0.16.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   httpcore
+    #   httpcore2
     #   wsproto
-httpcore==1.0.9
-    # via httpx
-httpx==0.28.1
+httpcore2==2.3.0
+    # via httpx2
+httpx2==2.3.0
     # via bump-my-version
 humanize==4.15.0
     # via
@@ -602,7 +599,7 @@ idna==3.16
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   anyio
-    #   httpx
+    #   httpx2
     #   requests
 imagesize==1.4.1
     # via
@@ -715,6 +712,11 @@ msgpack==1.2.4
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   locust
+msgspec==0.22.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/performance-tests.in
 nodeenv==1.12.0
     # via pre-commit
 notifications-api-common==0.13.1
@@ -923,11 +925,6 @@ psycopg-pool==3.2.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-py-cpuinfo2==10.1.1
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   pytest-benchmark
 pycparser==2.23
     # via
     #   -c requirements/ci.txt
@@ -964,7 +961,6 @@ pyjwt==2.15.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   -r requirements/performance-tests.in
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
@@ -986,14 +982,7 @@ pytest==9.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   -r requirements/performance-tests.in
     #   locust
-    #   pytest-benchmark
-pytest-benchmark==5.3.1
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   -r requirements/performance-tests.in
 python-crontab==3.3.0
     # via
     #   -c requirements/ci.txt
@@ -1086,7 +1075,6 @@ requests==2.33.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   -r requirements/performance-tests.in
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests
@@ -1266,6 +1254,10 @@ tornado==6.6
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   flower
+truststore==0.10.5
+    # via
+    #   httpcore2
+    #   httpx2
 typer==0.24.1
     # via
     #   -c requirements/ci.txt

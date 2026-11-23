@@ -5,11 +5,28 @@ Report Locust results to Bencher, in the Bencher Metric Format (BMF).
 import json
 import os
 import tempfile
+from typing import NotRequired, TypedDict
 
 from locust import events
+from locust.env import Environment
 from locust.runners import WorkerRunner
+from locust.stats import RequestStats, StatsEntry
 
 BMF_FILENAME = "bencher_metric_format.json"
+MS_TO_NS = 1_000_000
+
+
+class Metric(TypedDict):
+    """One Bencher metric: a value, optionally with a lower and upper bound."""
+
+    value: float
+    lower_value: NotRequired[float]
+    upper_value: NotRequired[float]
+
+
+type Measures = dict[str, Metric]
+
+type BMF = dict[str, Measures]
 
 
 def _default_bmf_output() -> str:
@@ -21,14 +38,13 @@ def _default_bmf_output() -> str:
 
 
 BMF_OUTPUT = os.environ.get("BMF_OUTPUT") or _default_bmf_output()
-MS_TO_NS = 1_000_000
 
 
-def _ns(value_ms) -> float:
+def _ns(value_ms: float | None) -> float:
     return (value_ms or 0) * MS_TO_NS
 
 
-def entry_metrics(entry) -> dict:
+def entry_metrics(entry: StatsEntry) -> Measures:
     """
     Metrics of one Locust stats entry, as Bencher measures.
 
@@ -60,14 +76,14 @@ def entry_metrics(entry) -> dict:
     }
 
 
-def write_bencher_metric_format(stats, path: str) -> None:
+def write_bencher_metric_format(stats: RequestStats, path: str) -> None:
     """
     Write the results in the Bencher Metric Format: one benchmark per request
     name, plus an `aggregated` benchmark over all requests.
 
     No file is written without results.
     """
-    results = {}
+    results: BMF = {}
     for (name, _method), entry in sorted(stats.entries.items()):
         if not entry.num_requests:
             continue
@@ -86,7 +102,7 @@ def report_to_bencher(path: str = BMF_OUTPUT) -> None:
     """Write the BMF file at the end of the run. Call once, from the locustfile."""
 
     @events.quitting.add_listener
-    def _on_quitting(environment, **kwargs):
+    def _on_quitting(environment: Environment, **kwargs: object) -> None:
         # Workers reset their stats after reporting them; only the master has the full picture.
         if isinstance(environment.runner, WorkerRunner):
             return

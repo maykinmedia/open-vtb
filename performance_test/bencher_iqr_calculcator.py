@@ -18,6 +18,7 @@
 #     uv run ./bencher_iqr_calculcator.py --list
 #     uv run ./bencher_iqr_calculcator.py --benchmark-name="<name>"
 #     uv run ./bencher_iqr_calculcator.py --all [--json] [<report-file>]
+#     uv run ./bencher_iqr_calculcator.py --all --branch=main --testbed=<testbed>
 #
 """
 Bencher IQR Calculator
@@ -40,10 +41,7 @@ import typer
 from msgspec.json import decode, encode
 from scipy.stats import iqr
 
-REPORTS_URL = (
-    "https://api.bencher.dev/v0/projects/objects-ed2ce35-z71n5gf8t4f40/reports"
-    "?per_page=100"
-)
+REPORTS_URL = "https://api.bencher.dev/v0/projects/open-vtb/reports"
 
 app = typer.Typer(
     help="Analyze Bencher reports for IQR thresholds",
@@ -81,6 +79,10 @@ class MeasureEntry(msgspec.Struct, frozen=True):
 class ResultItem(msgspec.Struct, frozen=True):
     benchmark: Benchmark
     measures: list[MeasureEntry]
+
+
+class ReportSummary(msgspec.Struct, frozen=True):
+    uuid: str
 
 
 class Report(msgspec.Struct, frozen=True):
@@ -126,8 +128,8 @@ def calculate_iqr_statistics(values: Iterable[float]) -> dict[str, float]:
             "At least 2 valid numeric data points are required to calculate statistics"
         )
 
-    iqr_val = iqr(arr)
-    q1, q3 = np.percentile(arr, [25, 75])
+    iqr_val = float(iqr(arr))
+    q1, q3 = (float(q) for q in np.percentile(arr, [25, 75]))
     median_val = float(np.median(arr))
     mean_val = float(np.mean(arr))
     std_val = float(np.std(arr, ddof=1))
@@ -248,7 +250,7 @@ def format_report(stats: dict[str, float]) -> str:
                 "   Execute Bencher with these parameters:",
                 "     --threshold-test iqr \\",
                 f"     --threshold-upper-boundary {rec_mult} \\",
-                "     --threshold-window 30 \\",
+                "     --threshold-max-sample-size 30 \\",
                 "     --threshold-min-sample-size 15",
                 "",
             ]
@@ -263,7 +265,7 @@ def format_report(stats: dict[str, float]) -> str:
             "",
             "💡 DESIGN ADVICE FOR PUBLIC RUNNERS:",
             f"   * Window Size: Your current max range spread is {stats['range_vs_median_pct']:.1f}%.",
-            "     Keep '--threshold-window 30' or higher. A wide rolling window forces Bencher to",
+            "     Keep '--threshold-max-sample-size 30' or higher. A wide rolling window forces Bencher to",
             "     evaluate current builds against a broad history, neutralizing localized GHA noise waves.",
             "   * If false alerts persist, switch your benchmarking framework to report the 'median' or",
             "     'minimum' execution duration per test, rather than the arithmetic 'mean'.",
@@ -274,16 +276,31 @@ def format_report(stats: dict[str, float]) -> str:
     return "\n".join(lines)
 
 
-def load_reports(report_file: Path | None) -> list[Report]:
+def fetch_reports(branch: str | None, testbed: str | None) -> list[Report]:
+    """The list endpoint only returns summaries, without `results`: fetch each report."""
+    with requests.Session() as session:
+
+        def get(url: str, **params: str | int | None) -> bytes:
+            params = {k: v for k, v in params.items() if v is not None}
+            response = session.get(url, params=params, timeout=30)
+            response.raise_for_status()
+            return response.content
+
+        summaries = decode(
+            get(REPORTS_URL, branch=branch, testbed=testbed, per_page=100),
+            type=list[ReportSummary],
+        )
+        return [decode(get(f"{REPORTS_URL}/{s.uuid}"), type=Report) for s in summaries]
+
+
+def load_reports(
+    report_file: Path | None, branch: str | None, testbed: str | None
+) -> list[Report]:
     """Load reports from a local JSON file, or fetch them from the Bencher API."""
     try:
         if report_file:
-            data = report_file.read_bytes()
-        else:
-            response = requests.get(REPORTS_URL, timeout=30)
-            response.raise_for_status()
-            data = response.content
-        return decode(data, type=list[Report])
+            return decode(report_file.read_bytes(), type=list[Report])
+        return fetch_reports(branch, testbed)
     except (OSError, requests.RequestException, msgspec.DecodeError) as e:
         typer.secho(f"Error loading reports: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
@@ -322,9 +339,17 @@ def main(
     analyse_all: Annotated[
         bool, typer.Option("--all", help="Analyse all benchmarks")
     ] = False,
+    branch: Annotated[
+        str | None,
+        typer.Option("--branch", help="Only fetch reports for this branch"),
+    ] = "main",
+    testbed: Annotated[
+        str | None,
+        typer.Option("--testbed", help="Only fetch reports for this testbed"),
+    ] = None,
 ) -> None:
     """Analyze Bencher reports and suggest IQR threshold settings."""
-    reports = load_reports(report_file)
+    reports = load_reports(report_file, branch, testbed)
 
     if list_only:
         list_benchmarks(reports)
@@ -352,10 +377,12 @@ def main(
             stats_dict = calculate_iqr_statistics(values)
         except ValueError as e:
             typer.secho(f"{benchmark}: {e}", fg=typer.colors.RED, err=True)
+            if analyse_all:
+                continue
             raise typer.Exit(code=1) from e
 
         if json_output:
-            typer.echo(encode(stats_dict).decode())
+            typer.echo(encode({"benchmark": benchmark, **stats_dict}).decode())
         else:
             typer.echo()
             typer.echo(benchmark)
