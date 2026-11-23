@@ -13,6 +13,7 @@ For the sake of simplicity, we have chosen to use Docker and Docker Compose for 
    :maxdepth: 1
    :caption: Further reading
 
+   prerequisites
    config/index
    observability/index
    health_checks
