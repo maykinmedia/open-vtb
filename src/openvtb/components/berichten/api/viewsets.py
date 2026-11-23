@@ -40,7 +40,9 @@ logger = structlog.stdlib.get_logger(__name__)
     ),
 )
 class BerichtViewset(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Bericht.objects.prefetch_related("bijlagen")
+    queryset = Bericht.objects.select_related("bericht_type").prefetch_related(
+        "bijlagen"
+    )
     serializer_class = BerichtSerializer
     pagination_class = DynamicPageSizePagination
     permission_classes = (IsAuthenticated,)

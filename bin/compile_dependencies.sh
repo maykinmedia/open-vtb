@@ -29,10 +29,12 @@ uv pip compile \
     --output-file "$root_dir/requirements/ci.txt" \
     "$@" \
     "$root_dir/requirements/test-tools.in" \
-    "$root_dir/requirements/docs.in"
+    "$root_dir/requirements/docs.in" \
+    "$root_dir/requirements/performance-tests.in"
 
 # Dev depedencies - exact same set as CI + some extra tooling
 uv pip compile \
     --output-file "$root_dir/requirements/dev.txt" \
     "$@" \
-    "$root_dir/requirements/dev.in"
+    "$root_dir/requirements/dev.in" \
+    "$root_dir/requirements/performance-tests.in"
